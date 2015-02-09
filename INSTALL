@@ -1,0 +1,9 @@
+Building MartexCoin
+
+See doc/readme-qt.rst for instructions on building MartexCoin QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of MartexCoin.
+
+See doc/build-*.txt for instructions on building MartexCoind,
+the intended-for-services, no-graphical-interface, reference
+implementation of MartexCoin.
