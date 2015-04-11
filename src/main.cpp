@@ -977,10 +977,6 @@ int64_t GetProofOfWorkReward(int64_t nFees)
     {
         nSubsidy = 50000 * COIN; //2% Bounties/Promotions
     }
-    if(pindexBest->nHeight > 176095 && pindexBest->nHeight <= 176100)
-    {
-        nSubsidy = 0 * COIN; //Timing Issue
-    }
     // LAST_POW_BLOCK = 33331
 
     if (fDebug && GetBoolArg("-printcreation"))
@@ -2190,7 +2186,7 @@ bool CBlock::AcceptBlock()
     int nHeight = pindexPrev->nHeight+1;
 
     //if (IsProofOfWork() && nHeight > LAST_POW_BLOCK)
-    if (IsProofOfWork() && nHeight > LAST_POW_BLOCK && nHeight > 176095 && nHeight <= 177095)
+    if (IsProofOfWork() && nHeight > LAST_POW_BLOCK)
         return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
 
     // Check proof-of-work or proof-of-stake
