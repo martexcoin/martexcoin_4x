@@ -1,4 +1,4 @@
-// Copyright (c) 2013 NovaCoin Developers
+// Copyright (c) 2013 MarteXcoin Developers
 
 #include <string.h>
 #include "pbkdf2.h"

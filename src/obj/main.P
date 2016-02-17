@@ -1,0 +1,28 @@
+obj/main.o: main.cpp alert.h uint256.h util.h uint256_t.h netbase.h \
+ serialize.h allocators.h version.h clientversion.h compat.h \
+ checkpoints.h net.h mruset.h protocol.h addrman.h sync.h db.h main.h \
+ bignum.h script.h keystore.h crypter.h key.h scrypt.h hashblock.h \
+ sph_blake.h sph_types.h sph_bmw.h sph_groestl.h sph_jh.h sph_keccak.h \
+ sph_skein.h sph_luffa.h sph_cubehash.h sph_shavite.h sph_simd.h \
+ sph_echo.h sph_hamsi.h sph_fugue.h txdb.h txdb-leveldb.h \
+ /root/martexcoin/src/leveldb/include/leveldb/db.h \
+ /root/martexcoin/src/leveldb/include/leveldb/iterator.h \
+ /root/martexcoin/src/leveldb/include/leveldb/slice.h \
+ /root/martexcoin/src/leveldb/include/leveldb/status.h \
+ /root/martexcoin/src/leveldb/include/leveldb/options.h \
+ /root/martexcoin/src/leveldb/include/leveldb/write_batch.h init.h \
+ wallet.h ui_interface.h walletdb.h base58.h kernel.h
+main.cpp alert.h uint256.h util.h uint256_t.h netbase.h :
+ serialize.h allocators.h version.h clientversion.h compat.h :
+ checkpoints.h net.h mruset.h protocol.h addrman.h sync.h db.h main.h :
+ bignum.h script.h keystore.h crypter.h key.h scrypt.h hashblock.h :
+ sph_blake.h sph_types.h sph_bmw.h sph_groestl.h sph_jh.h sph_keccak.h :
+ sph_skein.h sph_luffa.h sph_cubehash.h sph_shavite.h sph_simd.h :
+ sph_echo.h sph_hamsi.h sph_fugue.h txdb.h txdb-leveldb.h :
+ /root/martexcoin/src/leveldb/include/leveldb/db.h :
+ /root/martexcoin/src/leveldb/include/leveldb/iterator.h :
+ /root/martexcoin/src/leveldb/include/leveldb/slice.h :
+ /root/martexcoin/src/leveldb/include/leveldb/status.h :
+ /root/martexcoin/src/leveldb/include/leveldb/options.h :
+ /root/martexcoin/src/leveldb/include/leveldb/write_batch.h init.h :
+ wallet.h ui_interface.h walletdb.h base58.h kernel.h :
