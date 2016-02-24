@@ -1,0 +1,16 @@
+qrc_bitcoin.cpp
+MartexCoin-qt
+build/*.o
+build/*.cpp
+build/*.moc
+build/ui_*
+src/MartexCoind
+src/obj/*.o
+src/obj/*.P
+src/obj-test/*.o
+src/obj-test/*.P
+src/obj/build.h
+src/leveldb/libleveldb.a
+src/leveldb/libmemenv.a
+src/qt/locale/*.qm
+src/clean.sh

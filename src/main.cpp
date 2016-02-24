@@ -972,10 +972,15 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
 int64_t GetProofOfWorkReward(int64_t nFees)
 {
 
-    int64_t nSubsidy = 150 * COIN;
+    int64_t nSubsidy = 150 * COIN; //Inicial
     if(pindexBest->nHeight < 2)
     {
         nSubsidy = 50000 * COIN; //2% Bounties/Promotions
+    }
+
+    if(pindexBest->nHeight > 263250) //Mineracao hibrida PoW+PoS
+    {
+        nSubsidy = 0.05 * COIN;
     }
 
     // LAST_POW_BLOCK = 33331
@@ -2186,8 +2191,8 @@ bool CBlock::AcceptBlock()
     CBlockIndex* pindexPrev = (*mi).second;
     int nHeight = pindexPrev->nHeight+1;
 
-    if (IsProofOfWork() && nHeight > LAST_POW_BLOCK)
-        return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
+    //if (IsProofOfWork() && nHeight > LAST_POW_BLOCK)
+    //    return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
 
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
