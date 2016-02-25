@@ -57,8 +57,8 @@ void StatisticsPage::updateStatistics()
     QString LastPoWBlock = QString::number(LAST_POW_BLOCK);
 
     ui->labelPhasePoW->setText("PoW = Block 0 - " + LastPoWBlock);
-    ui->labelPhasePoS->setText("PoS = Block " + LastPoWBlock + " - onwards");
-
+    ui->labelPhasePoS->setText("PoS = Block " + LastPoWBlock + " - 263250");
+    ui->labelPhaseHibrid->setText("PoW + PoS = Block 263251 up");
 
     if (pindexBest->nHeight < LAST_POW_BLOCK)
     {
@@ -67,6 +67,10 @@ void StatisticsPage::updateStatistics()
     else
     {
         phase = "Proof of Stake";
+    }
+    if (pindexBest->nHeight > 263250)
+    {
+        phase = "Hibrid Proof of Work+Proof of Stake";
     }
     QString subsidy = QString::number(nSubsidy, 'f', 6);
     QString hardness = QString::number(pHardness, 'f', 6);
