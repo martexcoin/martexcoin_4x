@@ -5,6 +5,7 @@ build/*.o
 build/*.cpp
 build/*.moc
 build/ui_*
+build/*.h
 src/MartexCoind
 src/obj/*.o
 src/obj/*.P
