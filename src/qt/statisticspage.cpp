@@ -42,7 +42,7 @@ void StatisticsPage::updateStatistics()
     int pPawrate = GetPoWMHashPS();
     double pPawrate2 = 0.000;
     int nHeight = pindexBest->nHeight;
-    double nSubsidy = 150;
+    double nSubsidy = 0;
     uint64_t nMinWeight = 0, nMaxWeight = 0, nWeight = 0;
     pwalletMain->GetStakeWeight(*pwalletMain, nMinWeight, nMaxWeight, nWeight);
     uint64_t nNetworkWeight = GetPoSKernelPS();
@@ -63,14 +63,17 @@ void StatisticsPage::updateStatistics()
     if (pindexBest->nHeight < LAST_POW_BLOCK)
     {
         phase = "Proof of Work";
+	nSubsidy = 150;
     }
     else
     {
         phase = "Proof of Stake";
+	nSubsidy = 150;
     }
     if (pindexBest->nHeight > 263250)
     {
         phase = "Hibrid Proof of Work+Proof of Stake";
+	nSubsidy = 0.05;
     }
     QString subsidy = QString::number(nSubsidy, 'f', 6);
     QString hardness = QString::number(pHardness, 'f', 6);
@@ -114,7 +117,7 @@ void StatisticsPage::updateStatistics()
     {
         ui->rewardBox->setText("<b><font color=\"red\">" + subsidy + "</font></b>");
     } else {
-    ui->rewardBox->setText(subsidy);
+	ui->rewardBox->setText(subsidy);
     }
     
     if(pHardness > hardnessPrevious)
