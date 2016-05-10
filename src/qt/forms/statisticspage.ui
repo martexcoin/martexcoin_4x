@@ -90,6 +90,19 @@ font-family:'Open Sans,sans-serif';</string>
        <string>labelPhasePoS</string>
       </property>
      </widget>
+     <widget class="QLabel" name="labelPhaseHibrid">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>240</y>
+        <width>191</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>labelPhaseHibrid</string>
+      </property>
+     </widget>
     </widget>
    </item>
    <item row="0" column="0">

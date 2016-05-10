@@ -14,10 +14,10 @@
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
-Copyright © 2012-2014 The NovaCoin developers
+Copyright © 2012-2014 The MarteXcoin developers
 Copyright © 2014 The MartexCoin developers</source>
         <translation>Copyright © 2009-2014 Les développeurs Bitcoin
-Copyright © 2012-2014 Les développeurs NovaCoin
+Copyright © 2012-2014 Les développeurs MarteXcoin
 Copyright © 2014 Les développeurs MartexCoin</translation>
     </message>
     <message>

@@ -74,6 +74,10 @@ CCriticalSection cs_vOneShots;
 set<CNetAddr> setservAddNodeAddresses;
 CCriticalSection cs_setservAddNodeAddresses;
 
+vector<std::string> vAddedNodes;
+CCriticalSection cs_vAddedNodes;
+
+
 static CSemaphore *semOutbound = NULL;
 
 void AddOneShot(string strDest)
@@ -1445,6 +1449,11 @@ void ThreadOpenConnections2(void* parg)
 
 void ThreadOpenAddedConnections(void* parg)
 {
+    {
+        LOCK(cs_vAddedNodes);
+        vAddedNodes = mapMultiArgs["-addnode"];
+    }
+
     // Make this thread recognisable as the connection opening thread
     RenameThread("MartexCoin-opencon");
 
@@ -1473,6 +1482,12 @@ void ThreadOpenAddedConnections2(void* parg)
 
     if (HaveNameProxy()) {
         while(!fShutdown) {
+           list<string> lAddresses(0);
+            {
+                LOCK(cs_vAddedNodes);
+                BOOST_FOREACH(string& strAddNode, vAddedNodes)
+                    lAddresses.push_back(strAddNode);
+            }
             BOOST_FOREACH(string& strAddNode, mapMultiArgs["-addnode"]) {
                 CAddress addr;
                 CSemaphoreGrant grant(*semOutbound);
@@ -1485,6 +1500,12 @@ void ThreadOpenAddedConnections2(void* parg)
         }
         return;
     }
+	list<string> lAddresses(0);
+        {
+            LOCK(cs_vAddedNodes);
+            BOOST_FOREACH(string& strAddNode, vAddedNodes)
+                lAddresses.push_back(strAddNode);
+        }
 
     vector<vector<CService> > vservAddressesToAdd(0);
     BOOST_FOREACH(string& strAddNode, mapMultiArgs["-addnode"])
