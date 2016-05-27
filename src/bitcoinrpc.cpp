@@ -20,6 +20,7 @@
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/stream.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/shared_ptr.hpp>
@@ -307,6 +308,21 @@ static const CRPCCommand vRPCCommands[] =
     { "resendtx",               &resendtx,               false,  true},
     { "makekeypair",            &makekeypair,            false,  true},
     { "sendalert",              &sendalert,              false,  false},
+
+    { "smsgenable",             &smsgenable,             false,  false},
+    { "smsgdisable",            &smsgdisable,            false,  false},
+    { "smsglocalkeys",          &smsglocalkeys,          false,  false},
+    { "smsgoptions",            &smsgoptions,            false,  false},
+    { "smsgscanchain",          &smsgscanchain,          false,  false},
+    { "smsgscanbuckets",        &smsgscanbuckets,        false,  false},
+    { "smsgaddkey",             &smsgaddkey,             false,  false},
+    { "smsggetpubkey",          &smsggetpubkey,          false,  false},
+    { "smsgsend",               &smsgsend,               false,  false},
+    { "smsgsendanon",           &smsgsendanon,           false,  false},
+    { "smsginbox",              &smsginbox,              false,  false},
+    { "smsgoutbox",             &smsgoutbox,             false,  false},
+    { "smsgbuckets",            &smsgbuckets,            false,  false},
+
 };
 
 CRPCTable::CRPCTable()
