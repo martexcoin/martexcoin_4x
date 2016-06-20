@@ -18,7 +18,7 @@ namespace boost {
     namespace program_options {
         std::string to_internal(const std::string&);
     }
-}
+} 
 
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
