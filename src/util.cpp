@@ -1098,7 +1098,7 @@ void createConf()
     srand(time(NULL));
 
     ofstream pConf;
-    pConf.open(GetConfigFile().c_str());
+    pConf.open(GetConfigFile().string().c_str());
     pConf << "rpcuser=user\nrpcpassword="
     + randomStrGen(15)
     + "\nrpcport=51324"
@@ -1109,11 +1109,11 @@ void createConf()
     + "\nserver=1"
     + "\nrpcallowip=127.0.0.1"
     + "\ntestnet=0"
-    + "\addnode=seed.martexcoin.org"
-    + "\addnode=seed1.martexcoin.org"
-    + "\addnode=seed2.martexcoin.org"
-    + "\addnode=seed3.martexcoin.org"
-    + "\addnode=seed4.martexcoin.org";
+    + "\naddnode=seed.martexcoin.org"
+    + "\naddnode=seed1.martexcoin.org"
+    + "\naddnode=seed2.martexcoin.org"
+    + "\naddnode=seed3.martexcoin.org"
+    + "\naddnode=seed4.martexcoin.org";
    pConf.close();
 }
 
