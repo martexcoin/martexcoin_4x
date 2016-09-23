@@ -582,11 +582,11 @@ bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx, bool fCheckInputs,
         return tx.DoS(100, error("CTxMemPool::accept() : coinstake as individual tx"));
 
     // To help v0.1.5 clients who would see it as a negative number
-    if ((int64_t)tx.nLockTime > std::numeric_limits<int>::max())
+    if ((int64_t)tx.nLockTime > std::numeric_limits<int>::max() && !GetBoolArg("-acceptnonstdtxn", false))
         return error("CTxMemPool::accept() : not accepting nLockTime beyond 2038 yet");
 
     // Rather not work on nonstandard transactions (unless -testnet)
-    if (!fTestNet && !tx.IsStandard())
+    if (!fTestNet && !tx.IsStandard() && !GetBoolArg("-acceptnonstdtxn", false))
         return error("CTxMemPool::accept() : nonstandard transaction type");
 
     // Do we already have it?
@@ -643,8 +643,8 @@ bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx, bool fCheckInputs,
         }
 
         // Check for non-standard pay-to-script-hash in inputs
-        if (!tx.AreInputsStandard(mapInputs) && !fTestNet)
-            return error("CTxMemPool::accept() : nonstandard transaction input");
+        if (!tx.AreInputsStandard(mapInputs) && !fTestNet && !GetBoolArg("-acceptnonstdtxn", false))
+                return error("CTxMemPool::accept() : nonstandard transaction input");
 
         // Note: if you modify this code to accept non-standard transactions, then
         // you should add code here to check that the transaction does a

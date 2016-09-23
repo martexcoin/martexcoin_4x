@@ -283,7 +283,7 @@ std::string HelpMessage()
         "\n" + _("Node relay options:") + "\n";
         "  -datacarrier           " + _("Relay and mine data carrier transactions (default: %u)") + "\n";
         "  -datacarriersize       " + _("Maximum size of data in data carrier transactions we relay and mine (default 80)") + "\n";
-
+        "  -acceptnonstdtxn       " + _("Accept \"non-standard\" transactions for relay and blocks") + "\n" +
         "  -debug                 " + _("Output extra debugging information. Implies all other -debug* options") + "\n" +
         "  -debugnet              " + _("Output extra network debugging information") + "\n" +
         "  -logtimestamps         " + _("Prepend debug output with timestamp") + "\n" +
