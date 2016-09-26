@@ -323,16 +323,19 @@ bool CTransaction::IsStandard() const
     txnouttype whichType;
     BOOST_FOREACH(const CTxOut& txout, vout) {
         //if (!::IsStandard(txout.scriptPubKey))
-	if (!::IsStandard(txout.scriptPubKey, whichType))
+	if (!::IsStandard(txout.scriptPubKey, whichType)) {
             //reason = "scriptpubkey";
             return false;
+        }
         if (whichType == TX_NULL_DATA)
             nDataOut++;
-
-        if (txout.nValue == 0)
-            return false;
-        if (fEnforceCanonical && !txout.scriptPubKey.HasCanonicalPushes()) {
-            return false;
+        else {
+             if (txout.nValue == 0) {
+                 return false;
+             }
+             if (fEnforceCanonical && !txout.scriptPubKey.HasCanonicalPushes()) {
+                return false;
+             }
         }
     }
 
@@ -403,7 +406,8 @@ bool CTransaction::AreInputsStandard(const MapPrevTx& mapInputs) const
             nArgsExpected += tmpExpected;
         }
 
-        if (stack.size() != (unsigned int)nArgsExpected)
+        //if (stack.size() != (unsigned int)nArgsExpected)
+        if (stack.size() != nArgsExpected)
             return false;
     }
 
