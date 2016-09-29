@@ -218,6 +218,7 @@ extern json_spirit::Value getblockhash(const json_spirit::Array& params, bool fH
 extern json_spirit::Value getblock(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value getblockbynumber(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value getcheckpoint(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value getstakereport(const json_spirit::Array& params, bool fHelp); 
 
 extern json_spirit::Value smsgenable(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value smsgdisable(const json_spirit::Array& params, bool fHelp);
