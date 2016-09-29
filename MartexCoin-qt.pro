@@ -1,11 +1,13 @@
 # x13 version
 TEMPLATE = app
 TARGET = MartexCoin-qt
-VERSION = 2.5.4.1
+VERSION = 2.5.4.2
 INCLUDEPATH += src src/json src/qt
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
 CONFIG += thread
+CONFIG += static
+QT += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 lessThan(QT_MAJOR_VERSION, 5): CONFIG += static
 QMAKE_CXXFLAGS = -fpermissive
@@ -16,17 +18,17 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 }
 
 win32 {
-BOOST_LIB_SUFFIX=-mgw48-mt-s-1_55
-BOOST_INCLUDE_PATH=e:/deps/boost_1_55_0
-BOOST_LIB_PATH=e:/deps/boost_1_55_0/stage/lib
-BDB_INCLUDE_PATH=e:/deps/db-4.8.30.NC/build_unix
-BDB_LIB_PATH=e:/deps/db-4.8.30.NC/build_unix
-OPENSSL_INCLUDE_PATH=e:/deps/openssl-1.0.1g/include
-OPENSSL_LIB_PATH=e:/deps/openssl-1.0.1g
-MINIUPNPC_INCLUDE_PATH=e:/deps/
-MINIUPNPC_LIB_PATH=e:/deps/miniupnpc
-QRENCODE_INCLUDE_PATH=e:/deps/qrencode-3.4.3
-QRENCODE_LIB_PATH=e:/deps/qrencode-3.4.3/.libs
+BOOST_LIB_SUFFIX=-mgw49-mt-s-1_57
+BOOST_INCLUDE_PATH=C:/deps/boost_1_57_0
+BOOST_LIB_PATH=C:/deps/boost_1_57_0/stage/lib
+BDB_INCLUDE_PATH=C:/deps/db-4.8.30.NC/build_unix
+BDB_LIB_PATH=C:/deps/db-4.8.30.NC/build_unix
+OPENSSL_INCLUDE_PATH=C:/deps/openssl-1.0.1l/include
+OPENSSL_LIB_PATH=C:/deps/openssl-1.0.1l
+MINIUPNPC_INCLUDE_PATH=C:/deps/
+MINIUPNPC_LIB_PATH=C:/deps/miniupnpc
+QRENCODE_INCLUDE_PATH=C:/deps/qrencode-3.4.4
+QRENCODE_LIB_PATH=C:/deps/qrencode-3.4.4/.libs
 }
 
 # for boost 1.37, add -mt to the boost libraries
@@ -63,7 +65,7 @@ QMAKE_LFLAGS *= -fstack-protector-all --param ssp-buffer-size=1
 }
 # for extra security on Windows: enable ASLR and DEP via GCC linker flags
 win32:QMAKE_LFLAGS *= -Wl,--large-address-aware -static
-win32:QMAKE_LFLAGS += -static-libgcc -static-libstdc++
+win32:QMAKE_LFLAGS += -static-libgcc
 lessThan(QT_MAJOR_VERSION, 5): win32: QMAKE_LFLAGS *= -static
 
 
@@ -286,13 +288,14 @@ HEADERS += src/qt/bitcoingui.h \
     src/sph_types.h \
     src/threadsafety.h \
     src/txdb-leveldb.h \
-      src/qt/sendmessagesdialog.h \
-      src/qt/sendmessagesentry.h \
-      src/qt/messagemodel.h \
-      src/qt/messagepage.h \
-      src/smessage.h \
-      src/lz4/lz4.h \
-      src/xxhash/xxhash.h
+    src/qt/stakereportdialog.h \
+    src/qt/sendmessagesdialog.h \
+    src/qt/sendmessagesentry.h \
+    src/qt/messagemodel.h \
+    src/qt/messagepage.h \
+    src/smessage.h \
+    src/lz4/lz4.h \
+    src/xxhash/xxhash.h
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
@@ -364,15 +367,16 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/scrypt-x86.S \
     src/scrypt-x86_64.S \
     src/scrypt.cpp \
-      src/qt/sendmessagesdialog.cpp \
-      src/qt/sendmessagesentry.cpp \
-      src/qt/messagemodel.cpp \
-      src/qt/messagepage.cpp \
-      src/rpcsmessage.cpp \
-      src/smessage.cpp \
-      src/lz4/lz4.c \
-      src/xxhash/xxhash.c \
-    src/pbkdf2.cpp 
+    src/qt/sendmessagesdialog.cpp \
+    src/qt/sendmessagesentry.cpp \
+    src/qt/messagemodel.cpp \
+    src/qt/messagepage.cpp \
+    src/rpcsmessage.cpp \
+    src/smessage.cpp \
+    src/lz4/lz4.c \
+    src/xxhash/xxhash.c \
+    src/pbkdf2.cpp \
+    src/qt/stakereportdialog.cpp
 
 RESOURCES += \
     src/qt/bitcoin.qrc
@@ -391,11 +395,12 @@ FORMS += \
     src/qt/forms/blockbrowser.ui \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
-      src/qt/forms/chatwindow.ui \
-      src/qt/forms/sendmessagesdialog.ui \
-      src/qt/forms/sendmessagesentry.ui \
-      src/qt/forms/messagepage.ui \
-    src/qt/forms/optionsdialog.ui
+    src/qt/forms/chatwindow.ui \
+    src/qt/forms/sendmessagesdialog.ui \
+    src/qt/forms/sendmessagesentry.ui \
+    src/qt/forms/messagepage.ui \
+    src/qt/forms/optionsdialog.ui \
+    src/qt/forms/stakereportdialog.ui
 
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h

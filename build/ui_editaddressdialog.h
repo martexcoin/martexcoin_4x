@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'editaddressdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.7
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,16 +10,16 @@
 #define UI_EDITADDRESSDIALOG_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QFormLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QVBoxLayout>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QFormLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
@@ -37,30 +37,30 @@ public:
     void setupUi(QDialog *EditAddressDialog)
     {
         if (EditAddressDialog->objectName().isEmpty())
-            EditAddressDialog->setObjectName(QString::fromUtf8("EditAddressDialog"));
+            EditAddressDialog->setObjectName(QStringLiteral("EditAddressDialog"));
         EditAddressDialog->resize(457, 126);
         verticalLayout = new QVBoxLayout(EditAddressDialog);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         formLayout = new QFormLayout();
-        formLayout->setObjectName(QString::fromUtf8("formLayout"));
+        formLayout->setObjectName(QStringLiteral("formLayout"));
         formLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
         label = new QLabel(EditAddressDialog);
-        label->setObjectName(QString::fromUtf8("label"));
+        label->setObjectName(QStringLiteral("label"));
 
         formLayout->setWidget(0, QFormLayout::LabelRole, label);
 
         labelEdit = new QLineEdit(EditAddressDialog);
-        labelEdit->setObjectName(QString::fromUtf8("labelEdit"));
+        labelEdit->setObjectName(QStringLiteral("labelEdit"));
 
         formLayout->setWidget(0, QFormLayout::FieldRole, labelEdit);
 
         label_2 = new QLabel(EditAddressDialog);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setObjectName(QStringLiteral("label_2"));
 
         formLayout->setWidget(1, QFormLayout::LabelRole, label_2);
 
         addressEdit = new QLineEdit(EditAddressDialog);
-        addressEdit->setObjectName(QString::fromUtf8("addressEdit"));
+        addressEdit->setObjectName(QStringLiteral("addressEdit"));
 
         formLayout->setWidget(1, QFormLayout::FieldRole, addressEdit);
 
@@ -68,7 +68,7 @@ public:
         verticalLayout->addLayout(formLayout);
 
         buttonBox = new QDialogButtonBox(EditAddressDialog);
-        buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
+        buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
 
@@ -88,14 +88,14 @@ public:
 
     void retranslateUi(QDialog *EditAddressDialog)
     {
-        EditAddressDialog->setWindowTitle(QApplication::translate("EditAddressDialog", "Edit Address", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("EditAddressDialog", "&Label", 0, QApplication::UnicodeUTF8));
+        EditAddressDialog->setWindowTitle(QApplication::translate("EditAddressDialog", "Edit Address", 0));
+        label->setText(QApplication::translate("EditAddressDialog", "&Label", 0));
 #ifndef QT_NO_TOOLTIP
-        labelEdit->setToolTip(QApplication::translate("EditAddressDialog", "The label associated with this address book entry", 0, QApplication::UnicodeUTF8));
+        labelEdit->setToolTip(QApplication::translate("EditAddressDialog", "The label associated with this address book entry", 0));
 #endif // QT_NO_TOOLTIP
-        label_2->setText(QApplication::translate("EditAddressDialog", "&Address", 0, QApplication::UnicodeUTF8));
+        label_2->setText(QApplication::translate("EditAddressDialog", "&Address", 0));
 #ifndef QT_NO_TOOLTIP
-        addressEdit->setToolTip(QApplication::translate("EditAddressDialog", "The address associated with this address book entry. This can only be modified for sending addresses.", 0, QApplication::UnicodeUTF8));
+        addressEdit->setToolTip(QApplication::translate("EditAddressDialog", "The address associated with this address book entry. This can only be modified for sending addresses.", 0));
 #endif // QT_NO_TOOLTIP
     } // retranslateUi
 

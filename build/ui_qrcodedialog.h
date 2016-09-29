@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'qrcodedialog.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,21 +10,21 @@
 #define UI_QRCODEDIALOG_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QCheckBox>
-#include <QtGui/QDialog>
-#include <QtGui/QFormLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPlainTextEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QFormLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 #include "bitcoinamountfield.h"
 
 QT_BEGIN_NAMESPACE
@@ -52,12 +52,12 @@ public:
     void setupUi(QDialog *QRCodeDialog)
     {
         if (QRCodeDialog->objectName().isEmpty())
-            QRCodeDialog->setObjectName(QString::fromUtf8("QRCodeDialog"));
+            QRCodeDialog->setObjectName(QStringLiteral("QRCodeDialog"));
         QRCodeDialog->resize(340, 530);
         verticalLayout_3 = new QVBoxLayout(QRCodeDialog);
-        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         lblQRCode = new QLabel(QRCodeDialog);
-        lblQRCode->setObjectName(QString::fromUtf8("lblQRCode"));
+        lblQRCode->setObjectName(QStringLiteral("lblQRCode"));
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -71,7 +71,7 @@ public:
         verticalLayout_3->addWidget(lblQRCode);
 
         outUri = new QPlainTextEdit(QRCodeDialog);
-        outUri->setObjectName(QString::fromUtf8("outUri"));
+        outUri->setObjectName(QStringLiteral("outUri"));
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Minimum);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
@@ -84,44 +84,44 @@ public:
         verticalLayout_3->addWidget(outUri);
 
         widget = new QWidget(QRCodeDialog);
-        widget->setObjectName(QString::fromUtf8("widget"));
+        widget->setObjectName(QStringLiteral("widget"));
         verticalLayout_2 = new QVBoxLayout(widget);
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         chkReqPayment = new QCheckBox(widget);
-        chkReqPayment->setObjectName(QString::fromUtf8("chkReqPayment"));
+        chkReqPayment->setObjectName(QStringLiteral("chkReqPayment"));
         chkReqPayment->setEnabled(true);
 
         verticalLayout_2->addWidget(chkReqPayment);
 
         formLayout = new QFormLayout();
-        formLayout->setObjectName(QString::fromUtf8("formLayout"));
+        formLayout->setObjectName(QStringLiteral("formLayout"));
         formLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
         lblLabel = new QLabel(widget);
-        lblLabel->setObjectName(QString::fromUtf8("lblLabel"));
+        lblLabel->setObjectName(QStringLiteral("lblLabel"));
         lblLabel->setTextFormat(Qt::PlainText);
         lblLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         formLayout->setWidget(1, QFormLayout::LabelRole, lblLabel);
 
         lnLabel = new QLineEdit(widget);
-        lnLabel->setObjectName(QString::fromUtf8("lnLabel"));
+        lnLabel->setObjectName(QStringLiteral("lnLabel"));
 
         formLayout->setWidget(1, QFormLayout::FieldRole, lnLabel);
 
         lblMessage = new QLabel(widget);
-        lblMessage->setObjectName(QString::fromUtf8("lblMessage"));
+        lblMessage->setObjectName(QStringLiteral("lblMessage"));
         lblMessage->setTextFormat(Qt::PlainText);
         lblMessage->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         formLayout->setWidget(2, QFormLayout::LabelRole, lblMessage);
 
         lnMessage = new QLineEdit(widget);
-        lnMessage->setObjectName(QString::fromUtf8("lnMessage"));
+        lnMessage->setObjectName(QStringLiteral("lnMessage"));
 
         formLayout->setWidget(2, QFormLayout::FieldRole, lnMessage);
 
         lblAmount = new QLabel(widget);
-        lblAmount->setObjectName(QString::fromUtf8("lblAmount"));
+        lblAmount->setObjectName(QStringLiteral("lblAmount"));
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Maximum);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
@@ -133,7 +133,7 @@ public:
         formLayout->setWidget(0, QFormLayout::LabelRole, lblAmount);
 
         lnReqAmount = new BitcoinAmountField(widget);
-        lnReqAmount->setObjectName(QString::fromUtf8("lnReqAmount"));
+        lnReqAmount->setObjectName(QStringLiteral("lnReqAmount"));
         lnReqAmount->setEnabled(false);
         lnReqAmount->setMinimumSize(QSize(80, 0));
 
@@ -143,13 +143,13 @@ public:
         verticalLayout_2->addLayout(formLayout);
 
         horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
 
         btnSaveAs = new QPushButton(widget);
-        btnSaveAs->setObjectName(QString::fromUtf8("btnSaveAs"));
+        btnSaveAs->setObjectName(QStringLiteral("btnSaveAs"));
 
         horizontalLayout->addWidget(btnSaveAs);
 
@@ -173,12 +173,12 @@ public:
 
     void retranslateUi(QDialog *QRCodeDialog)
     {
-        QRCodeDialog->setWindowTitle(QApplication::translate("QRCodeDialog", "QR Code Dialog", 0, QApplication::UnicodeUTF8));
-        chkReqPayment->setText(QApplication::translate("QRCodeDialog", "Request Payment", 0, QApplication::UnicodeUTF8));
-        lblLabel->setText(QApplication::translate("QRCodeDialog", "Label:", 0, QApplication::UnicodeUTF8));
-        lblMessage->setText(QApplication::translate("QRCodeDialog", "Message:", 0, QApplication::UnicodeUTF8));
-        lblAmount->setText(QApplication::translate("QRCodeDialog", "Amount:", 0, QApplication::UnicodeUTF8));
-        btnSaveAs->setText(QApplication::translate("QRCodeDialog", "&Save As...", 0, QApplication::UnicodeUTF8));
+        QRCodeDialog->setWindowTitle(QApplication::translate("QRCodeDialog", "QR Code Dialog", 0));
+        chkReqPayment->setText(QApplication::translate("QRCodeDialog", "Request Payment", 0));
+        lblLabel->setText(QApplication::translate("QRCodeDialog", "Label:", 0));
+        lblMessage->setText(QApplication::translate("QRCodeDialog", "Message:", 0));
+        lblAmount->setText(QApplication::translate("QRCodeDialog", "Amount:", 0));
+        btnSaveAs->setText(QApplication::translate("QRCodeDialog", "&Save As...", 0));
     } // retranslateUi
 
 };

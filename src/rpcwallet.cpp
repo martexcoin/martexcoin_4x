@@ -1776,8 +1776,8 @@ Value makekeypair(const Array& params, bool fHelp)
     return result;
 }
 
-// ///////////////////////////////////////////////////////////////////// ** em52
-//  new rpc added by Remy5
+// /////////////////////////////////////////////////////////////////////
+//  new rpc added
 
 struct StakePeriodRange_T {
     int64_t Start;
@@ -1790,7 +1790,7 @@ struct StakePeriodRange_T {
 typedef vector<StakePeriodRange_T> vStakePeriodRange_T;
 
 
-// **em52: Get total coins staked on given period
+// Get total coins staked on given period
 // inspired from CWallet::GetStake()
 // Parameter aRange = Vector with given limit date, and result
 // return int =  Number of Wallet's elements analyzed
