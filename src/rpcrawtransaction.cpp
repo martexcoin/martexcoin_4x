@@ -35,13 +35,20 @@ void ScriptPubKeyToJSON(const CScript& scriptPubKey, Object& out, bool fIncludeH
         return;
     }
 
-    out.push_back(Pair("reqSigs", nRequired));
-    out.push_back(Pair("type", GetTxnOutputType(type)));
+    if (type != TX_NULL_DATA)
+    {
+        out.push_back(Pair("reqSigs", nRequired));
+        out.push_back(Pair("type", GetTxnOutputType(type)));
 
-    Array a;
-    BOOST_FOREACH(const CTxDestination& addr, addresses)
-        a.push_back(CBitcoinAddress(addr).ToString());
-    out.push_back(Pair("addresses", a));
+        Array a;
+        BOOST_FOREACH(const CTxDestination& addr, addresses)
+            a.push_back(CBitcoinAddress(addr).ToString());
+        out.push_back(Pair("addresses", a));
+    }
+    else
+    {
+        out.push_back(Pair("type", GetTxnOutputType(type)));
+    }
 }
 
 void TxToJSON(const CTransaction& tx, const uint256 hashBlock, Object& entry)
@@ -508,7 +515,7 @@ Value signrawtransaction(const Array& params, bool fHelp)
         {
             txin.scriptSig = CombineSignatures(prevPubKey, mergedTx, i, txin.scriptSig, txv.vin[i].scriptSig);
         }
-        if (!VerifyScript(txin.scriptSig, prevPubKey, mergedTx, i, 0))
+        if (!VerifyScript(txin.scriptSig, prevPubKey, mergedTx, i, STANDARD_SCRIPT_VERIFY_FLAGS, 0))
             fComplete = false;
     }
 
