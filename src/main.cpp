@@ -47,8 +47,9 @@ unsigned int nStakeMaxAge = 8 * 60 * 60; // 8 hours max
 unsigned int nModifierInterval = 10 * 30; // time to elapse before new modifier is computed
 static const int64_t nTargetTimespan_legacy = nTargetSpacing * nRetarget; // every 20 blocks
 static const int64_t nInterval = nTargetTimespan_legacy / nTargetSpacing;
-
 static const int64_t nTargetTimespan = 30 * 60;
+
+static const unsigned int CHECKLOCKTIMEVERIFY_SWITCH_TIME = 1461110400; // Wednesday, 20-Apr-16 00:00:00 UTC
 
 int64_t devCoin = 0 * COIN;
 int nCoinbaseMaturity = 5;
@@ -1657,7 +1658,14 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
             if (tx.IsCoinStake())
                 nStakeReward = nTxValueOut - nTxValueIn;
 
-            if (!tx.ConnectInputs(txdb, mapInputs, mapQueuedChanges, posThisTx, pindex, true, false, SCRIPT_VERIFY_NOCACHE | SCRIPT_VERIFY_P2SH))
+            unsigned int nFlags = SCRIPT_VERIFY_NOCACHE | SCRIPT_VERIFY_P2SH;
+
+            if (tx.nTime >= CHECKLOCKTIMEVERIFY_SWITCH_TIME) {
+                nFlags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
+            }
+
+            //if (!tx.ConnectInputs(txdb, mapInputs, mapQueuedChanges, posThisTx, pindex, true, false, fScriptChecks, nFlags, nScriptCheckThreads ? &vChecks : NULL))
+            if (!tx.ConnectInputs(txdb, mapInputs, mapQueuedChanges, posThisTx, pindex, true, false, nFlags))
                 return false;
         }
 
