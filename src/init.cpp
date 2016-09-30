@@ -280,6 +280,7 @@ std::string HelpMessage()
         "  -daemon                " + _("Run in the background as a daemon and accept commands") + "\n" +
 #endif
         "  -testnet               " + _("Use the test network") + "\n" +
+        "  -acceptnonstdtxn       " + _("Accept \"non-standard\" transactions for relay and blocks") + "\n" +
         "  -debug                 " + _("Output extra debugging information. Implies all other -debug* options") + "\n" +
         "  -debugnet              " + _("Output extra network debugging information") + "\n" +
         "  -logtimestamps         " + _("Prepend debug output with timestamp") + "\n" +
