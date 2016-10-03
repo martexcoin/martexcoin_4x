@@ -1662,10 +1662,9 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
 
             if (tx.nTime >= CHECKLOCKTIMEVERIFY_SWITCH_TIME) {
                 nFlags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
-                nFlags |= SCRIPT_VERIFY_CHECKSEQUENCEVERIFY;
+                //nFlags |= SCRIPT_VERIFY_CHECKSEQUENCEVERIFY;
             }
 
-            //if (!tx.ConnectInputs(txdb, mapInputs, mapQueuedChanges, posThisTx, pindex, true, false, fScriptChecks, nFlags, nScriptCheckThreads ? &vChecks : NULL))
             if (!tx.ConnectInputs(txdb, mapInputs, mapQueuedChanges, posThisTx, pindex, true, false, nFlags))
                 return false;
         }
