@@ -78,7 +78,7 @@ void setupAmountWidget(QLineEdit *widget, QWidget *parent)
 bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 {
     // MarteXcoin: check prefix
-    if(uri.scheme() != QString("MartexCoin"))
+    if(uri.scheme() != QString("martexcoin"))
         return false;
 
     SendCoinsRecipient rv;
@@ -127,9 +127,9 @@ bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
     //
     //    Cannot handle this later, because bitcoin:// will cause Qt to see the part after // as host,
     //    which will lower-case it (and thus invalidate the address).
-    if(uri.startsWith("MartexCoin://"))
+    if(uri.startsWith("martexcoin://"))
     {
-        uri.replace(0, 12, "MartexCoin:");
+        uri.replace(0, 12, "martexcoin:");
     }
     QUrl uriInstance(uri);
     return parseBitcoinURI(uriInstance, out);
