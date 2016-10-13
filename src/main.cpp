@@ -1593,7 +1593,7 @@ bool static BuildAddrIndex(const CScript &script, std::vector<uint160>& addrIds)
         script.GetOp(pc, opcode, data);
         if (0 <= opcode && opcode <= OP_PUSHDATA4 && data.size() >= 8) { // data element
             uint160 addrid = 0;
-            if (data.size() <= 120) {
+            if (data.size() <= 20) {
                 memcpy(&addrid, &data[0], data.size());
             } else {
                 addrid = Hash160(data);
