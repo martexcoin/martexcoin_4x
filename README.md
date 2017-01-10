@@ -1,3 +1,5 @@
+![MarteXcoin](https://raw.githubusercontent.com/martexcoin/martexcoin/master/src/qt/res/images/splash.png)
+
 Site Oficial
 ------------
 - http://martexcoin.org
@@ -34,9 +36,13 @@ Anúncios
 
 Wallets
 -------
-- Windows http://martexcoin.org/releases/martexcoin-qt_2.5.4.0.exe
-- Linux http://martexcoin.org/releases/martexcoin-qt_2.5.4.0
+- Windows http://martexcoin.org/releases/martexcoin-qt_2.5.4.2.exe
+- Linux http://martexcoin.org/releases/martexcoin-qt_2.5.4.2
 - Raspiberry http://martexcoin.org/releases/raspi-mxt.tar
+
+Bootstrap
+---------
+- http://martexcoin.org/releases/bootstrap.zip
 
 Source
 ------
