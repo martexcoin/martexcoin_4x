@@ -51,7 +51,8 @@ void StatisticsPage::updateStatistics()
     int peers = this->model->getNumConnections();
     pPawrate2 = (double)pPawrate;
     QString height = QString::number(nHeight);
-    QString stakemin = QString::number(nMinWeight);
+    //QString stakemin = QString::number(nMinWeight);
+    QString stakemin = QString::number(nWeight);
     QString stakemax = QString::number(nNetworkWeight);
     QString phase = "";
     QString LastPoWBlock = QString::number(LAST_POW_BLOCK);
