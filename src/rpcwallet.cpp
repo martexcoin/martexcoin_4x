@@ -1295,6 +1295,12 @@ Value gettransaction(const Array& params, bool fHelp)
         Array details;
         ListTransactions(pwalletMain->mapWallet[hash], "*", 0, false, details);
         entry.push_back(Pair("details", details));
+
+        CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
+        ssTx << wtx;
+        string strHex = HexStr(ssTx.begin(), ssTx.end());
+        entry.push_back(Pair("hex", strHex));
+
     }
     else
     {
