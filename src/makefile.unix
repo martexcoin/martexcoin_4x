@@ -153,7 +153,17 @@ OBJS= \
     obj/scrypt-arm.o \
     obj/scrypt-x86.o \
     obj/smessage.o \
-    obj/scrypt-x86_64.o 
+    obj/scrypt-x86_64.o \
+    obj/zerocoin/Accumulator.o \
+    obj/zerocoin/AccumulatorProofOfKnowledge.o \
+    obj/zerocoin/Coin.o \
+    obj/zerocoin/CoinSpend.o \
+    obj/zerocoin/Commitment.o \
+    obj/zerocoin/ParamGeneration.o \
+    obj/zerocoin/Params.o \
+    obj/zerocoin/SerialNumberSignatureOfKnowledge.o \
+    obj/zerocoin/SpendMetaData.o \
+    obj/zerocoin/ZeroTest.o
 
 all: MartexCoind
 

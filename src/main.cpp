@@ -12,6 +12,7 @@
 #include "ui_interface.h"
 #include "kernel.h"
 #include "smessage.h"
+#include "zerocoin/Zerocoin.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -34,6 +35,8 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 set<pair<COutPoint, unsigned int> > setStakeSeen;
+
+libzerocoin::Params* ZCParams;
 
 CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // PoW starting difficulty = 0.0002441
 CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);//  PoS starting difficulty = 0.0002441

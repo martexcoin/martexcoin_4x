@@ -11,6 +11,7 @@
 #include "script.h"
 #include "scrypt.h"
 #include "hashblock.h"
+#include "zerocoin/Zerocoin.h"
 
 #include <list>
 
@@ -57,6 +58,8 @@ static const uint256 hashGenesisBlockTestNet("0x0000bb718576edb7039081063593e532
 inline int64_t PastDrift(int64_t nTime)   { return nTime - 2 * 60 * 60; } // up to 2 hours day from the past
 inline int64_t FutureDrift(int64_t nTime) { return nTime + 2 * 60 * 60; } // up to 2 hours from the future
 
+
+extern libzerocoin::Params* ZCParams;
 extern int64_t devCoin;
 extern CScript COINBASE_FLAGS;
 extern CCriticalSection cs_main;
