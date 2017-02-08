@@ -200,12 +200,19 @@ obj/%.o: %.cpp
 	  rm -f $(@:%.o=%.d)
 
 obj/%.o: %.c
-		$(CXX) -c $(xCXXFLAGS) -fpermissive -MMD -MF $(@:%.o=%.d) -o $@ $<
-		@cp $(@:%.o=%.d) $(@:%.o=%.P); \
-		  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-		     -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
-		  rm -f $(@:%.o=%.d)
-		  
+	$(CXX) -c $(xCXXFLAGS) -fpermissive -MMD -MF $(@:%.o=%.d) -o $@ $<
+	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
+	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
+	  rm -f $(@:%.o=%.d)
+
+obj/zerocoin/%.o: zerocoin/%.cpp
+	$(CXX) -c $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
+	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
+	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
+	  rm -f $(@:%.o=%.d)
+
 MartexCoind: $(OBJS:obj/%=obj/%)
 	$(LINK) $(xCXXFLAGS) -o $@ $^ $(xLDFLAGS) $(LIBS)
 
@@ -213,6 +220,8 @@ clean:
 	-rm -f MartexCoind
 	-rm -f obj/*.o
 	-rm -f obj/*.P
+	-rm -f obj/zerocoin/*.o
+	-rm -f obj/zerocoin/*.P
 	-rm -f obj-test/*.o
 	-rm -f obj-test/*.P
 	-rm -f obj/build.h

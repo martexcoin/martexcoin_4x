@@ -31,13 +31,17 @@ static const int LAST_POW_BLOCK = 33331;
 static const unsigned int MAX_BLOCK_SIZE = 20000000; //20MB
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
-static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
+/** Default for -maxorphantx, maximum number of orphan transactions kept in memory */
+static const unsigned int DEFAULT_MAX_ORPHAN_TRANSACTIONS = 100;
 static const unsigned int MAX_INV_SZ = 50000;
 static const int64_t MIN_TX_FEE = 10000;
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
 static const int64_t MAX_MONEY = 5000000 * COIN;
 static const int64_t MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;	// 7% first year, 15, then 10. Set in main.cpp
 static const int64_t COIN_YEAR_REWARD = 50 * CENT; // 50% per year (output to console will be updated)
+
+/** Default for accepting alerts from the P2P network. */
+static const bool DEFAULT_ALERTS = true;
 
 #define FOUNDATION "Null"
 #define FOUNDATION_TEST "Null"
@@ -91,6 +95,8 @@ extern int64_t nReserveBalance;
 extern int64_t nMinimumInputValue;
 extern bool fUseFastIndex;
 extern unsigned int nDerivationMethodIndex;
+
+extern bool fAlerts;
 
 extern bool fEnforceCanonical;
 

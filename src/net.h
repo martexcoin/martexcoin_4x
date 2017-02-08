@@ -221,6 +221,7 @@ public:
     SOCKET hSocket;
     CDataStream vSend;
     CDataStream vRecv;
+    size_t nSendSize; // total size of all vSendMsg entries
     CCriticalSection cs_vSend;
     CCriticalSection cs_vRecv;
     int64_t nLastSend;
@@ -293,6 +294,7 @@ public:
         fNetworkNode = false;
         fSuccessfullyConnected = false;
         fDisconnect = false;
+	nSendSize = 0;
         nRefCount = 0;
         hashContinue = 0;
         pindexLastGetBlocksBegin = 0;
