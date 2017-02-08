@@ -7,7 +7,7 @@ DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
 CONFIG += thread
 CONFIG += static
-QT += network
+QT += gui widgets network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 lessThan(QT_MAJOR_VERSION, 5): CONFIG += static
 QMAKE_CXXFLAGS = -fpermissive
@@ -294,7 +294,18 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/messagepage.h \
     src/smessage.h \
     src/lz4/lz4.h \
-    src/xxhash/xxhash.h
+    src/xxhash/xxhash.h \
+	src/zerocoin/Accumulator.h \
+    src/zerocoin/AccumulatorProofOfKnowledge.h \
+    src/zerocoin/Coin.h \
+    src/zerocoin/CoinSpend.h \
+    src/zerocoin/Commitment.h \
+    src/zerocoin/ParamGeneration.h \
+    src/zerocoin/Params.h \
+    src/zerocoin/SerialNumberSignatureOfKnowledge.h \
+    src/zerocoin/SpendMetaData.h \
+    src/zerocoin/ZeroTest.h
+	
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
@@ -374,7 +385,17 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/lz4/lz4.c \
     src/xxhash/xxhash.c \
     src/pbkdf2.cpp \
-    src/qt/stakereportdialog.cpp
+    src/qt/stakereportdialog.cpp \
+	src/zerocoin/Accumulator.cpp \
+    src/zerocoin/AccumulatorProofOfKnowledge.cpp \
+    src/zerocoin/Coin.cpp \
+    src/zerocoin/CoinSpend.cpp \
+    src/zerocoin/Commitment.cpp \
+    src/zerocoin/ParamGeneration.cpp \
+    src/zerocoin/Params.cpp \
+    src/zerocoin/SerialNumberSignatureOfKnowledge.cpp \
+    src/zerocoin/SpendMetaData.cpp \
+    src/zerocoin/ZeroTest.cpp
 
 RESOURCES += \
     src/qt/bitcoin.qrc
