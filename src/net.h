@@ -700,6 +700,11 @@ public:
     // new code.
     static void ClearBanned(); // needed for unit testing
     static bool IsBanned(CNetAddr ip);
+
+    static bool Ban(const CNetAddr &ip, int64_t bantimeoffset = 0);
+    static bool Unban(const CNetAddr &ip);
+    static void GetBanned(std::map<CNetAddr, int64_t> &banmap);
+
     bool Misbehaving(int howmuch); // 1 == a little, 100 == a lot
     void copyStats(CNodeStats &stats);
 };

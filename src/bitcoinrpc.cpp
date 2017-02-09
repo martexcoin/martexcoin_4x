@@ -243,6 +243,11 @@ static const CRPCCommand vRPCCommands[] =
     { "getblockcount",          &getblockcount,          true,   false },
     { "getconnectioncount",     &getconnectioncount,     true,   false },
     { "getpeerinfo",            &getpeerinfo,            true,   false },
+
+    { "setban",                 &setban,                 true,   false },
+    { "listbanned",             &listbanned,             true,   false },
+    { "clearbanned",            &clearbanned,            true,   false },
+
     { "addnode",                &addnode,                true,   false },
     { "getdifficulty",          &getdifficulty,          true,   false },
     { "getinfo",                &getinfo,                true,   false },
@@ -1237,6 +1242,8 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
     if (strMethod == "sendalert"              && n > 4) ConvertTo<boost::int64_t>(params[4]);
     if (strMethod == "sendalert"              && n > 5) ConvertTo<boost::int64_t>(params[5]);
     if (strMethod == "sendalert"              && n > 6) ConvertTo<boost::int64_t>(params[6]);
+
+    if (strMethod == "setban"                 && n > 2) ConvertTo<double>(params[2]);
 
     if (strMethod == "sendmany"               && n > 1) ConvertTo<Object>(params[1]);
     if (strMethod == "sendmany"               && n > 2) ConvertTo<boost::int64_t>(params[2]);

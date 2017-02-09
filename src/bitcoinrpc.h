@@ -53,6 +53,10 @@ enum RPCErrorCode
     // P2P client errors
     RPC_CLIENT_NOT_CONNECTED        = -9,  // Bitcoin is not connected
     RPC_CLIENT_IN_INITIAL_DOWNLOAD  = -10, // Still downloading initial blocks
+    RPC_CLIENT_NODE_ALREADY_ADDED   = -23, //! Node is already added
+    RPC_CLIENT_NODE_NOT_ADDED       = -24, //! Node has not been added before
+    RPC_CLIENT_NODE_NOT_CONNECTED   = -29, //! Node to disconnect not found in connected nodes
+    RPC_CLIENT_INVALID_IP_OR_SUBNET = -30, //! Invalid IP/Subnet
 
     // Wallet errors
     RPC_WALLET_ERROR                = -4,  // Unspecified problem with wallet (key not found etc.)
@@ -151,6 +155,10 @@ extern json_spirit::Value dumpwallet(const json_spirit::Array& params, bool fHel
 extern json_spirit::Value importwallet(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value dumpprivkey(const json_spirit::Array& params, bool fHelp); // in rpcdump.cpp
 extern json_spirit::Value importprivkey(const json_spirit::Array& params, bool fHelp);
+
+extern json_spirit::Value setban(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value listbanned(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value clearbanned(const json_spirit::Array& params, bool fHelp);
 
 extern json_spirit::Value sendalert(const json_spirit::Array& params, bool fHelp);
 
