@@ -923,6 +923,7 @@ bool AppInit2()
 	while(pblockAddrIndex)
 	{
 	    uiInterface.InitMessage(strprintf("Rebuilding address index, block %i", pblockAddrIndex->nHeight));
+            printf("Rebuilding address index, block %i \n", pblockAddrIndex->nHeight);
 	    bool ReadFromDisk(const CBlockIndex* pindex, bool fReadTransactions=true);
 	    CBlock pblockAddr;
 	    if(pblockAddr.ReadFromDisk(pblockAddrIndex, true))

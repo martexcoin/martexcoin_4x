@@ -51,8 +51,8 @@ const CBlockIndex* getBlockIndex(int height)
 
 std::string getBlockHash(int Height)
 {
-    if(Height > pindexBest->nHeight) { return "0x2268acd51c9790b6aca5a564189ad1aa0de92eedb05713f8f5e16e2b85af862d"; }
-    if(Height < 0) { return "0x2268acd51c9790b6aca5a564189ad1aa0de92eedb05713f8f5e16e2b85af862d"; }
+    if(Height > pindexBest->nHeight) { return ""; }
+    if(Height < 0) { return ""; }
     int desiredheight;
     desiredheight = Height;
     if (desiredheight < 0 || desiredheight > nBestHeight)
@@ -62,7 +62,7 @@ std::string getBlockHash(int Height)
     CBlockIndex* pblockindex = mapBlockIndex[hashBestChain];
     while (pblockindex->nHeight > desiredheight)
         pblockindex = pblockindex->pprev;
-    return pblockindex->phashBlock->GetHex();
+    return  pblockindex->GetBlockHash().GetHex(); // pblockindex->phashBlock->GetHex();
 }
 
 int getBlockTime(int Height)
@@ -88,7 +88,7 @@ std::string getBlockMerkle(int Height)
 
     CBlock block;
     CBlockIndex* pblockindex = mapBlockIndex[hash];
-    return pblockindex->hashMerkleRoot.ToString().substr(0,10).c_str();
+    return pblockindex->hashMerkleRoot.ToString();//.substr(0,10).c_str();
 }
 
 int getBlocknBits(int Height)
@@ -254,7 +254,7 @@ std::string getInputs(std::string txid)
         str.append(lol6);
         str.append(": ");
         str.append(amount);
-        str.append("MXT");
+        str.append(" MXT");
         str.append("\n");
     }
 
