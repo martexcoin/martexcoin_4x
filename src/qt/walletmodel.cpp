@@ -466,3 +466,8 @@ void WalletModel::listLockedCoins(std::vector<COutPoint>& vOutpts)
 {
     return;
 }
+
+void WalletModel::clearOrphans()
+{
+    wallet->ClearOrphans();
+}

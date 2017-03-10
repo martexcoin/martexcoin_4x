@@ -1229,6 +1229,9 @@ void SetMockTime(int64_t nMockTimeIn)
     nMockTime = nMockTimeIn;
 }
 
+uint32_t insecure_rand_Rz = 11;
+uint32_t insecure_rand_Rw = 11;
+
 static int64_t nTimeOffset = 0;
 
 int64_t GetTimeOffset()
