@@ -3208,6 +3208,11 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 
         pfrom->fClient = !(pfrom->nServices & NODE_NETWORK);
 
+        // reset counts to detect forked peers
+        pfrom->nHighestHeightRequested = 0;
+        pfrom->nHeightBackwards = 0;
+        pfrom->nHeightBackwardsLast = GetTime();
+
         if (GetBoolArg("-synctime", true))
             AddTimeData(pfrom->addr, nTime);
 
@@ -3499,6 +3504,31 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             pindex = pindex->pnext;
         int nLimit = 500;
         printf("getblocks %d to %s limit %d\n", (pindex ? pindex->nHeight : -1), hashStop.ToString().substr(0,20).c_str(), nLimit);
+
+        // detect when peers go backwards in the height of blocks that they request, which is a sign of a forked client stuck in an endless loop. if this happens too many times, ban the peer.
+        if (pindex)    // only act when an explicit height is requested
+        {
+            if (pindex->nHeight > pfrom->nHighestHeightRequested)
+            {
+                pfrom->nHighestHeightRequested = pindex->nHeight;
+            } else {
+                if (pindex->nHeight < (pfrom->nHighestHeightRequested - 500))   // peer has gone backwards in height when requesting blocks
+                {
+                    if (pfrom->nHeightBackwardsLast < (GetTime() - 3600))  pfrom->nHeightBackwards = 0;  // reset penalty count if last backward leap was more than an hour ago
+                    pfrom->nHeightBackwards++;
+                    printf("peer %s: leap backwards in height request, from max %d to current %d. penalty=%d/100\n", pfrom->addr.ToString().c_str(), pfrom->nHighestHeightRequested, pindex->nHeight,
+                        pfrom->nHeightBackwards);
+                    pfrom->nHeightBackwardsLast = GetTime();
+                    pfrom->nHighestHeightRequested = pindex->nHeight;  // reset maximum to height of current request
+                }
+            }
+            if (pfrom->nHeightBackwards >= 100)
+            {
+                  pfrom->Misbehaving(100);
+                  return error("peer %s: sync repeatedly leaping backwards to lower height", pfrom->addr.ToString().c_str());
+            }
+        }
+
         for (; pindex; pindex = pindex->pnext)
         {
             if (pindex->GetBlockHash() == hashStop)

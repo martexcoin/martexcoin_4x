@@ -228,6 +228,9 @@ public:
     int64_t nLastRecv;
     int64_t nLastSendEmpty;
     int64_t nTimeConnected;
+    int nHighestHeightRequested;
+    int nHeightBackwards;
+    int64_t nHeightBackwardsLast;
     int nHeaderStart;
     unsigned int nMessageStart;
     CAddress addr;
@@ -282,6 +285,9 @@ public:
         nLastRecv = 0;
         nLastSendEmpty = GetTime();
         nTimeConnected = GetTime();
+        nHighestHeightRequested = 0;
+        nHeightBackwards = 0;
+        nHeightBackwardsLast = GetTime();
         nHeaderStart = -1;
         nMessageStart = -1;
         addr = addrIn;
