@@ -50,6 +50,15 @@ void OptionsModel::Init()
     nReserveBalance = settings.value("nReserveBalance").toLongLong();
     language = settings.value("language", "").toString();
 
+    if (!settings.contains("nAnonsendRounds"))
+   	 settings.setValue("nAnonsendRounds", 2);
+
+    if (!settings.contains("nAnonymizeMarteXcoinAmount"))
+	 settings.setValue("nAnonymizeMarteXcoinAmount", 1000);
+
+    nAnonsendRounds = settings.value("nAnonsendRounds").toLongLong();
+    nAnonymizeMarteXcoinAmount = settings.value("nAnonymizeMarteXcoinAmount").toLongLong();
+
     // These are shared with core Bitcoin; we want
     // command-line options to override the GUI settings:
     if (settings.contains("fUseUPnP"))
@@ -62,6 +71,12 @@ void OptionsModel::Init()
         SoftSetBoolArg("-detachdb", settings.value("detachDB").toBool());
     if (!language.isEmpty())
         SoftSetArg("-lang", language.toStdString());
+
+    if (settings.contains("nAnonsendRounds"))
+	SoftSetArg("-anonsendrounds", settings.value("nAnonsendRounds").toString().toStdString());
+    if (settings.contains("nAnonymizeMarteXcoinAmount"))
+  	SoftSetArg("-anonymizeMarteXcoinamount", settings.value("nAnonymizeMarteXcoinAmount").toString().toStdString());
+
 }
 
 bool OptionsModel::Upgrade()
@@ -176,6 +191,10 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return settings.value("language", "");
         case CoinControlFeatures:
             return QVariant(fCoinControlFeatures);
+        case AnonsendRounds:
+            return QVariant(nAnonsendRounds);
+        case AnonymizeMarteXcoinAmount:
+            return QVariant(nAnonymizeMarteXcoinAmount);
         default:
             return QVariant();
         }
@@ -276,6 +295,16 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             emit coinControlFeaturesChanged(fCoinControlFeatures);
             }
             break;
+	case AnonsendRounds:
+	     nAnonsendRounds = value.toInt();
+	     settings.setValue("nAnonsendRounds", nAnonsendRounds);
+	     emit anonsendRoundsChanged(nAnonsendRounds);
+	     break;
+	case AnonymizeMarteXcoinAmount:
+	     nAnonymizeMarteXcoinAmount = value.toInt();
+	     settings.setValue("nAnonymizeMarteXcoinAmount", nAnonymizeMarteXcoinAmount);
+	     emit anonymizeMarteXcoinAmountChanged(nAnonymizeMarteXcoinAmount);
+	     break;
         default:
             break;
         }

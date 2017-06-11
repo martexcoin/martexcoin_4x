@@ -9,23 +9,23 @@ USE_UPNP:=-
 USE_IPV6:=1
 
 DEPSDIR?=/usr/local
-BOOST_SUFFIX?=-mgw49-mt-s-1_57
+BOOST_SUFFIX?=-mgw48-mt-s-1_55
 
 INCLUDEPATHS= \
  -I"$(CURDIR)" \
  -I"$(DEPSDIR)/include" \
- -I"c:/deps/boost_1_57_0" \
+ -I"c:/deps/boost_1_55_0" \
  -I"c:/deps/db-4.8.30.NC/build_unix" \
- -I"c:/deps/miniupnpc" \
- -I"c:/deps/openssl-1.0.1l/include"
+ -I"c:/deps/miniupnpc-1.8" \
+ -I"c:/deps/openssl-1.0.1g/include"
 
 LIBPATHS= \
  -L"$(CURDIR)/leveldb" \
  -L"$(DEPSDIR)/lib" \
- -L"c:/deps/boost_1_57_0/stage/lib" \
+ -L"c:/deps/boost_1_55_0/stage/lib" \
  -L"c:/deps/db-4.8.30.NC/build_unix" \
- -L"c:/deps/miniupnpc" \
- -L"c:/deps/openssl-1.0.1l"
+ -L"c:/deps/miniupnpc-1.8" \
+ -L"c:/deps/openssl-1.0.1g"
 
 LIBS= \
  -l leveldb \
@@ -50,8 +50,8 @@ ifndef USE_UPNP
 	override USE_UPNP = -
 endif
 ifneq (${USE_UPNP}, -)
- INCLUDEPATHS += -I"C:\deps\miniupnpc"
- LIBPATHS += -L"C:\deps\miniupnpc"
+ INCLUDEPATHS += -I"C:\miniupnpc-1.6"
+ LIBPATHS += -L"C:\miniupnpc-1.6"
  LIBS += -l miniupnpc -l iphlpapi
  DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif
@@ -111,7 +111,7 @@ OBJS= \
     obj/scrypt-arm.o \
     obj/scrypt-x86.o \
     obj/scrypt-x86_64.o \
-	obj/zerocoin/Accumulator.o \
+    obj/zerocoin/Accumulator.o \
     obj/zerocoin/AccumulatorProofOfKnowledge.o \
     obj/zerocoin/Coin.o \
     obj/zerocoin/CoinSpend.o \
@@ -120,7 +120,15 @@ OBJS= \
     obj/zerocoin/Params.o \
     obj/zerocoin/SerialNumberSignatureOfKnowledge.o \
     obj/zerocoin/SpendMetaData.o \
-    obj/zerocoin/ZeroTest.o
+    obj/zerocoin/ZeroTest.o \
+    obj/activemasternode.o \
+    obj/anonsend.o \
+    obj/instantx.o \
+    obj/masternodeconfig.o \
+    obj/masternode.o \
+    obj/rpcanonsend.o \
+    obj/spork.o
+
 
 all: MartexCoind.exe
 
@@ -159,11 +167,11 @@ obj/%.o: %.cpp
 	  rm -f $(@:%.o=%.d)
 
 obj/zerocoin/%.o: zerocoin/%.cpp
-	$(CXX) -c $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
-	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
-		sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-			-e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
-        rm -f $(@:%.o=%.d)
+        $(CXX) -c $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
+        @cp $(@:%.o=%.d) $(@:%.o=%.P); \
+          sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+              -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
+          rm -f $(@:%.o=%.d)
 
 MartexCoind.exe: $(OBJS:obj/%=obj/%)
 	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)

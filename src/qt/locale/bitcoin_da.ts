@@ -1766,8 +1766,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Indtast en MartexCoin-adresse (f.eks Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Indtast en MartexCoin-adresse (f.eks MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1910,8 +1910,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to send the payment to  (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Adressen til at sende betalingen til (f.eks Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>The address to send the payment to  (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Adressen til at sende betalingen til (f.eks MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1940,8 +1940,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Indtast en MartexCoin-adresse (f.eks Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Indtast en MartexCoin-adresse (f.eks MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
 </context>
 <context>
@@ -1964,8 +1964,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to sign the message with (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Adresse til at underskrive meddelelsen med (f.eks Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>The address to sign the message with (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Adresse til at underskrive meddelelsen med (f.eks MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2028,8 +2028,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+21"/>
-        <source>The address the message was signed with (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Adressen meddelelse blev underskrevet med (f.eks Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>The address the message was signed with (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Adressen meddelelse blev underskrevet med (f.eks MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
     <message>
         <location line="+40"/>
@@ -2044,8 +2044,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Indtast en MartexCoin-adresse (f.eks Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Indtast en MartexCoin-adresse (f.eks MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
     <message>
         <location line="-2"/>

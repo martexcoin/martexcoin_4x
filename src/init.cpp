@@ -19,6 +19,12 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <openssl/crypto.h>
 
+#include "main.h"
+#include "version.h"
+#include "activemasternode.h"
+#include "spork.h"
+#include "anonsend.h"
+
 #ifndef WIN32
 #include <signal.h>
 #endif
@@ -321,6 +327,24 @@ std::string HelpMessage()
         "  -rpcsslprivatekeyfile=<file.pem>         " + _("Server private key (default: server.pem)") + "\n" +
         "  -rpcsslciphers=<ciphers>                 " + _("Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)") + "\n";
 
+	" -litemode=<n> " + _("Disable all Masternode and Anonsend related functionality (0-1, default: 0)") + "\n";
+	"\n" + _("Masternode options:") + "\n";
+	" -masternode=<n> " + _("Enable the client to act as a masternode (0-1, default: 0)") + "\n";
+	" -mnconf=<file> " + _("Specify masternode configuration file (default: masternode.conf)") + "\n";
+	" -masternodeprivkey=<n> " + _("Set the masternode private key") + "\n";
+	" -masternodeaddr=<n> " + _("Set external address:port to get to this masternode (example: address:port)") + "\n";
+	" -masternodeminprotocol=<n> " + _("Ignore masternodes less than version (example: 70007; default : 0)") + "\n";
+
+	"\n" + _("Anonsend options:") + "\n";
+	" -enableanonsend=<n> " + _("Enable use of automated anonsend for funds stored in this wallet (0-1, default: 0)") + "\n";
+	" -anonsendrounds=<n> " + _("Use N separate masternodes to anonymize funds (2-8, default: 2)") + "\n";
+	" -anonymizeMarteXcoinamount=<n> " + _("Keep N MarteXcoin anonymized (default: 0)") + "\n";
+	" -liquidityprovider=<n> " + _("Provide liquidity to Anonsend by infrequently mixing coins on a continual basis (0-100, default: 0, 1=very frequent, high fees, 100=very infrequent, low fees)") + "\n";
+
+	"\n" + _("InstantX options:") + "\n";
+	" -enableinstantx=<n> " + _("Enable instantx, show confirmations for locked transactions (bool, default: true)") + "\n";
+	" -instantxdepth=<n> " + _("Show N confirmations for a successfully locked transaction (0-9999, default: 1)") + "\n";
+
         "\n" + _("Secure messaging options:") + "\n" +
         "  -nosmsg                                  " + _("Disable secure messaging.") + "\n" +
         "  -debugsmsg                               " + _("Log extra debug messages.") + "\n" +
@@ -543,6 +567,17 @@ bool AppInit2()
     printf("Default data directory %s\n", GetDefaultDataDir().string().c_str());
     printf("Used data directory %s\n", strDataDir.c_str());
     std::ostringstream strErrors;
+
+    if (mapArgs.count("-masternodepaymentskey")) // masternode payments priv key
+    {
+	 if (!masternodePayments.SetPrivKey(GetArg("-masternodepaymentskey", "")))
+		 return InitError(_("Unable to sign masternode payment winner, wrong key?"));
+	 if (!sporkManager.SetPrivKey(GetArg("-masternodepaymentskey", "")))
+		 return InitError(_("Unable to sign spork message, wrong key?"));
+    }
+
+    //ignore masternodes below protocol version
+    CMasterNode::minProtoVersion = GetArg("-masternodeminprotocol", MIN_MN_PROTO_VERSION);
 
     if (fDaemon)
         fprintf(stdout, "MartexCoin server starting\n");
@@ -912,6 +947,99 @@ bool AppInit2()
 
     if (!CheckDiskSpace())
         return false;
+
+fMasterNode = GetBoolArg("-masternode", false);
+ if(fMasterNode) {
+ printf("IS ANONSEND MASTER NODE\n");
+ strMasterNodeAddr = GetArg("-masternodeaddr", "");
+
+ printf(" addr %s\n", strMasterNodeAddr.c_str());
+
+ if(!strMasterNodeAddr.empty()){
+ CService addrTest = CService(strMasterNodeAddr);
+ if (!addrTest.IsValid()) {
+ return InitError("Invalid -masternodeaddr address: " + strMasterNodeAddr);
+ }
+ }
+
+ strMasterNodePrivKey = GetArg("-masternodeprivkey", "");
+ if(!strMasterNodePrivKey.empty()){
+ std::string errorMessage;
+
+ CKey key;
+ CPubKey pubkey;
+
+ if(!anonSendSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubkey))
+ {
+ return InitError(_("Invalid masternodeprivkey. Please see documenation."));
+ }
+
+ activeMasternode.pubKeyMasternode = pubkey;
+
+ } else {
+ return InitError(_("You must specify a masternodeprivkey in the configuration. Please see documentation for help."));
+ }
+ }
+
+ fEnableAnonsend = GetBoolArg("-enableanonsend", false);
+
+ nAnonsendRounds = GetArg("-anonsendrounds", 2);
+ if(nAnonsendRounds > 16) nAnonsendRounds = 16;
+ if(nAnonsendRounds < 1) nAnonsendRounds = 1;
+
+ nLiquidityProvider = GetArg("-liquidityprovider", 0); //0-100
+ if(nLiquidityProvider != 0) {
+ anonSendPool.SetMinBlockSpacing(std::min(nLiquidityProvider,100)*15);
+ fEnableAnonsend = true;
+ nAnonsendRounds = 99999;
+ }
+
+ nAnonymizeMarteXcoinAmount = GetArg("-anonymizeMarteXcoinamount", 0);
+ if(nAnonymizeMarteXcoinAmount > 999999) nAnonymizeMarteXcoinAmount = 999999;
+ if(nAnonymizeMarteXcoinAmount < 2) nAnonymizeMarteXcoinAmount = 2;
+
+ bool fEnableInstantX = GetBoolArg("-enableinstantx", true);
+ if(fEnableInstantX){
+ nInstantXDepth = GetArg("-instantxdepth", 5);
+ if(nInstantXDepth > 60) nInstantXDepth = 60;
+ if(nInstantXDepth < 0) nAnonymizeMarteXcoinAmount = 0;
+ } else {
+ nInstantXDepth = 0;
+ }
+
+ //lite mode disables all Masternode and Anonsend related functionality
+ fLiteMode = GetBoolArg("-litemode", false);
+ if(fMasterNode && fLiteMode){
+ return InitError("You can not start a masternode in litemode");
+ }
+
+ printf("fLiteMode %d\n", fLiteMode);
+ printf("nInstantXDepth %d\n", nInstantXDepth);
+ printf("Anonsend rounds %d\n", nAnonsendRounds);
+ printf("Anonymize MarteXcoin Amount %d\n", nAnonymizeMarteXcoinAmount);
+
+ /* Denominations
+ A note about convertability. Within Anonsend pools, each denomination
+ is convertable to another.
+ For example:
+ 1MarteXcoin+1000 == (.1MarteXcoin+100)*10
+ 10MarteXcoin+10000 == (1MarteXcoin+1000)*10
+ */
+ anonSendDenominations.push_back( (100000 * COIN)+100000000 );
+ anonSendDenominations.push_back( (10000 * COIN)+10000000 );
+ anonSendDenominations.push_back( (1000 * COIN)+1000000 );
+ anonSendDenominations.push_back( (100 * COIN)+100000 );
+ anonSendDenominations.push_back( (10 * COIN)+10000 );
+ anonSendDenominations.push_back( (1 * COIN)+1000 );
+ anonSendDenominations.push_back( (.1 * COIN)+100 );
+ /* Disabled till we need them
+ anonSendDenominations.push_back( (.01 * COIN)+10 );
+ anonSendDenominations.push_back( (.001 * COIN)+1 );
+ */
+
+ anonSendPool.InitCollateralAddress();
+
+ NewThread(ThreadCheckAnonSendPool, NULL);
 
     RandAddSeedPerfmon();
 

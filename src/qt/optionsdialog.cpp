@@ -150,6 +150,11 @@ void OptionsDialog::setMapper()
     mapper->addMapping(ui->unit, OptionsModel::DisplayUnit);
     mapper->addMapping(ui->displayAddresses, OptionsModel::DisplayAddresses);
     mapper->addMapping(ui->coinControlFeatures, OptionsModel::CoinControlFeatures);
+
+    /* Anonsend Rounds */
+    mapper->addMapping(ui->anonsendRounds, OptionsModel::AnonsendRounds);
+    mapper->addMapping(ui->anonymizeMarteXcoin, OptionsModel::AnonymizeMarteXcoinAmount);
+
 }
 
 void OptionsDialog::enableApplyButton()

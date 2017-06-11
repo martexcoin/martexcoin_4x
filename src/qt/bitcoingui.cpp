@@ -28,9 +28,11 @@
 #include "guiutil.h"
 #include "rpcconsole.h"
 #include "wallet.h"
+#include "masternodemanager.h"
 #include "statisticspage.h"
 #include "blockbrowser.h"
 #include "stakereportdialog.h"
+#include "calcdialog.h"
 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
@@ -85,7 +87,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     notificator(0),
     rpcConsole(0)
 {
-    resize(850, 550);
+    resize(1100, 550);
     setWindowTitle(tr("MartexCoin") + " - " + tr("Wallet"));
 #ifndef Q_OS_MAC
     qApp->setWindowIcon(QIcon(":icons/bitcoin"));
@@ -128,6 +130,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     messagePage   = new MessagePage(this);
 
     signVerifyMessageDialog = new SignVerifyMessageDialog(this);
+    masternodeManagerPage = new MasternodeManager(this);
 
     centralWidget = new QStackedWidget(this);
     centralWidget->addWidget(overviewPage);
@@ -135,6 +138,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     centralWidget->addWidget(addressBookPage);
     centralWidget->addWidget(receiveCoinsPage);
     centralWidget->addWidget(sendCoinsPage);
+    centralWidget->addWidget(masternodeManagerPage);
     centralWidget->addWidget(statisticsPage);
     centralWidget->addWidget(blockBrowser);
     centralWidget->addWidget(messagePage);
@@ -249,6 +253,10 @@ void BitcoinGUI::createActions()
     statisticsAction->setToolTip(tr("View statistics"));
     statisticsAction->setCheckable(true);
     tabGroup->addAction(statisticsAction);
+	
+	calcAction = new QAction(QIcon(":/icons/bitcoin"), tr("&Stake Calculator"), this);
+    calcAction->setToolTip(tr("Open Stake Calculator"));
+    calcAction->setMenuRole(QAction::AboutRole);	
    
     blockAction = new QAction(QIcon(":/icons/block"), tr("&Block Explorer"), this);
     blockAction->setToolTip(tr("Explore the BlockChain"));
@@ -274,6 +282,11 @@ void BitcoinGUI::createActions()
     messageAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
     tabGroup->addAction(messageAction);
 
+    masternodeManagerAction = new QAction(QIcon(":/icons/bitcoin"), tr("&MarteXcoin Nodes"), this);
+    masternodeManagerAction->setToolTip(tr("Show MarteXcoin Nodes status and configure your nodes."));
+    masternodeManagerAction->setCheckable(true);
+    tabGroup->addAction(masternodeManagerAction);
+
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
     connect(sendCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
@@ -284,6 +297,9 @@ void BitcoinGUI::createActions()
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(gotoAddressBookPage()));
+
+    connect(masternodeManagerAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(masternodeManagerAction, SIGNAL(triggered()), this, SLOT(gotoMasternodeManagerPage()));
 
     connect(messageAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(messageAction, SIGNAL(triggered()), this, SLOT(gotoMessagePage()));
@@ -343,6 +359,8 @@ void BitcoinGUI::createActions()
     connect(signMessageAction, SIGNAL(triggered()), this, SLOT(gotoSignMessageTab()));
     connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
     connect(stakeReportAction, SIGNAL(triggered()), this, SLOT(stakeReportClicked()));
+	connect(calcAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+	connect(calcAction, SIGNAL(triggered()), this, SLOT(calcClicked()));
 
 }
 
@@ -372,6 +390,7 @@ void BitcoinGUI::createMenuBar()
     settings->addAction(changePassphraseAction);
     settings->addAction(unlockWalletAction);
     settings->addAction(lockWalletAction);
+	settings->addAction(calcAction);
     settings->addSeparator();
     settings->addAction(optionsAction);
 
@@ -386,18 +405,25 @@ void BitcoinGUI::createToolBars()
 {
     QToolBar *toolbar = addToolBar(tr("Tabs toolbar"));
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    toolbar->setContextMenuPolicy(Qt::PreventContextMenu);
+    toolbar->setOrientation(Qt::Vertical);
+    toolbar->setMovable( false );
+    toolbar->setFixedWidth(152);
+    addToolBar(Qt::LeftToolBarArea,toolbar);
+
     toolbar->addAction(overviewAction);
     toolbar->addAction(sendCoinsAction);
     toolbar->addAction(receiveCoinsAction);
     toolbar->addAction(historyAction);
     toolbar->addAction(addressBookAction);
+    toolbar->addAction(masternodeManagerAction);
     toolbar->addAction(messageAction);
     toolbar->addAction(statisticsAction);
     toolbar->addAction(blockAction);
 
-    QToolBar *toolbar2 = addToolBar(tr("Actions toolbar"));
-    toolbar2->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    toolbar2->addAction(exportAction);
+    foreach(QAction *action, toolbar->actions()) {
+        toolbar->widgetForAction(action)->setFixedWidth(142);
+    }
 }
 
 void BitcoinGUI::setClientModel(ClientModel *clientModel)
@@ -807,6 +833,14 @@ void BitcoinGUI::incomingMessage(const QModelIndex & parent, int start, int end)
     };
 }
 
+void BitcoinGUI::gotoMasternodeManagerPage()
+{
+    masternodeManagerAction->setChecked(true);
+    centralWidget->setCurrentWidget(masternodeManagerPage);
+
+    exportAction->setEnabled(false);
+    disconnect(exportAction, SIGNAL(triggered()), 0, 0);
+}
 
 void BitcoinGUI::gotoOverviewPage()
 {
@@ -1060,6 +1094,12 @@ void BitcoinGUI::showNormalIfMinimized(bool fToggleHidden)
     }
     else if(fToggleHidden)
         hide();
+}
+
+void BitcoinGUI::calcClicked()
+{
+    calcDialog dlg;
+    dlg.exec();
 }
 
 void BitcoinGUI::toggleHidden()

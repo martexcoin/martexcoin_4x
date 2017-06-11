@@ -26,11 +26,11 @@ This is experimental software.
 Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org/) and cryptographic software written by Eric Young (eay@cryptsoft.com) and UPnP software written by Thomas Bernard.</source>
-        <translation>⏎
-Este é um software experimental.⏎
-⏎
-Distribuido sob a licença de software MIT/X11, veja o arquivo anexo COPYING ou http://www.opensource.org/licenses/mit-license.php.⏎
-⏎
+        <translation>
+Este é um software experimental.
+
+Distribuido sob a licença de software MIT/X11, veja o arquivo anexo COPYING ou http://www.opensource.org/licenses/mit-license.php.
+
 Este produto inclui software desenvolvido pelo Projeto OpenSSL para uso no OpenSSL Toolkit (http://www.openssl.org/), software de criptografia escrito por Eric Young (eay@cryptsoft.com) e sofware UPnP escrito por Thomas Bernard.</translation>
     </message>
 </context>
@@ -1749,7 +1749,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1893,7 +1893,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to send the payment to  (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <source>The address to send the payment to  (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1923,7 +1923,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -1947,7 +1947,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to sign the message with (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <source>The address to sign the message with (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2011,7 +2011,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+21"/>
-        <source>The address the message was signed with (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <source>The address the message was signed with (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2027,7 +2027,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
         <translation type="unfinished"/>
     </message>
     <message>

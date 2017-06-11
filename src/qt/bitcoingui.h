@@ -18,6 +18,7 @@ class Notificator;
 class RPCConsole;
 class StatisticsPage;
 class BlockBrowser;
+class MasternodeManager;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -78,6 +79,7 @@ private:
     AddressBookPage *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
     SignVerifyMessageDialog *signVerifyMessageDialog;
+    MasternodeManager *masternodeManagerPage;
 
     QLabel *labelEncryptionIcon;
     QLabel *labelStakingIcon;
@@ -107,9 +109,11 @@ private:
     QAction *lockWalletAction;
     QAction *aboutQtAction;
     QAction *openRPCConsoleAction;
+    QAction *masternodeManagerAction;
     QAction *statisticsAction;
     QAction *blockAction;
     QAction *stakeReportAction;
+	QAction *calcAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -162,6 +166,8 @@ private slots:
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage();
+    /** Switch to masternode page */
+    void gotoMasternodeManagerPage();
     /** Switch to message page */
     void gotoMessagePage();
     /** Switch to statistics page*/
@@ -178,6 +184,8 @@ private slots:
     void optionsClicked();
     /** Show about dialog */
     void aboutClicked();
+	/** Show Stake Calculator Dialog */
+    void calcClicked();	
 #ifndef Q_OS_MAC
     /** Handle tray icon clicked */
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);

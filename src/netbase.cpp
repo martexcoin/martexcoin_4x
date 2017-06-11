@@ -954,7 +954,7 @@ int CNetAddr::GetReachabilityFrom(const CNetAddr *paddrPartner) const
         REACH_TEREDO,
         REACH_IPV6_WEAK,
         REACH_IPV4,
-        REACH_IPV6_STRONG,
+        REACH_IPV6_SMXTG,
         REACH_PRIVATE
     };
 
@@ -976,7 +976,7 @@ int CNetAddr::GetReachabilityFrom(const CNetAddr *paddrPartner) const
         default:         return REACH_DEFAULT;
         case NET_TEREDO: return REACH_TEREDO;
         case NET_IPV4:   return REACH_IPV4;
-        case NET_IPV6:   return fTunnel ? REACH_IPV6_WEAK : REACH_IPV6_STRONG; // only prefer giving our IPv6 address if it's not tunnelled
+        case NET_IPV6:   return fTunnel ? REACH_IPV6_WEAK : REACH_IPV6_SMXTG; // only prefer giving our IPv6 address if it's not tunnelled
         }
     case NET_TOR:
         switch(ourNet) {

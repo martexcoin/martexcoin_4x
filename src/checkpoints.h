@@ -136,6 +136,7 @@ public:
     {
         return SerializeHash(*this);
     }
+
 /*
     bool RelayTo(CNode* pnode) const
     {

@@ -91,8 +91,11 @@
          <property name="text">
           <string>Using OpenSSL version</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
          <property name="indent">
-          <number>10</number>
+          <number>-1</number>
          </property>
         </widget>
        </item>

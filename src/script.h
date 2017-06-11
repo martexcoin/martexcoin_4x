@@ -284,11 +284,7 @@ inline std::string StackString(const std::vector<std::vector<unsigned char> >& v
     return str;
 }
 
-
-
-
-
-
+CScript GetScriptForDestination(const CTxDestination& dest);
 
 
 /** Serialized script, used inside transaction inputs and outputs */
@@ -580,6 +576,7 @@ public:
     // pay-to-script-hash transactions:
     unsigned int GetSigOpCount(const CScript& scriptSig) const;
 
+    bool IsNormalPaymentScript() const;
     bool IsPayToScriptHash() const;
 
     // Called by CTransaction::IsStandard and P2SH VerifyScript (which makes it consensus-critical).

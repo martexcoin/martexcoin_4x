@@ -18,6 +18,13 @@
 #include "netbase.h"
 #include "protocol.h"
 #include "addrman.h"
+#include "main.h"
+#include "key.h"
+#include "keystore.h"
+#include "script.h"
+
+class CTxIn;
+class CTxOut;
 
 class CRequestTracker;
 class CNode;
@@ -35,12 +42,14 @@ bool GetMyExternalIP(CNetAddr& ipRet);
 void AddressCurrentlyConnected(const CService& addr);
 CNode* FindNode(const CNetAddr& ip);
 CNode* FindNode(const CService& ip);
-CNode* ConnectNode(CAddress addrConnect, const char *strDest = NULL);
+CNode* ConnectNode(CAddress addrConnect, const char *strDest = NULL, bool anonSendMaster=false);
 void MapPort();
 unsigned short GetListenPort();
 bool BindListenPort(const CService &bindAddr, std::string& strError=REF(std::string()));
 void StartNode(void* parg);
 bool StopNode();
+
+typedef int NodeId;
 
 enum
 {
@@ -73,6 +82,14 @@ enum
 {
     MSG_TX = 1,
     MSG_BLOCK,
+    // Nodes may always request a MSG_FILTERED_BLOCK in a getdata, however,
+    // MSG_FILTERED_BLOCK should not appear in any invs except as a part of getdata.
+    MSG_FILTERED_BLOCK,
+    MSG_TXLOCK_REQUEST,
+    MSG_TXLOCK_VOTE,
+    MSG_SPORK,
+    MSG_MASTERNODE_WINNER,
+    MSG_DSTX
 };
 
 class CRequestTracker
@@ -127,18 +144,20 @@ extern std::deque<std::pair<int64_t, CInv> > vRelayExpiration;
 extern CCriticalSection cs_mapRelay;
 extern std::map<CInv, int64_t> mapAlreadyAskedFor;
 
-
-
+extern NodeId nLastNodeId;
+extern CCriticalSection cs_nLastNodeId;
 
 class CNodeStats
 {
 public:
+    NodeId nodeid;
     uint64_t nServices;
     int64_t nLastSend;
     int64_t nLastRecv;
     int64_t nTimeConnected;
     std::string addrName;
     int nVersion;
+    std::string cleanSubVer;
     std::string strSubVer;
     bool fInbound;
     int nStartingHeight;
@@ -228,15 +247,18 @@ public:
     int64_t nLastRecv;
     int64_t nLastSendEmpty;
     int64_t nTimeConnected;
+
     int nHighestHeightRequested;
     int nHeightBackwards;
     int64_t nHeightBackwardsLast;
+
     int nHeaderStart;
     unsigned int nMessageStart;
     CAddress addr;
     std::string addrName;
     CService addrLocal;
     int nVersion;
+    std::string cleanSubVer;
     std::string strSubVer;
     bool fOneShot;
     bool fClient;
@@ -244,17 +266,21 @@ public:
     bool fNetworkNode;
     bool fSuccessfullyConnected;
     bool fDisconnect;
+    bool fRelayTxes;
+    bool fAnonSendMaster;
     CSemaphoreGrant grantOutbound;
     int nRefCount;
+    NodeId id;
 protected:
 
     // Denial-of-service detection/prevention
     // Key is IP address, value is banned-until-time
     static std::map<CNetAddr, int64_t> setBanned;
     static CCriticalSection cs_setBanned;
-    int nMisbehavior;
 
 public:
+    int nMisbehavior;
+    std::vector<std::string> vecRequestsFulfilled; //keep track of what client has asked for
     std::map<uint256, CRequestTracker> mapRequests;
     CCriticalSection cs_mapRequests;
     uint256 hashContinue;
@@ -285,9 +311,11 @@ public:
         nLastRecv = 0;
         nLastSendEmpty = GetTime();
         nTimeConnected = GetTime();
+
         nHighestHeightRequested = 0;
         nHeightBackwards = 0;
         nHeightBackwardsLast = GetTime();
+
         nHeaderStart = -1;
         nMessageStart = -1;
         addr = addrIn;
@@ -330,6 +358,9 @@ private:
     void operator=(const CNode&);
 public:
 
+    NodeId GetId() const {
+	return id;
+    }
 
     int GetRefCount()
     {
@@ -391,7 +422,7 @@ public:
             printf("askfor %s   %"PRId64" (%s)\n", inv.ToString().c_str(), nRequestTime, DateTimeStrFormat("%H:%M:%S", nRequestTime/1000000).c_str());
 
         // Make sure not to reuse time indexes to keep things in the same order
-        int64_t nNow = (GetTime() - 1) * 1000000;
+	int64_t nNow = (GetTime() - 1) * 1000000;
         static int64_t nLastTime;
         ++nLastTime;
         nNow = std::max(nNow, nLastTime);
@@ -680,6 +711,39 @@ public:
         PushMessage(pszCommand, hashReply, a1, a2);
     }
 
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9, typename T10>
+    void PushMessage(const char* pszCommand, const T1& a1, const T2& a2, const T3& a3, const T4& a4, const T5& a5, const T6& a6, const T7& a7, const T8& a8, const T9& a9, const T10& a10)
+    {
+        try
+        {
+            BeginMessage(pszCommand);
+            //ssSend << a1 << a2 << a3 << a4 << a5 << a6 << a7 << a8 << a9 << a10;
+            vSend << a1 << a2 << a3 << a4 << a5 << a6 << a7 << a8 << a9 << a10;
+            EndMessage();
+        }
+        catch (...)
+        {
+            AbortMessage();
+            throw;
+        }
+    }
+
+
+    bool HasFulfilledRequest(std::string strRequest)
+    {
+        BOOST_FOREACH(std::string& type, vecRequestsFulfilled)
+        {
+            if(type == strRequest) return true;
+        }
+        return false;
+    }
+
+    void FulfilledRequest(std::string strRequest)
+    {
+        if(HasFulfilledRequest(strRequest)) return;
+        vecRequestsFulfilled.push_back(strRequest);
+    }
+
 
 
     void PushGetBlocks(CBlockIndex* pindexBegin, uint256 hashEnd);
@@ -729,5 +793,15 @@ class CTransaction;
 void RelayTransaction(const CTransaction& tx, const uint256& hash);
 void RelayTransaction(const CTransaction& tx, const uint256& hash, const CDataStream& ss);
 
+void RelayTransactionLockReq(const CTransaction& tx, const uint256& hash, bool relayToAll=false);
+void RelayAnonSendFinalTransaction(const int sessionID, const CTransaction& txNew);
+void RelayAnonSendIn(const std::vector<CTxIn>& in, const int64_t& nAmount, const CTransaction& txCollateral, const std::vector<CTxOut>& out);
+void RelayAnonSendStatus(const int sessionID, const int newState, const int newEntriesCount, const int newAccepted, const std::string error="");
+void RelayAnonSendElectionEntry(const CTxIn vin, const CService addr, const std::vector<unsigned char> vchSig, const int64_t nNow, const CPubKey pubkey, const CPubKey pubkey2, const int count, const int current, const int64_t lastUpdated, const int protocolVersion);
+void SendAnonSendElectionEntry(const CTxIn vin, const CService addr, const std::vector<unsigned char> vchSig, const int64_t nNow, const CPubKey pubkey, const CPubKey pubkey2, const int count, const int current, const int64_t lastUpdated, const int protocolVersion);
+void RelayAnonSendElectionEntryPing(const CTxIn vin, const std::vector<unsigned char> vchSig, const int64_t nNow, const bool stop);
+void SendAnonSendElectionEntryPing(const CTxIn vin, const std::vector<unsigned char> vchSig, const int64_t nNow, const bool stop);
+void RelayAnonSendCompletedTransaction(const int sessionID, const bool error, const std::string errorMessage);
+void RelayAnonSendMasterNodeContestant();
 
 #endif

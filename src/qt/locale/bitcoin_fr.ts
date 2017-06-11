@@ -1766,8 +1766,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Entrer une adresse MartexCoin (par ex: Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Entrer une adresse MartexCoin (par ex: MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1910,8 +1910,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to send the payment to  (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Adresse destinataire du paiement (ex: Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>The address to send the payment to  (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Adresse destinataire du paiement (ex: MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1940,8 +1940,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Entrer une adresse MartexCoin (ex: Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Entrer une adresse MartexCoin (ex: MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
 </context>
 <context>
@@ -1964,8 +1964,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to sign the message with (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Entrer une adresse MartexCoin (ex: Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>The address to sign the message with (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Entrer une adresse MartexCoin (ex: MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2028,8 +2028,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+21"/>
-        <source>The address the message was signed with (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>L&apos;adresse avec laquelle le message à été signé (ex: Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>The address the message was signed with (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>L&apos;adresse avec laquelle le message à été signé (ex: MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
     <message>
         <location line="+40"/>
@@ -2044,8 +2044,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
-        <translation>Entrer une adresse MartexCoin (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
+        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
+        <translation>Entrer une adresse MartexCoin (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
     </message>
     <message>
         <location line="-2"/>

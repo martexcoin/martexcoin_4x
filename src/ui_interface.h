@@ -13,6 +13,7 @@
 
 #include <stdint.h>
 
+class CValverdeNodeConfig;
 class CBasicKeyStore;
 class CWallet;
 class uint256;
@@ -59,7 +60,32 @@ public:
         MORE                  = 0x00010000,
         SETUP                 = 0x00020000,
         // Force blocking, modal message box dialog (not just OS notification)
-        MODAL                 = 0x00040000
+        MODAL                 = 0x00040000,
+
+	/** These values are taken from qmessagebox.h "enum StandardButton" to be directly usable */
+	BTN_OK = 0x00000400U, // QMessageBox::Ok
+	BTN_YES = 0x00004000U, // QMessageBox::Yes
+	BTN_NO = 0x00010000U, // QMessageBox::No
+	BTN_ABORT = 0x00040000U, // QMessageBox::Abort
+	BTN_RETRY = 0x00080000U, // QMessageBox::Retry
+	BTN_IGNORE = 0x00100000U, // QMessageBox::Ignore
+	BTN_CLOSE = 0x00200000U, // QMessageBox::Close
+	BTN_CANCEL = 0x00400000U, // QMessageBox::Cancel
+	BTN_DISCARD = 0x00800000U, // QMessageBox::Discard
+	BTN_HELP = 0x01000000U, // QMessageBox::Help
+	BTN_APPLY = 0x02000000U, // QMessageBox::Apply
+	BTN_RESET = 0x04000000U, // QMessageBox::Reset
+	/**
+	* Mask of all available buttons in CClientUIInterface::MessageBoxFlags
+	* This needs to be updated, when buttons are changed there!
+	*/
+	BTN_MASK = (BTN_OK | BTN_YES | BTN_NO | BTN_ABORT | BTN_RETRY | BTN_IGNORE |
+	BTN_CLOSE | BTN_CANCEL | BTN_DISCARD | BTN_HELP | BTN_APPLY | BTN_RESET),
+	/** Predefined combinations for certain default usage cases */
+	MSG_INFORMATION = (ICON_INFORMATION | BTN_OK),
+	MSG_WARNING = (ICON_WARNING | BTN_OK | MODAL),
+	MSG_ERROR = (ICON_ERROR | BTN_OK | MODAL)
+
     };
 
     /** Show message box. */
@@ -91,6 +117,8 @@ public:
      * @note called with lock cs_mapAlerts held.
      */
     boost::signals2::signal<void (const uint256 &hash, ChangeType status)> NotifyAlertChanged;
+
+    boost::signals2::signal<void (CValverdeNodeConfig nodeConfig)> NotifyValverdeNodeChanged;
 };
 
 extern CClientUIInterface uiInterface;

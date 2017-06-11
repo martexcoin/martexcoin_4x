@@ -27,6 +27,42 @@ class CInv;
 class CRequestTracker;
 class CNode;
 
+class CTxIn;
+class CTxMemPool;
+
+#define START_MASTERNODE_PAYMENTS_TESTNET 1490140800  // Março 22, 2017, 00:00:00 GMT
+#define START_MASTERNODE_PAYMENTS 1490140800
+
+static const int64_t ANONSEND_COLLATERAL = (5000*COIN);
+static const int64_t ANONSEND_FEE = (0.0010000*COIN);
+static const int64_t ANONSEND_POOL_MAX = (4999.99*COIN);
+
+/*
+    At 15 signatures, 1/2 of the masternode network can be owned by
+    one party without comprimising the security of InstantX
+    (1000/2150.0)**15 = 1.031e-05
+*/
+#define INSTANTX_SIGNATURES_REQUIRED           20
+#define INSTANTX_SIGNATURES_TOTAL              30
+
+#define MASTERNODE_NOT_PROCESSED               0 // initial state
+#define MASTERNODE_IS_CAPABLE                  1
+#define MASTERNODE_NOT_CAPABLE                 2
+#define MASTERNODE_STOPPED                     3
+#define MASTERNODE_INPUT_TOO_NEW               4
+#define MASTERNODE_PORT_NOT_OPEN               6
+#define MASTERNODE_PORT_OPEN                   7
+#define MASTERNODE_SYNC_IN_PROCESS             8
+#define MASTERNODE_REMOTELY_ENABLED            9
+
+#define MASTERNODE_MIN_CONFIRMATIONS           15
+#define MASTERNODE_MIN_DSEEP_SECONDS           (30*60)
+#define MASTERNODE_MIN_DSEE_SECONDS            (5*60)
+#define MASTERNODE_PING_SECONDS                (1*60)
+#define MASTERNODE_EXPIRATION_SECONDS          (65*60)
+#define MASTERNODE_REMOVAL_SECONDS             (70*60)
+
+
 static const int LAST_POW_BLOCK = 33331;
 static const unsigned int MAX_BLOCK_SIZE = 20000000; //20MB
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
@@ -36,10 +72,10 @@ static const unsigned int DEFAULT_MAX_ORPHAN_BLOCKS = 750;
 /** Default for -maxorphantx, maximum number of orphan transactions kept in memory */
 static const unsigned int DEFAULT_MAX_ORPHAN_TRANSACTIONS = 100;
 static const unsigned int MAX_INV_SZ = 50000;
-static const int64_t MIN_TX_FEE = 10000;
+static const int64_t MIN_TX_FEE = 10000; // 0.0001
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
 static const int64_t MAX_MONEY = 5000000 * COIN;
-static const int64_t MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;	// 7% first year, 15, then 10. Set in main.cpp
+static const int64_t MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;
 static const int64_t COIN_YEAR_REWARD = 50 * CENT; // 50% per year (output to console will be updated)
 
 /** Default for accepting alerts from the P2P network. */
@@ -63,7 +99,6 @@ static const uint256 hashGenesisBlockTestNet("0x0000bb718576edb7039081063593e532
 
 inline int64_t PastDrift(int64_t nTime)   { return nTime - 2 * 60 * 60; } // up to 2 hours day from the past
 inline int64_t FutureDrift(int64_t nTime) { return nTime + 2 * 60 * 60; } // up to 2 hours from the future
-
 
 extern libzerocoin::Params* ZCParams;
 extern int64_t devCoin;
@@ -141,6 +176,13 @@ uint256 WantedByOrphan(const COrphanBlock* pblockOrphan);
 const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfStake);
 void StakeMiner(CWallet *pwallet);
 void ResendWalletTransactions(bool fForce = false);
+
+int64_t GetMasternodePayment(int nHeight, int64_t blockValue);
+bool AcceptableInputs(CTxMemPool& pool, const CTransaction &txo, bool fLimitFree,
+bool* pfMissingInputs);
+int GetInputAge(CTxIn& vin);
+
+bool AbortNode(const std::string &msg, const std::string &userMessage="");
 
 bool FindTransactionsByDestination(const CTxDestination &dest, std::vector<uint256> &vtxhash);
 
@@ -265,6 +307,7 @@ class CTxIn
 public:
     COutPoint prevout;
     CScript scriptSig;
+    CScript prevPubKey;
     unsigned int nSequence;
 
     CTxIn()
@@ -767,6 +810,8 @@ public:
     int GetBlocksToMaturity() const;
     bool AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs=true);
     bool AcceptToMemoryPool();
+    int GetTransactionLockSignatures() const;
+    bool IsTransactionLockTimedOut() const;
 };
 
 
@@ -857,6 +902,8 @@ public:
 
     // MartexCoin: block signature - signed by one of the coin base txout[N]'s owner
     std::vector<unsigned char> vchBlockSig;
+
+    mutable CScript payee;
 
     // memory only
     mutable std::vector<uint256> vMerkleTree;
@@ -1596,6 +1643,7 @@ public:
     bool removeConflicts(const CTransaction &tx);
     void clear();
     void queryHashes(std::vector<uint256>& vtxid);
+    bool lookup(uint256 hash, CTransaction& result) const;
 
     unsigned long size()
     {

@@ -38,6 +38,9 @@ AskPassphraseDialog::AskPassphraseDialog(Mode mode, QWidget *parent) :
         case UnlockStaking:
             ui->stakingCheckBox->setChecked(true);
             ui->stakingCheckBox->show();
+	case UnlockAnonymize:
+            ui->anonymizationCheckBox->setChecked(true);
+            ui->anonymizationCheckBox->show();
             // fallthru
         case Unlock: // Ask passphrase
             ui->warningLabel->setText(tr("This operation needs your wallet passphrase to unlock the wallet."));
@@ -79,6 +82,7 @@ AskPassphraseDialog::~AskPassphraseDialog()
 void AskPassphraseDialog::setModel(WalletModel *model)
 {
     this->model = model;
+    ui->anonymizationCheckBox->setChecked(model->isAnonymizeOnlyUnlocked());
 }
 
 void AskPassphraseDialog::accept()
@@ -144,9 +148,10 @@ void AskPassphraseDialog::accept()
             QDialog::reject(); // Cancelled
         }
         } break;
+    case UnlockAnonymize:
     case UnlockStaking:
     case Unlock:
-        if(!model->setWalletLocked(false, oldpass))
+        if(!model->setWalletLocked(false, oldpass, ui->anonymizationCheckBox->isChecked()))
         {
             QMessageBox::critical(this, tr("Wallet unlock failed"),
                                   tr("The passphrase entered for the wallet decryption was incorrect."));
@@ -202,6 +207,7 @@ void AskPassphraseDialog::textChanged()
         acceptable = !ui->passEdit2->text().isEmpty() && !ui->passEdit3->text().isEmpty();
         break;
     case UnlockStaking:
+    case UnlockAnonymize: // Old passphrase x1
     case Unlock: // Old passphrase x1
     case Decrypt:
         acceptable = !ui->passEdit1->text().isEmpty();

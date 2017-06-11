@@ -23,6 +23,29 @@ enum DBErrors
     DB_NEED_REWRITE
 };
 
+class CValverdeNodeConfig
+{
+public:
+ int nVersion;
+ std::string sAlias;
+ std::string sAddress;
+ std::string sCollateralAddress;
+ std::string sMasternodePrivKey;
+
+ CValverdeNodeConfig()
+ {
+ nVersion = 0;
+ }
+
+ IMPLEMENT_SERIALIZE(
+ READWRITE(nVersion);
+ READWRITE(sAlias);
+ READWRITE(sAddress);
+ READWRITE(sCollateralAddress);
+ READWRITE(sMasternodePrivKey);
+ )
+};
+
 class CKeyMetadata
 {
 public:
@@ -81,6 +104,9 @@ public:
         nWalletDBUpdated++;
         return Erase(std::make_pair(std::string("tx"), hash));
     }
+    bool WriteValverdeNodeConfig(std::string sAlias, const CValverdeNodeConfig& nodeConfig);
+    bool ReadValverdeNodeConfig(std::string sAlias, CValverdeNodeConfig& nodeConfig);
+    bool EraseValverdeNodeConfig(std::string sAlias);
 
     bool WriteKey(const CPubKey& vchPubKey, const CPrivKey& vchPrivKey, const CKeyMetadata &keyMeta)
     {

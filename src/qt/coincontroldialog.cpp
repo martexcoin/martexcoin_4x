@@ -7,6 +7,8 @@
 #include "addresstablemodel.h"
 #include "optionsmodel.h"
 #include "coincontrol.h"
+#include "anonsend.h"
+#include "main.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -108,6 +110,7 @@ CoinControlDialog::CoinControlDialog(QWidget *parent) :
     ui->treeWidget->setColumnWidth(COLUMN_AMOUNT, 100);
     ui->treeWidget->setColumnWidth(COLUMN_LABEL, 170);
     ui->treeWidget->setColumnWidth(COLUMN_ADDRESS, 290);
+    ui->treeWidget->setColumnWidth(COLUMN_ANONSEND_ROUNDS, 120);
     ui->treeWidget->setColumnWidth(COLUMN_DATE, 110);
     ui->treeWidget->setColumnWidth(COLUMN_CONFIRMATIONS, 100);
     ui->treeWidget->setColumnWidth(COLUMN_PRIORITY, 100);
@@ -486,7 +489,10 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
         
         // Fee
         int64_t nFee = nTransactionFee * (1 + (int64_t)nBytes / 1000);
-        
+
+        // IX Fee
+        if(coinControl->useInstantX) nFee = max(nFee, CENT);
+
         // Min Fee
         int64_t nMinFee = txDummy.GetMinFee(1, GMF_SEND, nBytes);
         
@@ -496,21 +502,29 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
         {
             nChange = nAmount - nPayFee - nPayAmount;
             
-            // if sub-cent change is required, the fee must be raised to at least CTransaction::nMinTxFee   
+
+            // DS Fee = overpay
+            if(coinControl->useAnonSend && nChange > 0)
+            {
+                nPayFee += nChange;
+                nChange = 0;
+            }
+
+            // if sub-cent change is required, the fee must be raised to at least CTransaction::nMinTxFee
             if (nPayFee < CENT && nChange > 0 && nChange < CENT)
             {
-                if (nChange < CENT) // change < 0.01 => simply move all change to fees
+                if (nChange < CENT) // change < 0.0001 => simply move all change to fees
                 {
-                    nPayFee = nChange;
+                    nPayFee += nChange;
                     nChange = 0;
                 }
                 else
                 {
                     nChange = nChange + nPayFee - CENT;
                     nPayFee = CENT;
-                }  
+                }
             }
-            
+
             if (nChange == 0)
                 nBytes -= 34;
         }
@@ -680,6 +694,13 @@ void CoinControlDialog::updateView()
               itemOutput->setBackground(COLUMN_CONFIRMATIONS, Qt::red);
               itemOutput->setDisabled(true);
             }
+
+            // ds+ rounds
+            CTxIn vin = CTxIn(out.tx->GetHash(), out.i);
+            int rounds = GetInputAnonsendRounds(vin);
+            if(rounds >= 0) itemOutput->setText(COLUMN_ANONSEND_ROUNDS, strPad(QString::number(rounds), 15, " "));
+             else itemOutput->setText(COLUMN_ANONSEND_ROUNDS, strPad(QString("n/a"), 15, " "));
+
 
             // confirmations
             itemOutput->setText(COLUMN_CONFIRMATIONS, strPad(QString::number(out.nDepth), 8, " "));

@@ -29,8 +29,8 @@
       <attribute name="title">
        <string>&amp;Main</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_Main">
-       <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="transactionFeeInfoLabel">
          <property name="text">
           <string>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</string>
@@ -43,53 +43,30 @@
          </property>
         </widget>
        </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayoutFee">
-         <item>
-          <widget class="QLabel" name="transactionFeeLabel">
-           <property name="text">
-            <string>Pay transaction &amp;fee</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-           <property name="buddy">
-            <cstring>transactionFee</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="BitcoinAmountField" name="transactionFee"/>
-         </item>
-         <item>
-          <spacer name="horizontalSpacerFee">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+       <item row="6" column="0">
+        <spacer name="verticalSpacer_Main">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item>
-        <widget class="QLabel" name="reserveBalanceInfoLabel">
+       <item row="7" column="0">
+        <widget class="QLabel" name="label">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This setting determines the amount of individual masternodes that an input will be anonymized through. More rounds of anonymization gives a higher degree of privacy, but also costs more in fees.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="text">
-          <string>Reserved amount does not participate in staking and is therefore spendable at any time.</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::PlainText</enum>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
+          <string>Anonsend rounds to use</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="3" column="0">
         <layout class="QHBoxLayout" name="horizontalLayoutReserveBalance">
          <item>
           <widget class="QLabel" name="reserveBalanceLabel">
@@ -122,7 +99,39 @@
          </item>
         </layout>
        </item>
-       <item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="reserveBalanceInfoLabel">
+         <property name="text">
+          <string>Reserved amount does not participate in staking and is therefore spendable at any time.</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::PlainText</enum>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QSpinBox" name="anonymizeMarteXcoin">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>2000</number>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
+         <property name="value">
+          <number>1000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
         <widget class="QCheckBox" name="bitcoinAtStartup">
          <property name="toolTip">
           <string>Automatically start MartexCoin after logging in to the system.</string>
@@ -132,7 +141,78 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="toolTip">
+          <string>This amount acts as a threshold to turn off Anonsend once it's reached.</string>
+         </property>
+         <property name="statusTip">
+          <string notr="true"/>
+         </property>
+         <property name="whatsThis">
+          <string notr="true"/>
+         </property>
+         <property name="accessibleName">
+          <string notr="true"/>
+         </property>
+         <property name="accessibleDescription">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>Amount of MarteXcoin to keep anonymized</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QSpinBox" name="anonsendRounds">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>6</number>
+         </property>
+         <property name="value">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayoutFee">
+         <item>
+          <widget class="QLabel" name="transactionFeeLabel">
+           <property name="text">
+            <string>Pay transaction &amp;fee</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::PlainText</enum>
+           </property>
+           <property name="buddy">
+            <cstring>transactionFee</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="BitcoinAmountField" name="transactionFee"/>
+         </item>
+         <item>
+          <spacer name="horizontalSpacerFee">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="5" column="0">
         <widget class="QCheckBox" name="detachDatabases">
          <property name="toolTip">
           <string>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</string>
@@ -141,19 +221,6 @@
           <string>&amp;Detach databases at shutdown</string>
          </property>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_Main">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -496,19 +563,20 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QValidatedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>qvalidatedlineedit.h</header>
+  </customwidget>
+  <customwidget>
    <class>BitcoinAmountField</class>
-   <extends>QSpinBox</extends>
+   <extends>QLineEdit</extends>
    <header>bitcoinamountfield.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QValueComboBox</class>
    <extends>QComboBox</extends>
    <header>qvaluecombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QValidatedLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>qvalidatedlineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

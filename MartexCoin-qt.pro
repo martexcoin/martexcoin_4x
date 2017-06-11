@@ -1,7 +1,7 @@
 # x13 version
 TEMPLATE = app
 TARGET = MartexCoin-qt
-VERSION = 2.5.4.2
+VERSION = 2.6.0.0
 INCLUDEPATH += src src/json src/qt
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
@@ -197,7 +197,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/editaddressdialog.h \
     src/qt/bitcoinaddressvalidator.h \
     src/qt/statisticspage.h \
-    src/qt/blockbrowser.h \
+    src/qt/blockbrowser.h \	
+    src/qt/calcdialog.h \
     src/alert.h \
     src/addrman.h \
     src/base58.h \
@@ -295,7 +296,7 @@ HEADERS += src/qt/bitcoingui.h \
     src/smessage.h \
     src/lz4/lz4.h \
     src/xxhash/xxhash.h \
-	src/zerocoin/Accumulator.h \
+    src/zerocoin/Accumulator.h \
     src/zerocoin/AccumulatorProofOfKnowledge.h \
     src/zerocoin/Coin.h \
     src/zerocoin/CoinSpend.h \
@@ -304,7 +305,16 @@ HEADERS += src/qt/bitcoingui.h \
     src/zerocoin/Params.h \
     src/zerocoin/SerialNumberSignatureOfKnowledge.h \
     src/zerocoin/SpendMetaData.h \
-    src/zerocoin/ZeroTest.h
+    src/zerocoin/ZeroTest.h \
+    src/qt/anonsendconfig.h \
+    src/masternode.h \
+    src/anonsend.h \
+    src/instantx.h \
+    src/activemasternode.h \
+    src/spork.h \
+    src/qt/addeditvalverdenode.h \
+    src/qt/valverdenodeconfigdialog.h \
+    src/qt/masternodemanager.h
 	
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
@@ -321,6 +331,7 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/blockbrowser.cpp \
     src/qt/editaddressdialog.cpp \
     src/qt/bitcoinaddressvalidator.cpp \
+    src/qt/calcdialog.cpp \
     src/alert.cpp \
     src/version.cpp \
     src/sync.cpp \
@@ -386,7 +397,7 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/xxhash/xxhash.c \
     src/pbkdf2.cpp \
     src/qt/stakereportdialog.cpp \
-	src/zerocoin/Accumulator.cpp \
+    src/zerocoin/Accumulator.cpp \
     src/zerocoin/AccumulatorProofOfKnowledge.cpp \
     src/zerocoin/Coin.cpp \
     src/zerocoin/CoinSpend.cpp \
@@ -395,7 +406,18 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/zerocoin/Params.cpp \
     src/zerocoin/SerialNumberSignatureOfKnowledge.cpp \
     src/zerocoin/SpendMetaData.cpp \
-    src/zerocoin/ZeroTest.cpp
+    src/zerocoin/ZeroTest.cpp \
+    src/qt/anonsendconfig.cpp \
+    src/masternode.cpp \
+    src/anonsend.cpp \
+    src/rpcanonsend.cpp \
+    src/instantx.cpp \
+    src/activemasternode.cpp \
+    src/spork.cpp \
+    src/masternodeconfig.cpp \
+    src/qt/addeditvalverdenode.cpp \
+    src/qt/valverdenodeconfigdialog.cpp \
+    src/qt/masternodemanager.cpp
 
 RESOURCES += \
     src/qt/bitcoin.qrc
@@ -419,7 +441,12 @@ FORMS += \
     src/qt/forms/sendmessagesentry.ui \
     src/qt/forms/messagepage.ui \
     src/qt/forms/optionsdialog.ui \
-    src/qt/forms/stakereportdialog.ui
+    src/qt/forms/stakereportdialog.ui \
+    src/qt/forms/anonsendconfig.ui \
+    src/qt/forms/addeditvalverdenode.ui \
+    src/qt/forms/valverdenodeconfigdialog.ui \
+    src/qt/forms/masternodemanager.ui \
+    src/qt/forms/calcdialog.ui 
 
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h
