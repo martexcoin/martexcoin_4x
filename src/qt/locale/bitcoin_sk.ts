@@ -1765,8 +1765,8 @@ Sumy nižšie ako 0,546 násobok minimálneho poplatku sú zobrazené ako DUST.<
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
-        <translation>Zadajte MartexCoin adresu (napr. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
+        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <translation>Zadajte MartexCoin adresu (napr. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1909,8 +1909,8 @@ Sumy nižšie ako 0,546 násobok minimálneho poplatku sú zobrazené ako DUST.<
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to send the payment to  (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
-        <translation>Adresa pre poslanie platby (napr. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
+        <source>The address to send the payment to  (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <translation>Adresa pre poslanie platby (napr. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1939,8 +1939,8 @@ Sumy nižšie ako 0,546 násobok minimálneho poplatku sú zobrazené ako DUST.<
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
-        <translation>Zadaj a MartexCoin addresu (napr. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
+        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <translation>Zadaj a MartexCoin addresu (napr. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
     </message>
 </context>
 <context>
@@ -1963,8 +1963,8 @@ Sumy nižšie ako 0,546 násobok minimálneho poplatku sú zobrazené ako DUST.<
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to sign the message with (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
-        <translation>Adresa na podpísanie správy (napr. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
+        <source>The address to sign the message with (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <translation>Adresa na podpísanie správy (napr. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2027,8 +2027,8 @@ Sumy nižšie ako 0,546 násobok minimálneho poplatku sú zobrazené ako DUST.<
     </message>
     <message>
         <location line="+21"/>
-        <source>The address the message was signed with (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
-        <translation>Adresa správy bola podpísaná (napr. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
+        <source>The address the message was signed with (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <translation>Adresa správy bola podpísaná (napr. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
     </message>
     <message>
         <location line="+40"/>
@@ -2043,8 +2043,8 @@ Sumy nižšie ako 0,546 násobok minimálneho poplatku sú zobrazené ako DUST.<
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</source>
-        <translation>Zadajte MartexCoin adresu (napr. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)</translation>
+        <source>Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</source>
+        <translation>Zadajte MartexCoin adresu (napr. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)</translation>
     </message>
     <message>
         <location line="-2"/>

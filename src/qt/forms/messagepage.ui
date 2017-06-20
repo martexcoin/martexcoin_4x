@@ -15,6 +15,22 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Minimum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>50</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
     <widget class="QLabel" name="labelExplanation">
      <property name="text">
       <string>These are your sent and received encrypted messages. Click on an item to read it.</string>

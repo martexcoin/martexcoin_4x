@@ -6,8 +6,6 @@ class CCoinControl
 {
 public:
     CTxDestination destChange;
-    bool useAnonSend;
-    bool useInstantX;
 
     CCoinControl()
     {
@@ -44,8 +42,6 @@ public:
     void UnSelectAll()
     {
         setSelected.clear();
-        useInstantX = false;
-        useAnonSend = true;
     }
 
     void ListSelected(std::vector<COutPoint>& vOutpoints)

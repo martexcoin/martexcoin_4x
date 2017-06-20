@@ -32,8 +32,6 @@ public:
         DetachDatabases,   // bool
         Language,          // QString
         CoinControlFeatures, // bool
-	AnonsendRounds, // int
-	AnonymizeMarteXcoinAmount, //int
         OptionIDRowCount,
     };
 
@@ -69,8 +67,6 @@ signals:
     void transactionFeeChanged(qint64);
     void reserveBalanceChanged(qint64);
     void coinControlFeaturesChanged(bool);
-    void anonsendRoundsChanged(int);
-    void anonymizeMarteXcoinAmountChanged(int);
 };
 
 #endif // OPTIONSMODEL_H

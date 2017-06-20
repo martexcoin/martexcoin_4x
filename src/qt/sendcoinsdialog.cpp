@@ -37,7 +37,7 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
 
 #if QT_VERSION >= 0x040700
     /* Do not move this to the XML file, Qt before 4.7 will choke on it */
-    ui->lineEditCoinControlChange->setPlaceholderText(tr("Enter a MartexCoin address (e.g. MVQeVeqYyadP6C4BUrVXYY1SMpjrvSSi2W)"));
+    ui->lineEditCoinControlChange->setPlaceholderText(tr("Enter a MartexCoin address (e.g. Sjz75uKHzUQJnSdzvpiigEGxseKkDhQToX)"));
 #endif
 
     addEntry();
@@ -50,9 +50,6 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
     connect(ui->pushButtonCoinControl, SIGNAL(clicked()), this, SLOT(coinControlButtonClicked()));
     connect(ui->checkBoxCoinControlChange, SIGNAL(stateChanged(int)), this, SLOT(coinControlChangeChecked(int)));
     connect(ui->lineEditCoinControlChange, SIGNAL(textEdited(const QString &)), this, SLOT(coinControlChangeEdited(const QString &)));
-
-    connect(ui->checkUseAnonsend, SIGNAL(stateChanged ( int )), this, SLOT(updateDisplayUnit()));
-    connect(ui->checkInstantX, SIGNAL(stateChanged ( int )), this, SLOT(updateInstantX()));
 
     // Coin Control: clipboard actions
     QAction *clipboardQuantityAction = new QAction(tr("Copy quantity"), this);
@@ -367,15 +364,7 @@ void SendCoinsDialog::updateDisplayUnit()
     {
         // Update labelBalance with the current balance and the current unit
         ui->labelBalance->setText(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), model->getBalance()));
-        CoinControlDialog::coinControl->useAnonSend = ui->checkUseAnonsend->isChecked();
-        coinControlUpdateLabels();
     }
-}
-
-void SendCoinsDialog::updateInstantX()
-{
-    CoinControlDialog::coinControl->useInstantX = ui->checkInstantX->isChecked();
-    coinControlUpdateLabels();
 }
 
 // Coin Control: copy label "Quantity" to clipboard

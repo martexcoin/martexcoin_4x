@@ -63,10 +63,10 @@ public:
 /** An encapsulated public key. */
 class CPubKey {
 private:
+    std::vector<unsigned char> vchPubKey;
     friend class CKey;
 
 public:
-    std::vector<unsigned char> vchPubKey;
     CPubKey() { }
     CPubKey(const std::vector<unsigned char> &vchPubKeyIn) : vchPubKey(vchPubKeyIn) { }
     friend bool operator==(const CPubKey &a, const CPubKey &b) { return a.vchPubKey == b.vchPubKey; }

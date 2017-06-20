@@ -317,10 +317,6 @@ static const CRPCCommand vRPCCommands[] =
     { "sendalert",              &sendalert,              false,  false},
     { "getstakereport",         &getstakereport,         false,  false},
 
-    { "anonsend", 		&anonsend, 		 false, true },
-    { "spork", 			&spork, 		 false, false },
-    { "masternode", 		&masternode, 		 false, true },
-
     { "smsgenable",             &smsgenable,             false,  false},
     { "smsgdisable",            &smsgdisable,            false,  false},
     { "smsglocalkeys",          &smsglocalkeys,          false,  false},
@@ -1372,14 +1368,5 @@ int main(int argc, char *argv[])
     return 0;
 }
 #endif
-
-std::string HelpExampleCli(string methodname, string args){
-    return "> MartexCoind " + methodname + " " + args + "\n";
-}
-
-std::string HelpExampleRpc(string methodname, string args){
-    return "> curl --user myusername --data-binary '{\"jsonrpc\": \"1.0\", \"id\":\"curltest\", "
-        "\"method\": \"" + methodname + "\", \"params\": [" + args + "] }' -H 'content-type: text/plain;' http://127.0.0.1:51324/\n";
-}
 
 const CRPCTable tableRPC;

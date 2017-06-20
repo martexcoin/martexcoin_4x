@@ -7,10 +7,6 @@
 
 #include "wallet.h"
 
-namespace boost {
- class thread_group;
-} // namespace boost
-
 extern CWallet* pwalletMain;
 extern std::string strWalletFileName;
 void StartShutdown();

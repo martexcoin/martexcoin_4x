@@ -15,23 +15,6 @@ using namespace boost;
 static uint64_t nAccountingEntryNumber = 0;
 extern bool fWalletUnlockStakingOnly;
 
-bool CWalletDB::WriteValverdeNodeConfig(std::string sAlias, const CValverdeNodeConfig& nodeConfig)
-{
- nWalletDBUpdated++;
- return Write(std::make_pair(std::string("valverde"), sAlias), nodeConfig, true);
-}
-
-bool CWalletDB::ReadValverdeNodeConfig(std::string sAlias, CValverdeNodeConfig& nodeConfig)
-{
- return Read(std::make_pair(std::string("valverde"), sAlias), nodeConfig);
-}
-
-bool CWalletDB::EraseValverdeNodeConfig(std::string sAlias)
-{
- nWalletDBUpdated++;
- return Erase(std::make_pair(std::string("valverde"), sAlias));
-}
-
 //
 // CWalletDB
 //
@@ -434,14 +417,6 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         {
             ssValue >> pwallet->nOrderPosNext;
         }
-	else if (strType == "valverde")
-	{
-	    std::string sAlias;
-	    ssKey >> sAlias;
-	    CValverdeNodeConfig valverdeNodeConfig;
-	    ssValue >> valverdeNodeConfig;
-	    pwallet->mapMyValverdeNodes.insert(make_pair(sAlias, valverdeNodeConfig));
-	}
     } catch (...)
     {
         return false;

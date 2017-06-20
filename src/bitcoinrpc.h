@@ -137,8 +137,6 @@ extern double GetPoSKernelPS();
 
 extern std::string HexBits(unsigned int nBits);
 extern std::string HelpRequiringPassphrase();
-extern std::string HelpExampleCli(std::string methodname, std::string args);
-extern std::string HelpExampleRpc(std::string methodname, std::string args);
 extern void EnsureWalletIsUnlocked();
 
 //
@@ -245,9 +243,5 @@ extern json_spirit::Value smsgsendanon(const json_spirit::Array& params, bool fH
 extern json_spirit::Value smsginbox(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value smsgoutbox(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value smsgbuckets(const json_spirit::Array& params, bool fHelp);
-
-extern json_spirit::Value anonsend(const json_spirit::Array& params, bool fHelp);
-extern json_spirit::Value spork(const json_spirit::Array& params, bool fHelp);
-extern json_spirit::Value masternode(const json_spirit::Array& params, bool fHelp);
 
 #endif
