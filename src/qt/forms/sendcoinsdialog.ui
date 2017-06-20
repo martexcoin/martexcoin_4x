@@ -626,7 +626,7 @@
         <x>0</x>
         <y>0</y>
         <width>836</width>
-        <height>168</height>
+        <height>170</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -677,7 +677,7 @@
         <string>Anonsend</string>
        </property>
        <property name="checked">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
      </item>
