@@ -34,7 +34,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter an Alias (friendly name) for your MarteXcoin Node and its address (either clearnet IP and port or Tor onion address and port). The address should be in the format 123.456.789.123:51325 or akjdsafxjkhasdf.onion:51325. A masternode private key and a collateral address will both be automatically generated for you. You must send exactly 5000 MXT to the collateral address.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter an Alias (friendly name) for your MarteXcoin Node and its address (either clearnet IP and port or Tor onion address and port). The address should be in the format 123.456.789.123:51315 or akjdsafxjkhasdf.onion:51315. A masternode private key and a collateral address will both be automatically generated for you. You must send exactly 5000 MXT to the collateral address.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>

@@ -1270,9 +1270,9 @@ int64_t GetProofOfWorkReward(int64_t nFees)
 {
     //Moedas mineradas ate 20/06/2017  2738384.78622820 MXT
     int64_t nSubsidy = 150 * COIN; //Inicial 2014
-    if(pindexBest->nHeight == 1)
+    if(pindexBest->nHeight < 2)
     {
-        nSubsidy = 2738384 * COIN; //SWAP to version 2.6.1.0
+        nSubsidy = 1369192.5 * COIN; //SWAP to version 2.6.1.0
     }
 
     if(pindexBest->nHeight > 1 && pindexBest->nHeight < 2501)
