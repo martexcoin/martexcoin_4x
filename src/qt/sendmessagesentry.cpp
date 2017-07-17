@@ -25,7 +25,7 @@ SendMessagesEntry::SendMessagesEntry(QWidget *parent) :
 #if QT_VERSION >= 0x040700
     /* Do not move this to the XML file, Qt before 4.7 will choke on it */
     ui->addAsLabel->setPlaceholderText(tr("Enter a label for this address to add it to your address book"));
-    ui->sendTo->setPlaceholderText(tr("Enter a MarteXcoin address (e.g. B8j4S6kBqDVYcMcQTjPmiSVu24YRwS94SA)"));
+    ui->sendTo->setPlaceholderText(tr("Enter a MarteX address (e.g. MLaZBUkdM15PjB7Zmbmwfwi31L3KeExgFG)"));
     ui->publicKey->setPlaceholderText(tr("Enter the public key for the address above, it is not in the blockchain"));
     ui->messageText->setErrorText(tr("You cannot send a blank message!"));
 #endif
@@ -44,6 +44,12 @@ void SendMessagesEntry::on_pasteButton_clicked()
 {
     // Paste text from clipboard into recipient field
     ui->sendTo->setText(QApplication::clipboard()->text());
+}
+
+void SendMessagesEntry::on_PubkeyPasteButton_clicked()
+{
+    // Paste text from clipboard into recipient field
+    ui->publicKey->setText(QApplication::clipboard()->text());
 }
 
 void SendMessagesEntry::on_addressBookButton_clicked()

@@ -4,7 +4,8 @@
 #include "wallet.h"
 #include "base58.h"
 #include "clientmodel.h"
-#include "bitcoinrpc.h"
+#include "walletmodel.h"
+#include "rpcconsole.h"
 #include "transactionrecord.h"
 
 #include <sstream>
@@ -51,8 +52,8 @@ const CBlockIndex* getBlockIndex(int height)
 
 std::string getBlockHash(int Height)
 {
-    if(Height > pindexBest->nHeight) { return ""; }
-    if(Height < 0) { return ""; }
+    if(Height > pindexBest->nHeight) { return "351c6703813172725c6d660aa539ee6a3d7a9fe784c87fae7f36582e3b797058"; }
+    if(Height < 0) { return "351c6703813172725c6d660aa539ee6a3d7a9fe784c87fae7f36582e3b797058"; }
     int desiredheight;
     desiredheight = Height;
     if (desiredheight < 0 || desiredheight > nBestHeight)
@@ -62,7 +63,7 @@ std::string getBlockHash(int Height)
     CBlockIndex* pblockindex = mapBlockIndex[hashBestChain];
     while (pblockindex->nHeight > desiredheight)
         pblockindex = pblockindex->pprev;
-    return  pblockindex->GetBlockHash().GetHex(); // pblockindex->phashBlock->GetHex();
+    return pblockindex->phashBlock->GetHex();
 }
 
 int getBlockTime(int Height)
@@ -88,7 +89,7 @@ std::string getBlockMerkle(int Height)
 
     CBlock block;
     CBlockIndex* pblockindex = mapBlockIndex[hash];
-    return pblockindex->hashMerkleRoot.ToString();//.substr(0,10).c_str();
+    return pblockindex->hashMerkleRoot.ToString().substr(0,10).c_str();
 }
 
 int getBlocknBits(int Height)
@@ -161,7 +162,7 @@ double getTxTotalValue(std::string txid)
     CTransaction tx;
     uint256 hashBlock = 0;
     if (!GetTransaction(hash, tx, hashBlock))
-        return 505;
+        return 1000;
 
     CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
     ssTx << tx;
@@ -203,10 +204,12 @@ std::string getOutputs(std::string txid)
         const CTxOut& txout = tx.vout[i];
         CTxDestination source;
         ExtractDestination(txout.scriptPubKey, source);
-        CBitcoinAddress addressSource(source);
+        CMarteXAddress addressSource(source);
         std::string lol7 = addressSource.ToString();
         double buffer = convertCoins(txout.nValue);
-        std::string amount = boost::to_string(buffer);
+		std::ostringstream ss;
+		ss << std::fixed << std::setprecision(4) << buffer;
+        std::string amount = ss.str();
         str.append(lol7);
         str.append(": ");
         str.append(amount);
@@ -246,11 +249,13 @@ std::string getInputs(std::string txid)
 
         CTxDestination source;
         ExtractDestination(wtxPrev.vout[vin.prevout.n].scriptPubKey, source);
-        CBitcoinAddress addressSource(source);
+        CMarteXAddress addressSource(source);
         std::string lol6 = addressSource.ToString();
         const CScript target = wtxPrev.vout[vin.prevout.n].scriptPubKey;
         double buffer = convertCoins(getInputValue(wtxPrev, target));
-        std::string amount = boost::to_string(buffer);
+		std::ostringstream ss;
+		ss << std::fixed << std::setprecision(4) << buffer;
+        std::string amount = ss.str();
         str.append(lol6);
         str.append(": ");
         str.append(amount);
@@ -283,7 +288,7 @@ double getTxFees(std::string txid)
     CTransaction tx;
     uint256 hashBlock = 0;
     if (!GetTransaction(hash, tx, hashBlock))
-        return 0.0001;
+        return 51;
 
     CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
     ssTx << tx;
@@ -350,17 +355,12 @@ void BlockBrowser::updateExplorer(bool block)
         ui->timeBox->show();
         ui->hardLabel->show();
         ui->hardBox->show();;
-        ui->pawLabel->show();
-        ui->pawBox->show();
         int height = ui->heightBox->value();
         if (height > pindexBest->nHeight)
         {
             ui->heightBox->setValue(pindexBest->nHeight);
             height = pindexBest->nHeight;
         }
-        int Pawrate = getBlockHashrate(height);
-        double Pawrate2 = 0.000;
-        Pawrate2 = ((double)Pawrate / 1000000);
         std::string hash = getBlockHash(height);
         std::string merkle = getBlockMerkle(height);
         int nBits = getBlocknBits(height);
@@ -374,7 +374,6 @@ void BlockBrowser::updateExplorer(bool block)
         QString QNonce = QString::number(nNonce);
         QString QTime = QString::number(atime);
         QString QHardness = QString::number(hardness, 'f', 6);
-        QString QPawrate = QString::number(Pawrate2, 'f', 3);
         ui->heightLabel->setText(QHeight);
         ui->hashBox->setText(QHash);
         ui->merkleBox->setText(QMerkle);
@@ -382,7 +381,6 @@ void BlockBrowser::updateExplorer(bool block)
         ui->nonceBox->setText(QNonce);
         ui->timeBox->setText(QTime);     
         ui->hardBox->setText(QHardness);
-        ui->pawBox->setText(QPawrate + " MH/s");
     } 
     
     if(block == false) {
@@ -425,7 +423,7 @@ void BlockBrowser::blockClicked()
     updateExplorer(true);
 }
 
-void BlockBrowser::setModel(ClientModel *model)
+void BlockBrowser::setModel(WalletModel *model)
 {
     this->model = model;
 }

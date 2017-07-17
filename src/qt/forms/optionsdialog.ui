@@ -29,8 +29,8 @@
       <attribute name="title">
        <string>&amp;Main</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_Main">
-       <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="transactionFeeInfoLabel">
          <property name="text">
           <string>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</string>
@@ -43,7 +43,7 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0">
         <layout class="QHBoxLayout" name="horizontalLayoutFee">
          <item>
           <widget class="QLabel" name="transactionFeeLabel">
@@ -76,7 +76,7 @@
          </item>
         </layout>
        </item>
-       <item>
+       <item row="2" column="0" colspan="2">
         <widget class="QLabel" name="reserveBalanceInfoLabel">
          <property name="text">
           <string>Reserved amount does not participate in staking and is therefore spendable at any time.</string>
@@ -89,7 +89,7 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="3" column="0">
         <layout class="QHBoxLayout" name="horizontalLayoutReserveBalance">
          <item>
           <widget class="QLabel" name="reserveBalanceLabel">
@@ -122,27 +122,17 @@
          </item>
         </layout>
        </item>
-       <item>
+       <item row="4" column="0">
         <widget class="QCheckBox" name="bitcoinAtStartup">
          <property name="toolTip">
-          <string>Automatically start MartexCoin after logging in to the system.</string>
+          <string>Automatically start MarteX after logging in to the system.</string>
          </property>
          <property name="text">
-          <string>&amp;Start MartexCoin on system login</string>
+          <string>&amp;Start MarteX on system login</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QCheckBox" name="detachDatabases">
-         <property name="toolTip">
-          <string>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</string>
-         </property>
-         <property name="text">
-          <string>&amp;Detach databases at shutdown</string>
-         </property>
-        </widget>
-       </item>
-       <item>
+       <item row="5" column="0">
         <spacer name="verticalSpacer_Main">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -155,6 +145,67 @@
          </property>
         </spacer>
        </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This setting determines the amount of individual masternodes that an input will be anonymized through. More rounds of anonymization gives a higher degree of privacy, but also costs more in fees.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Darksend rounds to use</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QSpinBox" name="darksendRounds">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>16</number>
+         </property>
+         <property name="value">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="toolTip">
+          <string>This amount acts as a threshold to turn off Darksend once it's reached.</string>
+         </property>
+         <property name="statusTip">
+          <string notr="true"/>
+         </property>
+         <property name="whatsThis">
+          <string notr="true"/>
+         </property>
+         <property name="accessibleName">
+          <string notr="true"/>
+         </property>
+         <property name="accessibleDescription">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>Amount of MarteX to keep anonymized</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QSpinBox" name="anonymizeMarteX">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
+         <property name="value">
+          <number>1000</number>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabNetwork">
@@ -165,7 +216,7 @@
        <item>
         <widget class="QCheckBox" name="mapPortUpnp">
          <property name="toolTip">
-          <string>Automatically open the MartexCoin client port on the router. This only works when your router supports UPnP and it is enabled.</string>
+          <string>Automatically open the MarteX client port on the router. This only works when your router supports UPnP and it is enabled.</string>
          </property>
          <property name="text">
           <string>Map port using &amp;UPnP</string>
@@ -175,10 +226,10 @@
        <item>
         <widget class="QCheckBox" name="connectSocks">
          <property name="toolTip">
-          <string>Connect to the MartexCoin network through a SOCKS proxy (e.g. when connecting through Tor).</string>
+          <string>Connect to the MarteX network through a SOCKS5 proxy (e.g. when connecting through Tor).</string>
          </property>
          <property name="text">
-          <string>&amp;Connect through SOCKS proxy:</string>
+          <string>&amp;Connect through SOCKS5 proxy:</string>
          </property>
         </widget>
        </item>
@@ -233,26 +284,6 @@
            </property>
            <property name="toolTip">
             <string>Port of the proxy (e.g. 9050)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="socksVersionLabel">
-           <property name="text">
-            <string>SOCKS &amp;Version:</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-           <property name="buddy">
-            <cstring>socksVersion</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QValueComboBox" name="socksVersion">
-           <property name="toolTip">
-            <string>SOCKS version of the proxy (e.g. 5)</string>
            </property>
           </widget>
          </item>
@@ -349,7 +380,7 @@
          <item>
           <widget class="QValueComboBox" name="lang">
            <property name="toolTip">
-            <string>The user interface language can be set here. This setting will take effect after restarting MartexCoin.</string>
+            <string>The user interface language can be set here. This setting will take effect after restarting MarteX.</string>
            </property>
           </widget>
          </item>
@@ -380,22 +411,19 @@
         </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="displayAddresses">
-         <property name="toolTip">
-          <string>Whether to show MartexCoin addresses in the transaction list or not.</string>
-         </property>
-         <property name="text">
-          <string>&amp;Display addresses in transaction list</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QCheckBox" name="coinControlFeatures">
          <property name="toolTip">
           <string>Whether to show coin control features or not.</string>
          </property>
          <property name="text">
           <string>Display coin &amp;control features (experts only!)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="useBlackTheme">
+         <property name="text">
+          <string>Use black visual theme (requires restart)</string>
          </property>
         </widget>
        </item>
@@ -499,6 +527,7 @@
    <class>BitcoinAmountField</class>
    <extends>QSpinBox</extends>
    <header>bitcoinamountfield.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QValueComboBox</class>

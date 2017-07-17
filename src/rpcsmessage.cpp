@@ -1,10 +1,9 @@
 // Copyright (c) 2014 The ShadowCoin developers
-// Copyright (c) 2014 The MartexCoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "main.h"
-#include "bitcoinrpc.h"
+#include "rpcserver.h"
 
 #include <boost/lexical_cast.hpp>
 
@@ -168,7 +167,7 @@ Value smsglocalkeys(const Array& params, bool fHelp)
                 && !it->fReceiveEnabled)
                 continue;
             
-            CBitcoinAddress coinAddress(it->sAddress);
+            CMarteXAddress coinAddress(it->sAddress);
             if (!coinAddress.IsValid())
                 continue;
             
@@ -307,7 +306,7 @@ Value smsglocalkeys(const Array& params, bool fHelp)
             if (!IsMine(*pwalletMain, entry.first))
                 continue;
             
-            CBitcoinAddress coinAddress(entry.first);
+            CMarteXAddress coinAddress(entry.first);
             if (!coinAddress.IsValid())
                 continue;
             
@@ -462,7 +461,7 @@ Value smsggetpubkey(const Array& params, bool fHelp)
             return result;
     };
     
-    CBitcoinAddress coinAddress(address);
+    CMarteXAddress coinAddress(address);
     
     
     CKeyID keyID;
@@ -806,7 +805,7 @@ Value smsgbuckets(const Array& params, bool fHelp)
                 std::string sBucket = boost::lexical_cast<std::string>(it->first);
                 std::string sFile = sBucket + "_01.dat";
                 
-                snprintf(cbuf, sizeof(cbuf), "%"PRIszu, tokenSet.size());
+                snprintf(cbuf, sizeof(cbuf), "%" PRIszu, tokenSet.size());
                 std::string snContents(cbuf);
                 
                 std::string sHash = boost::lexical_cast<std::string>(it->second.hash);
@@ -838,7 +837,7 @@ Value smsgbuckets(const Array& params, bool fHelp)
                         uint64_t nFBytes = 0;
                         nFBytes = boost::filesystem::file_size(fullPath);
                         nBytes += nFBytes;
-                        objM.push_back(Pair("file size", fsReadable(nFBytes)));
+                        objM.push_back(Pair("file size", bytesReadable(nFBytes)));
                     } catch (const boost::filesystem::filesystem_error& ex)
                     {
                         objM.push_back(Pair("file size, error", ex.what()));
@@ -856,7 +855,7 @@ Value smsgbuckets(const Array& params, bool fHelp)
         Object objM;
         objM.push_back(Pair("buckets", snBuckets));
         objM.push_back(Pair("messages", snMessages));
-        objM.push_back(Pair("size", fsReadable(nBytes)));
+        objM.push_back(Pair("size", bytesReadable(nBytes)));
         result.push_back(Pair("total", objM));
         
     } else

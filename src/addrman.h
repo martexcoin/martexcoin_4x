@@ -1,20 +1,21 @@
 // Copyright (c) 2012 Pieter Wuille
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #ifndef _BITCOIN_ADDRMAN
 #define _BITCOIN_ADDRMAN 1
 
 #include "netbase.h"
 #include "protocol.h"
-#include "util.h"
 #include "sync.h"
-
+#include "util.h"
 
 #include <map>
+#include <set>
+#include <stdint.h>
 #include <vector>
 
 #include <openssl/rand.h>
-
 
 /** Extended statistics about a CAddress */
 class CAddrInfo : public CAddress
@@ -245,6 +246,15 @@ protected:
 
 public:
 
+
+
+
+
+
+
+
+
+
     IMPLEMENT_SERIALIZE
     (({
         // serialized format:
@@ -382,7 +392,7 @@ public:
     CAddrMan() : vRandom(0), vvTried(ADDRMAN_TRIED_BUCKET_COUNT, std::vector<int>(0)), vvNew(ADDRMAN_NEW_BUCKET_COUNT, std::set<int>())
     {
          nKey.resize(32);
-         RAND_bytes(&nKey[0], 32);
+         GetRandBytes(&nKey[0], 32);
 
          nIdCount = 0;
          nTried = 0;
@@ -403,7 +413,7 @@ public:
             LOCK(cs);
             int err;
             if ((err=Check_()))
-                printf("ADDRMAN CONSISTENCY CHECK FAILED!!! err=%i\n", err);
+                LogPrintf("ADDRMAN CONSISTENCY CHECK FAILED!!! err=%i\n", err);
         }
 #endif
     }
@@ -419,7 +429,7 @@ public:
             Check();
         }
         if (fRet)
-            printf("Added %s from %s: %i tried, %i new\n", addr.ToStringIPPort().c_str(), source.ToString().c_str(), nTried, nNew);
+            LogPrint("addrman", "Added %s from %s: %i tried, %i new\n", addr.ToStringIPPort(), source.ToString(), nTried, nNew);
         return fRet;
     }
 
@@ -435,7 +445,7 @@ public:
             Check();
         }
         if (nAdd)
-            printf("Added %i addresses from %s: %i tried, %i new\n", nAdd, source.ToString().c_str(), nTried, nNew);
+            LogPrint("addrman", "Added %i addresses from %s: %i tried, %i new\n", nAdd, source.ToString(), nTried, nNew);
         return nAdd > 0;
     }
 

@@ -1,7 +1,8 @@
-#ifndef BITCOINFIELD_H
-#define BITCOINFIELD_H
+#ifndef BITCOINAMOUNTFIELD_H
+#define BITCOINAMOUNTFIELD_H
 
 #include <QWidget>
+#include "util.h"
 
 QT_BEGIN_NAMESPACE
 class QDoubleSpinBox;
@@ -13,12 +14,16 @@ QT_END_NAMESPACE
 class BitcoinAmountField: public QWidget
 {
     Q_OBJECT
+
+    // ugly hack: for some unknown reason CAmount (instead of qint64) does not work here as expected
+    // discussion: https://github.com/bitcoin/bitcoin/pull/5117
     Q_PROPERTY(qint64 value READ value WRITE setValue NOTIFY textChanged USER true)
+
 public:
     explicit BitcoinAmountField(QWidget *parent = 0);
 
-    qint64 value(bool *valid=0) const;
-    void setValue(qint64 value);
+    CAmount value(bool *valid=0) const;
+    void setValue(const CAmount& value);
 
     /** Mark current value as invalid in UI. */
     void setValid(bool valid);
@@ -56,5 +61,4 @@ private slots:
 
 };
 
-
-#endif // BITCOINFIELD_H
+#endif // BITCOINAMOUNTFIELD_H

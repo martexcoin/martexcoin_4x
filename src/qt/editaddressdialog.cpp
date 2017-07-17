@@ -1,10 +1,12 @@
 #include "editaddressdialog.h"
 #include "ui_editaddressdialog.h"
+
 #include "addresstablemodel.h"
 #include "guiutil.h"
 
 #include <QDataWidgetMapper>
 #include <QMessageBox>
+#include <QClipboard>
 
 EditAddressDialog::EditAddressDialog(Mode mode, QWidget *parent) :
     QDialog(parent),
@@ -19,16 +21,24 @@ EditAddressDialog::EditAddressDialog(Mode mode, QWidget *parent) :
     case NewReceivingAddress:
         setWindowTitle(tr("New receiving address"));
         ui->addressEdit->setEnabled(false);
+        ui->addressEdit->setVisible(false);
+        ui->stealthCB->setEnabled(true);
+        ui->stealthCB->setVisible(true);
         break;
     case NewSendingAddress:
         setWindowTitle(tr("New sending address"));
+        ui->stealthCB->setVisible(false);
         break;
     case EditReceivingAddress:
         setWindowTitle(tr("Edit receiving address"));
         ui->addressEdit->setEnabled(false);
+        ui->addressEdit->setVisible(true);
+        ui->stealthCB->setEnabled(false);
+        ui->stealthCB->setVisible(true);
         break;
     case EditSendingAddress:
         setWindowTitle(tr("Edit sending address"));
+        ui->stealthCB->setVisible(false);
         break;
     }
 
@@ -50,6 +60,7 @@ void EditAddressDialog::setModel(AddressTableModel *model)
     mapper->setModel(model);
     mapper->addMapping(ui->labelEdit, AddressTableModel::Label);
     mapper->addMapping(ui->addressEdit, AddressTableModel::Address);
+    mapper->addMapping(ui->stealthCB, AddressTableModel::Type);
 }
 
 void EditAddressDialog::loadRow(int row)
@@ -66,10 +77,14 @@ bool EditAddressDialog::saveCurrentRow()
     {
     case NewReceivingAddress:
     case NewSendingAddress:
+	{
+        int typeInd  = ui->stealthCB->isChecked() ? AddressTableModel::AT_Stealth : AddressTableModel::AT_Normal;
         address = model->addRow(
                 mode == NewSendingAddress ? AddressTableModel::Send : AddressTableModel::Receive,
                 ui->labelEdit->text(),
-                ui->addressEdit->text());
+                ui->addressEdit->text(),
+                typeInd);
+	}
         break;
     case EditReceivingAddress:
     case EditSendingAddress:
@@ -99,7 +114,7 @@ void EditAddressDialog::accept()
             break;
         case AddressTableModel::INVALID_ADDRESS:
             QMessageBox::warning(this, windowTitle(),
-                tr("The entered address \"%1\" is not a valid MartexCoin address.").arg(ui->addressEdit->text()),
+                tr("The entered address \"%1\" is not a valid MarteX address.").arg(ui->addressEdit->text()),
                 QMessageBox::Ok, QMessageBox::Ok);
             break;
         case AddressTableModel::DUPLICATE_ADDRESS:
@@ -133,4 +148,10 @@ void EditAddressDialog::setAddress(const QString &address)
 {
     this->address = address;
     ui->addressEdit->setText(address);
+}
+
+void EditAddressDialog::on_EditAddressPasteButton_clicked()
+{
+    // Paste text from clipboard into recipient field
+    ui->addressEdit->setText(QApplication::clipboard()->text());
 }

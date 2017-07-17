@@ -62,9 +62,6 @@ Threads
 
 StartNode : Starts other threads.
 
-ThreadGetMyExternalIP : Determines outside-the-firewall IP address,
-sends addr message to connected peers when it determines it. 
-
 ThreadSocketHandler : Sends/Receives data from peers on port 8333.
 
 ThreadMessageHandler : Higher-level message handling (sending and
@@ -77,7 +74,7 @@ ThreadTopUpKeyPool : replenishes the keystore's keypool.
 ThreadCleanWalletPassphrase : re-locks an encrypted wallet after user
 has unlocked it for a period of time. 
 
-SendingDialogStartTransfer : used by pay-via-ip-address code (obsolete)
+SendingDialogStartMarteX : used by pay-via-ip-address code (obsolete)
 
 ThreadDelayedRepaint : repaint the gui 
 

@@ -34,7 +34,7 @@ SendMessagesDialog::SendMessagesDialog(Mode mode, Type type, QWidget *parent) :
 #if QT_VERSION >= 0x040700
      /* Do not move this to the XML file, Qt before 4.7 will choke on it */
     if(mode == SendMessagesDialog::Encrypted)
-        ui->addressFrom->setPlaceholderText(tr("Enter a MarteXcoin address (e.g. B8j4S6kBqDVYcMcQTjPmiSVu24YRwS94SA)"));
+        ui->addressFrom->setPlaceholderText(tr("Enter a MarteX address (e.g. MLaZBUkdM15PjB7Zmbmwfwi31L3KeExgFG)"));
  #endif
     addEntry();
 

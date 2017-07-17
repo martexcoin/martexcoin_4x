@@ -3,6 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "addrman.h"
+#include "hash.h"
 
 using namespace std;
 
@@ -70,9 +71,8 @@ double CAddrInfo::GetChance(int64_t nNow) const
     if (nSinceLastTry < 60*10)
         fChance *= 0.01;
 
-    // deprioritize 50% after each failed attempt
-    for (int n=0; n<nAttempts; n++)
-        fChance /= 1.5;
+    // deprioritize 66% after each failed attempt, but at most 1/28th to avoid the search taking forever or overly penalizing outages.
+    fChance *= pow(0.66, min(nAttempts, 8));
 
     return fChance;
 }
@@ -260,8 +260,6 @@ void CAddrMan::MakeTried(CAddrInfo& info, int nId, int nOrigin)
 
 void CAddrMan::Good_(const CService &addr, int64_t nTime)
 {
-//    printf("Good: addr=%s\n", addr.ToString().c_str());
-
     int nId;
     CAddrInfo *pinfo = Find(addr, &nId);
 
@@ -303,7 +301,7 @@ void CAddrMan::Good_(const CService &addr, int64_t nTime)
     // TODO: maybe re-add the node, but for now, just bail out
     if (nUBucket == -1) return;
 
-    printf("Moving %s to tried\n", addr.ToString().c_str());
+    LogPrint("addrman", "Moving %s to tried\n", addr.ToString());
 
     // move nId to the tried tables
     MakeTried(info, nId, nUBucket);
@@ -350,7 +348,6 @@ bool CAddrMan::Add_(const CAddress &addr, const CNetAddr& source, int64_t nTimeP
     } else {
         pinfo = Create(addr, source, &nId);
         pinfo->nTime = max((int64_t)0, (int64_t)pinfo->nTime - nTimePenalty);
-//        printf("Added %s [nTime=%fhr]\n", pinfo->ToString().c_str(), (GetAdjustedTime() - pinfo->nTime) / 3600.0);
         nNew++;
         fNew = true;
     }

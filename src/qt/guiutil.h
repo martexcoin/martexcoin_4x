@@ -1,9 +1,17 @@
 #ifndef GUIUTIL_H
 #define GUIUTIL_H
 
-#include <QString>
-#include <QObject>
+#include <QEvent>
+#include <QHeaderView>
 #include <QMessageBox>
+#include <QObject>
+#include <QProgressBar>
+#include <QString>
+#include <QTableView>
+
+#include <boost/filesystem.hpp>
+
+class SendCoinsRecipient;
 
 QT_BEGIN_NAMESPACE
 class QFont;
@@ -13,7 +21,6 @@ class QDateTime;
 class QUrl;
 class QAbstractItemView;
 QT_END_NAMESPACE
-class SendCoinsRecipient;
 
 /** Utility functions used by the Bitcoin Qt UI.
  */
@@ -30,7 +37,7 @@ namespace GUIUtil
     void setupAddressWidget(QLineEdit *widget, QWidget *parent);
     void setupAmountWidget(QLineEdit *widget, QWidget *parent);
 
-    // Parse "martexcoin:" URI into recipient object, return true on successful parsing
+    // Parse "MarteX:" URI into recipient object, return true on successful parsing
     // See Bitcoin URI definition discussion here: https://bitcointalk.org/index.php?topic=33490.0
     bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out);
     bool parseBitcoinURI(QString uri, SendCoinsRecipient *out);
@@ -46,6 +53,8 @@ namespace GUIUtil
        @see  TransactionView::copyLabel, TransactionView::copyAmount, TransactionView::copyAddress
      */
     void copyEntryData(QAbstractItemView *view, int column, int role=Qt::EditRole);
+
+    void setClipboard(const QString& str);
 
     /** Get save filename, mimics QFileDialog::getSaveFileName, except that it appends a default suffix
         when no suffix is provided by the user.
@@ -73,6 +82,12 @@ namespace GUIUtil
 
     // Open debug.log
     void openDebugLogfile();
+    
+    // Browse backup folder
+    void showBackups();
+
+    // Replace invalid default fonts with known good ones
+    void SubstituteFonts(const QString& language);
 
     /** Qt event filter that intercepts ToolTipChange events, and replaces the tooltip with a rich text
       representation if needed. This assures that Qt can word-wrap long tooltip messages.
@@ -92,8 +107,53 @@ namespace GUIUtil
         int size_threshold;
     };
 
+    /**
+     * Makes a QTableView last column feel as if it was being resized from its left border.
+     * Also makes sure the column widths are never larger than the table's viewport.
+     * In Qt, all columns are resizable from the right, but it's not intuitive resizing the last column from the right.
+     * Usually our second to last columns behave as if stretched, and when on strech mode, columns aren't resizable
+     * interactively or programatically.
+     *
+     * This helper object takes care of this issue.
+     *
+     */
+    class TableViewLastColumnResizingFixer: public QObject
+    {
+        Q_OBJECT
+
+        public:
+            TableViewLastColumnResizingFixer(QTableView* table, int lastColMinimumWidth, int allColsMinimumWidth);
+            void stretchColumnWidth(int column);
+
+        private:
+            QTableView* tableView;
+            int lastColumnMinimumWidth;
+            int allColumnsMinimumWidth;
+            int lastColumnIndex;
+            int columnCount;
+            int secondToLastColumnIndex;
+
+            void adjustTableColumnsWidth();
+            int getAvailableWidthForColumn(int column);
+            int getColumnsWidth();
+            void connectViewHeadersSignals();
+            void disconnectViewHeadersSignals();
+            void setViewHeaderResizeMode(int logicalIndex, QHeaderView::ResizeMode resizeMode);
+            void resizeColumn(int nColumnIndex, int width);
+
+        private slots:
+            void on_sectionResized(int logicalIndex, int oldSize, int newSize);
+            void on_geometriesChanged();
+    };
+
     bool GetStartOnSystemStartup();
     bool SetStartOnSystemStartup(bool fAutoStart);
+
+    /* Convert QString to OS specific boost path through UTF-8 */
+    boost::filesystem::path qstringToBoostPath(const QString &path);
+
+    /* Convert OS specific boost path to QString through UTF-8 */
+    QString boostPathToQString(const boost::filesystem::path &path);
 
     /** Help message for Bitcoin-Qt, shown with --help. */
     class HelpMessageBox : public QMessageBox
@@ -114,6 +174,22 @@ namespace GUIUtil
         QString coreOptions;
         QString uiOptions;
     };
+
+    void SetBlackThemeQSS(QApplication& app);
+
+#if defined(Q_OS_MAC) && QT_VERSION >= 0x050000
+    // workaround for Qt OSX Bug:
+    // https://bugreports.qt-project.org/browse/QTBUG-15631
+    // QProgressBar uses around 10% CPU even when app is in background
+    class ProgressBar : public QProgressBar
+    {
+        bool event(QEvent *e) {
+            return (e->type() != QEvent::StyleAnimationUpdate) ? QProgressBar::event(e) : false;
+        }
+    };
+#else
+    typedef QProgressBar ProgressBar;
+#endif
 
 } // namespace GUIUtil
 

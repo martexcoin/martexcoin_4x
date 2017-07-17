@@ -17,6 +17,7 @@ QT_END_NAMESPACE
 class ClientModel : public QObject
 {
     Q_OBJECT
+
 public:
     explicit ClientModel(OptionsModel *optionsModel, QObject *parent = 0);
     ~ClientModel();
@@ -24,8 +25,12 @@ public:
     OptionsModel *getOptionsModel();
 
     int getNumConnections() const;
+    QString getMasternodeCountString() const;
     int getNumBlocks() const;
     int getNumBlocksAtStartup();
+
+    quint64 getTotalBytesRecv() const;
+    quint64 getTotalBytesSent() const;
 
     QDateTime getLastBlockDate() const;
 
@@ -33,13 +38,14 @@ public:
     bool isTestNet() const;
     //! Return true if core is doing initial block download
     bool inInitialBlockDownload() const;
-    //! Return conservative estimate of total number of blocks, or 0 if unknown
-    int getNumBlocksOfPeers() const;
+    //! Return true if core is importing blocks
+    bool isImporting() const;
     //! Return warnings to be displayed in status bar
     QString getStatusBarWarnings() const;
 
     QString formatFullVersion() const;
     QString formatBuildDate() const;
+    bool isReleaseVersion() const;
     QString clientName() const;
     QString formatClientStartupTime() const;
 
@@ -47,23 +53,31 @@ private:
     OptionsModel *optionsModel;
 
     int cachedNumBlocks;
-    int cachedNumBlocksOfPeers;
-
     int numBlocksAtStartup;
+    QString cachedMasternodeCountString;
 
     QTimer *pollTimer;
+    QTimer *pollMnTimer;
 
     void subscribeToCoreSignals();
     void unsubscribeFromCoreSignals();
+
 signals:
     void numConnectionsChanged(int count);
-    void numBlocksChanged(int count, int countOfPeers);
+    void numBlocksChanged(int count);
+    void strMasternodesChanged(const QString &strMasternodes);
+    void alertsChanged(const QString &warnings);
+    void bytesChanged(quint64 totalBytesIn, quint64 totalBytesOut);
 
-    //! Asynchronous error notification
-    void error(const QString &title, const QString &message, bool modal);
+    //! Asynchronous message notification
+    void message(const QString &title, const QString &message, bool modal, unsigned int style);
+
+    // Show progress dialog e.g. for verifychain
+    void showProgress(const QString &title, int nProgress);
 
 public slots:
     void updateTimer();
+    void updateMnTimer();
     void updateNumConnections(int numConnections);
     void updateAlert(const QString &hash, int status);
 };

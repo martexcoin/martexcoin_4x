@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Send Messages</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#SendMessagesDialog { background-color: #383838; }</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
    <property name="bottomMargin">
     <number>8</number>
@@ -40,6 +43,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <widget class="QLabel" name="addressFromLabel">
+        <property name="styleSheet">
+         <string notr="true">color: #ffffff;</string>
+        </property>
         <property name="text">
          <string>Address &amp;From:</string>
         </property>
@@ -106,7 +112,7 @@
         <x>0</x>
         <y>0</y>
         <width>830</width>
-        <height>279</height>
+        <height>298</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">

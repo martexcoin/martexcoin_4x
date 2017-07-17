@@ -13,13 +13,10 @@
   <property name="windowTitle">
    <string>Edit Address</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QFormLayout" name="formLayout">
-     <property name="fieldGrowthPolicy">
-      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-     </property>
-     <item row="0" column="0">
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
       <widget class="QLabel" name="label">
        <property name="text">
         <string>&amp;Label</string>
@@ -29,14 +26,18 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item>
       <widget class="QLineEdit" name="labelEdit">
        <property name="toolTip">
         <string>The label associated with this address book entry</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>&amp;Address</string>
@@ -46,16 +47,40 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item>
       <widget class="QLineEdit" name="addressEdit">
        <property name="toolTip">
         <string>The address associated with this address book entry. This can only be modified for sending addresses.</string>
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QToolButton" name="EditAddressPasteButton">
+       <property name="toolTip">
+        <string>Paste address from clipboard</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../bitcoin.qrc">
+         <normaloff>:/icons/editpaste</normaloff>:/icons/editpaste</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Alt+P</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
-   <item>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="stealthCB">
+     <property name="text">
+      <string>&amp;Stealth Address</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -67,7 +92,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../bitcoin.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

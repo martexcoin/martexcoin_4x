@@ -1,107 +1,91 @@
-![MarteXcoin](https://raw.githubusercontent.com/martexcoin/martexcoin/master/src/qt/res/images/splash.png)
+MarteX [MXT] integration/staging tree
+=====================================
 
-Site Oficial
-------------
-- http://martexcoin.org
+http://www.martexcoin.org
 
-Pool
-----
-- http://bitcoinpool.us
-- http://www.zpool.ca
+What is the MarteX [MXT] Blockchain?
+---------------------------
 
-Faucet
-------
-- http://martexcoin.org/faucet
+The MarteX [MXT] Blockchain is an experimental smart contract platform protocol that enables 
+instant payments to anyone, anywhere in the world in a private, secure manner. 
+MarteX [MXT] uses peer-to-peer blockchain technology developed by Bitcoin to operate
+with no central authority: managing transactions, execution of contracts, and 
+issuing money are carried out collectively by the network. MarteX [MXT] is the name of 
+open source software which enables the use of this protocol.
 
-Paperwallet
------------
-- http://martexcoin.org/paperwallet
-
-WalletOnline
-------------
-- http://wallet.martexcoin.org/
-
-Block Explorer
---------------
-- http://be.martexcoin.org
-
-Fórum
------
-- http://martexcoin.org/forum
-
-Anúncios
---------
-- http://martexcoin.org/forum/d/9-martexcoin-minera-o-hybrida-pow-pos-50-de-juros-anuais
-- https://bitcointalk.org/index.php?topic=1354130.0
-
-Wallets
--------
-- Windows http://martexcoin.org/releases/martexcoin-qt_2.5.4.2.exe
-- Linux http://martexcoin.org/releases/martexcoin-qt_2.5.4.2
-- Raspiberry http://martexcoin.org/releases/raspi-mxt.tar
-
-Bootstrap
----------
-- http://martexcoin.org/releases/bootstrap.zip
-
-Source
-------
-- https://github.com/martexcoin/martexcoin
-
-Exchanges
----------
-- chameleonbit.trade
-- coinexchange.io
-- yobit.net
-- bleutrade.com 
-
-Telegram
---------
-- https://telegram.me/martexcoin
-
-Especificações:
----------------
-- Tiker: MXT
-- Algoritimo: X13
-- Tempo de bloco: 60 segundos
-- Total de moedas: 5 milhões (POW / POS) - 2% Preminerado
-- Relocação de Dificuldade : A cada bloco
-- Taxa mínima por transação: 0.0001 MXT
-- Confirmações por transações: 3
-- Maturidade: 5
-
-Informação PoS
---------------
-- Juros: 50% anual
-- Proof-of-Stake tempo mínimo: 2 horas
-- Proof-of-Stake tempo máximo: 8 horas
-
-Outras informacoes
+Specifications and General info
 ------------------
-- Implementado BIP 14 (Protocol Version and User Agent)
-  https://github.com/bitcoin/bips/blob/master/bip-0014.mediawiki
+MarteX uses libsecp256k1,
+			  libgmp,
+			  Boost1.63,
+			  OR Boost1.57,  
+			  Openssl1.02k,
+			  Berkeley DB 6.2.23,
+			  QT5.8 to compile
 
-- Implementado BIP 21 (Esquema URI para fazer pagamentos MarteXcoin. O objectivo deste esquema URI e permitir aos usuarios facilmente fazer pagamentos simplesmente clicar em links em paginas da web ou codigos de varredura de QR.)
-  https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki
 
-- Implementado BIP 22 (Metodo de JSON-RPC para os mineiros e proxies "inteligentes" MarteXcoin. Em vez de enviar um cabecalho simples bloco para hash, a estrutura bloco inteiro e enviado, e a esquerda para o mineiro para (opcionalmente) personalizar e montar)
-  https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
+Block Spacing: 1 Minutes
+Stake Minimum Age: 15 Confirmations (PoS-v3) | 30 Minutes (PoS-v2)
 
-- Implementado BIP 30 (Blocos nao sao permitidos para conter uma transacao cujo identificador corresponde ao que, uma transacao anterior nao totalmente gasto na mesma blockchain)
-  https://github.com/bitcoin/bips/blob/master/bip-0030.mediawiki
+Port: 51315
+RPC Port: 51314
 
-- Implementado BIP 31 (Esta eh uma extensão do protocolo trivial que torna mais facil para os clientes para detectar conexoes de mesmo nivel mortas)
-  https://github.com/bitcoin/bips/blob/master/bip-0031.mediawiki
 
-- Implementado BIP 65 (OP_CHECKLOCKTIMEVERIFY)
-  https://github.com/bitcoin/bips/blob/master/bip-0065.mediawiki
+BUILD LINUX
+-----------
+1) git clone https://github.com/martexcoin/martexcoin
 
-- Implementado BIP 100 (Bloco com 20mb)
-  https://github.com/jgarzik/bip100/blob/master/bip-0100.mediawiki
+2) cd martexcoin/src
 
-- Implementado BIP 112: (OP_CHECKSEQUENCEVERIFY)
-  https://github.com/bitcoin/bips/blob/master/bip-0112.mediawiki
+3) sudo make -f makefile.unix            # Headless
 
-- Implementado OP_RETURN (Suporte para Open Assets/SmartContracts/Etc...)
+(optional)
 
-- Implementado suporte a Address Index
+4) strip MarteXd
+
+5) sudo cp MarteXd /usr/local/bin
+
+License
+-------
+
+MarteX [MXT] is released under the terms of the MIT license. See [COPYING](COPYING) for more
+information or see https://opensource.org/licenses/MIT.
+
+Development Process
+-------------------
+
+The `master` branch is regularly built and tested, but is not guaranteed to be
+completely stable. [Tags](https://github.com/martexcoin/martexcoin/tags) are created
+regularly to indicate new official, stable release versions of MarteX [MXT].
+
+The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+The developer [mailing list](https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev)
+should be used to discuss complicated or controversial changes before working
+on a patch set.
+
+Developer Slack can be found at http://martexcoin.slack.com.
+
+Testing
+-------
+
+Testing and code review is the bottleneck for development; we get more pull
+requests than we can review and test on short notice. Please be patient and help out by testing
+other people's pull requests, and remember this is a security-critical project where any mistake might cost people
+lots of money.
+
+### Automated Testing
+
+Developers are strongly encouraged to write [unit tests](/doc/unit-tests.md) for new code, and to
+submit new unit tests for old code. Unit tests can be compiled and run
+(assuming they weren't disabled in configure) with: `make check`
+
+There are also [regression and integration tests](/qa) of the RPC interface, written
+in Python, that are run automatically on the build server.
+
+### Manual Quality Assurance (QA) Testing
+
+Changes should be tested by somebody other than the developer who wrote the
+code. This is especially important for large or high-risk changes. It is useful
+to add a test plan to the pull request description if testing the changes is
+not straightforward.

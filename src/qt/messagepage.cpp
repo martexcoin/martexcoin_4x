@@ -2,6 +2,7 @@
 #include "ui_messagepage.h"
 
 #include "sendmessagesdialog.h"
+#include "mrichtextedit.h"
 #include "messagemodel.h"
 #include "bitcoingui.h"
 #include "csvmodelwriter.h"
@@ -75,7 +76,8 @@ MessagePage::MessagePage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MessagePage),
     model(0),
-    msgdelegate(new MessageViewDelegate())
+    msgdelegate(new MessageViewDelegate()),
+    messageTextEdit(new MRichTextEdit())
 {
     ui->setupUi(this);
    
@@ -85,15 +87,21 @@ MessagePage::MessagePage(QWidget *parent) :
 #endif
     // Context menu actions
     replyAction           = new QAction(ui->sendButton->text(),            this);
+    copyFromAddressAction = new QAction(ui->copyFromAddressButton->text(), this);
+    copyToAddressAction   = new QAction(ui->copyToAddressButton->text(),   this);
     deleteAction          = new QAction(ui->deleteButton->text(),          this);
 
     // Build context menu
     contextMenu = new QMenu();
 
     contextMenu->addAction(replyAction);
+    contextMenu->addAction(copyFromAddressAction);
+    contextMenu->addAction(copyToAddressAction);
     contextMenu->addAction(deleteAction);
 
     connect(replyAction,           SIGNAL(triggered()), this, SLOT(on_sendButton_clicked()));
+    connect(copyFromAddressAction, SIGNAL(triggered()), this, SLOT(on_copyFromAddressButton_clicked()));
+    connect(copyToAddressAction,   SIGNAL(triggered()), this, SLOT(on_copyToAddressButton_clicked()));
     connect(deleteAction,          SIGNAL(triggered()), this, SLOT(on_deleteButton_clicked()));
 
     connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextualMenu(QPoint)));
@@ -116,8 +124,8 @@ void MessagePage::setModel(MessageModel *model)
     if(!model)
         return;
     
-    if (model->proxyModel)
-        delete model->proxyModel;
+    //if (model->proxyModel)
+    //    delete model->proxyModel;
     model->proxyModel = new QSortFilterProxyModel(this);
     model->proxyModel->setSourceModel(model);
     model->proxyModel->setDynamicSortFilter(true);
@@ -142,6 +150,8 @@ void MessagePage::setModel(MessageModel *model)
     ui->tableView->horizontalHeader()->resizeSection(MessageModel::SentDateTime,     170);
     ui->tableView->horizontalHeader()->resizeSection(MessageModel::ReceivedDateTime, 170);
 
+    //ui->messageEdit->setMinimumHeight(100);
+
     // Hidden columns
     ui->tableView->setColumnHidden(MessageModel::Message, true);
 
@@ -149,12 +159,10 @@ void MessagePage::setModel(MessageModel *model)
     connect(ui->tableView,                          SIGNAL(doubleClicked(QModelIndex)),                       this, SLOT(selectionChanged()));
     connect(ui->listConversation->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),  this, SLOT(itemSelectionChanged()));
     connect(ui->listConversation,                   SIGNAL(doubleClicked(QModelIndex)),                       this, SLOT(itemSelectionChanged()));
-    connect(ui->messageEdit,                        SIGNAL(textChanged()),                                    this, SLOT(messageTextChanged()));
+    //connect(ui->messageEdit,                        SIGNAL(textChanged()),                                    this, SLOT(messageTextChanged()));
 
     // Scroll to bottom
     connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(incomingMessage()));
-
-    ui->messageEdit->setMaximumHeight(30);
 
     selectionChanged();
 }
@@ -178,7 +186,7 @@ void MessagePage::on_sendButton_clicked()
         return;
     };
 
-    ui->messageEdit->setMaximumHeight(30);
+    //ui->messageEdit->setMaximumHeight(30);
     ui->messageEdit->clear();
     ui->listConversation->scrollToBottom();
 }
@@ -192,6 +200,16 @@ void MessagePage::on_newButton_clicked()
 
     dlg.setModel(model);
     dlg.exec();
+}
+
+void MessagePage::on_copyFromAddressButton_clicked()
+{
+    GUIUtil::copyEntryData(ui->tableView, MessageModel::FromAddress, Qt::DisplayRole);
+}
+
+void MessagePage::on_copyToAddressButton_clicked()
+{
+    GUIUtil::copyEntryData(ui->tableView, MessageModel::ToAddress, Qt::DisplayRole);
 }
 
 void MessagePage::on_deleteButton_clicked()
@@ -245,8 +263,12 @@ void MessagePage::selectionChanged()
     if(table->selectionModel()->hasSelection())
     {
         replyAction->setEnabled(true);
+        copyFromAddressAction->setEnabled(true);
+        copyToAddressAction->setEnabled(true);
         deleteAction->setEnabled(true);
 
+        ui->copyFromAddressButton->setEnabled(true);
+        ui->copyToAddressButton->setEnabled(true);
         ui->deleteButton->setEnabled(true);
 
         ui->newButton->setEnabled(false);
@@ -299,6 +321,8 @@ void MessagePage::selectionChanged()
         ui->newButton->setVisible(true);
         ui->sendButton->setEnabled(false);
         ui->sendButton->setVisible(false);
+        ui->copyFromAddressButton->setEnabled(false);
+        ui->copyToAddressButton->setEnabled(false);
         ui->deleteButton->setEnabled(false);
         ui->messageEdit->hide();
         ui->messageDetails->hide();
@@ -316,8 +340,12 @@ void MessagePage::itemSelectionChanged()
     if(list->selectionModel()->hasSelection())
     {
         replyAction->setEnabled(true);
+        copyFromAddressAction->setEnabled(true);
+        copyToAddressAction->setEnabled(true);
         deleteAction->setEnabled(true);
 
+        ui->copyFromAddressButton->setEnabled(true);
+        ui->copyToAddressButton->setEnabled(true);
         ui->deleteButton->setEnabled(true);
 
         ui->newButton->setEnabled(false);
@@ -335,6 +363,8 @@ void MessagePage::itemSelectionChanged()
         ui->newButton->setVisible(true);
         ui->sendButton->setEnabled(false);
         ui->sendButton->setVisible(false);
+        ui->copyFromAddressButton->setEnabled(false);
+        ui->copyToAddressButton->setEnabled(false);
         ui->deleteButton->setEnabled(false);
         ui->messageEdit->hide();
         ui->messageDetails->hide();
@@ -349,11 +379,13 @@ void MessagePage::incomingMessage()
 
 void MessagePage::messageTextChanged()
 {
+    /*
     if(ui->messageEdit->toPlainText().endsWith("\n"))
     {
         ui->messageEdit->setMaximumHeight(80);
-        ui->messageEdit->resize(ui->messageEdit->width(), ui->messageEdit->document()->size().height() + 10);
-    }
+        ui->messageEdit->resize(256, ui->messageEdit->document()->size().height() + 10);
+    }*/
+
 }
 
 void MessagePage::exportClicked()

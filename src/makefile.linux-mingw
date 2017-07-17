@@ -2,224 +2,173 @@
 # Distributed under the MIT/X11 software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+TARGET_PLATFORM:=i686
+#TARGET_PLATFORM:=x86_64
+
+DEPSDIR:=/usr/$(TARGET_PLATFORM)-w64-mingw32
+CC:=$(TARGET_PLATFORM)-w64-mingw32-gcc
+CXX:=$(TARGET_PLATFORM)-w64-mingw32-g++
+RANLIB=$(TARGET_PLATFORM)-w64-mingw32-ranlib
+STRIP=$(TARGET_PLATFORM)-w64-mingw32-strip
+
 USE_UPNP:=0
-USE_IPV6:=1
+USE_WALLET:=1
 
-LINK:=$(CXX)
-ARCH:=$(system lscpu | head -n 1 | awk '{print $2}')
+INCLUDEPATHS= \
+ -I"$(CURDIR)" \
+ -I"$(CURDIR)"/obj \
+ -I"$(DEPSDIR)/boost_1_55_0" \
+ -I"$(DEPSDIR)/db-6.0.20/build_unix" \
+ -I"$(DEPSDIR)/openssl-1.0.1f/include" \
+ -I"$(DEPSDIR)"
 
-DEFS=-DBOOST_SPIRIT_THREADSAFE
+LIBPATHS= \
+ -L"$(DEPSDIR)/boost_1_55_0/stage/lib" \
+ -L"$(DEPSDIR)/db-6.0.20/build_unix" \
+ -L"$(DEPSDIR)/openssl-1.0.1f"
 
-DEFS += $(addprefix -I,$(CURDIR) $(CURDIR)/obj $(BOOST_INCLUDE_PATH) $(BDB_INCLUDE_PATH) $(OPENSSL_INCLUDE_PATH))
-LIBS = $(addprefix -L,$(BOOST_LIB_PATH) $(BDB_LIB_PATH) $(OPENSSL_LIB_PATH))
+LIBS= \
+ -l boost_system-mt \
+ -l boost_filesystem-mt \
+ -l boost_program_options-mt \
+ -l boost_thread_win32-mt \
+ -l boost_chrono-mt \
+ -l db_cxx \
+ -l ssl \
+ -l crypto \
+ -l z
 
-LMODE = dynamic
-LMODE2 = dynamic
-ifdef STATIC
-	LMODE = static
-	ifeq (${STATIC}, all)
-		LMODE2 = static
-	endif
-endif
-
-# for boost 1.37, add -mt to the boost libraries
-LIBS += \
- -Wl,-B$(LMODE) \
-   -l boost_system$(BOOST_LIB_SUFFIX) \
-   -l boost_filesystem$(BOOST_LIB_SUFFIX) \
-   -l boost_program_options$(BOOST_LIB_SUFFIX) \
-   -l boost_thread$(BOOST_LIB_SUFFIX) \
-   -l db_cxx$(BDB_LIB_SUFFIX) \
-   -l ssl \
-   -l crypto
+DEFS=-D_MT -DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE
+DEBUGFLAGS=-g
+CFLAGS=-O2 -msse2 -w -Wall -Wextra -Wno-ignored-qualifiers -Wformat -Wformat-security -Wno-unused-parameter $(DEBUGFLAGS) $(DEFS) $(INCLUDEPATHS)
+LDFLAGS=-Wl,--dynamicbase -Wl,--nxcompat -static-libgcc -static-libstdc++
 
 ifndef USE_UPNP
 	override USE_UPNP = -
 endif
 ifneq (${USE_UPNP}, -)
-	LIBS += -l miniupnpc
-	DEFS += -DUSE_UPNP=$(USE_UPNP)
+	LIBPATHS += -L"$(DEPSDIR)/miniupnpc"
+	LIBS += -l miniupnpc -l iphlpapi
+	DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif
 
-ifneq (${USE_IPV6}, -)
-	DEFS += -DUSE_IPV6=$(USE_IPV6)
-endif
+LIBS += -l mingwthrd -l kernel32 -l user32 -l gdi32 -l comdlg32 -l winspool -l winmm -l MarteX32 -l comctl32 -l ole32 -l oleaut32 -l uuid -l rpcrt4 -l advapi32 -l ws2_32 -l mswsock -l shlwapi
 
-LIBS+= \
- -Wl,-B$(LMODE2) \
-   -l z \
-   -l dl \
-   -l pthread
-
-
-# Hardening
-# Make some classes of vulnerabilities unexploitable in case one is discovered.
-#
-    # This is a workaround for Ubuntu bug #691722, the default -fstack-protector causes
-    # -fstack-protector-all to be ignored unless -fno-stack-protector is used first.
-    # see: https://bugs.launchpad.net/ubuntu/+source/gcc-4.5/+bug/691722
-    HARDENING=-fno-stack-protector
-
-    # Stack Canaries
-    # Put numbers at the beginning of each stack frame and check that they are the same.
-    # If a stack buffer if overflowed, it writes over the canary number and then on return
-    # when that number is checked, it won't be the same and the program will exit with
-    # a "Stack smashing detected" error instead of being exploited.
-    HARDENING+=-fstack-protector-all -Wstack-protector
-
-    # Make some important things such as the global offset table read only as soon as
-    # the dynamic linker is finished building it. This will prevent overwriting of addresses
-    # which would later be jumped to.
-    LDHARDENING+=-Wl,-z,relro -Wl,-z,now
-
-    # Build position independent code to take advantage of Address Space Layout Randomization
-    # offered by some kernels.
-    # see doc/build-unix.txt for more information.
-    ifdef PIE
-        HARDENING+=-fPIE
-        LDHARDENING+=-pie
-    endif
-
-    # -D_FORTIFY_SOURCE=2 does some checking for potentially exploitable code patterns in
-    # the source such overflowing a statically defined buffer.
-    HARDENING+=-D_FORTIFY_SOURCE=2
-#
-
-
-DEBUGFLAGS=-g
-
-
-ifeq (${ARCH}, i686)
-    EXT_OPTIONS=-msse2
-endif
-
-
-# CXXFLAGS can be specified on the make command line, so we use xCXXFLAGS that only
-# adds some defaults in front. Unfortunately, CXXFLAGS=... $(CXXFLAGS) does not work.
-xCXXFLAGS=-O2 $(EXT_OPTIONS) -pthread -Wall -Wextra -Wno-ignored-qualifiers -Wformat -Wformat-security -Wno-unused-parameter \
-    $(DEBUGFLAGS) $(DEFS) $(HARDENING) $(CXXFLAGS)
-
-# LDFLAGS can be specified on the make command line, so we use xLDFLAGS that only
-# adds some defaults in front. Unfortunately, LDFLAGS=... $(LDFLAGS) does not work.
-xLDFLAGS=$(LDHARDENING) $(LDFLAGS)
-
-#bmw.c       echo.c     jh.c      luffa.c    simd.c
-# blake.c       cubehash.c  groestl.c  keccak.c  shavite.c  skein.c
+# TODO: make the mingw builds smarter about dependencies, like the linux/osx builds are
+HEADERS = $(wildcard *.h)
 
 OBJS= \
-    obj/aes_helper.o \
-    obj/skein.o \
-    obj/blake.o \
-    obj/bmw.o \
-    obj/echo.o \
-    obj/cubehash.o \
-    obj/jh.o \
-    obj/groestl.o \
-    obj/luffa.o \
-    obj/keccak.o \
-    obj/simd.o \
-    obj/shavite.o \
     obj/alert.o \
+    obj/blocksizecalculator.o \
+    obj/allocators.o \
     obj/version.o \
+    obj/velocity.o \
+    obj/support/cleanse.o \
     obj/checkpoints.o \
     obj/netbase.o \
     obj/addrman.o \
+    obj/base58.o \
     obj/crypter.o \
     obj/key.o \
-    obj/db.o \
+    obj/pubkey.o \
+    obj/ecwrapper.o \
     obj/init.o \
+    obj/bitcoind.o \
     obj/keystore.o \
-    obj/miner.o \
+    obj/core.o \
     obj/main.o \
     obj/net.o \
     obj/protocol.o \
-    obj/bitcoinrpc.o \
-    obj/rpcdump.o \
+    obj/rpcclient.o \
+    obj/rpcprotocol.o \
+    obj/rpcserver.o \
+    obj/rpcmisc.o \
     obj/rpcnet.o \
-    obj/rpcmining.o \
-    obj/rpcwallet.o \
     obj/rpcblockchain.o \
     obj/rpcrawtransaction.o \
+    obj/rpcsmessage.o \
+    obj/rpcvelocity.o \
     obj/script.o \
+    obj/scrypt.o \
     obj/sync.o \
+    obj/txmempool.o \
     obj/util.o \
-    obj/wallet.o \
-    obj/walletdb.o \
+    obj/hash.o \
     obj/noui.o \
     obj/kernel.o \
     obj/pbkdf2.o \
-    obj/scrypt.o \
-    obj/scrypt-arm.o \
-    obj/scrypt-x86.o \
-    obj/scrypt-x86_64.o \
-	obj/zerocoin/Accumulator.o \
-    obj/zerocoin/AccumulatorProofOfKnowledge.o \
-    obj/zerocoin/Coin.o \
-    obj/zerocoin/CoinSpend.o \
-    obj/zerocoin/Commitment.o \
-    obj/zerocoin/ParamGeneration.o \
-    obj/zerocoin/Params.o \
-    obj/zerocoin/SerialNumberSignatureOfKnowledge.o \
-    obj/zerocoin/SpendMetaData.o \
-    obj/zerocoin/ZeroTest.o
+    obj/chainparams.o \
+    obj/stealth.o \
+    obj/activemasternode.o \
+    obj/darksend.o \
+    obj/darksend-relay.o \
+    obj/instantx.o \
+    obj/masternodeconfig.o \
+    obj/masternodeman.o \
+    obj/masternode.o \
+    obj/masternode-payments.o \
+    obj/rpcdarksend.o \
+    obj/spork.o \
+    obj/crypto/hmac_sha256.o \
+    obj/crypto/hmac_sha512.o \
+    obj/crypto/ripemd160.o \
+    obj/crypto/sha1.o \
+    obj/crypto/sha256.o \
+    obj/crypto/sha512.o \
+    obj/smessage.o    \
+    obj/cubehash.o \
+    obj/luffa.o \
+    obj/aes_helper.o \
+    obj/echo.o \
+    obj/shavite.o \
+    obj/simd.o \
+    obj/blake.o\
+    obj/bmw.o\
+    obj/groestl.o\
+    obj/jh.o\
+    obj/keccak.o\
+    obj/fugue.o \
+    obj/hamsi.o \
+    obj/skein.o
 
-all: MartexCoind
+ifeq (${USE_WALLET}, 1)
+    DEFS += -DENABLE_WALLET
+    OBJS += \
+        obj/db.o \
+        obj/miner.o \
+        obj/rpcdump.o \
+        obj/rpcmining.o \
+        obj/rpcwallet.o \
+        obj/wallet.o \
+        obj/walletdb.o
+endif
+
+all: MarteXd.exe
 
 LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
-DEFS += $(addprefix -I,$(CURDIR)/leveldb/include)
-DEFS += $(addprefix -I,$(CURDIR)/leveldb/helpers)
+DEFS += -I"$(CURDIR)/leveldb/include"
+DEFS += -I"$(CURDIR)/leveldb/helpers"
 OBJS += obj/txdb-leveldb.o
 leveldb/libleveldb.a:
-	@echo "Building LevelDB ..."; cd leveldb; make libleveldb.a libmemenv.a; cd ..;
+	@echo "Building LevelDB ..." && cd leveldb && CC=$(CC) CXX=$(CXX) TARGET_OS=OS_WINDOWS_CROSSCOMPILE CXXFLAGS="-I$(INCLUDEPATHS)" LDFLAGS="-L$(LIBPATHS)" $(MAKE) libleveldb.a libmemenv.a && $(RANLIB) libleveldb.a && $(RANLIB) libmemenv.a && cd ..
 obj/txdb-leveldb.o: leveldb/libleveldb.a
-
-# auto-generated dependencies:
--include obj/*.P
 
 obj/build.h: FORCE
 	/bin/sh ../share/genbuild.sh obj/build.h
 version.cpp: obj/build.h
 DEFS += -DHAVE_BUILD_INFO
 
-obj/scrypt-x86.o: scrypt-x86.S
-	$(CXX) -c $(xCXXFLAGS) -MMD -o $@ $<
+obj/%.o: %.cpp $(HEADERS)
+	$(CXX) -c $(CFLAGS) -o $@ $<
 
-obj/scrypt-x86_64.o: scrypt-x86_64.S
-	$(CXX) -c $(xCXXFLAGS) -MMD -o $@ $<
-
-obj/scrypt-arm.o: scrypt-arm.S
-	$(CXX) -c $(xCXXFLAGS) -MMD -o $@ $<
-
-obj/%.o: %.cpp
-	$(CXX) -c $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
-	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
-	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
-	  rm -f $(@:%.o=%.d)
-
-obj/%.o: %.c
-	$(CXX) -c $(xCXXFLAGS) -fpermissive -MMD -MF $(@:%.o=%.d) -o $@ $<
-	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
-	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-              -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
-	  rm -f $(@:%.o=%.d)
-
-obj/zerocoin/%.o: zerocoin/%.cpp
-        $(CXX) -c $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
-        @cp $(@:%.o=%.d) $(@:%.o=%.P); \
-          sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-              -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
-          rm -f $(@:%.o=%.d)
-
-MartexCoind: $(OBJS:obj/%=obj/%)
-	$(LINK) $(xCXXFLAGS) -o $@ $^ $(xLDFLAGS) $(LIBS)
+MarteXd.exe: $(OBJS:obj/%=obj/%)
+	$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS) -lshlwapi
+	$(STRIP) MarteXd.exe
 
 clean:
-	-rm -f MartexCoind
 	-rm -f obj/*.o
-	-rm -f obj/*.P
-	-rm -f obj/zerocoin/*.o
-	-rm -f obj/zerocoin/*.P
+	-rm -f MarteXd.exe
 	-rm -f obj/build.h
+	cd leveldb && TARGET_OS=OS_WINDOWS_CROSSCOMPILE $(MAKE) clean && cd ..
 
 FORCE:

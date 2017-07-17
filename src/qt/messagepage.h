@@ -16,6 +16,7 @@ class QSortFilterProxyModel;
 class QMenu;
 class QModelIndex;
 class MessageViewDelegate;
+class MRichTextEdit;
 QT_END_NAMESPACE
 
 
@@ -44,14 +45,19 @@ private:
     
     QMenu *contextMenu;
     QAction *replyAction;
+    QAction *copyFromAddressAction;
+    QAction *copyToAddressAction;
     QAction *deleteAction;
     QString replyFromAddress;
     QString replyToAddress;
     MessageViewDelegate *msgdelegate;
+    MRichTextEdit *messageTextEdit;
 
 private slots:
     void on_sendButton_clicked();
     void on_newButton_clicked();
+    void on_copyFromAddressButton_clicked();
+    void on_copyToAddressButton_clicked();
     void on_deleteButton_clicked();
     void on_backButton_clicked();
     void messageTextChanged();
