@@ -1217,11 +1217,11 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
                fprintf(ConfFile, "rpcport=51314\n");
                fprintf(ConfFile, "rpcconnect=127.0.0.1\n");
                fprintf(ConfFile, "rpcallowip=127.0.0.1\n");
-               fprintf(ConfFile, "addnode=138.68.7.176\n");
-               fprintf(ConfFile, "addnode=107.170.67.22\n");
-               fprintf(ConfFile, "addnode=45.32.226.215\n");
-               fprintf(ConfFile, "addnode=45.32.225.215\n");
-               fprintf(ConfFile, "addnode=104.236.10.105\n");
+               fprintf(ConfFile, "addnode=seed.martexcoin.org:51315\n");
+               fprintf(ConfFile, "addnode=seed1.martexcoin.org:51315\n");
+               fprintf(ConfFile, "addnode=seed2.martexcoin.org:51315\n");
+               fprintf(ConfFile, "addnode=seed3.martexcoin.org:51315\n");
+               fprintf(ConfFile, "addnode=seed4.martexcoin.org:51315\n");
 
                fclose(ConfFile);
 
