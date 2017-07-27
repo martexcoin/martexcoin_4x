@@ -36,7 +36,44 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
     uint256 hash = wtx.GetHash(), hashPrev = 0;
     std::map<std::string, std::string> mapValue = wtx.mapValue;
 
-    if (nNet > 0 || wtx.IsCoinBase() || wtx.IsCoinStake())
+    if (wtx.IsCoinStake())
+    {
+        TransactionRecord sub(hash, nTime);
+        CTxDestination address;
+        if (!ExtractDestination(wtx.vout[1].scriptPubKey, address))
+            return parts;
+
+        if(!IsMine(*wallet, address))
+        {
+            //if the address is not yours then it means you have a tx sent to you in someone elses coinstake tx
+            for(unsigned int i = 1; i < wtx.vout.size(); i++)
+            {
+                CTxDestination outAddress;
+                if(ExtractDestination(wtx.vout[i].scriptPubKey, outAddress))
+                {
+                    if(IsMine(*wallet, outAddress))
+                    {
+                        isminetype mine = wallet->IsMine(wtx.vout[i]);
+                        sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
+                        sub.type = TransactionRecord::MNReward;
+                        sub.address = CMarteXAddress(outAddress).ToString();
+                        sub.credit = wtx.vout[i].nValue;
+                    }
+                }
+            }
+        }
+        else
+        {
+            //stake reward
+            isminetype mine = wallet->IsMine(wtx.vout[1]);
+            sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
+            sub.type = TransactionRecord::StakeMint;
+            sub.address = CMarteXAddress(address).ToString();
+            sub.credit = nNet;
+        }
+        parts.append(sub);
+    }
+    else if (nNet > 0 || wtx.IsCoinBase())
     {
         //
         // Credit
@@ -50,10 +87,10 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
                 CTxDestination address;
                 sub.idx = parts.size(); // sequence number
                 sub.credit = txout.nValue;
-                sub.involvesWatchAddress = mine == ISMINE_WATCH_ONLY;
+                sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
                 if (ExtractDestination(txout.scriptPubKey, address) && IsMine(*wallet, address))
                 {
-                    // Received by Bitcoin Address
+                    // Received by MXT Address
                     sub.type = TransactionRecord::RecvWithAddress;
                     sub.address = CMarteXAddress(address).ToString();
                 }
@@ -63,29 +100,10 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
                     sub.type = TransactionRecord::RecvFromOther;
                     sub.address = mapValue["from"];
                 }
-
                 if (wtx.IsCoinBase())
                 {
-                    // Generated (proof-of-work)
+                    // Generated
                     sub.type = TransactionRecord::Generated;
-                }
-                if (wtx.IsCoinStake())
-                {
-                    // Generated (proof-of-stake)
-
-                    if (hashPrev == hash)
-                        continue; // last coinstake output
-                    CAmount nValueOut = 0;
-                    BOOST_FOREACH(const CTxOut& txout, wtx.vout)
-                    {
-                        if (IsMine(*wallet,txout.scriptPubKey))
-                            nValueOut += txout.nValue;
-                        if (!MoneyRange(txout.nValue) || !MoneyRange(nValueOut))
-                            throw std::runtime_error("CTransaction::GetValueOut() : value out of range");
-                    }
-                    sub.type = TransactionRecord::StakeMint;
-                    sub.credit = nNet > 0 ? nNet : nValueOut - nDebit;
-                    hashPrev = hash;
                 }
 
                 parts.append(sub);
@@ -274,7 +292,7 @@ void TransactionRecord::updateStatus(const CWalletTx &wtx)
     }
 
     // For generated transactions, determine maturity
-    else if(type == TransactionRecord::Generated || type == TransactionRecord::StakeMint)
+    else if(type == TransactionRecord::Generated || type == TransactionRecord::StakeMint || type == TransactionRecord::MNReward)
     {
         if (wtx.GetBlocksToMaturity() > 0)
         {
@@ -335,6 +353,6 @@ QString TransactionRecord::getTxID() const
 }
 
 QString TransactionRecord::formatSubTxId(const uint256 &hash, int vout)
-{
-    return QString::fromStdString(hash.ToString());
+{    
+	return QString::fromStdString(hash.ToString());
 }
