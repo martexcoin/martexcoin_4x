@@ -4291,7 +4291,7 @@ void CWallet::FixSpentCoins(int& nMismatchFound, int64_t& nBalanceInQuestion, bo
     {
         // Find the corresponding transaction index
         CTxIndex txindex;
-        if (!txdb.ReadTxIndex(pcoin->GetHash(), txindex))
+	if (!txdb.ReadTxIndex(pcoin->GetHash(), txindex))
             continue;
         for (unsigned int n=0; n < pcoin->vout.size(); n++)
         {
@@ -4299,6 +4299,7 @@ void CWallet::FixSpentCoins(int& nMismatchFound, int64_t& nBalanceInQuestion, bo
             {
                 LogPrintf("FixSpentCoins found lost coin %s MXT %s[%d], %s\n",
                     FormatMoney(pcoin->vout[n].nValue), pcoin->GetHash().ToString(), n, fCheckOnly? "repair not attempted" : "repairing");
+
                 nMismatchFound++;
                 nBalanceInQuestion += pcoin->vout[n].nValue;
                 if (!fCheckOnly)
@@ -4311,6 +4312,7 @@ void CWallet::FixSpentCoins(int& nMismatchFound, int64_t& nBalanceInQuestion, bo
             {
                 LogPrintf("FixSpentCoins found spent coin %s MXT %s[%d], %s\n",
                     FormatMoney(pcoin->vout[n].nValue), pcoin->GetHash().ToString(), n, fCheckOnly? "repair not attempted" : "repairing");
+
                 nMismatchFound++;
                 nBalanceInQuestion += pcoin->vout[n].nValue;
                 if (!fCheckOnly)
@@ -4320,7 +4322,7 @@ void CWallet::FixSpentCoins(int& nMismatchFound, int64_t& nBalanceInQuestion, bo
                 }
             }
         }
-    }
+     }
 }
 
 // ppcoin: disable transaction (only for coinstake)
@@ -4502,4 +4504,22 @@ void CWallet::GetKeyBirthTimes(std::map<CKeyID, int64_t> &mapKeyBirth) const {
     // Extract block timestamps for those keys
     for (std::map<CKeyID, CBlockIndex*>::const_iterator it = mapKeyFirstBlock.begin(); it != mapKeyFirstBlock.end(); it++)
         mapKeyBirth[it->first] = it->second->nTime - 7200; // block times can be 2h off
+}
+
+void CWallet::ClearOrphans()
+{
+    list<uint256> orphans;
+
+    LOCK(cs_wallet);
+    for(map<uint256, CWalletTx>::const_iterator it = mapWallet.begin(); it != mapWallet.end(); ++it)
+    {
+        const CWalletTx *wtx = &(*it).second;
+        if((wtx->IsCoinBase() || wtx->IsCoinStake()) && !wtx->IsInMainChain())
+        {
+            orphans.push_back(wtx->GetHash());
+        }
+    }
+
+    for(list<uint256>::const_iterator it = orphans.begin(); it != orphans.end(); ++it)
+        EraseFromWallet(*it);
 }

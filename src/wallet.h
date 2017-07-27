@@ -259,6 +259,7 @@ public:
     int ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate = false);
     void ReacceptWalletTransactions();
     void ResendWalletTransactions(bool fForce = false);
+    void ClearOrphans();
 
     CAmount GetBalance() const;
     CAmount GetStake() const;

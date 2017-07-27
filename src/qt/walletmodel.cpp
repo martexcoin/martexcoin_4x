@@ -868,3 +868,8 @@ void WalletModel::listLockedCoins(std::vector<COutPoint>& vOutpts)
     LOCK2(cs_main, wallet->cs_wallet);
     wallet->ListLockedCoins(vOutpts);
 }
+
+void WalletModel::clearOrphans()
+{
+    wallet->ClearOrphans();
+}

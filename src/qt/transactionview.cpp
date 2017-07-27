@@ -151,6 +151,7 @@ TransactionView::TransactionView(QWidget *parent) :
     QAction *copyTxIDAction = new QAction(tr("Copy transaction ID"), this);
     QAction *editLabelAction = new QAction(tr("Edit label"), this);
     QAction *showDetailsAction = new QAction(tr("Show transaction details"), this);
+    QAction *clearOrphansAction = new QAction(tr("Clear orphans"), this);
 
     contextMenu = new QMenu();
     contextMenu->addAction(copyAddressAction);
@@ -159,6 +160,8 @@ TransactionView::TransactionView(QWidget *parent) :
     contextMenu->addAction(copyTxIDAction);
     contextMenu->addAction(editLabelAction);
     contextMenu->addAction(showDetailsAction);
+    contextMenu->addSeparator();
+    contextMenu->addAction(clearOrphansAction);
 
     // Connect actions
     connect(dateWidget, SIGNAL(activated(int)), this, SLOT(chooseDate(int)));
@@ -177,6 +180,7 @@ TransactionView::TransactionView(QWidget *parent) :
     connect(copyTxIDAction, SIGNAL(triggered()), this, SLOT(copyTxID()));
     connect(editLabelAction, SIGNAL(triggered()), this, SLOT(editLabel()));
     connect(showDetailsAction, SIGNAL(triggered()), this, SLOT(showDetails()));
+    connect(clearOrphansAction, SIGNAL(triggered()), this, SLOT(clearOrphans()));
 }
 
 void TransactionView::setModel(WalletModel *model)
@@ -242,6 +246,19 @@ void TransactionView::setModel(WalletModel *model)
         chooseType(settings.value("transactionType").toInt());
         chooseDate(settings.value("transactionDate").toInt());
     }
+}
+
+void TransactionView::clearOrphans()
+{
+    if(!model)
+        return;
+
+    model->clearOrphans();
+    model->getTransactionTableModel()->refresh();
+    delete transactionProxyModel;
+    setModel(model);
+    transactionView->sortByColumn(TransactionTableModel::Status, Qt::DescendingOrder);
+    transactionView->sortByColumn(TransactionTableModel::Date, Qt::DescendingOrder);
 }
 
 void TransactionView::chooseDate(int idx)
