@@ -65,11 +65,20 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
         else
         {
             //stake reward
-            isminetype mine = wallet->IsMine(wtx.vout[1]);
-            sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
-            sub.type = TransactionRecord::StakeMint;
-            sub.address = CMarteXAddress(address).ToString();
-            sub.credit = nNet;
+	    CAmount nValueOut = 0;
+            BOOST_FOREACH(const CTxOut& txout, wtx.vout)
+	    {
+		if (IsMine(*wallet,txout.scriptPubKey))
+			nValueOut += txout.nValue;
+		if (!MoneyRange(txout.nValue) || !MoneyRange(nValueOut))
+			throw std::runtime_error("CTransaction::GetValueOut() : value out of range");
+	    }
+	    isminetype mine = wallet->IsMine(wtx.vout[1]);
+	    sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
+	    sub.type = TransactionRecord::StakeMint;
+	    sub.address = CMarteXAddress(address).ToString();
+	    sub.credit = nNet > 0 ? nNet : nValueOut - nDebit;
+	    hashPrev = hash;
         }
         parts.append(sub);
     }
@@ -349,10 +358,10 @@ bool TransactionRecord::statusUpdateNeeded()
 
 QString TransactionRecord::getTxID() const
 {
-    return formatSubTxId(hash, idx);
+    return QString::fromStdString(hash.ToString());
 }
 
-QString TransactionRecord::formatSubTxId(const uint256 &hash, int vout)
-{    
-	return QString::fromStdString(hash.ToString());
+int TransactionRecord::getOutputIndex() const
+{
+    return idx;
 }
