@@ -24,9 +24,17 @@ int VelocityI(int nHeight)
 bool Velocity_check(int nHeight)
 {
     LogPrintf("Checking for Velocity on block %u: ",nHeight);
-    if(VelocityI(nHeight) >= 0)
+    if(VelocityI(nHeight) >= 0 && VelocityI(nHeight) <= 10080)
     {
         LogPrintf("Velocity is currently Enabled\n");
+        return true;
+    }
+    else if(VelocityI(nHeight) > 10080)
+    {
+        static const int VELOCITY_MAX_RATE[]  = { BLOCK_SPACING_MAX_CORRECT }; /** Rate to Velocity in seconds */
+        static const int VELOCITY_RATE[]      = { BLOCK_SPACING_CORRECT }; /** Rate to Velocity in seconds */
+        static const int VELOCITY_MIN_RATE[]  = { BLOCK_SPACING_MIN_CORRECT }; /** Rate to Velocity in seconds */
+        LogPrintf("Velocity is currently Enabled CORRECT\n");
         return true;
     }
     LogPrintf("Velocity is currently disabled\n");

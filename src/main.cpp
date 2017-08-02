@@ -1507,19 +1507,30 @@ int64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, int64_t nCoinAge, i
 {
     int64_t nSubsidy = nCoinAge * COIN_YEAR_REWARD * 33 / (365 * 33 + 8);
 
-    if(randreward() <= 20500) // Chance of superblock
+    if(randreward() <= 20500 && nBestHeight <= 10080) // Chance of superblock
         nSubsidy = nCoinAge * COIN_SPRB_REWARD * 33 / (365 * 33 + 8);
-    if(nBestHeight > RWRD_FIX_TOGGLE) // Correct block reward payouts
+
+    if(randreward() <= 20500 && nBestHeight > 10080) // Chance of superblock correct
+        nSubsidy = nCoinAge * COIN_SPRB_REWARD_CORRECT / 365 / COIN;
+
+    if(nBestHeight > RWRD_FIX_TOGGLE && nBestHeight <= 10080) // Correct block reward payouts
     {
         nSubsidy = nCoinAge * COIN_YEAR_REWARD_FIXED * 33 / (365 * 33 + 8);
-        if(randreward() <= 20500) // Chance of superblock (Fixed)
+	if(randreward() <= 20500) // Chance of superblock (Fixed)
             nSubsidy = nCoinAge * COIN_SPRB_REWARD_FIXED * 33 / (365 * 33 + 8);
         // Correct subsidy for proper MN allocation
-        if(nBestHeight > MN_FIX_TOGGLE)
+	if(nBestHeight > MN_FIX_TOGGLE)
             nSubsidy = nCoinAge * MN_REWARD_FIXED * 33 / (365 * 33 + 8);
     }
-    // hardCap v2.1
-    else if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
+
+    if(nBestHeight > 10080) // Correct block reward payouts correct
+    {
+        nSubsidy = nCoinAge * COIN_YEAR_REWARD_CORRECT / 365 / COIN;
+        if(randreward() <= 20500 && nBestHeight > 10080) // Chance of superblock correct
+            nSubsidy = nCoinAge * COIN_SPRB_REWARD_CORRECT / 365 / COIN;
+    }
+
+    if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
     {
         LogPrint("MINEOUT", "GetProofOfStakeReward(): create=%s nFees=%d\n", FormatMoney(nFees), nFees);
         return nFees;

@@ -89,6 +89,12 @@ static const int64_t COIN_YEAR_REWARD_FIXED = 50 * CENT; // 50%
 static const int64_t COIN_SPRB_REWARD = 3 * COIN; // Corrected in v1.0.2.0+
 /** PoS Superblock Reward Fixed */
 static const int64_t COIN_SPRB_REWARD_FIXED = 55 * CENT; // 55%
+/** PoS Reward Correct */
+static const int64_t COIN_YEAR_REWARD_CORRECT = 0.05 * COIN;
+/** PoS Superblock Reward Correct */
+static const int64_t COIN_SPRB_REWARD_CORRECT = 0.06 * COIN;
+/** PoS Interest **/
+static const int64_t COIN_YEAR_INTEREST = 50 * CENT; // 50%
 /** MN Reward Fixed */
 static const int64_t MN_REWARD_FIXED = 50 * CENT;
 /** Block spacing preferred */
@@ -97,6 +103,12 @@ static const int64_t BLOCK_SPACING = 2 * 60;
 static const int64_t BLOCK_SPACING_MIN = 1.5 * 60;
 /** Block spacing maximum */
 static const int64_t BLOCK_SPACING_MAX = 3.5 * 60;
+/** Block spacing preferred CORRECT */
+static const int64_t BLOCK_SPACING_CORRECT = 1 * 60;
+/** Block spacing minimum CORRECT */
+static const int64_t BLOCK_SPACING_MIN_CORRECT = 0.5 * 60;
+/** Block spacing maximum CORRECT */
+static const int64_t BLOCK_SPACING_MAX_CORRECT = 1.5 * 60;
 /** Darksend collateral */
 static const int64_t DARKSEND_COLLATERAL = (0.01*COIN);
 /** Darksend pool values */

@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = MarteX-qt
-VERSION = 2.6.2.1
+VERSION = 2.6.2.2
 INCLUDEPATH += src src/json src/qt src/qt/plugins/mrichtexteditor
 QT += core gui widgets network printsupport
 DEFINES += ENABLE_WALLET
