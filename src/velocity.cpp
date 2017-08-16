@@ -24,17 +24,9 @@ int VelocityI(int nHeight)
 bool Velocity_check(int nHeight)
 {
     LogPrintf("Checking for Velocity on block %u: ",nHeight);
-    if(VelocityI(nHeight) >= 0 && VelocityI(nHeight) <= 10080)
+    if(VelocityI(nHeight) >= 0)
     {
         LogPrintf("Velocity is currently Enabled\n");
-        return true;
-    }
-    else if(VelocityI(nHeight) > 10080)
-    {
-        static const int VELOCITY_MAX_RATE[]  = { BLOCK_SPACING_MAX_CORRECT }; /** Rate to Velocity in seconds */
-        static const int VELOCITY_RATE[]      = { BLOCK_SPACING_CORRECT }; /** Rate to Velocity in seconds */
-        static const int VELOCITY_MIN_RATE[]  = { BLOCK_SPACING_MIN_CORRECT }; /** Rate to Velocity in seconds */
-        LogPrintf("Velocity is currently Enabled CORRECT\n");
         return true;
     }
     LogPrintf("Velocity is currently disabled\n");
@@ -64,6 +56,7 @@ bool Velocity(CBlockIndex* prevBlock, CBlock* block)
     int nHeight = prevBlock->nHeight+1;
     int i = VelocityI(nHeight);
     int HaveCoins = false;
+
     // Set stanard values
     TXrate = block->GetBlockTime() - prevBlock->GetBlockTime();
     TXstampC = block->nTime;
@@ -127,12 +120,12 @@ bool Velocity(CBlockIndex* prevBlock, CBlock* block)
      }
   }
     // Verify minimum Velocity rate
-    if( VELOCITY_RATE[i] > 0 && TXrate > VELOCITY_RATE[i] )
+    if( (nHeight <= 16000 ? VELOCITY_RATE[i] > 0 && TXrate > VELOCITY_RATE[i] : VELOCITY_RATE_CORRECT[i] > 0 && TXrate > VELOCITY_RATE_CORRECT[i]) )
     {
         LogPrintf("ACCEPTED: block has met Velocity constraints\n");
     }
     // Rates that are too rapid are rejected without exception
-    else if( VELOCITY_MIN_RATE[i] > 0 && TXrate < VELOCITY_MIN_RATE[i] )
+    else if( (nHeight <= 16000 ? VELOCITY_MIN_RATE[i] > 0 && TXrate > VELOCITY_MIN_RATE[i] : VELOCITY_MIN_RATE_CORRECT[i] > 0 && TXrate > VELOCITY_MIN_RATE_CORRECT[i]) )
     {
         LogPrintf("DENIED: Minimum block spacing not met for Velocity\n");
         return false;

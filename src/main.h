@@ -114,7 +114,7 @@ static const int64_t DARKSEND_COLLATERAL = (0.01*COIN);
 /** Darksend pool values */
 static const int64_t DARKSEND_POOL_MAX = (4999.99*COIN);
 /** Velocity toggle block */
-static const int64_t VELOCITY_TOGGLE = 120; // Implementation of the Velocity system into the chain.
+static const int64_t VELOCITY_TOGGLE = 1500000; // Implementation of the Velocity system into the chain.
 /** Velocity retarget toggle block */
 static const int64_t VELOCITY_TDIFF = 0; // Use Velocity's retargetting method.
 /** Protocol toggle */
