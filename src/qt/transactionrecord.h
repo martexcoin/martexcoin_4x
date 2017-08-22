@@ -78,12 +78,12 @@ public:
         SendToSelf,
 		StakeMint,
 		MNReward,
-        RecvWithDarksend,
-        DarksendDenominate,
-        DarksendCollateralPayment,
-        DarksendMakeCollaterals,
-        DarksendCreateDenominations,
-        Darksent
+        RecvWithAnonsend,
+        AnonsendDenominate,
+        AnonsendCollateralPayment,
+        AnonsendMakeCollaterals,
+        AnonsendCreateDenominations,
+        Anonsent
     };
 
     /** Number of confirmation recommended for accepting a transaction */

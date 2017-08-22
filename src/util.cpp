@@ -80,18 +80,18 @@ bool fMasterNode = false;
 string strMasterNodePrivKey = "";
 string strMasterNodeAddr = "";
 bool fLiteMode = false;
-bool fEnableInstantX = true;
-int nInstantXDepth = 10;
-int nDarksendRounds = 2;
+bool fEnableFastTx = true;
+int nFastTxDepth = 10;
+int nAnonsendRounds = 2;
 int nAnonymizeMarteXAmount = 1000;
 int nLiquidityProvider = 0;
 /** Spork enforcement enabled time */
 int64_t enforceMasternodePaymentsTime = 4085657524;
 int nMasternodeMinProtocol = 0;
 bool fSucessfullyLoaded = false;
-bool fEnableDarksend = false;
-/** All denominations used by darksend */
-std::vector<int64_t> darkSendDenominations;
+bool fEnableAnonsend = false;
+/** All denominations used by anonsend */
+std::vector<int64_t> anonSendDenominations;
 
 map<string, string> mapArgs;
 map<string, vector<string> > mapMultiArgs;

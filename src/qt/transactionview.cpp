@@ -87,11 +87,11 @@ TransactionView::TransactionView(QWidget *parent) :
                                         TransactionFilterProxy::TYPE(TransactionRecord::RecvFromOther));
     typeWidget->addItem(tr("Sent to"), TransactionFilterProxy::TYPE(TransactionRecord::SendToAddress) |
                                   TransactionFilterProxy::TYPE(TransactionRecord::SendToOther));
-    typeWidget->addItem(tr("Darksent"), TransactionFilterProxy::TYPE(TransactionRecord::Darksent));
-    typeWidget->addItem(tr("Darksend Make Collateral Inputs"), TransactionFilterProxy::TYPE(TransactionRecord::DarksendMakeCollaterals));
-    typeWidget->addItem(tr("Darksend Create Denominations"), TransactionFilterProxy::TYPE(TransactionRecord::DarksendCreateDenominations));
-    typeWidget->addItem(tr("Darksend Denominate"), TransactionFilterProxy::TYPE(TransactionRecord::DarksendDenominate));
-    typeWidget->addItem(tr("Darksend Collateral Payment"), TransactionFilterProxy::TYPE(TransactionRecord::DarksendCollateralPayment));
+    typeWidget->addItem(tr("Anonsent"), TransactionFilterProxy::TYPE(TransactionRecord::Anonsent));
+    typeWidget->addItem(tr("Anonsend Make Collateral Inputs"), TransactionFilterProxy::TYPE(TransactionRecord::AnonsendMakeCollaterals));
+    typeWidget->addItem(tr("Anonsend Create Denominations"), TransactionFilterProxy::TYPE(TransactionRecord::AnonsendCreateDenominations));
+    typeWidget->addItem(tr("Anonsend Denominate"), TransactionFilterProxy::TYPE(TransactionRecord::AnonsendDenominate));
+    typeWidget->addItem(tr("Anonsend Collateral Payment"), TransactionFilterProxy::TYPE(TransactionRecord::AnonsendCollateralPayment));
     typeWidget->addItem(tr("To yourself"), TransactionFilterProxy::TYPE(TransactionRecord::SendToSelf));
     typeWidget->addItem(tr("Mined"), TransactionFilterProxy::TYPE(TransactionRecord::Generated));
     typeWidget->addItem(tr("Stake"), TransactionFilterProxy::TYPE(TransactionRecord::StakeMint));

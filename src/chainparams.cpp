@@ -95,7 +95,7 @@ public:
         convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
 
         nPoolMaxTransactions = 3;
-        strDarksendPoolDummyAddress = "MLJoZZky8GtfYKiRY2Jzxfd4KTEK3drZv2";
+        strAnonsendPoolDummyAddress = "MLJoZZky8GtfYKiRY2Jzxfd4KTEK3drZv2";
         nEndPoWBlock = 0x7fffffff;
         nStartPoSBlock = 0;
     }

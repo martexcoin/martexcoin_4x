@@ -481,7 +481,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Darksend Rounds</string>
+       <string>Anonsend Rounds</string>
       </property>
     </column>
      <column>

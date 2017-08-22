@@ -41,7 +41,7 @@ public:
         Language,               // QString
         CoinControlFeatures,    // bool
         UseBlackTheme,     // bool
-        DarksendRounds,    // int
+        AnonsendRounds,    // int
         AnonymizeMarteXAmount, //int
         OptionIDRowCount,
     };
@@ -83,7 +83,7 @@ signals:
     void transactionFeeChanged(qint64);
     void reserveBalanceChanged(qint64);
     void coinControlFeaturesChanged(bool);
-    void darksendRoundsChanged(int);
+    void anonsendRoundsChanged(int);
     void AnonymizeMarteXAmountChanged(int);
 };
 

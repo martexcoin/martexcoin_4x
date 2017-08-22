@@ -12,7 +12,7 @@
 
 #include "coincontrol.h"
 #include "wallet.h"
-#include "darksend.h"
+#include "anonsend.h"
 
 #include <ctime>
 #include <QMessageBox>
@@ -123,7 +123,7 @@ CoinControlDialog::CoinControlDialog(QWidget *parent) :
     ui->treeWidget->setColumnWidth(COLUMN_AMOUNT, 100);
     ui->treeWidget->setColumnWidth(COLUMN_LABEL, 170);
     ui->treeWidget->setColumnWidth(COLUMN_ADDRESS, 190);
-    ui->treeWidget->setColumnWidth(COLUMN_DARKSEND_ROUNDS, 120);
+    ui->treeWidget->setColumnWidth(COLUMN_ANONSEND_ROUNDS, 120);
     ui->treeWidget->setColumnWidth(COLUMN_DATE, 60);
     ui->treeWidget->setColumnWidth(COLUMN_CONFIRMATIONS, 100);
     ui->treeWidget->setColumnWidth(COLUMN_PRIORITY, 100);
@@ -456,12 +456,12 @@ void CoinControlDialog::viewItemChanged(QTreeWidgetItem* item, int column)
         else {
             coinControl->Select(outpt);
             CTxIn vin(outpt);
-            int rounds = pwalletMain->GetInputDarksendRounds(vin);
-            if(coinControl->useDarkSend && rounds < nDarksendRounds) {
+            int rounds = pwalletMain->GetInputAnonsendRounds(vin);
+            if(coinControl->useAnonSend && rounds < nAnonsendRounds) {
                 QMessageBox::warning(this, windowTitle(),
-                    tr("Non-anonymized input selected. <b>Darksend will be disabled.</b><br><br>If you still want to use Darksend, please deselect all non-nonymized inputs first and then check Darksend checkbox again."),
+                    tr("Non-anonymized input selected. <b>Anonsend will be disabled.</b><br><br>If you still want to use Anonsend, please deselect all non-nonymized inputs first and then check Anonsend checkbox again."),
                     QMessageBox::Ok, QMessageBox::Ok);
-                coinControl->useDarkSend = false;
+                coinControl->useAnonSend = false;
             }
         }
 
@@ -602,7 +602,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
         int64_t nFee = nTransactionFee * (1 + (int64_t)nBytes / 1000);
 
         // IX Fee
-        if(coinControl->useInstantX) nFee = max(nFee, CENT);
+        if(coinControl->useFastTx) nFee = max(nFee, CENT);
 
         // Min Fee
         int64_t nMinFee = GetMinFee(txDummy, nBytes, AllowFree(dPriority), GMF_SEND);
@@ -614,7 +614,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
             nChange = nAmount - nPayFee - nPayAmount;
 
             // DS Fee = overpay
-            if(coinControl->useDarkSend && nChange > 0)
+            if(coinControl->useAnonSend && nChange > 0)
             {
                 nPayFee += nChange;
                 nChange = 0;
@@ -819,10 +819,10 @@ void CoinControlDialog::updateView()
 
             // ds+ rounds
             CTxIn vin = CTxIn(out.tx->GetHash(), out.i);
-            int rounds = pwalletMain->GetInputDarksendRounds(vin);
+            int rounds = pwalletMain->GetInputAnonsendRounds(vin);
 
-            if(rounds >= 0) itemOutput->setText(COLUMN_DARKSEND_ROUNDS, strPad(QString::number(rounds), 15, " "));
-            else itemOutput->setText(COLUMN_DARKSEND_ROUNDS, strPad(QString(tr("n/a")), 15, " "));
+            if(rounds >= 0) itemOutput->setText(COLUMN_ANONSEND_ROUNDS, strPad(QString::number(rounds), 15, " "));
+            else itemOutput->setText(COLUMN_ANONSEND_ROUNDS, strPad(QString(tr("n/a")), 15, " "));
 
             // confirmations
             itemOutput->setText(COLUMN_CONFIRMATIONS, strPad(QString::number(out.nDepth), 8, " "));

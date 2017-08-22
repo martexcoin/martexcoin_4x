@@ -8,8 +8,8 @@ class CCoinControl
 {
 public:
     CTxDestination destChange;
-    bool useDarkSend;
-    bool useInstantX;
+    bool useAnonSend;
+    bool useFastTx;
 
     CCoinControl()
     {
@@ -20,8 +20,8 @@ public:
     {
         destChange = CNoDestination();
         setSelected.clear();
-        useInstantX = false;
-        useDarkSend = true;
+        useFastTx = false;
+        useAnonSend = true;
     }
     
     bool HasSelected() const

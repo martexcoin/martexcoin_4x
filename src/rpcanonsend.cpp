@@ -55,11 +55,11 @@ void SendMoney(const CTxDestination &address, CAmount nValue, CWalletTx& wtxNew,
         throw JSONRPCError(RPC_WALLET_ERROR, "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
 }
 
-Value darksend(const Array& params, bool fHelp)
+Value anonsend(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() == 0)
         throw runtime_error(
-            "darksend <MarteX> <amount>\n"
+            "anonsend <MarteX> <amount>\n"
             "MarteX, reset, or auto (AutoDenominate)"
             "<amount> is a real and is rounded to the nearest 0.00000001"
             + HelpRequiringPassphrase());
@@ -69,19 +69,19 @@ Value darksend(const Array& params, bool fHelp)
 
     if(params[0].get_str() == "auto"){
         if(fMasterNode)
-            return "DarkSend is not supported from masternodes";
+            return "AnonSend is not supported from masternodes";
 
-        return "DoAutomaticDenominating " + (darkSendPool.DoAutomaticDenominating() ? "successful" : ("failed: " + darkSendPool.GetStatus()));
+        return "DoAutomaticDenominating " + (anonSendPool.DoAutomaticDenominating() ? "successful" : ("failed: " + anonSendPool.GetStatus()));
     }
 
     if(params[0].get_str() == "reset"){
-        darkSendPool.Reset();
-        return "successfully reset darksend";
+        anonSendPool.Reset();
+        return "successfully reset anonsend";
     }
 
     if (params.size() != 2)
         throw runtime_error(
-            "darksend <MarteX> <amount>\n"
+            "anonsend <MarteX> <amount>\n"
             "MarteX, denominate, or auto (AutoDenominate)"
             "<amount> is type \"real\" and will be rounded to the nearest 0.1"
             + HelpRequiringPassphrase());
@@ -120,9 +120,9 @@ Value getpoolinfo(const Array& params, bool fHelp)
 
     Object obj;
     obj.push_back(Pair("current_masternode",        mnodeman.GetCurrentMasterNode()->addr.ToString()));
-    obj.push_back(Pair("state",        darkSendPool.GetState()));
-    obj.push_back(Pair("entries",      darkSendPool.GetEntriesCount()));
-    obj.push_back(Pair("entries_accepted",      darkSendPool.GetCountEntriesAccepted()));
+    obj.push_back(Pair("state",        anonSendPool.GetState()));
+    obj.push_back(Pair("entries",      anonSendPool.GetEntriesCount()));
+    obj.push_back(Pair("entries_accepted",      anonSendPool.GetCountEntriesAccepted()));
     return obj;
 }
 
@@ -652,7 +652,7 @@ Value masternode(const Array& params, bool fHelp)
             CPubKey pubKeyMasternode;
             CKey keyMasternode;
 
-            if(!darkSendSigner.SetKey(mne.getPrivKey(), errorMessage, keyMasternode, pubKeyMasternode)){
+            if(!anonSendSigner.SetKey(mne.getPrivKey(), errorMessage, keyMasternode, pubKeyMasternode)){
                 printf(" Error upon calling SetKey for %s\n", mne.getAlias().c_str());
                 failed++;
                 continue;
@@ -668,13 +668,13 @@ Value masternode(const Array& params, bool fHelp)
 
             std::string strMessage = pmn->vin.ToString() + boost::lexical_cast<std::string>(nVote);
 
-            if(!darkSendSigner.SignMessage(strMessage, errorMessage, vchMasterNodeSignature, keyMasternode)){
+            if(!anonSendSigner.SignMessage(strMessage, errorMessage, vchMasterNodeSignature, keyMasternode)){
                 printf(" Error upon calling SignMessage for %s\n", mne.getAlias().c_str());
                 failed++;
                 continue;
             }
 
-            if(!darkSendSigner.VerifyMessage(pubKeyMasternode, vchMasterNodeSignature, strMessage, errorMessage)){
+            if(!anonSendSigner.VerifyMessage(pubKeyMasternode, vchMasterNodeSignature, strMessage, errorMessage)){
                 printf(" Error upon calling VerifyMessage for %s\n", mne.getAlias().c_str());
                 failed++;
                 continue;
@@ -715,13 +715,13 @@ Value masternode(const Array& params, bool fHelp)
         std::vector<unsigned char> vchMasterNodeSignature;
         std::string strMessage = activeMasternode.vin.ToString() + boost::lexical_cast<std::string>(nVote);
 
-        if(!darkSendSigner.SetKey(strMasterNodePrivKey, errorMessage, keyMasternode, pubKeyMasternode))
+        if(!anonSendSigner.SetKey(strMasterNodePrivKey, errorMessage, keyMasternode, pubKeyMasternode))
             return(" Error upon calling SetKey");
 
-        if(!darkSendSigner.SignMessage(strMessage, errorMessage, vchMasterNodeSignature, keyMasternode))
+        if(!anonSendSigner.SignMessage(strMessage, errorMessage, vchMasterNodeSignature, keyMasternode))
             return(" Error upon calling SignMessage");
 
-        if(!darkSendSigner.VerifyMessage(pubKeyMasternode, vchMasterNodeSignature, strMessage, errorMessage))
+        if(!anonSendSigner.VerifyMessage(pubKeyMasternode, vchMasterNodeSignature, strMessage, errorMessage))
             return(" Error upon calling VerifyMessage");
 
         //send to all peers

@@ -3,8 +3,8 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef DARKSEND_RELAY_H
-#define DARKSEND_RELAY_H
+#ifndef ANONSEND_RELAY_H
+#define ANONSEND_RELAY_H
 
 #include "core.h"
 #include "main.h"
@@ -12,7 +12,7 @@
 #include "masternodeman.h"
 
 
-class CDarkSendRelay
+class CAnonSendRelay
 {
 public:
     CTxIn vinMasternode;
@@ -23,8 +23,8 @@ public:
     CTxIn in;
     CTxOut out;
 
-    CDarkSendRelay();
-    CDarkSendRelay(CTxIn& vinMasternodeIn, vector<unsigned char>& vchSigIn, int nBlockHeightIn, int nRelayTypeIn, CTxIn& in2, CTxOut& out2);
+    CAnonSendRelay();
+    CAnonSendRelay(CTxIn& vinMasternodeIn, vector<unsigned char>& vchSigIn, int nBlockHeightIn, int nRelayTypeIn, CTxIn& in2, CTxOut& out2);
     
     IMPLEMENT_SERIALIZE
     (

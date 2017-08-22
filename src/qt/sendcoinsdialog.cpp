@@ -60,30 +60,30 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
 
     // Dash specific
     QSettings settings;
-    if (!settings.contains("bUseDarkSend"))
-        settings.setValue("bUseDarkSend", false);
-    if (!settings.contains("bUseInstantX"))
-        settings.setValue("bUseInstantX", false);
+    if (!settings.contains("bUseAnonSend"))
+        settings.setValue("bUseAnonSend", false);
+    if (!settings.contains("bUseFastTx"))
+        settings.setValue("bUseFastTx", false);
 
-    bool useDarkSend = settings.value("bUseDarkSend").toBool();
-    bool useInstantX = settings.value("bUseInstantX").toBool();
+    bool useAnonSend = settings.value("bUseAnonSend").toBool();
+    bool useFastTx = settings.value("bUseFastTx").toBool();
 
     if(fLiteMode) {
-        ui->checkUseDarksend->setChecked(false);
-        ui->checkUseDarksend->setVisible(false);
-        ui->checkInstantX->setVisible(false);
-        CoinControlDialog::coinControl->useDarkSend = false;
-        CoinControlDialog::coinControl->useInstantX = false;
+        ui->checkUseAnonsend->setChecked(false);
+        ui->checkUseAnonsend->setVisible(false);
+        ui->checkFastTx->setVisible(false);
+        CoinControlDialog::coinControl->useAnonSend = false;
+        CoinControlDialog::coinControl->useFastTx = false;
     }
     else{
-        ui->checkUseDarksend->setChecked(useDarkSend);
-        ui->checkInstantX->setChecked(useInstantX);
-        CoinControlDialog::coinControl->useDarkSend = useDarkSend;
-        CoinControlDialog::coinControl->useInstantX = useInstantX;
+        ui->checkUseAnonsend->setChecked(useAnonSend);
+        ui->checkFastTx->setChecked(useFastTx);
+        CoinControlDialog::coinControl->useAnonSend = useAnonSend;
+        CoinControlDialog::coinControl->useFastTx = useFastTx;
     }
 
-    connect(ui->checkUseDarksend, SIGNAL(stateChanged ( int )), this, SLOT(updateDisplayUnit()));
-    connect(ui->checkInstantX, SIGNAL(stateChanged ( int )), this, SLOT(updateInstantX()));
+    connect(ui->checkUseAnonsend, SIGNAL(stateChanged ( int )), this, SLOT(updateDisplayUnit()));
+    connect(ui->checkFastTx, SIGNAL(stateChanged ( int )), this, SLOT(updateFastTx()));
 
     // Coin Control: clipboard actions
     QAction *clipboardQuantityAction = new QAction(tr("Copy quantity"), this);
@@ -253,26 +253,26 @@ void SendCoinsDialog::on_sendButton_clicked()
     QString strFee = "";
     recipients[0].inputType = ONLY_DENOMINATED;
 
-    if(ui->checkUseDarksend->isChecked()) {
+    if(ui->checkUseAnonsend->isChecked()) {
         recipients[0].inputType = ONLY_DENOMINATED;
         strFunds = tr("using") + " <b>" + tr("anonymous funds") + "</b>";
         QString strNearestAmount(
             BitcoinUnits::formatWithUnit(
                 model->getOptionsModel()->getDisplayUnit(), 0.1 * COIN));
         strFee = QString(tr(
-            "(darksend requires this amount to be rounded up to the nearest %1)."
+            "(anonsend requires this amount to be rounded up to the nearest %1)."
         ).arg(strNearestAmount));
     } else {
         recipients[0].inputType = ALL_COINS;
         strFunds = tr("using") + " <b>" + tr("any available funds (not recommended)") + "</b>";
     }
 
-    if(ui->checkInstantX->isChecked()) {
-        recipients[0].useInstantX = true;
+    if(ui->checkFastTx->isChecked()) {
+        recipients[0].useFastTx = true;
         strFunds += " ";
-        strFunds += tr("and InstantX");
+        strFunds += tr("and FastTx");
     } else {
-        recipients[0].useInstantX = false;
+        recipients[0].useFastTx = false;
     }
 
     // Format confirmation message
@@ -563,8 +563,8 @@ void SendCoinsDialog::setBalance(const CAmount& balance, const CAmount& stake, c
     {
         uint64_t bal = 0;
         QSettings settings;
-        settings.setValue("bUseDarkSend", ui->checkUseDarksend->isChecked());
-        if(ui->checkUseDarksend->isChecked()) {
+        settings.setValue("bUseAnonSend", ui->checkUseAnonsend->isChecked());
+        if(ui->checkUseAnonsend->isChecked()) {
         bal = anonymizedBalance;
         } else {
         bal = balance;
@@ -580,15 +580,15 @@ void SendCoinsDialog::updateDisplayUnit()
     if(!lockMain) return;
     setBalance(model->getBalance(), model->getStake(), model->getUnconfirmedBalance(), model->getImmatureBalance(), model->getAnonymizedBalance(),
     	model->getWatchBalance(), model->getWatchStake(), model->getWatchUnconfirmedBalance(), model->getWatchImmatureBalance());
-    CoinControlDialog::coinControl->useDarkSend = ui->checkUseDarksend->isChecked();
+    CoinControlDialog::coinControl->useAnonSend = ui->checkUseAnonsend->isChecked();
     coinControlUpdateLabels();
 }
 
-void SendCoinsDialog::updateInstantX()
+void SendCoinsDialog::updateFastTx()
 {
     QSettings settings;
-    settings.setValue("bUseInstantX", ui->checkInstantX->isChecked());
-    CoinControlDialog::coinControl->useInstantX = ui->checkInstantX->isChecked();
+    settings.setValue("bUseFastTx", ui->checkFastTx->isChecked());
+    CoinControlDialog::coinControl->useFastTx = ui->checkFastTx->isChecked();
     coinControlUpdateLabels();
 }
 
@@ -622,7 +622,7 @@ void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn 
         msgParams.second = CClientUIInterface::MSG_ERROR;
         break;
     case WalletModel::IXTransactionCreationFailed:
-        msgParams.first = tr("InstantX doesn't support sending values that high yet. Transactions are currently limited to 500 MXT.");
+        msgParams.first = tr("FastTx doesn't support sending values that high yet. Transactions are currently limited to 500 MXT.");
         msgParams.second = CClientUIInterface::MSG_ERROR;
         break;
     case WalletModel::TransactionCommitFailed:
@@ -898,7 +898,7 @@ void SendCoinsDialog::coinControlUpdateLabels()
             CoinControlDialog::payAmounts.append(entry->getValue().amount);
     }
 
-    ui->checkUseDarksend->setChecked(CoinControlDialog::coinControl->useDarkSend);
+    ui->checkUseAnonsend->setChecked(CoinControlDialog::coinControl->useAnonSend);
 
     if (CoinControlDialog::coinControl->HasSelected())
     {

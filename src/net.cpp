@@ -9,7 +9,7 @@
 #include "chainparams.h"
 #include "core.h"
 #include "ui_interface.h"
-#include "darksend.h"
+#include "anonsend.h"
 #include "wallet.h"
 
 #ifdef WIN32
@@ -375,7 +375,7 @@ CNode* FindNode(const CService& addr)
     return NULL;
 }
 
-CNode* ConnectNode(CAddress addrConnect, const char *pszDest, bool darkSendMaster)
+CNode* ConnectNode(CAddress addrConnect, const char *pszDest, bool anonSendMaster)
 {
     if (pszDest == NULL) {
         if (IsLocal(addrConnect))
@@ -385,8 +385,8 @@ CNode* ConnectNode(CAddress addrConnect, const char *pszDest, bool darkSendMaste
         CNode* pnode = FindNode((CService)addrConnect);
         if (pnode)
         {
-            if(darkSendMaster)
-                pnode->fDarkSendMaster = true;
+            if(anonSendMaster)
+                pnode->fAnonSendMaster = true;
 
             pnode->AddRef();
             return pnode;

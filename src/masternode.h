@@ -44,7 +44,7 @@ extern map<int64_t, uint256> mapCacheBlockHashes;
 bool GetBlockHash(uint256& hash, int nBlockHeight);
 
 //
-// The Masternode Class. For managing the darksend process. It contains the input of the 50,000 MXT, signature to prove
+// The Masternode Class. For managing the anonsend process. It contains the input of the 50,000 MXT, signature to prove
 // it's the one who own that ip address and code for calculating the payment election.
 //
 class CMasternode

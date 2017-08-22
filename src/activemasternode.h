@@ -13,7 +13,7 @@
 #include "main.h"
 #include "init.h"
 #include "wallet.h"
-#include "darksend.h"
+#include "anonsend.h"
 
 // Responsible for activating the masternode and pinging the network
 class CActiveMasternode

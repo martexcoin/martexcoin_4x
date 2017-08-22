@@ -700,7 +700,7 @@
         <number>3</number>
        </property>
         <item>
-        <widget class="QCheckBox" name="checkUseDarksend">
+        <widget class="QCheckBox" name="checkUseAnonsend">
          <property name="minimumSize">
           <size>
            <width>95</width>
@@ -708,7 +708,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Darksend</string>
+          <string>Anonsend</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -716,7 +716,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkInstantX">
+        <widget class="QCheckBox" name="checkFastTx">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -727,7 +727,7 @@
           </size>
          </property>
          <property name="text">
-          <string>InstantX</string>
+          <string>FastTx</string>
          </property>
         </widget>
        </item>

@@ -356,8 +356,8 @@ QString TransactionTableModel::formatTxType(const TransactionRecord *wtx) const
         return tr("Masternode Reward");
     case TransactionRecord::RecvFromOther:
         return tr("Received from");
-    case TransactionRecord::RecvWithDarksend:
-        return tr("Received via Darksend");
+    case TransactionRecord::RecvWithAnonsend:
+        return tr("Received via Anonsend");
     case TransactionRecord::SendToAddress:
     case TransactionRecord::SendToOther:
         return tr("Sent to");
@@ -368,16 +368,16 @@ QString TransactionTableModel::formatTxType(const TransactionRecord *wtx) const
     case TransactionRecord::StakeMint:
         return tr("Stake");
 
-    case TransactionRecord::DarksendDenominate:
-        return tr("Darksend Denominate");
-    case TransactionRecord::DarksendCollateralPayment:
-        return tr("Darksend Collateral Payment");
-    case TransactionRecord::DarksendMakeCollaterals:
-        return tr("Darksend Make Collateral Inputs");
-    case TransactionRecord::DarksendCreateDenominations:
-        return tr("Darksend Create Denominations");
-    case TransactionRecord::Darksent:
-        return tr("Darksent");
+    case TransactionRecord::AnonsendDenominate:
+        return tr("Anonsend Denominate");
+    case TransactionRecord::AnonsendCollateralPayment:
+        return tr("Anonsend Collateral Payment");
+    case TransactionRecord::AnonsendMakeCollaterals:
+        return tr("Anonsend Make Collateral Inputs");
+    case TransactionRecord::AnonsendCreateDenominations:
+        return tr("Anonsend Create Denominations");
+    case TransactionRecord::Anonsent:
+        return tr("Anonsent");
 
     default:
         return QString();
@@ -392,7 +392,7 @@ QVariant TransactionTableModel::txAddressDecoration(const TransactionRecord *wtx
     case TransactionRecord::StakeMint:
 	case TransactionRecord::MNReward:
         return QIcon(fUseBlackTheme ? ":/icons/black/tx_mined" : ":/icons/tx_mined");
-    case TransactionRecord::RecvWithDarksend:
+    case TransactionRecord::RecvWithAnonsend:
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::RecvFromOther:
         return QIcon(fUseBlackTheme ? ":/icons/black/tx_input" : ":/icons/tx_input");
@@ -418,11 +418,11 @@ QString TransactionTableModel::formatTxToAddress(const TransactionRecord *wtx, b
         return QString::fromStdString(wtx->address) + watchAddress;
     case TransactionRecord::RecvWithAddress:
 	case TransactionRecord::MNReward:
-    case TransactionRecord::RecvWithDarksend:
+    case TransactionRecord::RecvWithAnonsend:
     case TransactionRecord::SendToAddress:
     case TransactionRecord::Generated:
     case TransactionRecord::StakeMint:
-    case TransactionRecord::Darksent:
+    case TransactionRecord::Anonsent:
         return lookupAddress(wtx->address, tooltip) + watchAddress;
     case TransactionRecord::SendToOther:
         return QString::fromStdString(wtx->address) + watchAddress;

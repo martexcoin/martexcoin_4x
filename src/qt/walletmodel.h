@@ -8,7 +8,7 @@
 #include "walletmodeltransaction.h"
 
 #include "allocators.h" /* for SecureString */
-#include "instantx.h"
+#include "fasttx.h"
 #include "wallet.h"
 
 #include <map>
@@ -49,7 +49,7 @@ public:
     QString label;
     QString narration;
     AvailableCoinsType inputType;
-    bool useInstantX;
+    bool useFastTx;
     CAmount amount;
     // If from a payment request, this is used for storing the memo
     QString message;
@@ -105,8 +105,8 @@ public:
         AmountWithFeeExceedsBalance,
         DuplicateAddress,
         TransactionCreationFailed, // Error returned when wallet is still locked
-        IXTransactionCreationFailed, // Error returned when InstantX fails in prepareTransaction
-        PrepareTransactionFailed, // Error returned when InstantX fails in prepareTransaction
+        IXTransactionCreationFailed, // Error returned when FastTx fails in prepareTransaction
+        PrepareTransactionFailed, // Error returned when FastTx fails in prepareTransaction
         TransactionCommitFailed,
         NarrationTooLong,
         Aborted,
@@ -225,7 +225,7 @@ private:
     EncryptionStatus cachedEncryptionStatus;
     int cachedNumBlocks;
     int cachedTxLocks;
-    int cachedDarksendRounds;
+    int cachedAnonsendRounds;
 
     QTimer *pollTimer;
 

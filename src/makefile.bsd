@@ -136,14 +136,14 @@ OBJS= \
     obj/chainparams.o \
     obj/stealth.o \
     obj/activemasternode.o \
-    obj/darksend.o \
-    obj/darksend-relay.o \
-    obj/instantx.o \
+    obj/anonsend.o \
+    obj/anonsend-relay.o \
+    obj/fasttx.o \
     obj/masternodeconfig.o \
     obj/masternodeman.o \
     obj/masternode.o \
     obj/masternode-payments.o \
-    obj/rpcdarksend.o \
+    obj/rpcanonsend.o \
     obj/spork.o \
     obj/crypto/hmac_sha256.o \
     obj/crypto/hmac_sha512.o \

@@ -453,7 +453,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frameDarksend">
+        <widget class="QFrame" name="frameAnonsend">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -487,12 +487,12 @@
                </font>
               </property>
               <property name="text">
-               <string>Darksend</string>
+               <string>Anonsend</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="labelDarksendSyncStatus">
+             <widget class="QLabel" name="labelAnonsendSyncStatus">
               <property name="toolTip">
                <string>The displayed information may be out of date. Your wallet automatically synchronizes with the MarteX network after a connection is established, but this process has not completed yet.</string>
               </property>
@@ -979,7 +979,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QProgressBar" name="darksendProgress">
+             <widget class="QProgressBar" name="anonsendProgress">
               <property name="maximumSize">
                <size>
                 <width>154</width>
@@ -994,7 +994,7 @@
             <item row="3" column="0">
              <widget class="QLabel" name="labelAnonymizedText">
               <property name="text">
-               <string>Darksend Balance:</string>
+               <string>Anonsend Balance:</string>
               </property>
              </widget>
             </item>
@@ -1043,7 +1043,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLabel" name="darksendEnabled">
+             <widget class="QLabel" name="anonsendEnabled">
               <property name="text">
                <string>Enabled/Disabled</string>
               </property>
@@ -1059,7 +1059,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="darksendStatus">
+           <widget class="QLabel" name="anonsendStatus">
             <property name="minimumSize">
              <size>
               <width>288</width>
@@ -1078,7 +1078,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="darksendAuto">
+           <widget class="QPushButton" name="anonsendAuto">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1086,7 +1086,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Try to manually submit a Darksend request.</string>
+             <string>Try to manually submit a Anonsend request.</string>
             </property>
             <property name="text">
              <string>Try Mix</string>
@@ -1094,7 +1094,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="toggleDarksend">
+           <widget class="QPushButton" name="toggleAnonsend">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1107,7 +1107,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="darksendReset">
+           <widget class="QPushButton" name="anonsendReset">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1115,7 +1115,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Reset the current status of Darksend (can interrupt Darksend if it's in the process of Mixing, which can cost you money!)</string>
+             <string>Reset the current status of Anonsend (can interrupt Anonsend if it's in the process of Mixing, which can cost you money!)</string>
             </property>
             <property name="autoFillBackground">
              <bool>false</bool>

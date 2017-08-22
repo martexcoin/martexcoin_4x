@@ -1,29 +1,29 @@
-#ifndef DARKSENDCONFIG_H
-#define DARKSENDCONFIG_H
+#ifndef ANONSENDCONFIG_H
+#define ANONSENDCONFIG_H
 
 #include <QDialog>
 
 namespace Ui {
-    class DarksendConfig;
+    class AnonsendConfig;
 }
 class WalletModel;
 
 /** Multifunctional dialog to ask for passphrases. Used for encryption, unlocking, and changing the passphrase.
  */
-class DarksendConfig : public QDialog
+class AnonsendConfig : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    DarksendConfig(QWidget *parent = 0);
-    ~DarksendConfig();
+    AnonsendConfig(QWidget *parent = 0);
+    ~AnonsendConfig();
 
     void setModel(WalletModel *model);
 
 
 private:
-    Ui::DarksendConfig *ui;
+    Ui::AnonsendConfig *ui;
     WalletModel *model;
     void configure(bool enabled, int coins, int rounds);
 
@@ -34,4 +34,4 @@ private slots:
     void clickMax();
 };
 
-#endif // DARKSENDCONFIG_H
+#endif // ANONSENDCONFIG_H
