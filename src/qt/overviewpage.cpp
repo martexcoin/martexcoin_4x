@@ -2,8 +2,8 @@
 #include "ui_overviewpage.h"
 
 #include "clientmodel.h"
-#include "darksend.h"
-#include "darksendconfig.h"
+#include "anonsend.h"
+#include "anonsendconfig.h"
 #include "walletmodel.h"
 #include "bitcoinunits.h"
 #include "optionsmodel.h"
@@ -135,27 +135,27 @@ OverviewPage::OverviewPage(QWidget *parent) :
 
     // init "out of sync" warning labels
     ui->labelWalletStatus->setText("(" + tr("out of sync") + ")");
-    ui->labelDarksendSyncStatus->setText("(" + tr("out of sync") + ")");
+    ui->labelAnonsendSyncStatus->setText("(" + tr("out of sync") + ")");
     ui->labelTransactionsStatus->setText("(" + tr("out of sync") + ")");
 
     fLiteMode = GetBoolArg("-litemode", false);
 
     if(fLiteMode){
-        ui->frameDarksend->setVisible(false);
+        ui->frameAnonsend->setVisible(false);
     } else {
         if(fMasterNode){
-            ui->toggleDarksend->setText("(" + tr("Disabled") + ")");
-            ui->darksendAuto->setText("(" + tr("Disabled") + ")");
-            ui->darksendReset->setText("(" + tr("Disabled") + ")");
-            ui->frameDarksend->setEnabled(false);
+            ui->toggleAnonsend->setText("(" + tr("Disabled") + ")");
+            ui->anonsendAuto->setText("(" + tr("Disabled") + ")");
+            ui->anonsendReset->setText("(" + tr("Disabled") + ")");
+            ui->frameAnonsend->setEnabled(false);
         } else {
-            if(!fEnableDarksend){
-                ui->toggleDarksend->setText(tr("Start Darksend Mixing"));
+            if(!fEnableAnonsend){
+                ui->toggleAnonsend->setText(tr("Start Anonsend Mixing"));
             } else {
-                ui->toggleDarksend->setText(tr("Stop Darksend Mixing"));
+                ui->toggleAnonsend->setText(tr("Stop Anonsend Mixing"));
             }
             timer = new QTimer(this);
-            connect(timer, SIGNAL(timeout()), this, SLOT(darkSendStatus()));
+            connect(timer, SIGNAL(timeout()), this, SLOT(anonSendStatus()));
             if(!GetBoolArg("-reindexaddr", false))
                 timer->start(60000);
         }
@@ -183,7 +183,7 @@ void OverviewPage::handleTransactionClicked(const QModelIndex &index)
 
 OverviewPage::~OverviewPage()
 {
-    if(!fLiteMode && !fMasterNode) disconnect(timer, SIGNAL(timeout()), this, SLOT(darkSendStatus()));
+    if(!fLiteMode && !fMasterNode) disconnect(timer, SIGNAL(timeout()), this, SLOT(anonSendStatus()));
     delete ui;
 }
 
@@ -220,7 +220,7 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& stake, cons
     ui->labelImmatureText->setVisible(showImmature || showWatchOnlyImmature);
     ui->labelWatchImmature->setVisible(showWatchOnlyImmature); // show watch-only immature balance
 
-    updateDarksendProgress();
+    updateAnonsendProgress();
 
     static int cachedTxLocks = 0;
 
@@ -288,9 +288,9 @@ void OverviewPage::setWalletModel(WalletModel *model)
 
         connect(model->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
 
-        connect(ui->darksendAuto, SIGNAL(clicked()), this, SLOT(darksendAuto()));
-        connect(ui->darksendReset, SIGNAL(clicked()), this, SLOT(darksendReset()));
-        connect(ui->toggleDarksend, SIGNAL(clicked()), this, SLOT(toggleDarksend()));
+        connect(ui->anonsendAuto, SIGNAL(clicked()), this, SLOT(anonsendAuto()));
+        connect(ui->anonsendReset, SIGNAL(clicked()), this, SLOT(anonsendReset()));
+        connect(ui->toggleAnonsend, SIGNAL(clicked()), this, SLOT(toggleAnonsend()));
         updateWatchOnlyLabels(model->haveWatchOnly());
         connect(model, SIGNAL(notifyWatchonlyChanged(bool)), this, SLOT(updateWatchOnlyLabels(bool)));
     }
@@ -325,15 +325,15 @@ void OverviewPage::updateAlerts(const QString &warnings)
 void OverviewPage::showOutOfSyncWarning(bool fShow)
 {
     ui->labelWalletStatus->setVisible(fShow);
-    ui->labelDarksendSyncStatus->setVisible(fShow);
+    ui->labelAnonsendSyncStatus->setVisible(fShow);
     ui->labelTransactionsStatus->setVisible(fShow);
 }
 
 
 
-void OverviewPage::updateDarksendProgress()
+void OverviewPage::updateAnonsendProgress()
 {
-    if(!darkSendPool.IsBlockchainSynced() || ShutdownRequested()) return;
+    if(!anonSendPool.IsBlockchainSynced() || ShutdownRequested()) return;
 
     if(!pwalletMain) return;
 
@@ -342,11 +342,11 @@ void OverviewPage::updateDarksendProgress()
 
     if(currentBalance == 0)
     {
-        ui->darksendProgress->setValue(0);
-        ui->darksendProgress->setToolTip(tr("No inputs detected"));
+        ui->anonsendProgress->setValue(0);
+        ui->anonsendProgress->setToolTip(tr("No inputs detected"));
         // when balance is zero just show info from settings
         strAnonymizeMarteXAmount = strAnonymizeMarteXAmount.remove(strAnonymizeMarteXAmount.indexOf("."), BitcoinUnits::decimals(nDisplayUnit) + 1);
-        strAmountAndRounds = strAnonymizeMarteXAmount + " / " + tr("%n Rounds", "", nDarksendRounds);
+        strAmountAndRounds = strAnonymizeMarteXAmount + " / " + tr("%n Rounds", "", nAnonsendRounds);
 
         ui->labelAmountRounds->setToolTip(tr("No inputs detected"));
         ui->labelAmountRounds->setText(strAmountAndRounds);
@@ -382,7 +382,7 @@ void OverviewPage::updateDarksendProgress()
         ui->labelAmountRounds->setToolTip(tr("Found enough compatible inputs to anonymize %1")
                                           .arg(strAnonymizeMarteXAmount));
         strAnonymizeMarteXAmount = strAnonymizeMarteXAmount.remove(strAnonymizeMarteXAmount.indexOf("."), BitcoinUnits::decimals(nDisplayUnit) + 1);
-        strAmountAndRounds = strAnonymizeMarteXAmount + " / " + tr("%n Rounds", "", nDarksendRounds);
+        strAmountAndRounds = strAnonymizeMarteXAmount + " / " + tr("%n Rounds", "", nAnonsendRounds);
     } else {
         QString strMaxToAnonymize = BitcoinUnits::formatHtmlWithUnit(nDisplayUnit, nMaxToAnonymize, false, BitcoinUnits::separatorAlways);
         ui->labelAmountRounds->setToolTip(tr("Not enough compatible inputs to anonymize <span style='color:red;'>%1</span>,<br>"
@@ -392,7 +392,7 @@ void OverviewPage::updateDarksendProgress()
         strMaxToAnonymize = strMaxToAnonymize.remove(strMaxToAnonymize.indexOf("."), BitcoinUnits::decimals(nDisplayUnit) + 1);
         strAmountAndRounds = "<span style='color:red;'>" +
                 QString(BitcoinUnits::factor(nDisplayUnit) == 1 ? "" : "~") + strMaxToAnonymize +
-                " / " + tr("%n Rounds", "", nDarksendRounds) + "</span>";
+                " / " + tr("%n Rounds", "", nAnonsendRounds) + "</span>";
     }
     ui->labelAmountRounds->setText(strAmountAndRounds);
 
@@ -419,7 +419,7 @@ void OverviewPage::updateDarksendProgress()
 
     // apply some weights to them ...
     float denomWeight = 1;
-    float anonNormWeight = nDarksendRounds;
+    float anonNormWeight = nAnonsendRounds;
     float anonFullWeight = 2;
     float fullWeight = denomWeight + anonNormWeight + anonFullWeight;
     // ... and calculate the whole progress
@@ -429,106 +429,106 @@ void OverviewPage::updateDarksendProgress()
     float progress = denomPartCalc + anonNormPartCalc + anonFullPartCalc;
     if(progress >= 100) progress = 100;
 
-    ui->darksendProgress->setValue(progress);
+    ui->anonsendProgress->setValue(progress);
 
     QString strToolPip = ("<b>" + tr("Overall progress") + ": %1%</b><br/>" +
                           tr("Denominated") + ": %2%<br/>" +
                           tr("Mixed") + ": %3%<br/>" +
                           tr("Anonymized") + ": %4%<br/>" +
-                          tr("Denominated inputs have %5 of %n rounds on average", "", nDarksendRounds))
+                          tr("Denominated inputs have %5 of %n rounds on average", "", nAnonsendRounds))
             .arg(progress).arg(denomPart).arg(anonNormPart).arg(anonFullPart)
             .arg(nAverageAnonymizedRounds);
-    ui->darksendProgress->setToolTip(strToolPip);
+    ui->anonsendProgress->setToolTip(strToolPip);
 }
 
 
-void OverviewPage::darkSendStatus()
+void OverviewPage::anonSendStatus()
 {
     static int64_t nLastDSProgressBlockTime = 0;
 
     int nBestHeight = pindexBest->nHeight;
 
     // we we're processing more then 1 block per second, we'll just leave
-    if(((nBestHeight - darkSendPool.cachedNumBlocks) / (GetTimeMillis() - nLastDSProgressBlockTime + 1) > 1)) return;
+    if(((nBestHeight - anonSendPool.cachedNumBlocks) / (GetTimeMillis() - nLastDSProgressBlockTime + 1) > 1)) return;
     nLastDSProgressBlockTime = GetTimeMillis();
 
-    if(!fEnableDarksend) {
-        if(nBestHeight != darkSendPool.cachedNumBlocks)
+    if(!fEnableAnonsend) {
+        if(nBestHeight != anonSendPool.cachedNumBlocks)
         {
-            darkSendPool.cachedNumBlocks = nBestHeight;
-            updateDarksendProgress();
+            anonSendPool.cachedNumBlocks = nBestHeight;
+            updateAnonsendProgress();
 
-            ui->darksendEnabled->setText(tr("Disabled"));
-            ui->darksendStatus->setText("");
-            ui->toggleDarksend->setText(tr("Start Darksend Mixing"));
+            ui->anonsendEnabled->setText(tr("Disabled"));
+            ui->anonsendStatus->setText("");
+            ui->toggleAnonsend->setText(tr("Start Anonsend Mixing"));
         }
 
         return;
     }
 
-    // check darksend status and unlock if needed
-    if(nBestHeight != darkSendPool.cachedNumBlocks)
+    // check anonsend status and unlock if needed
+    if(nBestHeight != anonSendPool.cachedNumBlocks)
     {
         // Balance and number of transactions might have changed
-        darkSendPool.cachedNumBlocks = nBestHeight;
+        anonSendPool.cachedNumBlocks = nBestHeight;
 
-        updateDarksendProgress();
+        updateAnonsendProgress();
 
-        ui->darksendEnabled->setText(tr("Enabled"));
+        ui->anonsendEnabled->setText(tr("Enabled"));
     }
 
-    QString strStatus = QString(darkSendPool.GetStatus().c_str());
+    QString strStatus = QString(anonSendPool.GetStatus().c_str());
 
-    QString s = tr("Last Darksend message:\n") + strStatus;
+    QString s = tr("Last Anonsend message:\n") + strStatus;
 
-    if(s != ui->darksendStatus->text())
-        LogPrintf("Last Darksend message: %s\n", strStatus.toStdString());
+    if(s != ui->anonsendStatus->text())
+        LogPrintf("Last Anonsend message: %s\n", strStatus.toStdString());
 
-    ui->darksendStatus->setText(s);
+    ui->anonsendStatus->setText(s);
 
-    if(darkSendPool.sessionDenom == 0){
+    if(anonSendPool.sessionDenom == 0){
         ui->labelSubmittedDenom->setText(tr("N/A"));
     } else {
         std::string out;
-        darkSendPool.GetDenominationsToString(darkSendPool.sessionDenom, out);
+        anonSendPool.GetDenominationsToString(anonSendPool.sessionDenom, out);
         QString s2(out.c_str());
         ui->labelSubmittedDenom->setText(s2);
     }
 
-    // Get DarkSend Denomination Status
+    // Get AnonSend Denomination Status
 }
 
-void OverviewPage::darksendAuto(){
-    darkSendPool.DoAutomaticDenominating();
+void OverviewPage::anonsendAuto(){
+    anonSendPool.DoAutomaticDenominating();
 }
 
-void OverviewPage::darksendReset(){
-    darkSendPool.Reset();
-    darkSendStatus();
+void OverviewPage::anonsendReset(){
+    anonSendPool.Reset();
+    anonSendStatus();
 
-    QMessageBox::warning(this, tr("Darksend"),
-        tr("Darksend was successfully reset."),
+    QMessageBox::warning(this, tr("Anonsend"),
+        tr("Anonsend was successfully reset."),
         QMessageBox::Ok, QMessageBox::Ok);
 }
 
-void OverviewPage::toggleDarksend(){
+void OverviewPage::toggleAnonsend(){
 
     QSettings settings;
     // Popup some information on first mixing
     QString hasMixed = settings.value("hasMixed").toString();
     if(hasMixed.isEmpty()){
-        QMessageBox::information(this, tr("Darksend"),
-                tr("If you don't want to see internal Darksend fees/transactions select \"Received By\" as Type on the \"Transactions\" tab."),
+        QMessageBox::information(this, tr("Anonsend"),
+                tr("If you don't want to see internal Anonsend fees/transactions select \"Received By\" as Type on the \"Transactions\" tab."),
                 QMessageBox::Ok, QMessageBox::Ok);
         settings.setValue("hasMixed", "hasMixed");
     }
-    if(!fEnableDarksend){
+    if(!fEnableAnonsend){
         int64_t balance = currentBalance;
         float minAmount = 1.49 * COIN;
         if(balance < minAmount){
             QString strMinAmount(BitcoinUnits::formatWithUnit(nDisplayUnit, minAmount));
-            QMessageBox::warning(this, tr("Darksend"),
-                tr("Darksend requires at least %1 to use.").arg(strMinAmount),
+            QMessageBox::warning(this, tr("Anonsend"),
+                tr("Anonsend requires at least %1 to use.").arg(strMinAmount),
                 QMessageBox::Ok, QMessageBox::Ok);
             return;
         }
@@ -540,30 +540,30 @@ void OverviewPage::toggleDarksend(){
             if(!ctx.isValid())
             {
                 //unlock was cancelled
-                darkSendPool.cachedNumBlocks = std::numeric_limits<int>::max();
-                QMessageBox::warning(this, tr("Darksend"),
-                    tr("Wallet is locked and user declined to unlock. Disabling Darksend."),
+                anonSendPool.cachedNumBlocks = std::numeric_limits<int>::max();
+                QMessageBox::warning(this, tr("Anonsend"),
+                    tr("Wallet is locked and user declined to unlock. Disabling Anonsend."),
                     QMessageBox::Ok, QMessageBox::Ok);
-                if (fDebug) LogPrintf("Wallet is locked and user declined to unlock. Disabling Darksend.\n");
+                if (fDebug) LogPrintf("Wallet is locked and user declined to unlock. Disabling Anonsend.\n");
                 return;
             }
         }
 
     }
 
-    fEnableDarksend = !fEnableDarksend;
-    darkSendPool.cachedNumBlocks = std::numeric_limits<int>::max();
+    fEnableAnonsend = !fEnableAnonsend;
+    anonSendPool.cachedNumBlocks = std::numeric_limits<int>::max();
 
-    if(!fEnableDarksend){
-        ui->toggleDarksend->setText(tr("Start Darksend Mixing"));
-        darkSendPool.UnlockCoins();
+    if(!fEnableAnonsend){
+        ui->toggleAnonsend->setText(tr("Start Anonsend Mixing"));
+        anonSendPool.UnlockCoins();
     } else {
-        ui->toggleDarksend->setText(tr("Stop Darksend Mixing"));
+        ui->toggleAnonsend->setText(tr("Stop Anonsend Mixing"));
 
-        /* show darksend configuration if client has defaults set */
+        /* show anonsend configuration if client has defaults set */
 
         if(nAnonymizeMarteXAmount == 0){
-            DarksendConfig dlg(this);
+            AnonsendConfig dlg(this);
             dlg.setModel(walletModel);
             dlg.exec();
         }

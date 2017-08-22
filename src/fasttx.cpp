@@ -6,10 +6,10 @@
 #include "base58.h"
 #include "main.h"
 #include "protocol.h"
-#include "instantx.h"
+#include "fasttx.h"
 #include "activemasternode.h"
 #include "masternodeman.h"
-#include "darksend.h"
+#include "anonsend.h"
 #include "spork.h"
 #include "txdb.h"
 #include <boost/lexical_cast.hpp>
@@ -31,15 +31,15 @@ int nCompleteTXLocks;
 //step 2.) Top 10 masternodes, open connect to top 1 masternode. Send "txvote", CTransaction, Signature, Approve
 //step 3.) Top 1 masternode, waits for 10 messages. Upon success, sends "txlock'
 
-void ProcessMessageInstantX(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
+void ProcessMessageFastTx(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 {
-    if(fLiteMode) return; //disable all darksend/masternode related functionality
-    if(!IsSporkActive(SPORK_2_INSTANTX)) return;
-    if(!darkSendPool.IsBlockchainSynced()) return;
+    if(fLiteMode) return; //disable all anonsend/masternode related functionality
+    if(!IsSporkActive(SPORK_2_FASTTX)) return;
+    if(!anonSendPool.IsBlockchainSynced()) return;
 
     if (strCommand == "txlreq")
     {
-        //LogPrintf("ProcessMessageInstantX::txlreq\n");
+        //LogPrintf("ProcessMessageFastTx::txlreq\n");
         CDataStream vMsg(vRecv);
         CTransaction tx;
         vRecv >> tx;
@@ -57,7 +57,7 @@ void ProcessMessageInstantX(CNode* pfrom, std::string& strCommand, CDataStream& 
 
         BOOST_FOREACH(const CTxOut o, tx.vout){
             if(!o.scriptPubKey.IsNormalPaymentScript() && !o.scriptPubKey.IsUnspendable()){
-                LogPrintf("ProcessMessageInstantX::txlreq - Invalid Script %s\n", tx.ToString().c_str());
+                LogPrintf("ProcessMessageFastTx::txlreq - Invalid Script %s\n", tx.ToString().c_str());
                 return;
             }
         }
@@ -83,7 +83,7 @@ void ProcessMessageInstantX(CNode* pfrom, std::string& strCommand, CDataStream& 
 
             mapTxLockReq.insert(make_pair(tx.GetHash(), tx));
 
-            LogPrintf("ProcessMessageInstantX::txlreq - Transaction Lock Request: %s %s : accepted %s\n",
+            LogPrintf("ProcessMessageFastTx::txlreq - Transaction Lock Request: %s %s : accepted %s\n",
                 pfrom->addr.ToString().c_str(), pfrom->cleanSubVer.c_str(),
                 tx.GetHash().ToString().c_str()
             );
@@ -95,7 +95,7 @@ void ProcessMessageInstantX(CNode* pfrom, std::string& strCommand, CDataStream& 
 
             // can we get the conflicting transaction as proof?
 
-            LogPrintf("ProcessMessageInstantX::txlreq - Transaction Lock Request: %s %s : rejected %s\n",
+            LogPrintf("ProcessMessageFastTx::txlreq - Transaction Lock Request: %s %s : rejected %s\n",
                 pfrom->addr.ToString().c_str(), pfrom->cleanSubVer.c_str(),
                 tx.GetHash().ToString().c_str()
             );
@@ -110,9 +110,9 @@ void ProcessMessageInstantX(CNode* pfrom, std::string& strCommand, CDataStream& 
             std::map<uint256, CTransactionLock>::iterator i = mapTxLocks.find(tx.GetHash());
             if (i != mapTxLocks.end()){
                 //we only care if we have a complete tx lock
-                if((*i).second.CountSignatures() >= INSTANTX_SIGNATURES_REQUIRED){
+                if((*i).second.CountSignatures() >= FASTTX_SIGNATURES_REQUIRED){
                     if(!CheckForConflictingLocks(tx)){
-                        LogPrintf("ProcessMessageInstantX::txlreq - Found Existing Complete IX Lock\n");
+                        LogPrintf("ProcessMessageFastTx::txlreq - Found Existing Complete IX Lock\n");
 
                         //reprocess the last 15 blocks
                         block.DisconnectBlock(txdb, pindex);
@@ -124,7 +124,7 @@ void ProcessMessageInstantX(CNode* pfrom, std::string& strCommand, CDataStream& 
             return;
         }
     }
-    else if (strCommand == "txlvote") //InstantX Lock Consensus Votes
+    else if (strCommand == "txlvote") //FastTx Lock Consensus Votes
     {
         CConsensusVote ctx;
         vRecv >> ctx;
@@ -152,7 +152,7 @@ void ProcessMessageInstantX(CNode* pfrom, std::string& strCommand, CDataStream& 
 
                 if(mapUnknownVotes[ctx.vinMasternode.prevout.hash] > GetTime() &&
                     mapUnknownVotes[ctx.vinMasternode.prevout.hash] - GetAverageVoteTime() > 60*10){
-                        LogPrintf("ProcessMessageInstantX::txlreq - masternode is spamming transaction votes: %s %s\n",
+                        LogPrintf("ProcessMessageFastTx::txlreq - masternode is spamming transaction votes: %s %s\n",
                             ctx.vinMasternode.ToString().c_str(),
                             ctx.txHash.ToString().c_str()
                         );
@@ -193,12 +193,12 @@ bool IsIXTXValid(const CTransaction& txCollateral){
     }
 
     if(nValueOut > GetSporkValue(SPORK_5_MAX_VALUE)*COIN){
-        LogPrint("instantx", "IsIXTXValid - Transaction value too high - %s\n", txCollateral.ToString().c_str());
+        LogPrint("fasttx", "IsIXTXValid - Transaction value too high - %s\n", txCollateral.ToString().c_str());
         return false;
     }
 
     if(missingTx){
-        LogPrint("instantx", "IsIXTXValid - Unknown inputs in IX transaction - %s\n", txCollateral.ToString().c_str());
+        LogPrint("fasttx", "IsIXTXValid - Unknown inputs in IX transaction - %s\n", txCollateral.ToString().c_str());
         /*
             This happens sometimes for an unknown reason, so we'll return that it's a valid transaction.
             If someone submits an invalid transaction it will be rejected by the network anyway and this isn't
@@ -208,7 +208,7 @@ bool IsIXTXValid(const CTransaction& txCollateral){
     }
 
     if(nValueIn-nValueOut < COIN*0.01) {
-        LogPrint("instantx", "IsIXTXValid - did not include enough fees in transaction %d\n%s\n", nValueOut-nValueIn, txCollateral.ToString().c_str());
+        LogPrint("fasttx", "IsIXTXValid - did not include enough fees in transaction %d\n%s\n", nValueOut-nValueIn, txCollateral.ToString().c_str());
         return false;
     }
 
@@ -246,7 +246,7 @@ int64_t CreateNewLock(CTransaction tx)
         mapTxLocks.insert(make_pair(tx.GetHash(), newLock));
     } else {
         mapTxLocks[tx.GetHash()].nBlockHeight = nBlockHeight;
-        LogPrint("instantx", "CreateNewLock - Transaction Lock Exists %s !\n", tx.GetHash().ToString().c_str());
+        LogPrint("fasttx", "CreateNewLock - Transaction Lock Exists %s !\n", tx.GetHash().ToString().c_str());
     }
 
     return nBlockHeight;
@@ -257,35 +257,35 @@ void DoConsensusVote(CTransaction& tx, int64_t nBlockHeight)
 {
     if(!fMasterNode) return;
 
-    int n = mnodeman.GetMasternodeRank(activeMasternode.vin, nBlockHeight, MIN_INSTANTX_PROTO_VERSION);
+    int n = mnodeman.GetMasternodeRank(activeMasternode.vin, nBlockHeight, MIN_FASTTX_PROTO_VERSION);
 
     if(n == -1)
     {
-        LogPrint("instantx", "InstantX::DoConsensusVote - Unknown Masternode\n");
+        LogPrint("fasttx", "FastTx::DoConsensusVote - Unknown Masternode\n");
         return;
     }
 
-    if(n > INSTANTX_SIGNATURES_TOTAL)
+    if(n > FASTTX_SIGNATURES_TOTAL)
     {
-        LogPrint("instantx", "InstantX::DoConsensusVote - Masternode not in the top %d (%d)\n", INSTANTX_SIGNATURES_TOTAL, n);
+        LogPrint("fasttx", "FastTx::DoConsensusVote - Masternode not in the top %d (%d)\n", FASTTX_SIGNATURES_TOTAL, n);
         return;
     }
     /*
         nBlockHeight calculated from the transaction is the authoritive source
     */
 
-    LogPrint("instantx", "InstantX::DoConsensusVote - In the top %d (%d)\n", INSTANTX_SIGNATURES_TOTAL, n);
+    LogPrint("fasttx", "FastTx::DoConsensusVote - In the top %d (%d)\n", FASTTX_SIGNATURES_TOTAL, n);
 
     CConsensusVote ctx;
     ctx.vinMasternode = activeMasternode.vin;
     ctx.txHash = tx.GetHash();
     ctx.nBlockHeight = nBlockHeight;
     if(!ctx.Sign()){
-        LogPrintf("InstantX::DoConsensusVote - Failed to sign consensus vote\n");
+        LogPrintf("FastTx::DoConsensusVote - Failed to sign consensus vote\n");
         return;
     }
     if(!ctx.SignatureValid()) {
-        LogPrintf("InstantX::DoConsensusVote - Signature invalid\n");
+        LogPrintf("FastTx::DoConsensusVote - Signature invalid\n");
         return;
     }
 
@@ -300,37 +300,37 @@ void DoConsensusVote(CTransaction& tx, int64_t nBlockHeight)
 //received a consensus vote
 bool ProcessConsensusVote(CNode* pnode, CConsensusVote& ctx)
 {
-    int n = mnodeman.GetMasternodeRank(ctx.vinMasternode, ctx.nBlockHeight, MIN_INSTANTX_PROTO_VERSION);
+    int n = mnodeman.GetMasternodeRank(ctx.vinMasternode, ctx.nBlockHeight, MIN_FASTTX_PROTO_VERSION);
 
     CMasternode* pmn = mnodeman.Find(ctx.vinMasternode);
     if(pmn != NULL)
     {
-        LogPrint("instantx", "InstantX::ProcessConsensusVote - Masternode ADDR %s %d\n", pmn->addr.ToString().c_str(), n);
+        LogPrint("fasttx", "FastTx::ProcessConsensusVote - Masternode ADDR %s %d\n", pmn->addr.ToString().c_str(), n);
     }
 
     if(n == -1)
     {
         //can be caused by past versions trying to vote with an invalid protocol
-        LogPrint("instantx", "InstantX::ProcessConsensusVote - Unknown Masternode\n");
+        LogPrint("fasttx", "FastTx::ProcessConsensusVote - Unknown Masternode\n");
         mnodeman.AskForMN(pnode, ctx.vinMasternode);
         return false;
     }
 
-    if(n > INSTANTX_SIGNATURES_TOTAL)
+    if(n > FASTTX_SIGNATURES_TOTAL)
     {
-        LogPrint("instantx", "InstantX::ProcessConsensusVote - Masternode not in the top %d (%d) - %s\n", INSTANTX_SIGNATURES_TOTAL, n, ctx.GetHash().ToString().c_str());
+        LogPrint("fasttx", "FastTx::ProcessConsensusVote - Masternode not in the top %d (%d) - %s\n", FASTTX_SIGNATURES_TOTAL, n, ctx.GetHash().ToString().c_str());
         return false;
     }
 
     if(!ctx.SignatureValid()) {
-        LogPrintf("InstantX::ProcessConsensusVote - Signature invalid\n");
+        LogPrintf("FastTx::ProcessConsensusVote - Signature invalid\n");
         //don't ban, it could just be a non-synced masternode
         mnodeman.AskForMN(pnode, ctx.vinMasternode);
         return false;
     }
 
     if (!mapTxLocks.count(ctx.txHash)){
-        LogPrintf("InstantX::ProcessConsensusVote - New Transaction Lock %s !\n", ctx.txHash.ToString().c_str());
+        LogPrintf("FastTx::ProcessConsensusVote - New Transaction Lock %s !\n", ctx.txHash.ToString().c_str());
 
         CTransactionLock newLock;
         newLock.nBlockHeight = 0;
@@ -339,7 +339,7 @@ bool ProcessConsensusVote(CNode* pnode, CConsensusVote& ctx)
         newLock.txHash = ctx.txHash;
         mapTxLocks.insert(make_pair(ctx.txHash, newLock));
     } else {
-        LogPrint("instantx", "InstantX::ProcessConsensusVote - Transaction Lock Exists %s !\n", ctx.txHash.ToString().c_str());
+        LogPrint("fasttx", "FastTx::ProcessConsensusVote - Transaction Lock Exists %s !\n", ctx.txHash.ToString().c_str());
     }
 
     CBlockIndex* pindex;
@@ -358,10 +358,10 @@ bool ProcessConsensusVote(CNode* pnode, CConsensusVote& ctx)
         }
 #endif
 
-        LogPrint("instantx", "InstantX::ProcessConsensusVote - Transaction Lock Votes %d - %s !\n", (*i).second.CountSignatures(), ctx.GetHash().ToString().c_str());
+        LogPrint("fasttx", "FastTx::ProcessConsensusVote - Transaction Lock Votes %d - %s !\n", (*i).second.CountSignatures(), ctx.GetHash().ToString().c_str());
 
-        if((*i).second.CountSignatures() >= INSTANTX_SIGNATURES_REQUIRED){
-            LogPrint("instantx", "InstantX::ProcessConsensusVote - Transaction Lock Is Complete %s !\n", (*i).second.GetHash().ToString().c_str());
+        if((*i).second.CountSignatures() >= FASTTX_SIGNATURES_REQUIRED){
+            LogPrint("fasttx", "FastTx::ProcessConsensusVote - Transaction Lock Is Complete %s !\n", (*i).second.GetHash().ToString().c_str());
 
             CTransaction& tx = mapTxLockReq[ctx.txHash];
             if(!CheckForConflictingLocks(tx)){
@@ -411,7 +411,7 @@ bool CheckForConflictingLocks(CTransaction& tx)
     BOOST_FOREACH(const CTxIn& in, tx.vin){
         if(mapLockedInputs.count(in.prevout)){
             if(mapLockedInputs[in.prevout] != tx.GetHash()){
-                LogPrintf("InstantX::CheckForConflictingLocks - found two complete conflicting locks - removing both. %s %s", tx.GetHash().ToString().c_str(), mapLockedInputs[in.prevout].ToString().c_str());
+                LogPrintf("FastTx::CheckForConflictingLocks - found two complete conflicting locks - removing both. %s %s", tx.GetHash().ToString().c_str(), mapLockedInputs[in.prevout].ToString().c_str());
                 if(mapTxLocks.count(tx.GetHash())) mapTxLocks[tx.GetHash()].nExpiration = GetTime();
                 if(mapTxLocks.count(mapLockedInputs[in.prevout])) mapTxLocks[mapLockedInputs[in.prevout]].nExpiration = GetTime();
                 return true;
@@ -484,12 +484,12 @@ bool CConsensusVote::SignatureValid()
 
     if(pmn == NULL)
     {
-        LogPrintf("InstantX::CConsensusVote::SignatureValid() - Unknown Masternode\n");
+        LogPrintf("FastTx::CConsensusVote::SignatureValid() - Unknown Masternode\n");
         return false;
     }
 
-    if(!darkSendSigner.VerifyMessage(pmn->pubkey2, vchMasterNodeSignature, strMessage, errorMessage)) {
-        LogPrintf("InstantX::CConsensusVote::SignatureValid() - Verify message failed\n");
+    if(!anonSendSigner.VerifyMessage(pmn->pubkey2, vchMasterNodeSignature, strMessage, errorMessage)) {
+        LogPrintf("FastTx::CConsensusVote::SignatureValid() - Verify message failed\n");
         return false;
     }
 
@@ -506,18 +506,18 @@ bool CConsensusVote::Sign()
     //LogPrintf("signing strMessage %s \n", strMessage.c_str());
     //LogPrintf("signing privkey %s \n", strMasterNodePrivKey.c_str());
 
-    if(!darkSendSigner.SetKey(strMasterNodePrivKey, errorMessage, key2, pubkey2))
+    if(!anonSendSigner.SetKey(strMasterNodePrivKey, errorMessage, key2, pubkey2))
     {
         LogPrintf("CConsensusVote::Sign() - ERROR: Invalid masternodeprivkey: '%s'\n", errorMessage.c_str());
         return false;
     }
 
-    if(!darkSendSigner.SignMessage(strMessage, errorMessage, vchMasterNodeSignature, key2)) {
+    if(!anonSendSigner.SignMessage(strMessage, errorMessage, vchMasterNodeSignature, key2)) {
         LogPrintf("CConsensusVote::Sign() - Sign message failed");
         return false;
     }
 
-    if(!darkSendSigner.VerifyMessage(pubkey2, vchMasterNodeSignature, strMessage, errorMessage)) {
+    if(!anonSendSigner.VerifyMessage(pubkey2, vchMasterNodeSignature, strMessage, errorMessage)) {
         LogPrintf("CConsensusVote::Sign() - Verify message failed");
         return false;
     }
@@ -531,7 +531,7 @@ bool CTransactionLock::SignaturesValid()
 
     BOOST_FOREACH(CConsensusVote vote, vecConsensusVotes)
     {
-        int n = mnodeman.GetMasternodeRank(vote.vinMasternode, vote.nBlockHeight, MIN_INSTANTX_PROTO_VERSION);
+        int n = mnodeman.GetMasternodeRank(vote.vinMasternode, vote.nBlockHeight, MIN_FASTTX_PROTO_VERSION);
 
         if(n == -1)
         {
@@ -539,9 +539,9 @@ bool CTransactionLock::SignaturesValid()
             return false;
         }
 
-        if(n > INSTANTX_SIGNATURES_TOTAL)
+        if(n > FASTTX_SIGNATURES_TOTAL)
         {
-            LogPrintf("CTransactionLock::SignaturesValid() - Masternode not in the top %s\n", INSTANTX_SIGNATURES_TOTAL);
+            LogPrintf("CTransactionLock::SignaturesValid() - Masternode not in the top %s\n", FASTTX_SIGNATURES_TOTAL);
             return false;
         }
 

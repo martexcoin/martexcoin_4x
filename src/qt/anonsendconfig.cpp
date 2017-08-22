@@ -1,5 +1,5 @@
-#include "darksendconfig.h"
-#include "ui_darksendconfig.h"
+#include "anonsendconfig.h"
+#include "ui_anonsendconfig.h"
 
 #include "bitcoinunits.h"
 #include "guiconstants.h"
@@ -12,9 +12,9 @@
 #include <QKeyEvent>
 #include <QSettings>
 
-DarksendConfig::DarksendConfig(QWidget *parent) :
+AnonsendConfig::AnonsendConfig(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DarksendConfig),
+    ui(new Ui::AnonsendConfig),
     model(0)
 {
     ui->setupUi(this);
@@ -24,68 +24,68 @@ DarksendConfig::DarksendConfig(QWidget *parent) :
     connect(ui->buttonMax, SIGNAL(clicked()), this, SLOT(clickMax()));
 }
 
-DarksendConfig::~DarksendConfig()
+AnonsendConfig::~AnonsendConfig()
 {
     delete ui;
 }
 
-void DarksendConfig::setModel(WalletModel *model)
+void AnonsendConfig::setModel(WalletModel *model)
 {
     this->model = model;
 }
 
-void DarksendConfig::clickBasic()
+void AnonsendConfig::clickBasic()
 {
     configure(true, 1000, 2);
 
     QString strAmount(BitcoinUnits::formatWithUnit(
         model->getOptionsModel()->getDisplayUnit(), 1000 * COIN));
-    QMessageBox::information(this, tr("Darksend Configuration"),
+    QMessageBox::information(this, tr("Anonsend Configuration"),
         tr(
-            "Darksend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening MarteX's configuration screen."
+            "Anonsend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening MarteX's configuration screen."
         ).arg(strAmount)
     );
 
     close();
 }
 
-void DarksendConfig::clickHigh()
+void AnonsendConfig::clickHigh()
 {
     configure(true, 1000, 8);
 
     QString strAmount(BitcoinUnits::formatWithUnit(
         model->getOptionsModel()->getDisplayUnit(), 1000 * COIN));
-    QMessageBox::information(this, tr("Darksend Configuration"),
+    QMessageBox::information(this, tr("Anonsend Configuration"),
         tr(
-            "Darksend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening MarteX's configuration screen."
+            "Anonsend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening MarteX's configuration screen."
         ).arg(strAmount)
     );
 
     close();
 }
 
-void DarksendConfig::clickMax()
+void AnonsendConfig::clickMax()
 {
     configure(true, 1000, 16);
 
     QString strAmount(BitcoinUnits::formatWithUnit(
         model->getOptionsModel()->getDisplayUnit(), 1000 * COIN));
-    QMessageBox::information(this, tr("Darksend Configuration"),
+    QMessageBox::information(this, tr("Anonsend Configuration"),
         tr(
-            "Darksend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening Bitcoin's configuration screen."
+            "Anonsend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening Bitcoin's configuration screen."
         ).arg(strAmount)
     );
 
     close();
 }
 
-void DarksendConfig::configure(bool enabled, int coins, int rounds) {
+void AnonsendConfig::configure(bool enabled, int coins, int rounds) {
 
     QSettings settings;
 
-    settings.setValue("nDarksendRounds", rounds);
+    settings.setValue("nAnonsendRounds", rounds);
     settings.setValue("nAnonymizeMarteXAmount", coins);
 
-    nDarksendRounds = rounds;
+    nAnonsendRounds = rounds;
     nAnonymizeMarteXAmount = coins;
 }

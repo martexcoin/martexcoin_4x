@@ -16,7 +16,7 @@
 #include "util.h"
 #include "ui_interface.h"
 #include "checkpoints.h"
-#include "darksend-relay.h"
+#include "anonsend-relay.h"
 #include "activemasternode.h"
 #include "masternode-payments.h"
 #include "masternode.h"
@@ -207,7 +207,6 @@ std::string HelpMessage()
     strUsage += "  -externalip=<ip>       " + _("Specify your own public address") + "\n";
     strUsage += "  -onlynet=<net>         " + _("Only connect to nodes in network <net> (IPv4, IPv6 or Tor)") + "\n";
     strUsage += "  -discover              " + _("Discover own IP address (default: 1 when listening and no -externalip)") + "\n";
-    strUsage += "  -irc                   " + _("Find peers using internet relay chat (default: 0)") + "\n";
     strUsage += "  -listen                " + _("Accept connections from outside (default: 1 if no -proxy or -connect)") + "\n";
     strUsage += "  -bind=<addr>           " + _("Bind to given address. Use [host]:port notation for IPv6") + "\n";
     strUsage += "  -dnsseed               " + _("Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect)") + "\n";
@@ -282,7 +281,7 @@ std::string HelpMessage()
     strUsage += "  -rpcsslcertificatechainfile=<file.cert>  " + _("Server certificate file (default: server.cert)") + "\n";
     strUsage += "  -rpcsslprivatekeyfile=<file.pem>         " + _("Server private key (default: server.pem)") + "\n";
     strUsage += "  -rpcsslciphers=<ciphers>                 " + _("Acceptable ciphers (default: TLSv1.2+HIGH:TLSv1+HIGH:!SSLv3:!SSLv2:!aNULL:!eNULL:!3DES:@STRENGTH)") + "\n";
-    strUsage += "  -litemode=<n>          " + _("Disable all Darksend and Stealth Messaging related functionality (0-1, default: 0)") + "\n";
+    strUsage += "  -litemode=<n>          " + _("Disable all Anonsend and Stealth Messaging related functionality (0-1, default: 0)") + "\n";
 strUsage += "\n" + _("Masternode options:") + "\n";
     strUsage += "  -masternode=<n>            " + _("Enable the client to act as a masternode (0-1, default: 0)") + "\n";
     strUsage += "  -mnconf=<file>             " + _("Specify masternode configuration file (default: masternode.conf)") + "\n";
@@ -291,15 +290,15 @@ strUsage += "\n" + _("Masternode options:") + "\n";
     strUsage += "  -masternodeaddr=<n>        " + _("Set external address:port to get to this masternode (example: address:port)") + "\n";
     strUsage += "  -masternodeminprotocol=<n> " + _("Ignore masternodes less than version (example: 61401; default : 0)") + "\n";
 
-    strUsage += "\n" + _("Darksend options:") + "\n";
-    strUsage += "  -enabledarksend=<n>          " + _("Enable use of automated darksend for funds stored in this wallet (0-1, default: 0)") + "\n";
-    strUsage += "  -darksendrounds=<n>          " + _("Use N separate masternodes to anonymize funds  (2-8, default: 2)") + "\n";
+    strUsage += "\n" + _("Anonsend options:") + "\n";
+    strUsage += "  -enableanonsend=<n>          " + _("Enable use of automated anonsend for funds stored in this wallet (0-1, default: 0)") + "\n";
+    strUsage += "  -anonsendrounds=<n>          " + _("Use N separate masternodes to anonymize funds  (2-8, default: 2)") + "\n";
     strUsage += "  -anonymizeMarteXamount=<n> " + _("Keep N MarteX anonymized (default: 0)") + "\n";
-    strUsage += "  -liquidityprovider=<n>       " + _("Provide liquidity to Darksend by infrequently mixing coins on a continual basis (0-100, default: 0, 1=very frequent, high fees, 100=very infrequent, low fees)") + "\n";
+    strUsage += "  -liquidityprovider=<n>       " + _("Provide liquidity to Anonsend by infrequently mixing coins on a continual basis (0-100, default: 0, 1=very frequent, high fees, 100=very infrequent, low fees)") + "\n";
 
-    strUsage += "\n" + _("InstantX options:") + "\n";
-    strUsage += "  -enableinstantx=<n>    " + _("Enable instantx, show confirmations for locked transactions (bool, default: true)") + "\n";
-    strUsage += "  -instantxdepth=<n>     " + strprintf(_("Show N confirmations for a successfully locked transaction (0-9999, default: %u)"), nInstantXDepth) + "\n"; 
+    strUsage += "\n" + _("FastTx options:") + "\n";
+    strUsage += "  -enablefasttx=<n>    " + _("Enable fasttx, show confirmations for locked transactions (bool, default: true)") + "\n";
+    strUsage += "  -fasttxdepth=<n>     " + strprintf(_("Show N confirmations for a successfully locked transaction (0-9999, default: %u)"), nFastTxDepth) + "\n"; 
     strUsage += _("Secure messaging options:") + "\n" +
         "  -nosmsg                                  " + _("Disable secure messaging.") + "\n" +
         "  -debugsmsg                               " + _("Log extra debug messages.") + "\n" +
@@ -383,11 +382,6 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     if (!SelectParamsFromCommandLine()) {
         return InitError("Invalid combination of -testnet and -regtest.");
-    }
-
-    if (TestNet())
-    {
-        SoftSetBoolArg("-irc", true);
     }
 
     if (mapArgs.count("-bind")) {
@@ -1014,7 +1008,7 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     fMasterNode = GetBoolArg("-masternode", false);
     if(fMasterNode) {
-        LogPrintf("IS DARKSEND MASTER NODE\n");
+        LogPrintf("IS ANONSEND MASTER NODE\n");
         strMasterNodeAddr = GetArg("-masternodeaddr", "");
 
         LogPrintf(" addr %s\n", strMasterNodeAddr.c_str());
@@ -1033,7 +1027,7 @@ bool AppInit2(boost::thread_group& threadGroup)
             CKey key;
             CPubKey pubkey;
 
-            if(!darkSendSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubkey))
+            if(!anonSendSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubkey))
             {
                 return InitError(_("Invalid masternodeprivkey. Please see documenation."));
             }
@@ -1058,58 +1052,58 @@ bool AppInit2(boost::thread_group& threadGroup)
         }
     }
 
-    fEnableDarksend = GetBoolArg("-enabledarksend", false);
+    fEnableAnonsend = GetBoolArg("-enableanonsend", false);
 
-    nDarksendRounds = GetArg("-darksendrounds", 2);
-    if(nDarksendRounds > 16) nDarksendRounds = 16;
-    if(nDarksendRounds < 1) nDarksendRounds = 1;
+    nAnonsendRounds = GetArg("-anonsendrounds", 2);
+    if(nAnonsendRounds > 16) nAnonsendRounds = 16;
+    if(nAnonsendRounds < 1) nAnonsendRounds = 1;
 
     nLiquidityProvider = GetArg("-liquidityprovider", 0); //0-100
     if(nLiquidityProvider != 0) {
-        darkSendPool.SetMinBlockSpacing(std::min(nLiquidityProvider,100)*15);
-        fEnableDarksend = true;
-        nDarksendRounds = 99999;
+        anonSendPool.SetMinBlockSpacing(std::min(nLiquidityProvider,100)*15);
+        fEnableAnonsend = true;
+        nAnonsendRounds = 99999;
     }
 
     nAnonymizeMarteXAmount = GetArg("-anonymizeMarteXamount", 0);
     if(nAnonymizeMarteXAmount > 999999) nAnonymizeMarteXAmount = 999999;
     if(nAnonymizeMarteXAmount < 2) nAnonymizeMarteXAmount = 2;
 
-    fEnableInstantX = GetBoolArg("-enableinstantx", fEnableInstantX);
-    nInstantXDepth = GetArg("-instantxdepth", nInstantXDepth);
-    nInstantXDepth = std::min(std::max(nInstantXDepth, 0), 60);
+    fEnableFastTx = GetBoolArg("-enablefasttx", fEnableFastTx);
+    nFastTxDepth = GetArg("-fasttxdepth", nFastTxDepth);
+    nFastTxDepth = std::min(std::max(nFastTxDepth, 0), 60);
 
-    //lite mode disables all Masternode and Darksend related functionality
+    //lite mode disables all Masternode and Anonsend related functionality
     fLiteMode = GetBoolArg("-litemode", false);
     if(fMasterNode && fLiteMode){
         return InitError("You can not start a masternode in litemode");
     }
 
     LogPrintf("fLiteMode %d\n", fLiteMode);
-    LogPrintf("nInstantXDepth %d\n", nInstantXDepth);
-    LogPrintf("Darksend rounds %d\n", nDarksendRounds);
+    LogPrintf("nFastTxDepth %d\n", nFastTxDepth);
+    LogPrintf("Anonsend rounds %d\n", nAnonsendRounds);
     LogPrintf("Anonymize MarteX Amount %d\n", nAnonymizeMarteXAmount);
 
     /* Denominations
-       A note about convertability. Within Darksend pools, each denomination
+       A note about convertability. Within Anonsend pools, each denomination
        is convertable to another.
        For example:
        1TX+1000 == (.1TX+100)*10
        10TX+10000 == (1TX+1000)*10
     */
-    darkSendDenominations.push_back( (1000        * COIN)+1000000 );
-    darkSendDenominations.push_back( (100         * COIN)+100000 );
-    darkSendDenominations.push_back( (10          * COIN)+10000 );
-    darkSendDenominations.push_back( (1           * COIN)+1000 );
-    darkSendDenominations.push_back( (.1          * COIN)+100 );
+    anonSendDenominations.push_back( (1000        * COIN)+1000000 );
+    anonSendDenominations.push_back( (100         * COIN)+100000 );
+    anonSendDenominations.push_back( (10          * COIN)+10000 );
+    anonSendDenominations.push_back( (1           * COIN)+1000 );
+    anonSendDenominations.push_back( (.1          * COIN)+100 );
     /* Disabled till we need them
-    darkSendDenominations.push_back( (.01      * COIN)+10 );
-    darkSendDenominations.push_back( (.001     * COIN)+1 );
+    anonSendDenominations.push_back( (.01      * COIN)+10 );
+    anonSendDenominations.push_back( (.001     * COIN)+1 );
     */
 
-    darkSendPool.InitCollateralAddress();
+    anonSendPool.InitCollateralAddress();
 
-    threadGroup.create_thread(boost::bind(&ThreadCheckDarkSendPool));
+    threadGroup.create_thread(boost::bind(&ThreadCheckAnonSendPool));
 
 
 

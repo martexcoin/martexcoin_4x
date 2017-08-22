@@ -19,8 +19,8 @@
 #define START_MASTERNODE_PAYMENTS_TESTNET 1495238400 // Sat, 20 May 2017 00:00:00 GMT
 #define START_MASTERNODE_PAYMENTS 1495238400         // Sat, 20 May 2017 00:00:00 GMT
 
-#define INSTANTX_SIGNATURES_REQUIRED           05
-#define INSTANTX_SIGNATURES_TOTAL              10
+#define FASTTX_SIGNATURES_REQUIRED           05
+#define FASTTX_SIGNATURES_TOTAL              10
 
 // Define difficulty retarget algorithms
 enum DiffMode {
@@ -109,10 +109,10 @@ static const int64_t BLOCK_SPACING_CORRECT = 1 * 60;
 static const int64_t BLOCK_SPACING_MIN_CORRECT = 0.5 * 60;
 /** Block spacing maximum CORRECT */
 static const int64_t BLOCK_SPACING_MAX_CORRECT = 1.5 * 60;
-/** Darksend collateral */
-static const int64_t DARKSEND_COLLATERAL = (0.01*COIN);
-/** Darksend pool values */
-static const int64_t DARKSEND_POOL_MAX = (4999.99*COIN);
+/** Anonsend collateral */
+static const int64_t ANONSEND_COLLATERAL = (0.01*COIN);
+/** Anonsend pool values */
+static const int64_t ANONSEND_POOL_MAX = (4999.99*COIN);
 /** Velocity toggle block */
 static const int64_t VELOCITY_TOGGLE = 1500000; // Implementation of the Velocity system into the chain.
 /** Velocity retarget toggle block */

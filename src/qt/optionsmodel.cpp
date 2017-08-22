@@ -63,14 +63,14 @@ void OptionsModel::Init()
     fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
 
     // Dark Send
-    if (!settings.contains("nDarksendRounds"))
-        settings.setValue("nDarksendRounds", 2);
-    nDarksendRounds = settings.value("nDarksendRounds").toLongLong();
+    if (!settings.contains("nAnonsendRounds"))
+        settings.setValue("nAnonsendRounds", 2);
+    nAnonsendRounds = settings.value("nAnonsendRounds").toLongLong();
     if (!settings.contains("nAnonymizeMarteXAmount"))
         settings.setValue("nAnonymizeMarteXAmount", 1000);
     nAnonymizeMarteXAmount = settings.value("nAnonymizeMarteXAmount").toLongLong();
-    if (settings.contains("nDarksendRounds"))
-        SoftSetArg("-darksendrounds", settings.value("nDarksendRounds").toString().toStdString());
+    if (settings.contains("nAnonsendRounds"))
+        SoftSetArg("-anonsendrounds", settings.value("nAnonsendRounds").toString().toStdString());
     if (settings.contains("nAnonymizeMarteXAmount"))
         SoftSetArg("-anonymizeMarteXamount", settings.value("nAnonymizeMarteXAmount").toString().toStdString());
 
@@ -204,8 +204,8 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return settings.value("language");
         case CoinControlFeatures:
             return fCoinControlFeatures;
-        case DarksendRounds:
-            return QVariant(nDarksendRounds);
+        case AnonsendRounds:
+            return QVariant(nAnonsendRounds);
         case AnonymizeMarteXAmount:
             return QVariant(nAnonymizeMarteXAmount);
         case UseBlackTheme:
@@ -313,10 +313,10 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             fUseBlackTheme = value.toBool();
             settings.setValue("fUseBlackTheme", fUseBlackTheme);
             break;
-        case DarksendRounds:
-            nDarksendRounds = value.toInt();
-            settings.setValue("nDarksendRounds", nDarksendRounds);
-            emit darksendRoundsChanged(nDarksendRounds);
+        case AnonsendRounds:
+            nAnonsendRounds = value.toInt();
+            settings.setValue("nAnonsendRounds", nAnonsendRounds);
+            emit anonsendRoundsChanged(nAnonsendRounds);
             break;
         case AnonymizeMarteXAmount:
             nAnonymizeMarteXAmount = value.toInt();

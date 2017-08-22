@@ -2,8 +2,8 @@
 // Copyright (c) 2009-2012 The Darkcoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef INSTANTX_H
-#define INSTANTX_H
+#ifndef FASTTX_H
+#define FASTTX_H
 
 #include "uint256.h"
 #include "sync.h"
@@ -37,7 +37,7 @@ bool IsIXTXValid(const CTransaction& txCollateral);
 // if two conflicting locks are approved by the network, they will cancel out
 bool CheckForConflictingLocks(CTransaction& tx);
 
-void ProcessMessageInstantX(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
+void ProcessMessageFastTx(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
 
 //check if we need to vote on this transaction
 void DoConsensusVote(CTransaction& tx, int64_t nBlockHeight);

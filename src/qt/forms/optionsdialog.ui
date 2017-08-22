@@ -151,12 +151,12 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This setting determines the amount of individual masternodes that an input will be anonymized through. More rounds of anonymization gives a higher degree of privacy, but also costs more in fees.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
-          <string>Darksend rounds to use</string>
+          <string>Anonsend rounds to use</string>
          </property>
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QSpinBox" name="darksendRounds">
+        <widget class="QSpinBox" name="anonsendRounds">
          <property name="minimum">
           <number>2</number>
          </property>
@@ -171,7 +171,7 @@
        <item row="7" column="0">
         <widget class="QLabel" name="label_2">
          <property name="toolTip">
-          <string>This amount acts as a threshold to turn off Darksend once it's reached.</string>
+          <string>This amount acts as a threshold to turn off Anonsend once it's reached.</string>
          </property>
          <property name="statusTip">
           <string notr="true"/>

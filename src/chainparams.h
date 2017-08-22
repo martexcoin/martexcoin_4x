@@ -72,7 +72,7 @@ public:
     int EndPoWBlock() const { return nEndPoWBlock; }
     int StartPoSBlock() const { return nStartPoSBlock; }
     int PoolMaxTransactions() const { return nPoolMaxTransactions; }
-    std::string DarksendPoolDummyAddress() const { return strDarksendPoolDummyAddress; }
+    std::string AnonsendPoolDummyAddress() const { return strAnonsendPoolDummyAddress; }
 protected:
     CChainParams() {};
 
@@ -91,7 +91,7 @@ protected:
     int nEndPoWBlock;
     int nStartPoSBlock;
     int nPoolMaxTransactions;
-    std::string strDarksendPoolDummyAddress;
+    std::string strAnonsendPoolDummyAddress;
 };
 
 /**

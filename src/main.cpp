@@ -18,8 +18,8 @@
 #include "txmempool.h"
 #include "ui_interface.h"
 #include "velocity.h"
-#include "instantx.h"
-#include "darksend.h"
+#include "fasttx.h"
+#include "anonsend.h"
 #include "masternodeman.h"
 #include "masternode-payments.h"
 #include "spork.h"
@@ -74,6 +74,12 @@ set<pair<COutPoint, unsigned int> > setStakeSeenOrphan;
 
 map<uint256, CTransaction> mapOrphanTransactions;
 map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
+
+unsigned int nTargetSpacing = 1 * 60; // 60 seconds
+unsigned int nRetarget = 30;
+static const int64_t nTargetTimespan_legacy = nTargetSpacing * nRetarget; // every 20 blocks
+static const int64_t nInterval = nTargetTimespan_legacy / nTargetSpacing;
+static const int64_t nTargetTimespan = 30 * 60;
 
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
@@ -853,7 +859,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CTransaction &tx, bool fLimitFree,
     if (pool.exists(hash))
         return false;
 
-    // ----------- instantX transaction scanning -----------
+    // ----------- FastTx transaction scanning -----------
 
     BOOST_FOREACH(const CTxIn& in, tx.vin){
         if(mapLockedInputs.count(in.prevout)){
@@ -926,7 +932,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CTransaction &tx, bool fLimitFree,
 
         // Don't accept it if it can't get into a block
         // but prioritise dstx and don't check fees for it
-        if(mapDarksendBroadcastTxes.count(hash)) {
+        if(mapAnonsendBroadcastTxes.count(hash)) {
             // Normally we would PrioritiseTransaction But currently it is unimplemented
             // mempool.PrioritiseTransaction(hash, hash.ToString(), 1000, 0.1*COIN);
         } else if(!ignoreFees){
@@ -1026,7 +1032,7 @@ bool AcceptableInputs(CTxMemPool& pool, const CTransaction &txo, bool fLimitFree
     if (pool.exists(hash))
         return false;
 
-    // ----------- instantX transaction scanning -----------
+    // ----------- FastTx transaction scanning -----------
 
     BOOST_FOREACH(const CTxIn& in, tx.vin){
         if(mapLockedInputs.count(in.prevout)){
@@ -1172,8 +1178,8 @@ int CMerkleTx::GetDepthInMainChainINTERNAL(CBlockIndex* &pindexRet) const
 
 int CMerkleTx::GetTransactionLockSignatures() const
 {
-    if(!IsSporkActive(SPORK_2_INSTANTX)) return -3;
-    if(!fEnableInstantX) return -1;
+    if(!IsSporkActive(SPORK_2_FASTTX)) return -3;
+    if(!fEnableFastTx) return -1;
 
     //compile consessus vote
     std::map<uint256, CTransactionLock>::iterator i = mapTxLocks.find(GetHash());
@@ -1186,7 +1192,7 @@ int CMerkleTx::GetTransactionLockSignatures() const
 
 bool CMerkleTx::IsTransactionLockTimedOut() const
 {
-    if(!fEnableInstantX) return -1;
+    if(!fEnableFastTx) return -1;
 
     //compile consessus vote
     std::map<uint256, CTransactionLock>::iterator i = mapTxLocks.find(GetHash());
@@ -1207,8 +1213,8 @@ int CMerkleTx::GetDepthInMainChain(CBlockIndex* &pindexRet, bool enableIX) const
     if(enableIX){
         if (nResult < 10){
             int signatures = GetTransactionLockSignatures();
-            if(signatures >= INSTANTX_SIGNATURES_REQUIRED){
-                return nInstantXDepth+nResult;
+            if(signatures >= FASTTX_SIGNATURES_REQUIRED){
+                return nFastTxDepth+nResult;
             }
         }
     }
@@ -1287,8 +1293,8 @@ int GetInputAgeIX(uint256 nTXHash, CTxIn& vin)
         if (i != mapTxLocks.end()){
             sigs = (*i).second.CountSignatures();
         }
-        if(sigs >= INSTANTX_SIGNATURES_REQUIRED){
-            return nInstantXDepth+nResult;
+        if(sigs >= FASTTX_SIGNATURES_REQUIRED){
+            return nFastTxDepth+nResult;
         }
     }
 
@@ -1303,8 +1309,8 @@ int GetIXConfirmations(uint256 nTXHash)
     if (i != mapTxLocks.end()){
         sigs = (*i).second.CountSignatures();
     }
-    if(sigs >= INSTANTX_SIGNATURES_REQUIRED){
-        return nInstantXDepth;
+    if(sigs >= FASTTX_SIGNATURES_REQUIRED){
+        return nFastTxDepth;
     }
 
     return 0;
@@ -1480,7 +1486,7 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
 {
     int64_t nSubsidy = nBlockPoWReward;
 
-    if (nHeight > nReservePhaseStart && nHeight < nReservePhaseEnd) {
+    if (nHeight > nReservePhaseStart && nHeight < nReservePhaseEnd && !TestNet() ) {
       nSubsidy = nBlockRewardReserve;
     }
 
@@ -1653,7 +1659,7 @@ unsigned int Terminal_Velocity_RateX(const CBlockIndex* pindexLast, bool fProofO
        return bnNew.GetCompact();
 }
 
-unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake)
+unsigned int GetNextTargetRequired_legacy(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
     // Default with VRX
     unsigned int retarget = DIFF_VRX;
@@ -1665,11 +1671,64 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
 
     // Retarget using Terminal-Velocity
     // debug info for testing
-    // LogPrintf("Terminal-Velocity retarget selected \n");
-    // LogPrintf("Espers retargetted using: Terminal-Velocity difficulty curve \n");
+    LogPrintf("Terminal-Velocity retarget selected \n");
+    LogPrintf("MarteX retargetted using: Terminal-Velocity difficulty curve \n");
     return Terminal_Velocity_RateX(pindexLast, fProofOfStake);
 
 }
+
+static unsigned int GetNextTargetRequired_new(const CBlockIndex* pindexLast, bool fProofOfStake)
+{
+    CBigNum bnTargetLimit = fProofOfStake ? Params().ProofOfStakeLimit() : Params().ProofOfWorkLimit();
+
+    if (pindexLast == NULL)
+        return bnTargetLimit.GetCompact(); // genesis block
+
+    const CBlockIndex* pindexPrev = GetLastBlockIndex(pindexLast, fProofOfStake);
+    if (pindexPrev->pprev == NULL)
+        return bnTargetLimit.GetCompact(); // first block
+    const CBlockIndex* pindexPrevPrev = GetLastBlockIndex(pindexPrev->pprev, fProofOfStake);
+    if (pindexPrevPrev->pprev == NULL)
+        return bnTargetLimit.GetCompact(); // second block
+
+    int64_t nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
+    if (nActualSpacing < 0)
+        nActualSpacing = nTargetSpacing;
+
+    // target change every block
+    // retarget with exponential moving toward target spacing
+    // Includes MartexCoin fix for wrong retargeting difficulty by Mammix2
+
+    CBigNum bnNew;
+    bnNew.SetCompact(pindexPrev->nBits);
+    int64_t nInterval = nTargetTimespan / nTargetSpacing;
+    bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
+    bnNew /= ((nInterval + 1) * nTargetSpacing);
+
+    if (bnNew <= 0 || bnNew > bnTargetLimit)
+        bnNew = bnTargetLimit;
+    
+    LogPrintf("GetNextTargetRequired_new : next block 16000 \n");
+    
+    return bnNew.GetCompact();
+}
+
+unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake)
+{
+/*
+    int change;
+    if( TestNet() )
+        change = 20;
+    else
+        change = 16000;
+    if(pindexLast->nHeight + 1 > change)
+        return GetNextTargetRequired_new(pindexLast, fProofOfStake);
+    else
+        return GetNextTargetRequired_legacy(pindexLast, fProofOfStake);
+*/
+    return GetNextTargetRequired_legacy(pindexLast, fProofOfStake);
+}
+
 bool CheckProofOfWork(uint256 hash, unsigned int nBits)
 {
     CBigNum bnTarget;
@@ -2747,9 +2806,9 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
         return DoS(100, error("CheckBlock() : bad proof-of-stake block signature"));
 
 
-// ----------- instantX transaction scanning -----------
+// ----------- FastTx transaction scanning -----------
 
-    if(IsSporkActive(SPORK_3_INSTANTX_BLOCK_FILTERING)){
+    if(IsSporkActive(SPORK_3_FASTTX_BLOCK_FILTERING)){
         BOOST_FOREACH(const CTransaction& tx, vtx){
             if (!tx.IsCoinBase()){
                 //only reject blocks when it's based on complete consensus
@@ -3166,7 +3225,7 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
         CScript payee;
         CTxIn vin;
 
-        // If we're in LiteMode disable darksend features without disabling masternodes
+        // If we're in LiteMode disable anonsend features without disabling masternodes
         if (!fLiteMode && !fImporting && !fReindex && pindexBest->nHeight > Checkpoints::GetTotalBlocksEstimate()){
 
             if(masternodePayments.GetBlockPayee(pindexBest->nHeight, payee, vin)){
@@ -3179,8 +3238,8 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
                 LogPrintf("ProcessBlock() : Update Masternode Last Paid Time - %d\n", pindexBest->nHeight);
             }
 
-            darkSendPool.CheckTimeout();
-            darkSendPool.NewBlock();
+            anonSendPool.CheckTimeout();
+            anonSendPool.NewBlock();
             masternodePayments.ProcessBlock(GetHeight()+10);
 
         } else if (fLiteMode && !fImporting && !fReindex && pindexBest->nHeight > Checkpoints::GetTotalBlocksEstimate())
@@ -3632,7 +3691,7 @@ bool static AlreadyHave(CTxDB& txdb, const CInv& inv)
     switch (inv.type)
     {
     case MSG_DSTX:
-        return mapDarksendBroadcastTxes.count(inv.hash);
+        return mapAnonsendBroadcastTxes.count(inv.hash);
     case MSG_TX:
         {
         bool txInMap = false;
@@ -3763,14 +3822,14 @@ void static ProcessGetData(CNode* pfrom)
                     }
                 }
                 if (!pushed && inv.type == MSG_DSTX) {
-                    if(mapDarksendBroadcastTxes.count(inv.hash)){
+                    if(mapAnonsendBroadcastTxes.count(inv.hash)){
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss <<
-                            mapDarksendBroadcastTxes[inv.hash].tx <<
-                            mapDarksendBroadcastTxes[inv.hash].vin <<
-                            mapDarksendBroadcastTxes[inv.hash].vchSig <<
-                            mapDarksendBroadcastTxes[inv.hash].sigTime;
+                            mapAnonsendBroadcastTxes[inv.hash].tx <<
+                            mapAnonsendBroadcastTxes[inv.hash].vin <<
+                            mapAnonsendBroadcastTxes[inv.hash].vchSig <<
+                            mapAnonsendBroadcastTxes[inv.hash].sigTime;
 
                         pfrom->PushMessage("dstx", ss);
                         pushed = true;
@@ -4180,7 +4239,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
                 std::string strMessage = tx.GetHash().ToString() + boost::lexical_cast<std::string>(sigTime);
 
                 std::string errorMessage = "";
-                if(!darkSendSigner.VerifyMessage(pmn->pubkey2, vchSig, strMessage, errorMessage)){
+                if(!anonSendSigner.VerifyMessage(pmn->pubkey2, vchSig, strMessage, errorMessage)){
                     LogPrintf("dstx: Got bad masternode address signature %s \n", vin.ToString().c_str());
                     //Misbehaving(pfrom->GetId(), 20);
                     return false;
@@ -4191,14 +4250,14 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
                 ignoreFees = true;
                 pmn->allowFreeTx = false;
 
-                if(!mapDarksendBroadcastTxes.count(tx.GetHash())){
-                    CDarksendBroadcastTx dstx;
+                if(!mapAnonsendBroadcastTxes.count(tx.GetHash())){
+                    CAnonsendBroadcastTx dstx;
                     dstx.tx = tx;
                     dstx.vin = vin;
                     dstx.vchSig = vchSig;
                     dstx.sigTime = sigTime;
 
-                    mapDarksendBroadcastTxes.insert(make_pair(tx.GetHash(), dstx));
+                    mapAnonsendBroadcastTxes.insert(make_pair(tx.GetHash(), dstx));
                 }
             }
         }
@@ -4449,10 +4508,10 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         if (fSecMsgEnabled)
             SecureMsgReceiveData(pfrom, strCommand, vRecv);
 
-        darkSendPool.ProcessMessageDarksend(pfrom, strCommand, vRecv);
+        anonSendPool.ProcessMessageAnonsend(pfrom, strCommand, vRecv);
         mnodeman.ProcessMessage(pfrom, strCommand, vRecv);
         ProcessMessageMasternodePayments(pfrom, strCommand, vRecv);
-        ProcessMessageInstantX(pfrom, strCommand, vRecv);
+        ProcessMessageFastTx(pfrom, strCommand, vRecv);
         ProcessSpork(pfrom, strCommand, vRecv);
 
 

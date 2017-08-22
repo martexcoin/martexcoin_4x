@@ -139,13 +139,13 @@ void WalletModel::pollBalanceChanged()
     if(!lockWallet)
         return;
 
-    if(fForceCheckBalanceChanged || nBestHeight != cachedNumBlocks || nDarksendRounds != cachedDarksendRounds || cachedTxLocks != nCompleteTXLocks)
+    if(fForceCheckBalanceChanged || nBestHeight != cachedNumBlocks || nAnonsendRounds != cachedAnonsendRounds || cachedTxLocks != nCompleteTXLocks)
     {
         fForceCheckBalanceChanged = false;
 
         // Balance and number of transactions might have changed
         cachedNumBlocks = nBestHeight;
-        cachedDarksendRounds = nDarksendRounds;
+        cachedAnonsendRounds = nAnonsendRounds;
 
         checkBalanceChanged();
         if(transactionTableModel)
@@ -284,15 +284,15 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
         CWalletTx *newTx = transaction.getTransaction();
         CReserveKey *keyChange = transaction.getPossibleKeyChange();
 
-        if(recipients[0].useInstantX && total > GetSporkValue(SPORK_5_MAX_VALUE)*COIN){
+        if(recipients[0].useFastTx && total > GetSporkValue(SPORK_5_MAX_VALUE)*COIN){
             return IXTransactionCreationFailed;
         }
 
         int nChangePos;
-        bool fCreated = wallet->CreateTransaction(vecSend, *newTx, *keyChange, nFeeRequired, nChangePos, strFailReason, coinControl, recipients[0].inputType, recipients[0].useInstantX);
+        bool fCreated = wallet->CreateTransaction(vecSend, *newTx, *keyChange, nFeeRequired, nChangePos, strFailReason, coinControl, recipients[0].inputType, recipients[0].useFastTx);
         transaction.setTransactionFee(nFeeRequired);
 
-        if(recipients[0].useInstantX && newTx->GetValueOut() > GetSporkValue(SPORK_5_MAX_VALUE)*COIN){
+        if(recipients[0].useFastTx && newTx->GetValueOut() > GetSporkValue(SPORK_5_MAX_VALUE)*COIN){
             return IXTransactionCreationFailed;
         }
 
@@ -475,7 +475,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
         int nChangePos = -1;
         std::string strFailReason;
 
-        bool fCreated = wallet->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, nChangePos, strFailReason, coinControl, recipients[0].inputType, recipients[0].useInstantX);
+        bool fCreated = wallet->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, nChangePos, strFailReason, coinControl, recipients[0].inputType, recipients[0].useFastTx);
         transaction.setTransactionFee(nFeeRequired);
 
         std::map<int, std::string>::iterator it;
@@ -512,7 +512,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
         {
             return Aborted;
         }
-        if(!wallet->CommitTransaction(wtx, keyChange, (recipients[0].useInstantX) ? "txlreq" : "tx"))
+        if(!wallet->CommitTransaction(wtx, keyChange, (recipients[0].useFastTx) ? "txlreq" : "tx"))
         {
             return TransactionCommitFailed;
         }

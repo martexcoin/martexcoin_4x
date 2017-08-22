@@ -141,8 +141,8 @@ void OptionsDialog::setMapper()
     mapper->addMapping(ui->coinControlFeatures, OptionsModel::CoinControlFeatures);
     mapper->addMapping(ui->useBlackTheme, OptionsModel::UseBlackTheme);
 
-    /* Darksend Rounds */
-    mapper->addMapping(ui->darksendRounds, OptionsModel::DarksendRounds);
+    /* Anonsend Rounds */
+    mapper->addMapping(ui->anonsendRounds, OptionsModel::AnonsendRounds);
     mapper->addMapping(ui->anonymizeMarteX, OptionsModel::AnonymizeMarteXAmount);
 }
 

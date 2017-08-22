@@ -297,11 +297,11 @@ HEADERS += src/qt/bitcoingui.h \
     src/tinyformat.h \
     src/stealth.h \
     src/qt/flowlayout.h \
-    src/qt/darksendconfig.h \
+    src/qt/anonsendconfig.h \
     src/masternode.h \
-    src/darksend.h \
-    src/darksend-relay.h \
-    src/instantx.h \
+    src/anonsend.h \
+    src/anonsend-relay.h \
+    src/fasttx.h \
     src/activemasternode.h \
     src/masternodeconfig.h \
     src/masternodeman.h \
@@ -425,12 +425,12 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/support/cleanse.cpp \
     src/stealth.cpp \
     src/qt/flowlayout.cpp \
-    src/qt/darksendconfig.cpp \
+    src/qt/anonsendconfig.cpp \
     src/masternode.cpp \
-    src/darksend.cpp \
-    src/darksend-relay.cpp \
-    src/rpcdarksend.cpp \
-    src/instantx.cpp \
+    src/anonsend.cpp \
+    src/anonsend-relay.cpp \
+    src/rpcanonsend.cpp \
+    src/fasttx.cpp \
     src/activemasternode.cpp \
     src/masternodeman.cpp \
     src/masternode-payments.cpp \
@@ -485,7 +485,7 @@ FORMS += \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
     src/qt/forms/optionsdialog.ui \
-    src/qt/forms/darksendconfig.ui \
+    src/qt/forms/anonsendconfig.ui \
     src/qt/forms/masternodemanager.ui \
     src/qt/forms/addeditadrenalinenode.ui \
     src/qt/forms/adrenalinenodeconfigdialog.ui \

@@ -2,8 +2,8 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef DARKSEND_H
-#define DARKSEND_H
+#ifndef ANONSEND_H
+#define ANONSEND_H
 
 #include "core.h"
 #include "main.h"
@@ -11,15 +11,15 @@
 #include "activemasternode.h"
 #include "masternodeman.h"
 #include "masternode-payments.h"
-#include "darksend-relay.h"
+#include "anonsend-relay.h"
 
 class CTxIn;
-class CDarksendPool;
-class CDarkSendSigner;
+class CAnonsendPool;
+class CAnonSendSigner;
 class CMasterNodeVote;
 class CMarteXAddress;
-class CDarksendQueue;
-class CDarksendBroadcastTx;
+class CAnonsendQueue;
+class CAnonsendBroadcastTx;
 class CActiveMasternode;
 
 // pool states for mixing
@@ -38,22 +38,22 @@ class CActiveMasternode;
 #define MASTERNODE_REJECTED                    0
 #define MASTERNODE_RESET                       -1
 
-#define DARKSEND_QUEUE_TIMEOUT                 30
-#define DARKSEND_SIGNING_TIMEOUT               15
+#define ANONSEND_QUEUE_TIMEOUT                 30
+#define ANONSEND_SIGNING_TIMEOUT               15
 
 // used for anonymous relaying of inputs/outputs/sigs
-#define DARKSEND_RELAY_IN                 1
-#define DARKSEND_RELAY_OUT                2
-#define DARKSEND_RELAY_SIG                3
+#define ANONSEND_RELAY_IN                 1
+#define ANONSEND_RELAY_OUT                2
+#define ANONSEND_RELAY_SIG                3
 
-extern CDarksendPool darkSendPool;
-extern CDarkSendSigner darkSendSigner;
-extern std::vector<CDarksendQueue> vecDarksendQueue;
+extern CAnonsendPool anonSendPool;
+extern CAnonSendSigner anonSendSigner;
+extern std::vector<CAnonsendQueue> vecAnonsendQueue;
 extern std::string strMasterNodePrivKey;
-extern map<uint256, CDarksendBroadcastTx> mapDarksendBroadcastTxes;
+extern map<uint256, CAnonsendBroadcastTx> mapAnonsendBroadcastTxes;
 extern CActiveMasternode activeMasternode;
 
-/** Holds an Darksend input
+/** Holds an Anonsend input
  */
 class CTxDSIn : public CTxIn
 {
@@ -72,7 +72,7 @@ public:
     }
 };
 
-/** Holds an Darksend output
+/** Holds an Anonsend output
  */
 class CTxDSOut : public CTxOut
 {
@@ -88,8 +88,8 @@ public:
     }
 };
 
-// A clients transaction in the darksend pool
-class CDarkSendEntry
+// A clients transaction in the anonsend pool
+class CAnonSendEntry
 {
 public:
     bool isSet;
@@ -100,14 +100,14 @@ public:
     CTransaction txSupporting;
     int64_t addedTime; // time in UTC milliseconds
 
-    CDarkSendEntry()
+    CAnonSendEntry()
     {
         isSet = false;
         collateral = CTransaction();
         amount = 0;
     }
 
-    /// Add entries to use for Darksend
+    /// Add entries to use for Anonsend
     bool Add(const std::vector<CTxIn> vinIn, int64_t amountIn, const CTransaction collateralIn, const std::vector<CTxOut> voutIn)
     {
         if(isSet){return false;}
@@ -144,15 +144,15 @@ public:
 
     bool IsExpired()
     {
-        return (GetTime() - addedTime) > DARKSEND_QUEUE_TIMEOUT;// 120 seconds
+        return (GetTime() - addedTime) > ANONSEND_QUEUE_TIMEOUT;// 120 seconds
     }
 };
 
 
 /**
- * A currently inprogress Darksend merge and denomination information
+ * A currently inprogress Anonsend merge and denomination information
  */
-class CDarksendQueue
+class CAnonsendQueue
 {
 public:
     CTxIn vin;
@@ -161,7 +161,7 @@ public:
     bool ready; //ready for submit
     std::vector<unsigned char> vchSig;
 
-    CDarksendQueue()
+    CAnonsendQueue()
     {
         nDenom = 0;
         vin = CTxIn();
@@ -202,7 +202,7 @@ public:
         return false;
     }
 
-    /** Sign this Darksend transaction
+    /** Sign this Anonsend transaction
      *  \return true if all conditions are met:
      *     1) we have an active Masternode,
      *     2) we have a valid Masternode private key,
@@ -213,10 +213,10 @@ public:
 
     bool Relay();
 
-    /// Is this Darksend expired?
+    /// Is this Anonsend expired?
     bool IsExpired()
     {
-        return (GetTime() - time) > DARKSEND_QUEUE_TIMEOUT;// 120 seconds
+        return (GetTime() - time) > ANONSEND_QUEUE_TIMEOUT;// 120 seconds
     }
 
     /// Check if we have a valid Masternode address
@@ -224,9 +224,9 @@ public:
 
 };
 
-/** Helper class to store Darksend transaction (tx) information.
+/** Helper class to store Anonsend transaction (tx) information.
  */
-class CDarksendBroadcastTx
+class CAnonsendBroadcastTx
 {
 public:
     CTransaction tx;
@@ -237,7 +237,7 @@ public:
 
 /** Helper object for signing and checking signatures
  */
-class CDarkSendSigner
+class CAnonSendSigner
 {
 public:
     /// Is the inputs associated with this public key? (and there is 10000 MXT - checking if valid masternode)
@@ -250,14 +250,14 @@ public:
     bool VerifyMessage(CPubKey pubkey, std::vector<unsigned char>& vchSig, std::string strMessage, std::string& errorMessage);
 };
 
-/** Used to keep track of current status of Darksend pool
+/** Used to keep track of current status of Anonsend pool
  */
-class CDarksendPool
+class CAnonsendPool
 {
 private:
-    mutable CCriticalSection cs_darksend;
+    mutable CCriticalSection cs_anonsend;
 
-    std::vector<CDarkSendEntry> entries; // Masternode entries
+    std::vector<CAnonSendEntry> entries; // Masternode entries
     CTransaction finalTransaction; // the finalized transaction ready for signing
 
     int64_t lastTimeChanged; // last time the 'state' changed, in UTC milliseconds
@@ -323,9 +323,9 @@ public:
 
     int cachedNumBlocks; //used for the overview screen
 
-    CDarksendPool()
+    CAnonsendPool()
     {
-        /* Darksend uses collateral addresses to trust parties entering the pool
+        /* Anonsend uses collateral addresses to trust parties entering the pool
             to behave themselves. If they don't it takes their money. */
 
         cachedLastSuccess = 0;
@@ -338,25 +338,25 @@ public:
         SetNull();
     }
 
-    /** Process a Darksend message using the Darksend protocol
+    /** Process a Anonsend message using the Anonsend protocol
      * \param pfrom
      * \param strCommand lower case command string; valid values are:
      *        Command  | Description
      *        -------- | -----------------
-     *        dsa      | Darksend Acceptable
-     *        dsc      | Darksend Complete
-     *        dsf      | Darksend Final tx
-     *        dsi      | Darksend vIn
-     *        dsq      | Darksend Queue
-     *        dss      | Darksend Signal Final Tx
-     *        dssu     | Darksend status update
-     *        dssub    | Darksend Subscribe To
+     *        dsa      | Anonsend Acceptable
+     *        dsc      | Anonsend Complete
+     *        dsf      | Anonsend Final tx
+     *        dsi      | Anonsend vIn
+     *        dsq      | Anonsend Queue
+     *        dss      | Anonsend Signal Final Tx
+     *        dssu     | Anonsend status update
+     *        dssub    | Anonsend Subscribe To
      * \param vRecv
      */
-    void ProcessMessageDarksend(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
+    void ProcessMessageAnonsend(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
 
     void InitCollateralAddress(){
-        SetCollateralAddress(Params().DarksendPoolDummyAddress());
+        SetCollateralAddress(Params().AnonsendPoolDummyAddress());
     }
 
     void SetMinBlockSpacing(int minBlockSpacingIn){
@@ -402,15 +402,15 @@ public:
     void UpdateState(unsigned int newState)
     {
         if (fMasterNode && (newState == POOL_STATUS_ERROR || newState == POOL_STATUS_SUCCESS)){
-            LogPrint("darksend", "CDarksendPool::UpdateState() - Can't set state to ERROR or SUCCESS as a Masternode. \n");
+            LogPrint("anonsend", "CAnonsendPool::UpdateState() - Can't set state to ERROR or SUCCESS as a Masternode. \n");
             return;
         }
 
-        LogPrintf("CDarksendPool::UpdateState() == %d | %d \n", state, newState);
+        LogPrintf("CAnonsendPool::UpdateState() == %d | %d \n", state, newState);
         if(state != newState){
             lastTimeChanged = GetTimeMillis();
             if(fMasterNode) {
-                RelayStatus(darkSendPool.sessionID, darkSendPool.GetState(), darkSendPool.GetEntriesCount(), MASTERNODE_RESET);
+                RelayStatus(anonSendPool.sessionID, anonSendPool.GetState(), anonSendPool.GetEntriesCount(), MASTERNODE_RESET);
             }
         }
         state = newState;
@@ -433,14 +433,14 @@ public:
     /// Is this amount compatible with other client in the pool?
     bool IsCompatibleWithSession(int64_t nAmount, CTransaction txCollateral, std::string& strReason);
 
-    /// Passively run Darksend in the background according to the configuration in settings (only for QT)
+    /// Passively run Anonsend in the background according to the configuration in settings (only for QT)
     bool DoAutomaticDenominating(bool fDryRun=false);
-    bool PrepareDarksendDenominate();
+    bool PrepareAnonsendDenominate();
 
     /// from masternode-sync.h
     bool IsBlockchainSynced();
 
-    /// Check for process in Darksend
+    /// Check for process in Anonsend
     void Check();
     void CheckFinalTransaction();
     /// Charge fees to bad actors (Charge clients a fee if they're abusive)
@@ -460,8 +460,8 @@ public:
     /// Check that all inputs are signed. (Are all inputs signed?)
     bool SignaturesComplete();
     /// As a client, send a transaction to a Masternode to start the denomination process
-    void SendDarksendDenominate(std::vector<CTxIn>& vin, std::vector<CTxOut>& vout, int64_t amount);
-    /// Get Masternode updates about the progress of Darksend
+    void SendAnonsendDenominate(std::vector<CTxIn>& vin, std::vector<CTxOut>& vout, int64_t amount);
+    /// Get Masternode updates about the progress of Anonsend
     bool StatusUpdate(int newState, int newEntriesCount, int newAccepted, std::string& error, int newSessionID=0);
 
     /// As a client, check and sign the final transaction
@@ -493,7 +493,7 @@ public:
     std::string GetMessageByID(int messageID);
 
     //
-    // Relay Darksend Messages
+    // Relay Anonsend Messages
     //
 
     void RelayFinalTransaction(const int sessionID, const CTransaction& txNew);
@@ -504,6 +504,6 @@ public:
     void RelayCompletedTransaction(const int sessionID, const bool error, const std::string errorMessage);
 };
 
-void ThreadCheckDarkSendPool();
+void ThreadCheckAnonSendPool();
 
 #endif
