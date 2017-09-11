@@ -104,17 +104,19 @@ static const int64_t BLOCK_SPACING_MIN = 1.5 * 60;
 /** Block spacing maximum */
 static const int64_t BLOCK_SPACING_MAX = 3.5 * 60;
 /** Block spacing preferred CORRECT */
-static const int64_t BLOCK_SPACING_CORRECT = 1 * 60;
+static const int64_t BLOCK_SPACING_CORRECT = 0.5 * 60;
 /** Block spacing minimum CORRECT */
-static const int64_t BLOCK_SPACING_MIN_CORRECT = 0.5 * 60;
+static const int64_t BLOCK_SPACING_MIN_CORRECT = 0.25 * 60;
 /** Block spacing maximum CORRECT */
-static const int64_t BLOCK_SPACING_MAX_CORRECT = 1.5 * 60;
+static const int64_t BLOCK_SPACING_MAX_CORRECT = 0.5 * 60;
 /** Anonsend collateral */
 static const int64_t ANONSEND_COLLATERAL = (0.01*COIN);
 /** Anonsend pool values */
 static const int64_t ANONSEND_POOL_MAX = (4999.99*COIN);
 /** Velocity toggle block */
 static const int64_t VELOCITY_TOGGLE = 1500000; // Implementation of the Velocity system into the chain.
+/** Velocity toggle block NEW */
+static const int64_t VELOCITY_TOGGLE_NEW = 22500; // Implementation of the Velocity system into the NEW chain.
 /** Velocity retarget toggle block */
 static const int64_t VELOCITY_TDIFF = 0; // Use Velocity's retargetting method.
 /** Protocol toggle */
@@ -157,6 +159,10 @@ static const int64_t nBlockRewardReserve = 1369192.5 * COIN; //
 static const int64_t nBlockPoWReward = 0.05 * COIN;
 /** Superblock subsidy */
 static const int64_t nSuperPoWReward = 0.50 * COIN;
+/** NEW block subsidy */
+static const int64_t nBlockPoWReward_NEW = 0.10 * COIN;
+/** NEW Superblock subsidy */
+static const int64_t nSuperPoWReward_NEW = 1 * COIN;
 /** Swap fase subsidy */
 static const int64_t nSwapFaseReward = 0 * COIN;
 /** Genesis Block Height */

@@ -1708,25 +1708,23 @@ static unsigned int GetNextTargetRequired_new(const CBlockIndex* pindexLast, boo
     if (bnNew <= 0 || bnNew > bnTargetLimit)
         bnNew = bnTargetLimit;
     
-    LogPrintf("GetNextTargetRequired_new : next block 16000 \n");
+    //LogPrintf("GetNextTargetRequired_new : next block 22500 \n");
     
     return bnNew.GetCompact();
 }
 
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
-/*
     int change;
     if( TestNet() )
         change = 20;
     else
-        change = 16000;
+        change = 22500;
     if(pindexLast->nHeight + 1 > change)
         return GetNextTargetRequired_new(pindexLast, fProofOfStake);
     else
         return GetNextTargetRequired_legacy(pindexLast, fProofOfStake);
-*/
-    return GetNextTargetRequired_legacy(pindexLast, fProofOfStake);
+
 }
 
 bool CheckProofOfWork(uint256 hash, unsigned int nBits)
@@ -2841,7 +2839,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
             LOCK2(cs_main, mempool.cs);
 
             CBlockIndex *pindex = pindexBest;
-            if(IsProofOfStake() && pindex != NULL){
+	    if(IsProofOfStake() && pindex != NULL){
                 if(pindex->GetBlockHash() == hashPrevBlock){
                     // If we don't already have its previous block, skip masternode payment step
                     CAmount masternodePaymentAmount;
@@ -4917,7 +4915,6 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
     }
     return true;
 }
-
 
 // Define masternode payment value
 int64_t GetMasternodePayment(int nHeight, int64_t blockValue)

@@ -25,7 +25,7 @@ json_spirit::Value getvelocityinfo(const Array& params, bool fHelp) {
 	throw std::runtime_error("getvelocityinfo\nReturns an object containing various velocity info.");
     int i = VelocityI(nBestHeight);
     json_spirit::Object obj;
-    obj.push_back(json_spirit::Pair("toggle system",       (int)VELOCITY_HEIGHT[i]));
+    obj.push_back(json_spirit::Pair("toggle system",  (nBestHeight <= 22500 ? (int)VELOCITY_HEIGHT[i] : (int)VELOCITY_HEIGHT_NEW[i]) ));
     obj.push_back(json_spirit::Pair("toggle retarget",       (int)VELOCITY_TERMINAL[i]));
     obj.push_back(json_spirit::Pair("rate", (nBestHeight <= 16000 ? (int)VELOCITY_RATE[i] : (int)VELOCITY_RATE_CORRECT[i]) ));
     if( (nBestHeight <= 16000 ? VELOCITY_MIN_RATE[i] > 0 : VELOCITY_MIN_RATE_CORRECT[i] > 0) )

@@ -13,7 +13,8 @@ int VelocityI(int nHeight)
 {
     int i = 0;
     i --;
-    BOOST_FOREACH(int h, VELOCITY_HEIGHT)
+    BOOST_FOREACH(int h, (nHeight <= 22500 ? VELOCITY_HEIGHT : VELOCITY_HEIGHT_NEW) ) //MainNet
+    //BOOST_FOREACH(int h, (nHeight <= 2150 ? VELOCITY_HEIGHT : VELOCITY_HEIGHT_NEW) ) //TestNet
     if( nHeight >= h )
       i++;
     return i;
