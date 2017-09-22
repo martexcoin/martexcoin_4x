@@ -733,21 +733,14 @@ Value masternode(const Array& params, bool fHelp)
 
     if(strCommand == "status")
     {
-        std::vector<CMasternodeConfig::CMasternodeEntry> mnEntries;
-        mnEntries = masternodeConfig.getEntries();
-
-        CScript pubkey;
-        pubkey = GetScriptForDestination(activeMasternode.pubKeyMasternode.GetID());
-        CTxDestination address1;
-        ExtractDestination(pubkey, address1);
-        CMarteXAddress address2(address1);
+        if(!fMasterNode) throw runtime_error("This is not a masternode\n");
 
         Object mnObj;
-        mnObj.push_back(Pair("vin", activeMasternode.vin.ToString().c_str()));
-        mnObj.push_back(Pair("service", activeMasternode.service.ToString().c_str()));
+        CMasternode *pmn = mnodeman.Find(activeMasternode.vin);
+        mnObj.push_back(Pair("vin", activeMasternode.vin.ToString()));
+        mnObj.push_back(Pair("service", activeMasternode.service.ToString()));
+        if (pmn) mnObj.push_back(Pair("pubkey", CMarteXAddress(pmn->pubkey.GetID()).ToString()));
         mnObj.push_back(Pair("status", activeMasternode.status));
-        mnObj.push_back(Pair("pubKeyMasternode", address2.ToString().c_str()));
-        mnObj.push_back(Pair("notCapableReason", activeMasternode.notCapableReason.c_str()));
         return mnObj;
     }
 
