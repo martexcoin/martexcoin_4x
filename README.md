@@ -95,3 +95,4 @@ not straightforward.
 2.6.2.4
 - Fix the block space from block 22500
 - Rehabilitate velocity from block 22500
+- Fix rpc masternode status
