@@ -121,12 +121,12 @@ bool Velocity(CBlockIndex* prevBlock, CBlock* block)
      }
   }
     // Verify minimum Velocity rate
-    if( (nHeight <= 16000 ? VELOCITY_RATE[i] > 0 && TXrate > VELOCITY_RATE[i] : VELOCITY_RATE_CORRECT[i] > 0 && TXrate > VELOCITY_RATE_CORRECT[i]) )
+    if( (nHeight <= 16000 ? VELOCITY_RATE[i] > 0 && TXrate > VELOCITY_RATE[i] : (nHeight <= 32000 ? VELOCITY_RATE_CORRECT[i] > 0 && TXrate > VELOCITY_RATE_CORRECT[i] : VELOCITY_RATE_CORRECT_NEW[i] > 0 && TXrate > VELOCITY_RATE_CORRECT_NEW[i] ) ) )
     {
         LogPrintf("ACCEPTED: block has met Velocity constraints\n");
     }
     // Rates that are too rapid are rejected without exception
-    else if( (nHeight <= 16000 ? VELOCITY_MIN_RATE[i] > 0 && TXrate > VELOCITY_MIN_RATE[i] : VELOCITY_MIN_RATE_CORRECT[i] > 0 && TXrate > VELOCITY_MIN_RATE_CORRECT[i]) )
+    else if( (nHeight <= 16000 ? VELOCITY_MIN_RATE[i] > 0 && TXrate > VELOCITY_MIN_RATE[i] : (nHeight <= 32000 ? VELOCITY_MIN_RATE_CORRECT[i] > 0 && TXrate > VELOCITY_MIN_RATE_CORRECT[i] : VELOCITY_MIN_RATE_CORRECT_NEW[i] > 0 && TXrate > VELOCITY_MIN_RATE_CORRECT_NEW[i]) ) )
     {
         LogPrintf("DENIED: Minimum block spacing not met for Velocity\n");
         return false;

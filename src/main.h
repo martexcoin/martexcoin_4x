@@ -109,6 +109,12 @@ static const int64_t BLOCK_SPACING_CORRECT = 0.5 * 60;
 static const int64_t BLOCK_SPACING_MIN_CORRECT = 0.25 * 60;
 /** Block spacing maximum CORRECT */
 static const int64_t BLOCK_SPACING_MAX_CORRECT = 0.5 * 60;
+/** Block spacing preferred CORRECT NEW */
+static const int64_t BLOCK_SPACING_CORRECT_NEW = 1 * 60;
+/** Block spacing minimum CORRECT  NEW */
+static const int64_t BLOCK_SPACING_MIN_CORRECT_NEW = 0.5 * 60;
+/** Block spacing maximum CORRECT  NEW */
+static const int64_t BLOCK_SPACING_MAX_CORRECT_NEW = 1.25 * 60;
 /** Anonsend collateral */
 static const int64_t ANONSEND_COLLATERAL = (0.01*COIN);
 /** Anonsend pool values */

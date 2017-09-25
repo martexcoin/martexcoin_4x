@@ -77,7 +77,7 @@ map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
 
 unsigned int nTargetSpacing = 1 * 60; // 60 seconds
 unsigned int nRetarget = 30;
-static const int64_t nTargetTimespan_legacy = nTargetSpacing * nRetarget; // every 20 blocks
+static const int64_t nTargetTimespan_legacy = nTargetSpacing * nRetarget; // every 30 blocks
 static const int64_t nInterval = nTargetTimespan_legacy / nTargetSpacing;
 static const int64_t nTargetTimespan = 30 * 60;
 

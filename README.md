@@ -92,6 +92,9 @@ not straightforward.
 
 
 ### Change log
+2.6.2.5
+- Fix velocity time from block 32000
+
 2.6.2.4
 - Fix the block space from block 22500
 - Rehabilitate velocity from block 22500

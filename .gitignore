@@ -1,12 +1,13 @@
 qrc_bitcoin.cpp
+.qmake.stash
+MarteX-qt
 Makefile
-MartexCoin-qt
 build/*.o
 build/*.cpp
 build/*.moc
 build/ui_*
 build/*.h
-src/MartexCoind
+src/MarteXd
 src/obj/*.o
 src/obj/*.P
 src/obj-test/*.o

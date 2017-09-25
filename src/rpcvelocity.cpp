@@ -27,10 +27,10 @@ json_spirit::Value getvelocityinfo(const Array& params, bool fHelp) {
     json_spirit::Object obj;
     obj.push_back(json_spirit::Pair("toggle system",  (nBestHeight <= 22500 ? (int)VELOCITY_HEIGHT[i] : (int)VELOCITY_HEIGHT_NEW[i]) ));
     obj.push_back(json_spirit::Pair("toggle retarget",       (int)VELOCITY_TERMINAL[i]));
-    obj.push_back(json_spirit::Pair("rate", (nBestHeight <= 16000 ? (int)VELOCITY_RATE[i] : (int)VELOCITY_RATE_CORRECT[i]) ));
-    if( (nBestHeight <= 16000 ? VELOCITY_MIN_RATE[i] > 0 : VELOCITY_MIN_RATE_CORRECT[i] > 0) )
- 	obj.push_back(json_spirit::Pair("min-rate", (nBestHeight <= 16000 ? (int)VELOCITY_MIN_RATE[i] : (int)VELOCITY_MIN_RATE_CORRECT[i]) ));
-        obj.push_back(json_spirit::Pair("max-rate", (nBestHeight <= 16000 ? (int)VELOCITY_MAX_RATE[i] : (int)VELOCITY_MAX_RATE_CORRECT[i]) ));
+    obj.push_back(json_spirit::Pair("rate", (nBestHeight <= 16000 ? (int)VELOCITY_RATE[i] : (nBestHeight <= 32000 ? (int)VELOCITY_RATE_CORRECT[i] : (int)VELOCITY_RATE_CORRECT_NEW[i]) )));
+    if( (nBestHeight <= 16000 ? VELOCITY_MIN_RATE[i] > 0 : (nBestHeight <= 31000 ? VELOCITY_MIN_RATE_CORRECT[i] > 0 : VELOCITY_MIN_RATE_CORRECT_NEW[i] > 0) ))
+        obj.push_back(json_spirit::Pair("min-rate", (nBestHeight <= 16000 ? (int)VELOCITY_MIN_RATE[i] : (nBestHeight <= 32000 ? (int)VELOCITY_MIN_RATE_CORRECT[i] : (int)VELOCITY_MIN_RATE_CORRECT_NEW[i]) )));
+        obj.push_back(json_spirit::Pair("max-rate", (nBestHeight <= 16000 ? (int)VELOCITY_MAX_RATE[i] : (nBestHeight <= 32000 ? (int)VELOCITY_MAX_RATE_CORRECT[i] : (int)VELOCITY_MAX_RATE_CORRECT_NEW[i]) )));
     if( VELOCITY_MIN_TX[i] > 0 )
 	obj.push_back(json_spirit::Pair("min-tx",     (int)VELOCITY_MIN_TX[i]));
     if( VELOCITY_MIN_VALUE[i] > 0 )
