@@ -64,8 +64,9 @@ bool Velocity(CBlockIndex* prevBlock, CBlock* block)
     TXstampO = prevBlock->nTime;
     CURstamp = block->GetBlockTime();
     OLDstamp = prevBlock->GetBlockTime();
-    CURvalstamp = prevBlock->GetBlockTime() + VELOCITY_MIN_RATE[i];
-    OLDvalstamp = prevBlock->pprev->GetBlockTime() + VELOCITY_MIN_RATE[i];
+    CURvalstamp = prevBlock->GetBlockTime() + (nHeight <= 16000 ? VELOCITY_MIN_RATE[i] : (nHeight <= 32000 ? VELOCITY_MIN_RATE_CORRECT[i] : VELOCITY_MIN_RATE_CORRECT_NEW[i]) );
+    OLDvalstamp = prevBlock->pprev->GetBlockTime() + (nHeight <= 16000 ? VELOCITY_MIN_RATE[i] : (nHeight <= 32000 ? VELOCITY_MIN_RATE_CORRECT[i] : VELOCITY_MIN_RATE_CORRECT_NEW[i]) );
+
  // TODO: Rework and activate below section for future releases
  // Factor in TXs for Velocity constraints only if there are TXs to do so with
  if(VELOCITY_FACTOR[i] == true && TXvalue > 0)
@@ -132,10 +133,18 @@ bool Velocity(CBlockIndex* prevBlock, CBlock* block)
         return false;
     }
     // Validate timestamp is logical
-    else if(CURstamp < CURvalstamp || OLDstamp < OLDvalstamp || TXstampC < CURvalstamp || TXstampO < OLDvalstamp)
+    else if(CURstamp < CURvalstamp || TXstampC < CURvalstamp)
     {
         LogPrintf("DENIED: Block timestamp is not logical\n");
         return false;
+    }
+    else if(OLDstamp < OLDvalstamp || TXstampO < OLDvalstamp)
+    {
+        if(nHeight != (nHeight <= 22500 ? VELOCITY_HEIGHT[i] : VELOCITY_HEIGHT_NEW[i]))
+        {
+            LogPrintf("DENIED: Block timestamp is not logical\n");
+            return false;
+        }
     }
 
     // Constrain Velocity

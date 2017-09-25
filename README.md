@@ -94,6 +94,7 @@ not straightforward.
 ### Change log
 2.6.2.5
 - Fix velocity time from block 32000
+- Fix Corrected Velocity timestamp logic handling
 
 2.6.2.4
 - Fix the block space from block 22500
