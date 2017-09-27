@@ -92,6 +92,9 @@ not straightforward.
 
 
 ### Change log
+2.6.2.6
+- Disable temporarily velocity system
+
 2.6.2.5
 - Fix velocity time from block 32000
 - Fix Corrected Velocity timestamp logic handling

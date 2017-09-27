@@ -122,7 +122,7 @@ static const int64_t ANONSEND_POOL_MAX = (4999.99*COIN);
 /** Velocity toggle block */
 static const int64_t VELOCITY_TOGGLE = 1500000; // Implementation of the Velocity system into the chain.
 /** Velocity toggle block NEW */
-static const int64_t VELOCITY_TOGGLE_NEW = 22500; // Implementation of the Velocity system into the NEW chain.
+static const int64_t VELOCITY_TOGGLE_NEW = 22500000; // Implementation of the Velocity system into the NEW chain.
 /** Velocity retarget toggle block */
 static const int64_t VELOCITY_TDIFF = 0; // Use Velocity's retargetting method.
 /** Protocol toggle */
