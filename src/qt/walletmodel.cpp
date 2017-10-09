@@ -508,10 +508,6 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
             }
             return TransactionCreationFailed;
         }
-        if(!uiInterface.ThreadSafeAskFee(nFeeRequired, tr("Sending...").toStdString()))
-        {
-            return Aborted;
-        }
         if(!wallet->CommitTransaction(wtx, keyChange, (recipients[0].useFastTx) ? "txlreq" : "tx"))
         {
             return TransactionCommitFailed;
