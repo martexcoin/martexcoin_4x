@@ -1195,7 +1195,8 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
     boost::filesystem::ifstream streamConfig(GetConfigFile());
     if (!streamConfig.good())
     {
-        boost::filesystem::path ConfPath;
+               boost::filesystem::path ConfPath;
+               boost::filesystem::path ConfMNPath;
                ConfPath = GetDataDir() / "MarteX.conf";
                FILE* ConfFile = fopen(ConfPath.string().c_str(), "w");
                fprintf(ConfFile, "listen=1\n");
@@ -1215,7 +1216,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
                fprintf(ConfFile, rpcpass.c_str());
                fprintf(ConfFile, "port=51315\n");
                fprintf(ConfFile, "rpcport=51314\n");
-               fprintf(ConfFile, "rpcconnect=127.0.0.1\n");
+               fprintf(ConfFile, "#rpcconnect=127.0.0.1\n");
                fprintf(ConfFile, "rpcallowip=127.0.0.1\n");
                fprintf(ConfFile, "addnode=seed.martexcoin.org:51315\n");
                fprintf(ConfFile, "addnode=seed1.martexcoin.org:51315\n");
@@ -1224,6 +1225,13 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
                fprintf(ConfFile, "addnode=seed4.martexcoin.org:51315\n");
 
                fclose(ConfFile);
+
+               ConfMNPath = GetDataDir() / "masternode.conf";
+               FILE* ConfMNFile = fopen(ConfMNPath.string().c_str(), "w");
+               fprintf(ConfMNFile, "# Masternode config file");
+               fprintf(ConfMNFile, "# Format: alias IP:port masternodeprivkey collateral_output_txid collateral_output_index");
+               fprintf(ConfMNFile, "# Example: mn1 127.0.0.2:51315 63HaYBVUCYjEMeeH1Y4sBGLALQZE1Yc1K64xiqgX37tGBDQL8Xg 2bcd3c84c84f87eaa86e4e56834c92927a07f9e18718810b92e0d0324456a67c 0");
+               fclose(ConfMNFile);
 
                // Returns our config path, created config file is loaded during initial run...
                return ;
