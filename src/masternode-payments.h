@@ -24,7 +24,6 @@ extern map<uint256, CMasternodePaymentWinner> mapSeenMasternodeVotes;
 
 void ProcessMessageMasternodePayments(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
 
-
 // for storing the winning payments
 class CMasternodePaymentWinner
 {

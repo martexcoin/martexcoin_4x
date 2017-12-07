@@ -123,6 +123,35 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
         if (!reservekey.GetReservedKey(pubkey))
             return NULL;
         txNew.vout[0].scriptPubKey.SetDestination(pubkey.GetID());
+
+            bool hasPayment = true;
+            CScript payee;
+            CTxIn vin;
+
+            //spork
+            if(!masternodePayments.GetBlockPayee(pindexPrev->nHeight+1, payee, vin)){
+                //no masternode detected
+                CMasternode* winningNode = mnodeman.GetCurrentMasterNode(1);
+                if(winningNode){
+                    payee = GetScriptForDestination(winningNode->pubkey.GetID());
+                } else {
+                    LogPrintf("CreateNewBlock PoW: Failed to detect masternode to pay\n");
+                    hasPayment = false;
+                }
+            }
+
+            if(hasPayment)
+            {
+                txNew.vout.resize(2);
+                txNew.vout[1].scriptPubKey = payee;
+
+                CTxDestination address1;
+                ExtractDestination(payee, address1);
+                CBitcoinAddress address2(address1);
+
+                LogPrintf("PoW Masternode payment to %s\n", address2.ToString().c_str());
+            }
+
     }
     else
     {
@@ -168,7 +197,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
     {
         LOCK2(cs_main, mempool.cs);
         CTxDB txdb("r");
-//> MXT <
+        //> MXT <
         // Priority order to process transactions
         list<COrphan> vOrphan; // list memory doesn't move
         map<uint256, vector<COrphan*> > mapDependers;
@@ -346,19 +375,31 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
             }
         }
 
+	int64_t nblockValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
+	int64_t nmasternodePayment = (nblockValue - nFees) / 6 * 1;
+
+        // > MXT <
+        if (!fProofOfStake){
+            CAmount blockValue = nblockValue - nmasternodePayment;
+            CAmount masternodePayment = nmasternodePayment;
+
+            txNew.vout[1].nValue = masternodePayment;
+            txNew.vout[0].nValue = blockValue;
+
+            pblock->vtx[0].vout[0].nValue = blockValue;
+            pblock->vtx[0].vout[1].nValue = masternodePayment;
+        }
+
         nLastBlockTx = nBlockTx;
         nLastBlockSize = nBlockSize;
 
         if (fDebug && GetBoolArg("-printpriority", false))
             LogPrintf("CreateNewBlock(): total size %u\n", nBlockSize);
-// > MXT <
-        if (!fProofOfStake)
-            pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
 
         if (pFees)
             *pFees = nFees;
 
-        // Fill in header
+	// Fill in header
         pblock->hashPrevBlock  = pindexPrev->GetBlockHash();
         pblock->nTime          = max(pindexPrev->GetPastTimeLimit()+1, pblock->GetMaxTransactionTime());
         if (!fProofOfStake)
@@ -450,7 +491,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     //// debug print
     LogPrintf("CheckWork() : new proof-of-work block found  \n  proof hash: %s  \ntarget: %s\n", hashProof.GetHex(), hashTarget.GetHex());
     LogPrintf("%s\n", pblock->ToString());
-    LogPrintf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue));
+    LogPrintf("generated: %s - Miner: %s - MasterNode: %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue + pblock->vtx[0].vout[1].nValue), FormatMoney(pblock->vtx[0].vout[0].nValue), FormatMoney(pblock->vtx[0].vout[1].nValue));
 
     // Found a solution
     {

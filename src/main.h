@@ -166,9 +166,9 @@ static const int64_t nBlockPoWReward = 0.05 * COIN;
 /** Superblock subsidy */
 static const int64_t nSuperPoWReward = 0.50 * COIN;
 /** NEW block subsidy */
-static const int64_t nBlockPoWReward_NEW = 0.10 * COIN;
+static const int64_t nBlockPoWReward_NEW = 0.06 * COIN;
 /** NEW Superblock subsidy */
-static const int64_t nSuperPoWReward_NEW = 1 * COIN;
+static const int64_t nSuperPoWReward_NEW = 0.60 * COIN;
 /** Swap fase subsidy */
 static const int64_t nSwapFaseReward = 0 * COIN;
 /** Genesis Block Height */

@@ -1486,6 +1486,9 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
 {
     int64_t nSubsidy = nBlockPoWReward;
 
+    if(nHeight > 95100 && TestNet())
+      nSubsidy = nBlockPoWReward_NEW;
+
     if (nHeight > nReservePhaseStart && nHeight < nReservePhaseEnd) {
       nSubsidy = nBlockRewardReserve;
     }
@@ -1495,7 +1498,10 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
       nSubsidy = nSwapFaseReward;
     }
 
-    if(randreward() <= 5000 && nHeight > 10080) // 5% Chance of superblock
+    if(randreward() <= 5000 && nHeight > 10080 && TestNet()) // 5% Chance of superblock TESTNET
+        nSubsidy = nSuperPoWReward_NEW;
+
+    if(randreward() <= 5000 && nHeight > 10080 && !TestNet()) // 5% Chance of superblock
         nSubsidy = nSuperPoWReward;
     else if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
     {
@@ -2804,8 +2810,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
         return DoS(100, error("CheckBlock() : bad proof-of-stake block signature"));
 
 
-// ----------- FastTx transaction scanning -----------
-
+    // ----------- FastTx transaction scanning -----------
     if(IsSporkActive(SPORK_3_FASTTX_BLOCK_FILTERING)){
         BOOST_FOREACH(const CTransaction& tx, vtx){
             if (!tx.IsCoinBase()){
@@ -2827,7 +2832,6 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
 
 
     // ----------- masternode payments -----------
-
     bool MasternodePayments = false;
     bool fIsInitialDownload = IsInitialBlockDownload();
 
@@ -2839,13 +2843,21 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
             LOCK2(cs_main, mempool.cs);
 
             CBlockIndex *pindex = pindexBest;
-	    if(IsProofOfStake() && pindex != NULL){
+	    if(pindex != NULL){
                 if(pindex->GetBlockHash() == hashPrevBlock){
                     // If we don't already have its previous block, skip masternode payment step
                     CAmount masternodePaymentAmount;
-                    for (int i = vtx[1].vout.size(); i--> 0; ) {
-                        masternodePaymentAmount = vtx[1].vout[i].nValue;
-                        break;
+                    if(IsProofOfStake()){
+                      for (int i = vtx[1].vout.size(); i--> 0; ) {
+                         masternodePaymentAmount = vtx[1].vout[i].nValue;
+                         break;
+                      }
+                    }
+                    if(IsProofOfWork()){
+                      for (int i = vtx[0].vout.size(); i--> 0; ) {
+                         masternodePaymentAmount = vtx[0].vout[i].nValue;
+                         break;
+                      }
                     }
                     bool foundPaymentAmount = false;
                     bool foundPayee = false;
@@ -2859,14 +2871,25 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                         foundPaymentAndPayee = true;
                         if(fDebug) { LogPrintf("CheckBlock() : Using non-specific masternode payments %d\n", pindexBest->nHeight+1); }
                     }
-
-                    for (unsigned int i = 0; i < vtx[1].vout.size(); i++) {
-                        if(vtx[1].vout[i].nValue == masternodePaymentAmount )
-                            foundPaymentAmount = true;
-                        if(vtx[1].vout[i].scriptPubKey == payee )
-                            foundPayee = true;
-                        if(vtx[1].vout[i].nValue == masternodePaymentAmount && vtx[1].vout[i].scriptPubKey == payee)
-                            foundPaymentAndPayee = true;
+                    if(IsProofOfStake()){
+                      for (unsigned int i = 0; i < vtx[1].vout.size(); i++) {
+                          if(vtx[1].vout[i].nValue == masternodePaymentAmount )
+                              foundPaymentAmount = true;
+                          if(vtx[1].vout[i].scriptPubKey == payee )
+                              foundPayee = true;
+                          if(vtx[1].vout[i].nValue == masternodePaymentAmount && vtx[1].vout[i].scriptPubKey == payee)
+                              foundPaymentAndPayee = true;
+                      }
+                    }
+                    if(IsProofOfWork()){
+                      for (unsigned int i = 0; i < vtx[0].vout.size(); i++) {
+                          if(vtx[0].vout[i].nValue == masternodePaymentAmount )
+                              foundPaymentAmount = true;
+                          if(vtx[0].vout[i].scriptPubKey == payee )
+                              foundPayee = true;
+                          if(vtx[0].vout[i].nValue == masternodePaymentAmount && vtx[0].vout[i].scriptPubKey == payee)
+                              foundPaymentAndPayee = true;
+                      }
                     }
 
                     CTxDestination address1;
@@ -2891,14 +2914,6 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
     } else {
         if(fDebug) { LogPrintf("CheckBlock() : Is initial download, skipping masternode payment check %d\n", pindexBest->nHeight+1); }
     }
-
-
-
-
-
-
-
-
 
     // Check transactions
     BOOST_FOREACH(const CTransaction& tx, vtx)
