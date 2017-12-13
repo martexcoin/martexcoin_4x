@@ -81,6 +81,8 @@ static const int64_t nTargetTimespan_legacy = nTargetSpacing * nRetarget; // eve
 static const int64_t nInterval = nTargetTimespan_legacy / nTargetSpacing;
 static const int64_t nTargetTimespan = 30 * 60;
 
+static const unsigned int CHECKLOCKTIMEVERIFY_SWITCH_TIME = 1512604800; // 07-Dez-17 00:00:00 UTC
+
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
@@ -2270,6 +2272,11 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
             if (tx.IsCoinStake())
                 nStakeReward = nTxValueOut - nTxValueIn;
 
+            unsigned int nFlags = SCRIPT_VERIFY_NOCACHE | SCRIPT_VERIFY_P2SH;
+            if (tx.nTime >= CHECKLOCKTIMEVERIFY_SWITCH_TIME) {
+                nFlags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
+		nFlags |= SCRIPT_VERIFY_CHECKSEQUENCEVERIFY;
+            }
 
             if (!tx.ConnectInputs(txdb, mapInputs, mapQueuedChanges, posThisTx, pindex, true, false, flags))
                 return false;

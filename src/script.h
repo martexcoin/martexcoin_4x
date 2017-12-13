@@ -29,6 +29,27 @@ class BaseSignatureChecker;
 static const unsigned int MAX_SCRIPT_ELEMENT_SIZE = 520; // bytes
 static const unsigned int MAX_OP_RETURN_RELAY = 120;      // bytes
 
+/* Setting nSequence to this value for every input in a transaction
+ * disables nLockTime. */
+static const uint32_t SEQUENCE_FINAL = 0xffffffff;
+
+/* Threshold for inverted nSequence: below this value it is interpreted
+ * as a relative lock-time, otherwise ignored. */
+static const uint32_t SEQUENCE_THRESHOLD = (1 << 31);
+
+/* If this flag set, CTxIn::nSequence is NOT interpreted as a
+ * relative lock-time. */
+static const uint32_t SEQUENCE_LOCKTIME_DISABLE_FLAG = (1 << 31);
+
+/* If CTxIn::nSequence encodes a relative lock-time and this flag
+ * is set, the relative lock-time has units of 512 seconds,
+ * otherwise it specifies blocks with a granularity of 1. */
+static const uint32_t SEQUENCE_LOCKTIME_TYPE_FLAG = (1 << 22);
+
+/* If CTxIn::nSequence encodes a relative lock-time, this mask is
+ * applied to extract that lock-time from the sequence field. */
+static const uint32_t SEQUENCE_LOCKTIME_MASK = 0x0000ffff;
+
 template <typename T>
 std::vector<unsigned char> ToByteVector(const T& in)
 {
@@ -134,7 +155,17 @@ enum
     // discouraged NOPs fails the script. This verification flag will never be
     // a mandatory flag applied to scripts in a block. NOPs that are not
     // executed, e.g.  within an unexecuted IF ENDIF block, are *not* rejected.
-    SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS  = (1U << 7)
+    SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS  = (1U << 7),
+
+    // Verify CHECKLOCKTIMEVERIFY
+    //
+    // See BIP65 for details.
+    SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY = (1U << 8),
+
+    // support CHECKSEQUENCEVERIFY opcode
+    //
+    // See BIP112 for details
+    SCRIPT_VERIFY_CHECKSEQUENCEVERIFY = (1U << 9)
 
 };
 
@@ -235,6 +266,8 @@ enum opcodetype
     OP_ENDIF = 0x68,
     OP_VERIFY = 0x69,
     OP_RETURN = 0x6a,
+    OP_CHECKLOCKTIMEVERIFY = 0xb1,
+    OP_CHECKSEQUENCEVERIFY = 0xb2,
 
     // stack ops
     OP_TOALTSTACK = 0x6b,
@@ -320,8 +353,6 @@ enum opcodetype
 
     // expansion
     OP_NOP1 = 0xb0,
-    OP_NOP2 = 0xb1,
-    OP_NOP3 = 0xb2,
     OP_NOP4 = 0xb3,
     OP_NOP5 = 0xb4,
     OP_NOP6 = 0xb5,
