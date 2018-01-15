@@ -621,17 +621,17 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
             }
 
             // if sub-cent change is required, the fee must be raised to at least CTransaction::nMinTxFee
-            if (nPayFee < MIN_TX_FEE && nChange > 0 && nChange < CENT)
+            if (nPayFee < (GetTime() < TX_FEE_SWITCH_TIME ? MIN_TX_FEE : MIN_TX_FEE_NEW) && nChange > 0 && nChange < CENT)
             {
-                if (nChange < MIN_TX_FEE) // change < 0.0001 => simply move all change to fees
+                if (nChange < (GetTime() < TX_FEE_SWITCH_TIME ? MIN_TX_FEE : MIN_TX_FEE_NEW)) // change < 0.0001 => simply move all change to fees
                 {
                     nPayFee += nChange;
                     nChange = 0;
                 }
                 else
                 {
-                    nChange = nChange + nPayFee - MIN_TX_FEE;
-                    nPayFee = MIN_TX_FEE;
+                    nChange = nChange + nPayFee - (GetTime() < TX_FEE_SWITCH_TIME ? MIN_TX_FEE : MIN_TX_FEE_NEW);
+                    nPayFee = (GetTime() < TX_FEE_SWITCH_TIME ? MIN_TX_FEE : MIN_TX_FEE_NEW);
                 }
             }
 
@@ -639,7 +639,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
             if (nChange > 0 && nChange < CENT)
             {
                 CTxOut txout(nChange, (CScript)std::vector<unsigned char>(24, 0));
-                if (txout.IsDust(MIN_RELAY_TX_FEE))
+                if (txout.IsDust((GetTime() < TX_FEE_SWITCH_TIME ? MIN_RELAY_TX_FEE_NEW : MIN_RELAY_TX_FEE_NEW)))
                 {
                     nPayFee += nChange;
                     nChange = 0;

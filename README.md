@@ -1,7 +1,29 @@
 MarteX [MXT] integration/staging tree
 =====================================
 
-http://www.martexcoin.org
+
+### Change log
+2.7.0.0
+- Implemented soft lock for preventing masternode funds to be used in transactions (-masternodesoftlock)
+- Implement CHECKLOCKTIMEVERIFY/CHECKSEQUENCEVERIFY
+- Re-encoding the PoW blocks
+- Generate masternode.conf on initial wallet start
+- Add RpcCall getstakereport
+- Remove unused ThreadSafeAskFee
+
+2.6.2.6
+- Disable temporarily velocity system
+
+2.6.2.5
+- Fix velocity time from block 32000
+- Fix Corrected Velocity timestamp logic handling
+
+2.6.2.4
+- Fix the block space from block 22500
+- Rehabilitate velocity from block 22500
+- Fix rpc masternode status
+
+Official Site http://www.martexcoin.org
 
 What is the MarteX [MXT] Blockchain?
 ---------------------------
@@ -15,17 +37,18 @@ open source software which enables the use of this protocol.
 
 Specifications and General info
 ------------------
-MarteX uses libsecp256k1,
-			  libgmp,
-			  Boost1.63,
-			  OR Boost1.57,  
-			  Openssl1.02k,
-			  Berkeley DB 6.2.23,
-			  QT5.8 to compile
+MarteX uses
+	libsecp256k1,
+	libgmp,
+	Boost1.63,
+	OR Boost1.57,  
+	Openssl1.02k,
+	Berkeley DB 6.2.23,
+	QT5.8 to compile
 
 
 Block Spacing: 1 Minutes
-Stake Minimum Age: 15 Confirmations (PoS-v3) | 30 Minutes (PoS-v2)
+Stake Minimum Age: 15 Confirmations (PoS-v3)
 
 Port: 51315
 RPC Port: 51314
@@ -37,7 +60,7 @@ BUILD LINUX
 
 2) cd martexcoin/src
 
-3) sudo make -f makefile.unix            # Headless
+3) sudo make -f makefile.unix USE_UPNP=-           # Headless
 
 (optional)
 
@@ -89,17 +112,3 @@ Changes should be tested by somebody other than the developer who wrote the
 code. This is especially important for large or high-risk changes. It is useful
 to add a test plan to the pull request description if testing the changes is
 not straightforward.
-
-
-### Change log
-2.6.2.6
-- Disable temporarily velocity system
-
-2.6.2.5
-- Fix velocity time from block 32000
-- Fix Corrected Velocity timestamp logic handling
-
-2.6.2.4
-- Fix the block space from block 22500
-- Rehabilitate velocity from block 22500
-- Fix rpc masternode status

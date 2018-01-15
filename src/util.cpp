@@ -106,6 +106,7 @@ bool fCommandLine = false;
 string strMiscWarning;
 bool fNoListen = false;
 bool fLogTimestamps = false;
+bool fMasternodeSoftLock = false;
 volatile bool fReopenDebugLog = false;
 
 // Init OpenSSL library multithreading support

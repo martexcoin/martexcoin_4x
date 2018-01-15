@@ -93,11 +93,11 @@ bool Velocity(CBlockIndex* prevBlock, CBlock* block)
        return false;
     }
     // Authenticate submitted block's TXs
-    if(VELOCITY_MIN_VALUE[i] > 0 || VELOCITY_MIN_FEE[i] > 0)
+    if(VELOCITY_MIN_VALUE[i] > 0 || (GetTime() < TX_FEE_SWITCH_TIME ? VELOCITY_MIN_FEE[i] > 0 : VELOCITY_MIN_FEE_NEW[i] > 0) )
     {
        // Make sure we accept only blocks that sent an amount
        // NOT being more than available coins to send
-       if(VELOCITY_MIN_FEE[i] > 0 && TXinput > 0)
+       if((GetTime() < TX_FEE_SWITCH_TIME ? VELOCITY_MIN_FEE[i] > 0 : VELOCITY_MIN_FEE_NEW[i] > 0) && TXinput > 0)
        {
           if(HaveCoins == false)
           {
@@ -111,9 +111,9 @@ bool Velocity(CBlockIndex* prevBlock, CBlock* block)
              LogPrintf("DENIED: Invalid TX value found by Velocity\n");
              return false;
           }
-          if(VELOCITY_MIN_FEE[i] > 0 && TXinput > 0)
+          if((GetTime() < TX_FEE_SWITCH_TIME ? VELOCITY_MIN_FEE[i] > 0 : VELOCITY_MIN_FEE_NEW[i] > 0) && TXinput > 0)
           {
-             if(TXfee < VELOCITY_MIN_FEE[i])
+             if(TXfee < (GetTime() < TX_FEE_SWITCH_TIME ? VELOCITY_MIN_FEE[i] : VELOCITY_MIN_FEE_NEW[i]))
              {
                 LogPrintf("DENIED: Invalid network fee found by Velocity\n");
                 return false;
@@ -154,7 +154,7 @@ bool Velocity(CBlockIndex* prevBlock, CBlock* block)
             return false;
         if(VELOCITY_MIN_VALUE[i] > 0)
             return false;
-        if(VELOCITY_MIN_FEE[i] > 0)
+        if((GetTime() < TX_FEE_SWITCH_TIME ? VELOCITY_MIN_FEE[i] > 0 : VELOCITY_MIN_FEE_NEW[i] > 0))
             return false;
     }
     // Velocity constraints met, return block acceptance

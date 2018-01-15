@@ -143,6 +143,7 @@ extern bool fCommandLine;
 extern std::string strMiscWarning;
 extern bool fNoListen;
 extern bool fLogTimestamps;
+extern bool fMasternodeSoftLock;
 extern volatile bool fReopenDebugLog;
 
 void RandAddSeed();

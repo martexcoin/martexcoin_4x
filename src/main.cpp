@@ -800,7 +800,7 @@ bool CTransaction::CheckTransaction() const
 int64_t GetMinFee(const CTransaction& tx, unsigned int nBytes, bool fAllowFree, enum GetMinFee_mode mode)
 {
     // Base fee is either MIN_TX_FEE or MIN_RELAY_TX_FEE
-    int64_t nBaseFee = (mode == GMF_RELAY) ? MIN_RELAY_TX_FEE : MIN_TX_FEE;
+    int64_t nBaseFee = (mode == GMF_RELAY) ? (GetTime() < TX_FEE_SWITCH_TIME ? MIN_RELAY_TX_FEE_NEW : MIN_RELAY_TX_FEE_NEW) : (GetTime() < TX_FEE_SWITCH_TIME ? MIN_TX_FEE : MIN_TX_FEE_NEW);
 
     int64_t nMinFee = (1 + (int64_t)nBytes / 1000) * nBaseFee;
 
@@ -1488,7 +1488,7 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
 {
     int64_t nSubsidy = nBlockPoWReward;
 
-    if(nHeight > 95100 && TestNet())
+    if(GetTime() > REWARD_MN_POW_SWITCH_TIME)
       nSubsidy = nBlockPoWReward_NEW;
 
     if (nHeight > nReservePhaseStart && nHeight < nReservePhaseEnd) {
@@ -1500,11 +1500,12 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
       nSubsidy = nSwapFaseReward;
     }
 
-    if(randreward() <= 5000 && nHeight > 10080 && TestNet()) // 5% Chance of superblock TESTNET
-        nSubsidy = nSuperPoWReward_NEW;
-
     if(randreward() <= 5000 && nHeight > 10080 && !TestNet()) // 5% Chance of superblock
         nSubsidy = nSuperPoWReward;
+
+    if(randreward() <= 5000 && nHeight > 10080 && !TestNet() && (GetTime() > REWARD_MN_POW_SWITCH_TIME)) // 5% Chance of superblock NEW
+        nSubsidy = nSuperPoWReward_NEW;
+
     else if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
     {
         LogPrint("MINEOUT", "GetProofOfWorkReward(): create=%s nFees=%d\n", FormatMoney(nFees), nFees);
@@ -1715,11 +1716,91 @@ static unsigned int GetNextTargetRequired_new(const CBlockIndex* pindexLast, boo
 
     if (bnNew <= 0 || bnNew > bnTargetLimit)
         bnNew = bnTargetLimit;
-    
-    //LogPrintf("GetNextTargetRequired_new : next block 22500 \n");
-    
+
     return bnNew.GetCompact();
 }
+
+/*
+static unsigned int GetNextTargetRequired_DS(const CBlockIndex* pindexLast, bool fProofOfStake)
+{
+	CBigNum bnTargetLimit = fProofOfStake ? Params().ProofOfStakeLimit() : Params().ProofOfWorkLimit();
+	int nHeight = pindexLast->nHeight + 1;
+	int64_t retargetTimespan = nTargetTimespan;
+	int64_t retargetSpacing = nTargetSpacing;
+    	int64_t retargetInterval = nInterval;
+
+	// Genesis block
+	if (pindexLast == NULL)
+		return bnTargetLimit;
+
+	// Only change once per interval
+	if ((pindexLast->nHeight+1) % retargetInterval != 0)
+	{
+		return pindexLast->nBits;
+    	}
+
+	// Only change once per interval
+	if ((pindexLast->nHeight+1) % retargetInterval != 0)
+	{
+		// Special difficulty rule for testnet:
+		if (fTestNet)
+		{
+			// If the new block's timestamp is more than 2* nTargetSpacing minutes
+			// then allow mining of a min-difficulty block.
+			if (pblock->nTime > pindexLast->nTime + retargetSpacing*3)
+				return bnTargetLimit;
+			else
+			{
+				// Return the last non-special-min-difficulty-rules-block
+				const CBlockIndex* pindex = pindexLast;
+				while (pindex->pprev && pindex->nHeight % retargetInterval != 0 && pindex->nBits == bnTargetLimit)
+				pindex = pindex->pprev;
+				return pindex->nBits;
+			}
+		}
+		return pindexLast->nBits;
+	}
+
+	// This fixes an issue where a 51% attack can change difficulty at will.
+    	// Go back the full period unless it's the first retarget after genesis. Code courtesy of Art Forz
+    	int blockstogoback = retargetInterval-1;
+    	if ((pindexLast->nHeight+1) != retargetInterval)
+		blockstogoback = retargetInterval;
+
+    	// Go back by what we want to be 14 days worth of blocks
+    	const CBlockIndex* pindexFirst = pindexLast;
+    	for (int i = 0; pindexFirst && i < blockstogoback; i++)
+        	pindexFirst = pindexFirst->pprev;
+    	assert(pindexFirst);
+
+    	// Limit adjustment step
+    	int64_t nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
+
+    	CBigNum bnNew;
+    	bnNew.SetCompact(pindexLast->nBits);
+
+	LogPrintf("DIGISHIELD RETARGET\n");
+
+	if (nActualTimespan < (retargetTimespan - (retargetTimespan/4)) )
+		nActualTimespan = (retargetTimespan - (retargetTimespan/4));
+	if (nActualTimespan > (retargetTimespan + (retargetTimespan/2)) )
+		nActualTimespan = (retargetTimespan + (retargetTimespan/2));
+
+	// Retarget
+	bnNew *= nActualTimespan;
+	bnNew /= retargetTimespan;
+
+	LogPrintf("GetNextWorkRequired RETARGET \n");
+	LogPrintf("retargetTimespan = %"PRI64d" nActualTimespan = %"PRI64d"\n", retargetTimespan, nActualTimespan);
+	LogPrintf("Before: %08x %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
+	LogPrintf("After: %08x %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+
+	if (bnNew > bnTargetLimit)
+        	bnNew = bnTargetLimit;
+
+	return bnNew.GetCompact();
+}
+*/
 
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
@@ -1729,7 +1810,10 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
     else
         change = 22500;
     if(pindexLast->nHeight + 1 > change)
-        return GetNextTargetRequired_new(pindexLast, fProofOfStake);
+	//if (TestNet() && pindexLast->nHeight + 1 > 137310)
+	//	return GetNextTargetRequired_DS(pindexLast, fProofOfStake);
+	//else
+	        return GetNextTargetRequired_new(pindexLast, fProofOfStake);
     else
         return GetNextTargetRequired_legacy(pindexLast, fProofOfStake);
 
@@ -2060,7 +2144,7 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs, map<uint256, CTx
             if (!IsProtocolV3(nTime)) {
                 // enforce transaction fees for every block
                 // Base fee is either MIN_TX_FEE or MIN_RELAY_TX_FEE
-                int64_t nMinFee = MIN_TX_FEE;
+                int64_t nMinFee = (GetTime() < TX_FEE_SWITCH_TIME ? MIN_TX_FEE : MIN_TX_FEE_NEW);
                 int64_t nRequiredFee = nMinFee;
                 if (nTxFee < nRequiredFee)
                     return fBlock? DoS(100, error("ConnectInputs() : %s not paying required fee=%s, paid=%s", GetHash().ToString(), FormatMoney(nRequiredFee), FormatMoney(nTxFee))) : false;
@@ -2860,24 +2944,25 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                          break;
                       }
                     }
-                    if(IsProofOfWork()){
+                    if(IsProofOfWork() && (pindexBest->GetBlockTime() > REWARD_MN_POW_SWITCH_TIME)){
                       for (int i = vtx[0].vout.size(); i--> 0; ) {
                          masternodePaymentAmount = vtx[0].vout[i].nValue;
                          break;
                       }
                     }
-                    bool foundPaymentAmount = false;
-                    bool foundPayee = false;
-                    bool foundPaymentAndPayee = false;
+                      bool foundPaymentAmount = false;
+                      bool foundPayee = false;
+                      bool foundPaymentAndPayee = false;
 
-                    CScript payee;
-                    CTxIn vin;
-                    if(!masternodePayments.GetBlockPayee(pindexBest->nHeight+1, payee, vin) || payee == CScript()){
-                        foundPayee = true; //doesn't require a specific payee
-                        foundPaymentAmount = true;
-                        foundPaymentAndPayee = true;
-                        if(fDebug) { LogPrintf("CheckBlock() : Using non-specific masternode payments %d\n", pindexBest->nHeight+1); }
-                    }
+                      CScript payee;
+                      CTxIn vin;
+                      if(!masternodePayments.GetBlockPayee(pindexBest->nHeight+1, payee, vin) || payee == CScript()){
+                          foundPayee = true; //doesn't require a specific payee
+                          foundPaymentAmount = true;
+                          foundPaymentAndPayee = true;
+                          if(fDebug) { LogPrintf("CheckBlock() : Using non-specific masternode payments %d\n", pindexBest->nHeight+1); }
+                      }
+
                     if(IsProofOfStake()){
                       for (unsigned int i = 0; i < vtx[1].vout.size(); i++) {
                           if(vtx[1].vout[i].nValue == masternodePaymentAmount )
@@ -2888,7 +2973,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                               foundPaymentAndPayee = true;
                       }
                     }
-                    if(IsProofOfWork()){
+                    if(IsProofOfWork() && (pindexBest->GetBlockTime() > REWARD_MN_POW_SWITCH_TIME)){
                       for (unsigned int i = 0; i < vtx[0].vout.size(); i++) {
                           if(vtx[0].vout[i].nValue == masternodePaymentAmount )
                               foundPaymentAmount = true;

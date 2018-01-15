@@ -123,7 +123,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
         if (!reservekey.GetReservedKey(pubkey))
             return NULL;
         txNew.vout[0].scriptPubKey.SetDestination(pubkey.GetID());
-
+        if (GetTime() > REWARD_MN_POW_SWITCH_TIME){
             bool hasPayment = true;
             CScript payee;
             CTxIn vin;
@@ -151,7 +151,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
 
                 LogPrintf("PoW Masternode payment to %s\n", address2.ToString().c_str());
             }
-
+        }
     }
     else
     {
@@ -185,7 +185,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
     // a transaction spammer can cheaply fill blocks using
     // 1-satoshi-fee transactions. It should be set above the real
     // cost to you of processing a transaction.
-    int64_t nMinTxFee = MIN_TX_FEE;
+    int64_t nMinTxFee = (GetTime() < TX_FEE_SWITCH_TIME ? MIN_TX_FEE : MIN_TX_FEE_NEW);
     if (mapArgs.count("-mintxfee"))
         ParseMoney(mapArgs["-mintxfee"], nMinTxFee);
 
@@ -374,27 +374,30 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
                 }
             }
         }
+		if (GetTime() > REWARD_MN_POW_SWITCH_TIME){
+		int64_t nblockValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
+		int64_t nmasternodePayment = (nblockValue - nFees) / 6 * 1;
 
-	int64_t nblockValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
-	int64_t nmasternodePayment = (nblockValue - nFees) / 6 * 1;
+	        // > MXT <
+	        if (!fProofOfStake){
+	            CAmount blockValue = nblockValue - nmasternodePayment;
+	            CAmount masternodePayment = nmasternodePayment;
 
-        // > MXT <
-        if (!fProofOfStake){
-            CAmount blockValue = nblockValue - nmasternodePayment;
-            CAmount masternodePayment = nmasternodePayment;
+	            txNew.vout[1].nValue = masternodePayment;
+	            txNew.vout[0].nValue = blockValue;
 
-            txNew.vout[1].nValue = masternodePayment;
-            txNew.vout[0].nValue = blockValue;
-
-            pblock->vtx[0].vout[0].nValue = blockValue;
-            pblock->vtx[0].vout[1].nValue = masternodePayment;
+	            pblock->vtx[0].vout[0].nValue = blockValue;
+	            pblock->vtx[0].vout[1].nValue = masternodePayment;
+	        }
         }
-
         nLastBlockTx = nBlockTx;
         nLastBlockSize = nBlockSize;
 
         if (fDebug && GetBoolArg("-printpriority", false))
             LogPrintf("CreateNewBlock(): total size %u\n", nBlockSize);
+
+        if (!fProofOfStake && (GetTime() <= REWARD_MN_POW_SWITCH_TIME))
+            pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
 
         if (pFees)
             *pFees = nFees;
@@ -491,7 +494,10 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     //// debug print
     LogPrintf("CheckWork() : new proof-of-work block found  \n  proof hash: %s  \ntarget: %s\n", hashProof.GetHex(), hashTarget.GetHex());
     LogPrintf("%s\n", pblock->ToString());
-    LogPrintf("generated: %s - Miner: %s - MasterNode: %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue + pblock->vtx[0].vout[1].nValue), FormatMoney(pblock->vtx[0].vout[0].nValue), FormatMoney(pblock->vtx[0].vout[1].nValue));
+    if(GetTime() <= REWARD_MN_POW_SWITCH_TIME)
+    	LogPrintf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue));
+    else if(GetTime() > REWARD_MN_POW_SWITCH_TIME)
+	LogPrintf("generated: %s - Miner: %s - MasterNode: %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue + pblock->vtx[0].vout[1].nValue), FormatMoney(pblock->vtx[0].vout[0].nValue), FormatMoney(pblock->vtx[0].vout[1].nValue));
 
     // Found a solution
     {

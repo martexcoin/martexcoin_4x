@@ -89,7 +89,7 @@ void OptionsModel::Init()
     // Wallet
 #ifdef ENABLE_WALLET
     if (!settings.contains("nTransactionFee"))
-        settings.setValue("nTransactionFee", (qint64)MIN_TX_FEE);
+        settings.setValue("nTransactionFee", (GetTime() < TX_FEE_SWITCH_TIME ? (qint64)MIN_TX_FEE : (qint64)MIN_TX_FEE_NEW));
     nTransactionFee = settings.value("nTransactionFee").toLongLong(); // if -paytxfee is set, this will be overridden later in init.cpp
     if (mapArgs.count("-paytxfee"))
         addOverriddenOption("-paytxfee");

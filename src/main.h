@@ -19,6 +19,8 @@
 #define START_MASTERNODE_PAYMENTS_TESTNET 1495238400 // Sat, 20 May 2017 00:00:00 GMT
 #define START_MASTERNODE_PAYMENTS 1495238400         // Sat, 20 May 2017 00:00:00 GMT
 
+#define REWARD_MN_POW_SWITCH_TIME 1518652800 // 15-Fev-18 00:00:00 UTC
+
 #define FASTTX_SIGNATURES_REQUIRED           05
 #define FASTTX_SIGNATURES_TOTAL              10
 
@@ -65,6 +67,12 @@ static const unsigned int DEFAULT_MAX_ORPHAN_BLOCKS = 10000;
 static const int64_t MIN_TX_FEE = 0.0001*COIN;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
+/** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) NEW */
+static const int64_t MIN_TX_FEE_NEW = 0.00001*COIN;
+/** Fees smaller than this (in satoshi) are considered zero fee (for relaying) NEW */
+static const int64_t MIN_RELAY_TX_FEE_NEW = MIN_TX_FEE_NEW;
+static const unsigned int TX_FEE_SWITCH_TIME = 1526169600; // 13-Mai-18 00:00:00 UTC
+
 /** Minimum TX count (for relaying) */
 static const int64_t MIN_TX_COUNT = 0;
 /** Minimum TX value (for relaying) */
