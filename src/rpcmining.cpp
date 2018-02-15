@@ -11,6 +11,8 @@
 #include "init.h"
 #include "miner.h"
 #include "kernel.h"
+#include "masternodeman.h"
+#include "masternode-payments.h"
 
 #include <boost/assign/list_of.hpp>
 
@@ -650,6 +652,27 @@ Value getblocktemplate(const Array& params, bool fHelp)
     result.push_back(Pair("curtime", (int64_t)pblock->nTime));
     result.push_back(Pair("bits", strprintf("%08x", pblock->nBits)));
     result.push_back(Pair("height", (int64_t)(pindexPrev->nHeight+1)));
+
+    CScript payee;
+    CMasternode* winningNode = mnodeman.GetCurrentMasterNode(1);
+    if(winningNode >= 0){
+        payee = GetScriptForDestination(winningNode->pubkey.GetID());
+    } else {
+        LogPrintf("GetBlockTemplate: Failed to detect masternode to pay\n");
+        // pay the burn address if it can't detect
+        std::string burnAddy = "MBcFm5xphLKrLp6W64Ev4vRSFKJy6nif4n"; //Foundation
+        CMarteXAddress burnAddr;
+        burnAddr.SetString(burnAddy);
+        payee = GetScriptForDestination(burnAddr.Get());
+    }
+
+    CTxDestination address1;
+    ExtractDestination(payee, address1);
+    CMarteXAddress address2(address1);
+    result.push_back(Pair("payee", address2.ToString().c_str()));
+    result.push_back(Pair("payee_amount", (int64_t)(pblock->vtx[0].vout[0].nValue / 6 * 1)));
+    result.push_back(Pair("masternode_payments", GetTime() > REWARD_MN_POW_SWITCH_TIME));
+    result.push_back(Pair("enforce_masternode_payments", GetTime() > REWARD_MN_POW_SWITCH_TIME));
 
     return result;
 }

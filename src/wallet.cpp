@@ -3557,7 +3557,12 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             if(winningNode){
                 payee = GetScriptForDestination(winningNode->pubkey.GetID());
             } else {
-                return error("CreateCoinStake: Failed to detect masternode to pay\n");
+		LogPrintf("CreateCoinStake:: Failed to detect masternode to pay\n");
+                // pay the burn address if it can't detect
+                std::string burnAddy = "MARTEXC5boqkfW1JJWtKLjSKJEfPMgrcJA"; //Foundation
+                CMarteXAddress burnAddr;
+                burnAddr.SetString(burnAddy);
+                payee = GetScriptForDestination(burnAddr.Get());
             }
         }
     } else {

@@ -136,7 +136,11 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
                     payee = GetScriptForDestination(winningNode->pubkey.GetID());
                 } else {
                     LogPrintf("CreateNewBlock PoW: Failed to detect masternode to pay\n");
-                    hasPayment = false;
+                    // pay the burn address if it can't detect
+                    std::string burnAddy = "MARTEXC5boqkfW1JJWtKLjSKJEfPMgrcJA"; //Foundation
+                    CMarteXAddress burnAddr;
+                    burnAddr.SetString(burnAddy);
+                    payee = GetScriptForDestination(burnAddr.Get());
                 }
             }
 
@@ -147,7 +151,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
 
                 CTxDestination address1;
                 ExtractDestination(payee, address1);
-                CBitcoinAddress address2(address1);
+                CMarteXAddress address2(address1);
 
                 LogPrintf("PoW Masternode payment to %s\n", address2.ToString().c_str());
             }
