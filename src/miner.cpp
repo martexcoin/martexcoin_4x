@@ -378,13 +378,13 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
                 }
             }
         }
-		if (GetTime() > REWARD_MN_POW_SWITCH_TIME){
-		int64_t nblockValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
-		int64_t nmasternodePayment = (nblockValue - nFees) / 6 * 1;
+	if (GetTime() > REWARD_MN_POW_SWITCH_TIME){
+	int64_t nblockValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
+	int64_t nmasternodePayment = (nblockValue - nFees) / 6 * 1;
 
 	        // > MXT <
 	        if (!fProofOfStake){
-	            CAmount blockValue = nblockValue - nmasternodePayment;
+	            CAmount blockValue = nblockValue;
 	            CAmount masternodePayment = nmasternodePayment;
 
 	            txNew.vout[1].nValue = masternodePayment;

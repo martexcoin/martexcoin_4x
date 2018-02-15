@@ -3,6 +3,10 @@ MarteX [MXT] integration/staging tree
 
 
 ### Change log
+2.7.1.0
+- fix reward pow masternode
+- fix reward pow masternode, version
+
 2.7.0.0
 - Implemented soft lock for preventing masternode funds to be used in transactions (-masternodesoftlock)
 - Implement CHECKLOCKTIMEVERIFY/CHECKSEQUENCEVERIFY
