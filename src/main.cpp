@@ -1488,8 +1488,9 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
 {
     int64_t nSubsidy = nBlockPoWReward;
 
-    if(GetTime() > REWARD_MN_POW_SWITCH_TIME)
+    if(GetTime() > REWARD_MN_POW_SWITCH_TIME) {
       nSubsidy = nBlockPoWReward_NEW;
+    }
 
     if (nHeight > nReservePhaseStart && nHeight < nReservePhaseEnd) {
       nSubsidy = nBlockRewardReserve;
@@ -1500,14 +1501,15 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
       nSubsidy = nSwapFaseReward;
     }
 
-    if(randreward() <= 5000 && nHeight > 10080 && !TestNet()) // 5% Chance of superblock
+    if(randreward() <= 5000 && nHeight > 10080 && !TestNet()) { // 5% Chance of superblock
         nSubsidy = nSuperPoWReward;
+    }
 
-    if(randreward() <= 5000 && nHeight > 10080 && !TestNet() && (GetTime() > REWARD_MN_POW_SWITCH_TIME)) // 5% Chance of superblock NEW
+    if(randreward() <= 5000 && nHeight > 10080 && !TestNet() && (GetTime() > REWARD_MN_POW_SWITCH_TIME)) { // 5% Chance of superblock NEW
         nSubsidy = nSuperPoWReward_NEW;
+    }
 
-    else if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
-    {
+    else if(pindexBest->nMoneySupply > MAX_SINGLE_TX) {
         LogPrint("MINEOUT", "GetProofOfWorkReward(): create=%s nFees=%d\n", FormatMoney(nFees), nFees);
         return nFees;
     }
