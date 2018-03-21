@@ -146,7 +146,13 @@ Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool fPri
             entry.push_back(Pair("txid", tx.GetHash().GetHex()));
             TxToJSON(tx, 0, entry);
 
+            CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
+            ssTx << tx;
+            string strHex = HexStr(ssTx.begin(), ssTx.end());
+            entry.push_back(Pair("hex", strHex));
+
             txinfo.push_back(entry);
+
         }
         else
             txinfo.push_back(tx.GetHash().GetHex());
