@@ -1,6 +1,7 @@
 MarteX [MXT] integration/staging tree
 =====================================
 
+![MarteXcoin](https://raw.githubusercontent.com/martexcoin/martexcoin/master/src/qt/res/images/splash.png)
 
 ### Change log
 2.7.1.0
@@ -27,7 +28,16 @@ MarteX [MXT] integration/staging tree
 - Rehabilitate velocity from block 22500
 - Fix rpc masternode status
 
-Official Site http://www.martexcoin.org
+Bootstrap
+---------
+- https://martexcoin.org/releases/bootstrap.zip
+
+Blockchain
+---------
+- https://martexcoin.org/releases/blockchain-latest.zip (updated daily)
+
+
+Official Site https://www.martexcoin.org
 
 What is the MarteX [MXT] Blockchain?
 ---------------------------
