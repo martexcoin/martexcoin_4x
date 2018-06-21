@@ -3531,11 +3531,12 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
         nCredit += nReward;
     }
-
+	
     // Masternode Payments
     int payments = 1;
+    
     // start masternode payments
-    bool bMasterNodePayment = false; // note was false, set true to test
+    bool bMasterNodePayment = false;
 
     if ( Params().NetworkID() == CChainParams::TESTNET ){
         if (GetTime() > START_MASTERNODE_PAYMENTS_TESTNET ){
@@ -3547,7 +3548,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         }
     }
 
-    CScript payee;
+    CScript payee,payeeF;
     CTxIn vin;
     bool hasPayment = true;
     if(bMasterNodePayment) {
@@ -3557,12 +3558,21 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             if(winningNode){
                 payee = GetScriptForDestination(winningNode->pubkey.GetID());
             } else {
-		LogPrintf("CreateCoinStake:: Failed to detect masternode to pay\n");
-                // pay the burn address if it can't detect
-                std::string burnAddy = "MARTEXC5boqkfW1JJWtKLjSKJEfPMgrcJA"; //Foundation
-                CMarteXAddress burnAddr;
-                burnAddr.SetString(burnAddy);
-                payee = GetScriptForDestination(burnAddr.Get());
+				LogPrintf("CreateCoinStake:: Failed to detect masternode to pay\n");
+				// pay the dev address if it can't detect
+				std::vector<unsigned char> vchPubKey = ParseHex((!TestNet() ? mMVCDEV : tMVCDEV));
+				CPubKey pubKey(vchPubKey);
+
+				bool isValid = pubKey.IsValid();
+				bool isCompressed = pubKey.IsCompressed();
+				CKeyID keyID = pubKey.GetID();
+
+				CMarteXAddress address;
+				address.Set(keyID);
+				payee = GetScriptForDestination(address.Get());
+				LogPrintf("CreateNewBlock PoW DEV\n");	
+
+				//hasPayment = false;
             }
         }
     } else {
@@ -3570,6 +3580,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     }
 
     if(hasPayment){
+
         payments = txNew.vout.size() + 1;
         txNew.vout.resize(payments);
 
@@ -3583,29 +3594,101 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         LogPrintf("Masternode payment to %s\n", address2.ToString().c_str());
     }
 
+	// Foundation Payments
+	int paymentsF = 1;	
+	// start foundation payments
+	bool bFoundationPayment = false;
+	
+	if ( Params().NetworkID() == CChainParams::TESTNET ){
+		if (GetTime() > START_FOUNDATION_PAYMENTS_TESTNET ){
+			bFoundationPayment = true;
+		}
+	}else{
+		if (GetTime() > START_FOUNDATION_PAYMENTS){
+			bFoundationPayment = true;
+		}
+	}	
+	bool hasfoundationPay = true;
+	if(bFoundationPayment) {
+		// define address
+		CMarteXAddress foundationaddress;
+		foundationaddress = CMarteXAddress(!TestNet() ? FOUNDATION_M : FOUNDATION_T);
+		payeeF = GetScriptForDestination(foundationaddress.Get());
+	}else{ 
+		hasfoundationPay = false;
+	}
+		
+	if(hasfoundationPay){
+		paymentsF = txNew.vout.size() + 1;		
+		txNew.vout.resize(paymentsF);
+		txNew.vout[paymentsF-1].scriptPubKey = payeeF;
+		txNew.vout[paymentsF-1].nValue = 0;
+		CTxDestination address0;
+		ExtractDestination(payeeF, address0);
+		CMarteXAddress address3(address0);
+		LogPrintf("Foundation payment to %s\n", address3.ToString().c_str());
+	}	
+	
     int64_t blockValue = nCredit;
     int64_t masternodePayment = GetMasternodePayment(pindexPrev->nHeight+1, nReward);
+	int64_t foundationPayment = GetFoundationPayment(pindexPrev->nHeight+1, nReward);
 
-    // Set output amount
-    if (!hasPayment && txNew.vout.size() == 3) // 2 stake outputs, stake was split, no masternode payment
+    // Set output amount    
+    if (!hasPayment && !hasfoundationPay)
     {
-        txNew.vout[1].nValue = (blockValue / 2 / CENT) * CENT;
-        txNew.vout[2].nValue = blockValue - txNew.vout[1].nValue;
+        if(txNew.vout.size() == 3){ // 2 stake outputs, stake was split, no masternode payment
+            txNew.vout[1].nValue = (blockValue / 2 / CENT) * CENT;
+            txNew.vout[2].nValue = blockValue - txNew.vout[1].nValue;
+        }
+        else if(txNew.vout.size() == 2){ // only 1 stake output, was not split, no masternode payment
+            txNew.vout[1].nValue = blockValue;
+        }
     }
-    else if(hasPayment && txNew.vout.size() == 4) // 2 stake outputs, stake was split, plus a masternode payment
+    else if(hasPayment && !hasfoundationPay)
     {
-        txNew.vout[payments-1].nValue = masternodePayment;
-        blockValue -= masternodePayment;
-        txNew.vout[1].nValue = (blockValue / 2 / CENT) * CENT;
-        txNew.vout[2].nValue = blockValue - txNew.vout[1].nValue;
+        if(txNew.vout.size() == 4){ // 2 stake outputs, stake was split, plus a masternode payment
+            txNew.vout[payments-1].nValue = masternodePayment;
+            blockValue -= masternodePayment;
+            txNew.vout[1].nValue = (blockValue / 2 / CENT) * CENT;
+            txNew.vout[2].nValue = blockValue - txNew.vout[1].nValue;
+        }
+        else if(txNew.vout.size() == 3){ // only 1 stake output, was not split, plus a masternode payment
+            txNew.vout[payments-1].nValue = masternodePayment;
+            blockValue -= masternodePayment;
+            txNew.vout[1].nValue = blockValue;
+        }
     }
-    else if(!hasPayment && txNew.vout.size() == 2) // only 1 stake output, was not split, no masternode payment
-        txNew.vout[1].nValue = blockValue;
-    else if(hasPayment && txNew.vout.size() == 3) // only 1 stake output, was not split, plus a masternode payment
+    else if(!hasPayment && hasfoundationPay)
     {
-        txNew.vout[payments-1].nValue = masternodePayment;
-        blockValue -= masternodePayment;
-        txNew.vout[1].nValue = blockValue;
+        if(txNew.vout.size() == 4){ // 2 stake outputs, stake was split, plus a foundation payment
+            txNew.vout[paymentsF-1].nValue = foundationPayment;
+            blockValue -= foundationPayment;
+            txNew.vout[1].nValue = (blockValue / 2 / CENT) * CENT;
+            txNew.vout[2].nValue = blockValue - txNew.vout[1].nValue;
+        }
+        else if(txNew.vout.size() == 3){ // only 1 stake output, was not split, plus a foundation payment
+            txNew.vout[paymentsF-1].nValue = foundationPayment;
+            blockValue -= foundationPayment;
+            txNew.vout[1].nValue = blockValue;
+        }
+    }
+    else if(hasPayment && hasfoundationPay)
+    {
+        if(txNew.vout.size() == 5){ // 2 stake outputs, stake was split, plus a foundation AND masternode payment
+            txNew.vout[payments-1].nValue = masternodePayment;
+            blockValue -= masternodePayment;
+            txNew.vout[paymentsF-1].nValue = foundationPayment;
+            blockValue -= foundationPayment;
+            txNew.vout[1].nValue = (blockValue / 2 / CENT) * CENT;
+            txNew.vout[2].nValue = blockValue - txNew.vout[1].nValue;
+        }
+        else if(txNew.vout.size() == 4){ // only 1 stake output, was not split, plus a foundation AND masternode payment
+            txNew.vout[payments-1].nValue = masternodePayment;
+            blockValue -= masternodePayment;
+            txNew.vout[paymentsF-1].nValue = foundationPayment;
+            blockValue -= foundationPayment;
+            txNew.vout[1].nValue = blockValue;
+        }
     }
 
     // Sign
@@ -4330,6 +4413,16 @@ void CWallet::FixSpentCoins(int& nMismatchFound, int64_t& nBalanceInQuestion, bo
                     pcoin->WriteToDisk();
                 }
             }
+			
+        }
+
+        if(IsMine((CTransaction)*pcoin) && (pcoin->IsCoinBase() || pcoin->IsCoinStake()) && pcoin->GetDepthInMainChain() == 0)
+        {
+            LogPrintf("FixSpentCoins %s tx %s\n", fCheckOnly ? "found" : "removed", pcoin->GetHash().ToString().c_str());
+            if (!fCheckOnly)
+            {
+                EraseFromWallet(pcoin->GetHash());
+            }			
         }
      }
 }

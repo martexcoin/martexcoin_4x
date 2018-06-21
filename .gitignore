@@ -3,6 +3,11 @@ qrc_bitcoin.cpp
 .qmake.stash
 MarteX-qt
 Makefile
+Makefile.Debug
+Makefile.Release
+object_script.MarteX-qt.Debug
+object_script.MarteX-qt.Release
+release/*
 build/*.o
 build/*.cpp
 build/*.moc
@@ -23,3 +28,4 @@ src/leveldb/libleveldb.a
 src/leveldb/libmemenv.a
 src/qt/locale/*.qm
 src/clean.sh
+src/MarteXd.exe

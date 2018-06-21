@@ -19,6 +19,9 @@
 #define START_MASTERNODE_PAYMENTS_TESTNET 1495238400 // Sat, 20 May 2017 00:00:00 GMT
 #define START_MASTERNODE_PAYMENTS 1495238400         // Sat, 20 May 2017 00:00:00 GMT
 
+#define START_FOUNDATION_PAYMENTS_TESTNET 1526169600 // 13 May 2018 00:00:00 GMT
+#define START_FOUNDATION_PAYMENTS 1534291200         // 15 Ago 2018 00:00:00 GMT
+
 #define REWARD_MN_POW_SWITCH_TIME 1518652800 // 15-Fev-18 00:00:00 UTC
 
 #define FASTTX_SIGNATURES_REQUIRED           05
@@ -173,8 +176,10 @@ static const int64_t nBlockRewardReserve = 1369192.5 * COIN; //
 static const int64_t nBlockPoWReward = 0.05 * COIN;
 /** Superblock subsidy */
 static const int64_t nSuperPoWReward = 0.50 * COIN;
-/** NEW block subsidy */
+/** NEW block subsidy + masternode */
 static const int64_t nBlockPoWReward_NEW = 0.06 * COIN;
+/** NEW block subsidy + masternode + foundation */
+static const int64_t nBlockPoWReward_MMF = 0.066 * COIN;
 /** NEW Superblock subsidy */
 static const int64_t nSuperPoWReward_NEW = 0.60 * COIN;
 /** Swap fase subsidy */
@@ -193,6 +198,13 @@ static const uint256 hashTestNetGenesisBlock("0xbe10a5eb2ff7c7f2c958826bc773b057
 static const uint256 hashRegNetGenesisBlock("0xbe10a5eb2ff7c7f2c958826bc773b05748cf3c8c851744425e1af311ed36e502");
 /** Genesis Merkleroot */
 static const uint256 nGenesisMerkle("0x04035aa1d2a55488b3a8e4f84beb66e30a428140e88071ac83b7b333b0425e48");
+
+/** Foundation address */
+const std::string FOUNDATION_M = "MARTEXC5boqkfW1JJWtKLjSKJEfPMgrcJA";
+const std::string FOUNDATION_T = "mvcNScAif4qiBLKyaVZxXnN2C84dxowq6d";
+
+const std::string mMVCDEV = "04090B3ABA2B1FAFD0B07104E6FDDB83E8101C0F15019BE8F90AC179B43C9C05BA03D2F80D6BF14298CFB91E8D1A7D26B98D8EF14B502603235299356CAD2E4436";
+const std::string tMVCDEV = "04cff7ee668d09f694e8012299327f568acd5aa5075ef47133c4b6df318d558916989db7a012dc54b17a48ed63364fc18c09e2c878355e07a1745956649224a7ab";
 
 extern CScript COINBASE_FLAGS;
 extern CCriticalSection cs_main;
@@ -297,6 +309,7 @@ void Misbehaving(NodeId nodeid, int howmuch);
 
 
 int64_t GetMasternodePayment(int nHeight, int64_t blockValue);
+int64_t GetFoundationPayment(int nHeight, int64_t blockValue);
 
 struct CNodeStateStats {
     int nMisbehavior;

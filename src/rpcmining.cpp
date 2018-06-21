@@ -660,7 +660,7 @@ Value getblocktemplate(const Array& params, bool fHelp)
     } else {
         LogPrintf("GetBlockTemplate: Failed to detect masternode to pay\n");
         // pay the burn address if it can't detect
-        std::string burnAddy = "MBcFm5xphLKrLp6W64Ev4vRSFKJy6nif4n"; //Foundation
+        std::string burnAddy = (!TestNet() ? FOUNDATION_M : FOUNDATION_T);
         CMarteXAddress burnAddr;
         burnAddr.SetString(burnAddy);
         payee = GetScriptForDestination(burnAddr.Get());
@@ -670,7 +670,7 @@ Value getblocktemplate(const Array& params, bool fHelp)
     ExtractDestination(payee, address1);
     CMarteXAddress address2(address1);
     result.push_back(Pair("payee", address2.ToString().c_str()));
-    result.push_back(Pair("payee_amount", (int64_t)(pblock->vtx[0].vout[0].nValue / 6 * 1)));
+    result.push_back(Pair("payee_amount", (int64_t)(pblock->vtx[0].vout[1].nValue)));		
     result.push_back(Pair("masternode_payments", GetTime() > REWARD_MN_POW_SWITCH_TIME));
     result.push_back(Pair("enforce_masternode_payments", GetTime() > REWARD_MN_POW_SWITCH_TIME));
 

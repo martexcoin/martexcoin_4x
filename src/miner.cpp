@@ -124,8 +124,10 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
             return NULL;
         txNew.vout[0].scriptPubKey.SetDestination(pubkey.GetID());
         if (GetTime() > REWARD_MN_POW_SWITCH_TIME){
-            bool hasPayment = true;
-            CScript payee;
+            
+			// Set TX values
+			bool hasPayment = true;
+            CScript payee,payeeF;
             CTxIn vin;
 
             //spork
@@ -136,25 +138,72 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
                     payee = GetScriptForDestination(winningNode->pubkey.GetID());
                 } else {
                     LogPrintf("CreateNewBlock PoW: Failed to detect masternode to pay\n");
-                    // pay the burn address if it can't detect
-                    std::string burnAddy = "MARTEXC5boqkfW1JJWtKLjSKJEfPMgrcJA"; //Foundation
-                    CMarteXAddress burnAddr;
-                    burnAddr.SetString(burnAddy);
-                    payee = GetScriptForDestination(burnAddr.Get());
+                    // pay the dev address if it can't detect					
+					std::vector<unsigned char> vchPubKey = ParseHex((!TestNet() ? mMVCDEV : tMVCDEV));
+					CPubKey pubKey(vchPubKey);
+
+					bool isValid = pubKey.IsValid();
+					bool isCompressed = pubKey.IsCompressed();
+					CKeyID keyID = pubKey.GetID();
+
+					CMarteXAddress address;
+					address.Set(keyID);
+					payee = GetScriptForDestination(address.Get());
+					LogPrintf("CreateNewBlock PoW DEV\n");					
                 }
             }
-
+			
             if(hasPayment)
-            {
-                txNew.vout.resize(2);
-                txNew.vout[1].scriptPubKey = payee;
-
+            {				
+				txNew.vout.resize(2);
+  				txNew.vout[1].scriptPubKey = payee;
+				
                 CTxDestination address1;
                 ExtractDestination(payee, address1);
                 CMarteXAddress address2(address1);
 
                 LogPrintf("PoW Masternode payment to %s\n", address2.ToString().c_str());
             }
+			
+			// Foundation Payments
+			int paymentsF = 1;	
+			// start foundation payments
+			bool bFoundationPayment = false;
+			
+			if ( Params().NetworkID() == CChainParams::TESTNET ){
+				if (GetTime() > START_FOUNDATION_PAYMENTS_TESTNET ){
+					bFoundationPayment = true;
+				}
+			}else{
+				if (GetTime() > START_FOUNDATION_PAYMENTS){
+					bFoundationPayment = true;
+				}
+			}	
+
+			bool hasfoundationPay = true;
+			if(bFoundationPayment) {
+				// define address
+				CMarteXAddress foundationaddress;
+				foundationaddress = CMarteXAddress(!TestNet() ? FOUNDATION_M : FOUNDATION_T);
+				payeeF = GetScriptForDestination(foundationaddress.Get());
+			}else{ 
+				hasfoundationPay = false;
+			}
+			
+			if(hasfoundationPay){
+				paymentsF = txNew.vout.size() + 1;
+				txNew.vout.resize(paymentsF);
+
+				txNew.vout[paymentsF-1].scriptPubKey = payeeF;
+				txNew.vout[paymentsF-1].nValue = 0;
+
+				CTxDestination address0;
+				ExtractDestination(payeeF, address0);
+				CMarteXAddress address3(address0);
+
+				LogPrintf("Foundation payment to %s\n", address3.ToString().c_str());
+			}			
+			
         }
     }
     else
@@ -378,13 +427,26 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
                 }
             }
         }
-	if (GetTime() > REWARD_MN_POW_SWITCH_TIME){
-	int64_t nblockValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
-	int64_t nmasternodePayment = (nblockValue - nFees) / 6 * 1;
+
+		bool bfoundationPay = false;
+		if ( Params().NetworkID() == CChainParams::TESTNET ){
+			if (GetTime() > START_FOUNDATION_PAYMENTS_TESTNET ){
+				bfoundationPay = true;
+			}
+		}else{
+			if (GetTime() > START_FOUNDATION_PAYMENTS){
+				bfoundationPay = true;
+			}
+		}	
+		
+		if (GetTime() > REWARD_MN_POW_SWITCH_TIME){
+			int64_t nblockValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
+			int64_t nmasternodePayment = 0.01 * COIN; // 1/6 of block 0.06 MXT
+			int64_t nfoundationPayment = 0.006 * COIN;	//10% of block 0.06 MXT
 
 	        // > MXT <
-	        if (!fProofOfStake){
-	            CAmount blockValue = nblockValue;
+	        if (!fProofOfStake && !bfoundationPay){  //miner + masternode 
+	            CAmount blockValue = nblockValue - nmasternodePayment;
 	            CAmount masternodePayment = nmasternodePayment;
 
 	            txNew.vout[1].nValue = masternodePayment;
@@ -392,6 +454,20 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
 
 	            pblock->vtx[0].vout[0].nValue = blockValue;
 	            pblock->vtx[0].vout[1].nValue = masternodePayment;
+				
+	        }
+			else if (!fProofOfStake && bfoundationPay){  //miner + masternode + foundation
+				CAmount blockValue = nblockValue - nmasternodePayment - nfoundationPayment;
+				CAmount masternodePayment = nmasternodePayment;
+				CAmount foundationPayment = nfoundationPayment;
+				
+				txNew.vout[0].nValue = blockValue;
+				txNew.vout[1].nValue = masternodePayment;
+				txNew.vout[2].nValue = foundationPayment;				
+
+				pblock->vtx[0].vout[0].nValue = blockValue;
+				pblock->vtx[0].vout[1].nValue = masternodePayment;
+				pblock->vtx[0].vout[2].nValue = foundationPayment;
 	        }
         }
         nLastBlockTx = nBlockTx;
@@ -485,6 +561,7 @@ void FormatHashBuffers(CBlock* pblock, char* pmidstate, char* pdata, char* phash
 
 bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 {
+	uint256 nFoundationPayment = ( !TestNet() ? START_FOUNDATION_PAYMENTS : START_FOUNDATION_PAYMENTS_TESTNET);
     uint256 hashBlock = pblock->GetHash();
     uint256 hashProof = pblock->GetPoWHash();
     uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
@@ -500,8 +577,10 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     LogPrintf("%s\n", pblock->ToString());
     if(GetTime() <= REWARD_MN_POW_SWITCH_TIME)
     	LogPrintf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue));
-    else if(GetTime() > REWARD_MN_POW_SWITCH_TIME)
-	LogPrintf("generated: %s - Miner: %s - MasterNode: %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue + pblock->vtx[0].vout[1].nValue), FormatMoney(pblock->vtx[0].vout[0].nValue), FormatMoney(pblock->vtx[0].vout[1].nValue));
+	else if(GetTime() > REWARD_MN_POW_SWITCH_TIME && GetTime() < nFoundationPayment)
+		LogPrintf("generated: %s - Miner: %s - MasterNode: %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue + pblock->vtx[0].vout[1].nValue), FormatMoney(pblock->vtx[0].vout[0].nValue), FormatMoney(pblock->vtx[0].vout[1].nValue));
+	else if(GetTime() > REWARD_MN_POW_SWITCH_TIME && GetTime() >= nFoundationPayment)
+		LogPrintf("generated: %s - Miner: %s - MasterNode: %s - Foundation: %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue + pblock->vtx[0].vout[1].nValue), FormatMoney(pblock->vtx[0].vout[0].nValue), FormatMoney(pblock->vtx[0].vout[1].nValue), FormatMoney(pblock->vtx[0].vout[2].nValue));
 
     // Found a solution
     {

@@ -35,7 +35,7 @@ static const int PROTOCOL_VERSION = 62018;
 static const int INIT_PROTO_VERSION = 209;
 
 // disconnect from peers older than this proto version
-static const int MIN_PEER_PROTO_VERSION = 62017;
+static const int MIN_PEER_PROTO_VERSION = 62018;
 
 // minimum peer version accepted by AnonSendPool
 static const int MIN_POOL_PEER_PROTO_VERSION = 62005;

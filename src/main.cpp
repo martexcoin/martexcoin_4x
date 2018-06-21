@@ -81,6 +81,8 @@ static const int64_t nTargetTimespan_legacy = nTargetSpacing * nRetarget; // eve
 static const int64_t nInterval = nTargetTimespan_legacy / nTargetSpacing;
 static const int64_t nTargetTimespan = 30 * 60;
 
+static const int64_t nlowGravity = 198500; // Correct low gravity issue with DGW implementation.
+
 static const unsigned int CHECKLOCKTIMEVERIFY_SWITCH_TIME = 1512604800; // 07-Dez-17 00:00:00 UTC
 
 // Constant stuff for coinbase transactions we create:
@@ -1489,9 +1491,15 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
     int64_t nSubsidy = nBlockPoWReward;
 
     if(GetTime() > REWARD_MN_POW_SWITCH_TIME) {
-      nSubsidy = nBlockPoWReward_NEW;
+			nSubsidy = nBlockPoWReward_NEW;
     }
 
+	if (GetTime() > START_FOUNDATION_PAYMENTS_TESTNET && TestNet()){
+			nSubsidy = nBlockPoWReward_MMF;		
+	}else if (GetTime() > START_FOUNDATION_PAYMENTS && !TestNet()){
+			nSubsidy = nBlockPoWReward_MMF;
+	}	
+	
     if (nHeight > nReservePhaseStart && nHeight < nReservePhaseEnd) {
       nSubsidy = nBlockRewardReserve;
     }
@@ -1722,87 +1730,77 @@ static unsigned int GetNextTargetRequired_new(const CBlockIndex* pindexLast, boo
     return bnNew.GetCompact();
 }
 
-/*
-static unsigned int GetNextTargetRequired_DS(const CBlockIndex* pindexLast, bool fProofOfStake)
+
+unsigned int DarkGravityWave(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
-	CBigNum bnTargetLimit = fProofOfStake ? Params().ProofOfStakeLimit() : Params().ProofOfWorkLimit();
-	int nHeight = pindexLast->nHeight + 1;
-	int64_t retargetTimespan = nTargetTimespan;
-	int64_t retargetSpacing = nTargetSpacing;
-    	int64_t retargetInterval = nInterval;
+        const CBigNum nProofOfWorkLimit = fProofOfStake ? Params().ProofOfStakeLimit() : Params().ProofOfWorkLimit();
+        const CBlockIndex *BlockLastSolved = pindexLast;
+        const CBlockIndex *BlockLastSolved_lgf = GetLastBlockIndex(pindexLast, fProofOfStake);
+        const CBlockIndex *BlockReading = pindexLast;
+        // Low Gravity fix (PoW support)
+        if(pindexBest->nHeight > nlowGravity)
+        {
+            BlockReading = BlockLastSolved_lgf;
+        }
+        int64_t nActualTimespan = 0;
+        int64_t LastBlockTime = 0;
+        int64_t PastBlocksMin = 7;
+        int64_t PastBlocksMax = 24;
+        int64_t CountBlocks = 0;
+        CBigNum PastDifficultyAverage;
+        CBigNum PastDifficultyAveragePrev;
 
-	// Genesis block
-	if (pindexLast == NULL)
-		return bnTargetLimit;
+        if (BlockLastSolved == NULL || BlockLastSolved->nHeight == 0 || BlockLastSolved->nHeight < PastBlocksMax) {
+            return nProofOfWorkLimit.GetCompact();
+        }
 
-	// Only change once per interval
-	if ((pindexLast->nHeight+1) % retargetInterval != 0)
-	{
-		return pindexLast->nBits;
-    	}
+        for (unsigned int i = 1; BlockReading && BlockReading->nHeight > 0; i++) {
+            if (PastBlocksMax > 0 && i > PastBlocksMax) { break; }
+            CountBlocks++;
 
-	// Only change once per interval
-	if ((pindexLast->nHeight+1) % retargetInterval != 0)
-	{
-		// Special difficulty rule for testnet:
-		if (fTestNet)
-		{
-			// If the new block's timestamp is more than 2* nTargetSpacing minutes
-			// then allow mining of a min-difficulty block.
-			if (pblock->nTime > pindexLast->nTime + retargetSpacing*3)
-				return bnTargetLimit;
-			else
-			{
-				// Return the last non-special-min-difficulty-rules-block
-				const CBlockIndex* pindex = pindexLast;
-				while (pindex->pprev && pindex->nHeight % retargetInterval != 0 && pindex->nBits == bnTargetLimit)
-				pindex = pindex->pprev;
-				return pindex->nBits;
-			}
-		}
-		return pindexLast->nBits;
-	}
+            if(CountBlocks <= PastBlocksMin) {
+                if (CountBlocks == 1) { PastDifficultyAverage.SetCompact(BlockReading->nBits); }
+                else { PastDifficultyAverage = ((PastDifficultyAveragePrev * CountBlocks) + (CBigNum().SetCompact(BlockReading->nBits))) / (CountBlocks + 1); }
+                PastDifficultyAveragePrev = PastDifficultyAverage;
+            }
 
-	// This fixes an issue where a 51% attack can change difficulty at will.
-    	// Go back the full period unless it's the first retarget after genesis. Code courtesy of Art Forz
-    	int blockstogoback = retargetInterval-1;
-    	if ((pindexLast->nHeight+1) != retargetInterval)
-		blockstogoback = retargetInterval;
+            if(LastBlockTime > 0){
+                int64_t Diff = (LastBlockTime - BlockReading->GetBlockTime());
+                nActualTimespan += Diff;
+            }
+            LastBlockTime = BlockReading->GetBlockTime();
+            // Low Gravity chain support (Pre-fix)
+            if(pindexBest->nHeight <= nlowGravity)
+            {
+                if (BlockReading->pprev == NULL) { assert(BlockReading); break; }
+                    BlockReading = BlockReading->pprev;
+            }
+            // Low Gravity fix (PoW support)
+            else if(pindexBest->nHeight > nlowGravity)
+            {
+                BlockReading = GetLastBlockIndex(BlockReading->pprev, fProofOfStake);
+            }
+        }
 
-    	// Go back by what we want to be 14 days worth of blocks
-    	const CBlockIndex* pindexFirst = pindexLast;
-    	for (int i = 0; pindexFirst && i < blockstogoback; i++)
-        	pindexFirst = pindexFirst->pprev;
-    	assert(pindexFirst);
+        CBigNum bnNew(PastDifficultyAverage);
 
-    	// Limit adjustment step
-    	int64_t nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
+        int64_t _nTargetTimespan = CountBlocks * nTargetSpacing;
 
-    	CBigNum bnNew;
-    	bnNew.SetCompact(pindexLast->nBits);
+        if (nActualTimespan < _nTargetTimespan/3)
+            nActualTimespan = _nTargetTimespan/3;
+        if (nActualTimespan > _nTargetTimespan*3)
+            nActualTimespan = _nTargetTimespan*3;
 
-	LogPrintf("DIGISHIELD RETARGET\n");
+        // Retarget
+        bnNew *= nActualTimespan;
+        bnNew /= _nTargetTimespan;
 
-	if (nActualTimespan < (retargetTimespan - (retargetTimespan/4)) )
-		nActualTimespan = (retargetTimespan - (retargetTimespan/4));
-	if (nActualTimespan > (retargetTimespan + (retargetTimespan/2)) )
-		nActualTimespan = (retargetTimespan + (retargetTimespan/2));
+        if (bnNew > nProofOfWorkLimit){
+            bnNew = nProofOfWorkLimit;
+        }
 
-	// Retarget
-	bnNew *= nActualTimespan;
-	bnNew /= retargetTimespan;
-
-	LogPrintf("GetNextWorkRequired RETARGET \n");
-	LogPrintf("retargetTimespan = %"PRI64d" nActualTimespan = %"PRI64d"\n", retargetTimespan, nActualTimespan);
-	LogPrintf("Before: %08x %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
-	LogPrintf("After: %08x %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
-
-	if (bnNew > bnTargetLimit)
-        	bnNew = bnTargetLimit;
-
-	return bnNew.GetCompact();
+        return bnNew.GetCompact();
 }
-*/
 
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
@@ -1811,10 +1809,11 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
         change = 20;
     else
         change = 22500;
+	
     if(pindexLast->nHeight + 1 > change)
-	//if (TestNet() && pindexLast->nHeight + 1 > 137310)
-	//	return GetNextTargetRequired_DS(pindexLast, fProofOfStake);
-	//else
+		if (TestNet() && pindexLast->nHeight + 1 > 198500)
+			return DarkGravityWave(pindexLast, fProofOfStake);
+		else
 	        return GetNextTargetRequired_new(pindexLast, fProofOfStake);
     else
         return GetNextTargetRequired_legacy(pindexLast, fProofOfStake);
@@ -5031,18 +5030,23 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue)
     int64_t ret = blockValue * 1/6; // 1/6th
 
     // Correct MN payout to reflect posted rates
-    if(nHeight > MN_FIX_TOGGLE && nHeight <= 10080)
-    {
+    if(nHeight > MN_FIX_TOGGLE && nHeight <= 10080) {
         ret = blockValue * 5/6; // 5/6th
         if(randreward() <= 5000) // 5% Chance of superblock
             ret = blockValue * 4/6; // 4/6th
     }
-    else if(nHeight > 10080)
-    {
+    else if(nHeight > 10080){
         ret = blockValue * 0.50; // 50%
         if(randreward() <= 5000) // 5% Chance of superblock correct
             ret = blockValue * 0.55; // 55%
     }
 
+    return ret;
+}
+
+// Define foundation payment value
+int64_t GetFoundationPayment(int nHeight, int64_t blockValue)
+{
+    int64_t ret = blockValue * 0.10; //10%
     return ret;
 }

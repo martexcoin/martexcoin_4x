@@ -4,6 +4,17 @@ MarteX [MXT] integration/staging tree
 ![MarteXcoin](https://raw.githubusercontent.com/martexcoin/martexcoin/master/src/qt/res/images/splash.png)
 
 ### Change log
+2.7.2.0
+- Foundation rewards after unixtimestamp 1534291200(15 Ago 2018 00:00:00 GMT)
+- Remove reference CBitcoinAddress
+- Fix compile error: /usr/bin/ld: cannot find -lz on debian 8 or 9
+- Fix ports
+- Add raw transaction hex to gettransaction wallet RPC call and return Object blockToJSON
+- Fix compile error on debian 8 or 9 in libssl-dev
+- Fix macOS 10.12 build warning
+- Retarget using DarkGravityWave v3 (testnet)
+- RPC: repairwallet removes orphan related records from the wallet
+
 2.7.1.0
 - fix reward pow masternode
 - fix reward pow masternode, version

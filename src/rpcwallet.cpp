@@ -2623,7 +2623,7 @@ Value cclistcoins(const Array& params, bool fHelp)
 
                 CTxDestination outputAddress;
                 ExtractDestination(out.tx->vout[out.i].scriptPubKey, outputAddress);
-                coutput.push_back(Pair("Address", CBitcoinAddress(outputAddress).ToString()));
+                coutput.push_back(Pair("Address", CMarteXAddress(outputAddress).ToString()));
                 coutput.push_back(Pair("Output Hash", out.tx->GetHash().ToString()));
                 coutput.push_back(Pair("blockIndex", out.i));
                 double dAmount = double(out.tx->vout[out.i].nValue) / double(COIN);
