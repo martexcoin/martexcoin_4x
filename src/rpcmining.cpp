@@ -541,8 +541,8 @@ Value getblocktemplate(const Array& params, bool fHelp)
     if (vNodes.empty())
         throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "MarteX is not connected!");
 
-    //if (IsInitialBlockDownload())
-    //    throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "MarteX is downloading blocks...");
+    if (IsInitialBlockDownload())
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "MarteX is downloading blocks...");
 
     if (pindexBest->nHeight >= Params().EndPoWBlock())
         throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
@@ -642,7 +642,7 @@ Value getblocktemplate(const Array& params, bool fHelp)
     result.push_back(Pair("previousblockhash", pblock->hashPrevBlock.GetHex()));
     result.push_back(Pair("transactions", transactions));
     result.push_back(Pair("coinbaseaux", aux));
-    result.push_back(Pair("coinbasevalue", (int64_t)pblock->vtx[0].vout[0].nValue));
+    result.push_back(Pair("coinbasevalue", (int64_t)pblock->vtx[0].GetValueOut()));
     result.push_back(Pair("target", hashTarget.GetHex()));
     result.push_back(Pair("mintime", (int64_t)pindexPrev->GetPastTimeLimit()+1));
     result.push_back(Pair("mutable", aMutable));
@@ -659,11 +659,18 @@ Value getblocktemplate(const Array& params, bool fHelp)
         payee = GetScriptForDestination(winningNode->pubkey.GetID());
     } else {
         LogPrintf("GetBlockTemplate: Failed to detect masternode to pay\n");
-        // pay the burn address if it can't detect
-        std::string burnAddy = (!TestNet() ? FOUNDATION_M : FOUNDATION_T);
-        CMarteXAddress burnAddr;
-        burnAddr.SetString(burnAddy);
-        payee = GetScriptForDestination(burnAddr.Get());
+        // pay the dev address if it can't detect					
+		std::vector<unsigned char> vchPubKey = ParseHex((!TestNet() ? mMVCDEV : tMVCDEV));
+		CPubKey pubKey(vchPubKey);
+
+		bool isValid = pubKey.IsValid();
+		bool isCompressed = pubKey.IsCompressed();
+		CKeyID keyID = pubKey.GetID();
+
+		CMarteXAddress address;
+		address.Set(keyID);
+		payee = GetScriptForDestination(address.Get());		
+		
     }
 
     CTxDestination address1;

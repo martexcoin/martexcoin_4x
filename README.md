@@ -4,6 +4,10 @@ MarteX [MXT] integration/staging tree
 ![MarteXcoin](https://raw.githubusercontent.com/martexcoin/martexcoin/master/src/qt/res/images/splash.png)
 
 ### Change log
+2.7.2.1
+- Wait for full synchronization to use getblocktemplate.
+- Corrected getblocktemplate coinbasevalue output
+
 2.7.2.0
 - Foundation rewards after unixtimestamp 1534291200(15 Ago 2018 00:00:00 GMT)
 - Remove reference CBitcoinAddress
