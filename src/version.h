@@ -38,14 +38,14 @@ static const int INIT_PROTO_VERSION = 209;
 static const int MIN_PEER_PROTO_VERSION = 62018;
 
 // minimum peer version accepted by AnonSendPool
-static const int MIN_POOL_PEER_PROTO_VERSION = 62005;
-static const int MIN_FASTTX_PROTO_VERSION = 62005;
+static const int MIN_POOL_PEER_PROTO_VERSION = 62018;
+static const int MIN_FASTTX_PROTO_VERSION = 62018;
 
 // minimum peer version that can receive masternode payments
 // V1 - Last protocol version before update
 // V2 - Newest protocol version
-static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_1 = 62005;
-static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_2 = 62005;
+static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_1 = 62018;
+static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_2 = 62018;
 
 // nTime field added to CAddress, starting with this version;
 // if possible, avoid requesting addresses nodes older than this
@@ -53,7 +53,7 @@ static const int CADDR_TIME_VERSION = 31402;
 
 // only request blocks from nodes outside this range of versions
 static const int NOBLKS_VERSION_START = 0;
-static const int NOBLKS_VERSION_END = 62004;
+static const int NOBLKS_VERSION_END = 62017;
 
 // BIP 0031, pong message, is enabled for all versions AFTER this one
 static const int BIP0031_VERSION = 60000;

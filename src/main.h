@@ -24,6 +24,9 @@
 
 #define REWARD_MN_POW_SWITCH_TIME 1518652800 // 15-Fev-18 00:00:00 UTC
 
+#define NEW_MATURITY_SWITCH_TIME_TESTNET 1537056000 // Sun, 16 Sep 2018 00:00:00 UTC
+#define NEW_MATURITY_SWITCH_TIME 1538352000 // Mon, 01 Oct 2018 00:00:00 UTC
+
 #define FASTTX_SIGNATURES_REQUIRED           05
 #define FASTTX_SIGNATURES_TOTAL              10
 
@@ -75,6 +78,10 @@ static const int64_t MIN_TX_FEE_NEW = 0.00001*COIN;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) NEW */
 static const int64_t MIN_RELAY_TX_FEE_NEW = MIN_TX_FEE_NEW;
 static const unsigned int TX_FEE_SWITCH_TIME = 1526169600; // 13-Mai-18 00:00:00 UTC
+
+/** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
+static const int nCoinbaseMaturity = 3; 
+static const int nCoinbaseMaturity_NEW = 150; 
 
 /** Minimum TX count (for relaying) */
 static const int64_t MIN_TX_COUNT = 0;
@@ -154,8 +161,6 @@ static const unsigned char REJECT_INVALID = 0x10;
 inline int64_t MasternodeCollateral(int nHeight) { return 5000; } // 5K MXT required as collateral
 /** Coinbase transaction outputs can only be staked after this number of new blocks (network rule) */
 static const int nStakeMinConfirmations = 15;
-/** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
-static const int nCoinbaseMaturity = 3; // 3-TXs | 5-Mined
 /** Minimum nCoinAge required to stake PoS */
 static const unsigned int nStakeMinAge = 2 / 60; // 30 minutes
 /** Time to elapse before new modifier is computed */

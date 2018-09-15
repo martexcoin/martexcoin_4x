@@ -1228,9 +1228,10 @@ int CMerkleTx::GetDepthInMainChain(CBlockIndex* &pindexRet, bool enableIX) const
 
 int CMerkleTx::GetBlocksToMaturity() const
 {
+	int nCbMaturity = (GetTime() <= (!TestNet() ? NEW_MATURITY_SWITCH_TIME : NEW_MATURITY_SWITCH_TIME_TESTNET) ? nCoinbaseMaturity : nCoinbaseMaturity_NEW);
     if (!(IsCoinBase() || IsCoinStake()))
         return 0;
-    return max(0, nCoinbaseMaturity+2 - GetDepthInMainChain());
+    return max(0, nCbMaturity+2 - GetDepthInMainChain());
 }
 
 
@@ -2054,7 +2055,8 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs, map<uint256, CTx
             if (txPrev.IsCoinBase() || txPrev.IsCoinStake())
             {
                 int nSpendDepth;
-                if (IsConfirmedInNPrevBlocks(txindex, pindexBlock, nCoinbaseMaturity, nSpendDepth))
+				int nCbMaturity = (GetTime() <= (!TestNet() ? NEW_MATURITY_SWITCH_TIME : NEW_MATURITY_SWITCH_TIME_TESTNET) ? nCoinbaseMaturity : nCoinbaseMaturity_NEW);
+                if (IsConfirmedInNPrevBlocks(txindex, pindexBlock, nCbMaturity, nSpendDepth))
                     return error("ConnectInputs() : tried to spend %s at depth %d", txPrev.IsCoinBase() ? "coinbase" : "coinstake", nSpendDepth);
             }
 
