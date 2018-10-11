@@ -1812,7 +1812,7 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
         change = 22500;
 	
     if(pindexLast->nHeight + 1 > change)
-		if (TestNet() && pindexLast->nHeight + 1 > 198500)
+		if (TestNet() && pindexLast->nHeight + 1 > nlowGravity)
 			return DarkGravityWave(pindexLast, fProofOfStake);
 		else
 	        return GetNextTargetRequired_new(pindexLast, fProofOfStake);
