@@ -1549,8 +1549,9 @@ int64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, int64_t nCoinAge, i
 		nSubsidy = 0.066 * COIN;
         if(randreward() <= 20500) // 20.5% Chance of superblock (Fixed)
             nSubsidy = 0.60 * COIN;
-	}	
-    else if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
+	}
+    
+	if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
     {
         LogPrint("MINEOUT", "GetProofOfStakeReward(): create=%s nFees=%d\n", FormatMoney(nFees), nFees);
         return nFees;

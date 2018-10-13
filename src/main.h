@@ -30,7 +30,7 @@
 #define FASTTX_SIGNATURES_REQUIRED           05
 #define FASTTX_SIGNATURES_TOTAL              10
 
-#define REWARD_POS_SWITCH_BLOCK = 283350; 
+#define REWARD_POS_SWITCH_BLOCK 283350
 
 // Define difficulty retarget algorithms
 enum DiffMode {
