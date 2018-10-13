@@ -1543,6 +1543,13 @@ int64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, int64_t nCoinAge, i
         if(nBestHeight > MN_FIX_TOGGLE)
             nSubsidy = nCoinAge * MN_REWARD_FIXED * 33 / (365 * 33 + 8);
     }
+	//New reward PoS fixed 
+	if(nBestHeight >= REWARD_POS_SWITCH_BLOCK && TestNet())
+	{
+		nSubsidy = 0.066 * COIN;
+        if(randreward() <= 20500) // 20.5% Chance of superblock (Fixed)
+            nSubsidy = 0.60 * COIN;
+	}	
     else if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
     {
         LogPrint("MINEOUT", "GetProofOfStakeReward(): create=%s nFees=%d\n", FormatMoney(nFees), nFees);
