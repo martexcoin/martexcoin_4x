@@ -30,7 +30,8 @@
 #define FASTTX_SIGNATURES_REQUIRED           05
 #define FASTTX_SIGNATURES_TOTAL              10
 
-#define REWARD_POS_SWITCH_BLOCK 283350
+#define REWARD_POS_SWITCH_BLOCK 9999999999
+#define REWARD_POS_SWITCH_BLOCK_TESTNET 283350
 
 // Define difficulty retarget algorithms
 enum DiffMode {
@@ -146,7 +147,7 @@ static const int64_t VELOCITY_TOGGLE_NEW = 22500000; // Implementation of the Ve
 /** Velocity retarget toggle block */
 static const int64_t VELOCITY_TDIFF = 0; // Use Velocity's retargetting method.
 /** Protocol toggle */
-inline bool IsProtocolV3(int64_t nTime) { return TestNet() || nTime > 1493596800; } // Mon, 01 May 2017 00:00:00 GMT
+inline bool IsProtocolV3(int64_t nTime) { return TestNet() || nTime > 1498159985; } // Thu, 22 Jun 2017 @ 7:33pm (UTC)
 /** Reward Fix toggle */
 static const int64_t RWRD_FIX_TOGGLE = 827;
 /** MN Reward Fix toggle */
@@ -168,13 +169,13 @@ static const unsigned int nStakeMinAge = 2 / 60; // 30 minutes
 /** Time to elapse before new modifier is computed */
 static const unsigned int nModifierInterval = 2 * 60;
 /** Genesis Start Time */
-static const unsigned int timeGenesisBlock = 1493596800; // Mon, 01 May 2017 00:00:00 GMT
+static const unsigned int timeGenesisBlock = 1498159985; // Thu, 22 Jun 2017 @ 7:33pm (UTC)
 /** Genesis RegNet Start Time */
-static const unsigned int timeRegNetGenesis = 1493596800; // Mon, 01 May 2017 00:00:00 GMT
+static const unsigned int timeRegNetGenesis = 1498159985; // Thu, 22 Jun 2017 @ 7:33pm (UTC)
 /** Genesis Nonce */
-static const unsigned int nNonceMain = 0;
+static const unsigned int nNonceMain = 857701;
 /** Genesis Nonce Testnet */
-static const unsigned int nNonceTest = 0;
+static const unsigned int nNonceTest = 857701;
 /** Genesis block subsidy */
 static const int64_t nGenesisBlockReward = 1 * COIN;
 /** Reserve block subsidy */

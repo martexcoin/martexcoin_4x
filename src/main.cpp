@@ -81,7 +81,8 @@ static const int64_t nTargetTimespan_legacy = nTargetSpacing * nRetarget; // eve
 static const int64_t nInterval = nTargetTimespan_legacy / nTargetSpacing;
 static const int64_t nTargetTimespan = 30 * 60;
 
-static const int64_t nlowGravity = 198500; // Correct low gravity issue with DGW implementation.
+static const int64_t nlowGravity_T = 198500; // Correct low gravity issue with DGW implementation TESTNET
+static const int64_t nlowGravity_M = 9999999999; // Correct low gravity issue with DGW implementation MAINNET
 
 static const unsigned int CHECKLOCKTIMEVERIFY_SWITCH_TIME = 1512604800; // 07-Dez-17 00:00:00 UTC
 
@@ -1543,19 +1544,14 @@ int64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, int64_t nCoinAge, i
         if(nBestHeight > MN_FIX_TOGGLE)
             nSubsidy = nCoinAge * MN_REWARD_FIXED * 33 / (365 * 33 + 8);
     }
-	//New reward PoS fixed 
-	if(nBestHeight >= REWARD_POS_SWITCH_BLOCK && TestNet())
+	//New reward PoS fixed 	
+	if(nBestHeight >= (!TestNet ? REWARD_POS_SWITCH_BLOCK : REWARD_POS_SWITCH_BLOCK_TESTNET))
 	{
 		nSubsidy = 0.066 * COIN;
-        if(randreward() <= 20500) // 20.5% Chance of superblock (Fixed)
+        if(randreward() <= 10000) // 10% Chance of superblock (Fixed)
             nSubsidy = 0.60 * COIN;
 	}
     
-	if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
-    {
-        LogPrint("MINEOUT", "GetProofOfStakeReward(): create=%s nFees=%d\n", FormatMoney(nFees), nFees);
-        return nFees;
-    }
     LogPrint("creation", "GetProofOfStakeReward(): create=%s nCoinAge=%d\n", FormatMoney(nSubsidy), nCoinAge);
     return nSubsidy + nFees;
 }
@@ -1747,7 +1743,7 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, bool fProofOfStake)
         const CBlockIndex *BlockLastSolved_lgf = GetLastBlockIndex(pindexLast, fProofOfStake);
         const CBlockIndex *BlockReading = pindexLast;
         // Low Gravity fix (PoW support)
-        if(pindexBest->nHeight > nlowGravity)
+        if(pindexBest->nHeight > (!TestNet ? nlowGravity_M : nlowGravity_T))
         {
             BlockReading = BlockLastSolved_lgf;
         }
@@ -1779,13 +1775,13 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, bool fProofOfStake)
             }
             LastBlockTime = BlockReading->GetBlockTime();
             // Low Gravity chain support (Pre-fix)
-            if(pindexBest->nHeight <= nlowGravity)
+            if(pindexBest->nHeight <= (!TestNet ? nlowGravity_M : nlowGravity_T))
             {
                 if (BlockReading->pprev == NULL) { assert(BlockReading); break; }
                     BlockReading = BlockReading->pprev;
             }
             // Low Gravity fix (PoW support)
-            else if(pindexBest->nHeight > nlowGravity)
+            else if(pindexBest->nHeight > (!TestNet ? nlowGravity_M : nlowGravity_T))
             {
                 BlockReading = GetLastBlockIndex(BlockReading->pprev, fProofOfStake);
             }
