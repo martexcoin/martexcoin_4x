@@ -14,7 +14,7 @@ static bool sorted = false;
 unsigned int BlockSizeCalculator::ComputeBlockSize(CBlockIndex *pblockindex, unsigned int pastblocks) {
 
 	unsigned int proposedMaxBlockSize = 0;
-    unsigned int result = MIN_BLOCK_SIZE;
+	unsigned int result = MIN_BLOCK_SIZE;
 
 	LOCK(cs_main);
 
@@ -23,13 +23,12 @@ unsigned int BlockSizeCalculator::ComputeBlockSize(CBlockIndex *pblockindex, uns
 	if (proposedMaxBlockSize > 0) {
 		//Absolute max block size will be 2^32-1 bytes due to the fact that unsigned int's are 4 bytes
 		result = proposedMaxBlockSize * MAX_BLOCK_SIZE_INCREASE_MULTIPLE;
-		result = result < proposedMaxBlockSize ?
-				std::numeric_limits<unsigned int>::max() :
-				result;
+		result = result < proposedMaxBlockSize ? std::numeric_limits<unsigned int>::max() : result;
         if (result < MIN_BLOCK_SIZE) {
             result = MIN_BLOCK_SIZE;
 		}
 	}
+	LogPrint("ABS", "block size calculed %u \n", result);
 
 	return result;
 
