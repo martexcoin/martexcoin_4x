@@ -28,7 +28,7 @@ unsigned int BlockSizeCalculator::ComputeBlockSize(CBlockIndex *pblockindex, uns
             result = MIN_BLOCK_SIZE;
 		}
 	}
-	LogPrint("ABS", "block size calculed %u \n", result);
+	LogPrintf("ABS - Block size calculed %u \n", result);
 
 	return result;
 
@@ -118,13 +118,16 @@ inline int BlockSizeCalculator::GetBlockSize(CBlockIndex *pblockindex) {
 	const CDiskBlockPos& pos = pblockindex->GetBlockPos();
 
 	CAutoFile filein(OpenBlockFile(pos, false), SER_DISK, CLIENT_VERSION);
+
 	FILE* blockFile = filein.release();
 	long int filePos = ftell(blockFile);
 	fseek(blockFile, filePos - sizeof(uint32_t), SEEK_SET);
 
 	uint32_t size = 0;
-	fread(&size, sizeof(uint32_t), 1, blockFile);
+	//fread(&size, sizeof(uint32_t), 1, blockFile);
+	size_t sizeRead = fread(&size, sizeof(uint32_t), 1, blockFile);
 	fclose(blockFile);
-	return (unsigned int) size;
+	//return (unsigned int) size;
+	return (unsigned int) sizeRead;
 
 }
