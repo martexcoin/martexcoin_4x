@@ -26,8 +26,8 @@ class CTransaction;
 
 class BaseSignatureChecker;
 
-static const unsigned int MAX_SCRIPT_ELEMENT_SIZE = 5120; // bytes
-static const unsigned int MAX_OP_RETURN_RELAY = 5120;  // bytes
+static const unsigned int MAX_SCRIPT_ELEMENT_SIZE = 1040; // bytes
+static const unsigned int MAX_OP_RETURN_RELAY = 1024;  // bytes
 
 /* Setting nSequence to this value for every input in a transaction
  * disables nLockTime. */
