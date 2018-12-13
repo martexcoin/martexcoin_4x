@@ -53,9 +53,9 @@ static const unsigned int MAX_BLOCK_SIZE_INCREASE_MULTIPLE = 2;
 /** The number of blocks to consider in the computation of median block size */
 static const unsigned int NUM_BLOCKS_FOR_MEDIAN_BLOCK = 125;
 /** The maximum allowed size for a serialized block, in bytes (network rule) */
-static unsigned int MAX_BLOCK_SIZE = 25612864; // 2MB
+static unsigned int MAX_BLOCK_SIZE = 6384768; // 6MB
 /** The minimum allowed size for a serialized block, in bytes (network rule) */
-static const unsigned int MIN_BLOCK_SIZE = 2128256; // 2MB
+static const unsigned int MIN_BLOCK_SIZE = 2128256; // 2MB  4256512
 /** The maximum size for mined blocks */
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 /** Default for -blockprioritysize, maximum space for zero/low-fee transactions **/

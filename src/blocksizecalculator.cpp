@@ -124,10 +124,10 @@ inline int BlockSizeCalculator::GetBlockSize(CBlockIndex *pblockindex) {
 	fseek(blockFile, filePos - sizeof(uint32_t), SEEK_SET);
 
 	uint32_t size = 0;
-	//fread(&size, sizeof(uint32_t), 1, blockFile);
-	size_t sizeRead = fread(&size, sizeof(uint32_t), 1, blockFile);
+	fread(&size, sizeof(uint32_t), 1, blockFile);
+	//size_t sizeRead = fread(&size, sizeof(uint32_t), 1, blockFile);
 	fclose(blockFile);
-	//return (unsigned int) size;
-	return (unsigned int) sizeRead;
+	return (unsigned int) size;
+	//return (unsigned int) sizeRead;
 
 }
