@@ -13,6 +13,7 @@
 #include "main.h"
 #include "util.h"
 #include "clientversion.h"
+#include "serialize.h"
 
 using namespace std;
 
@@ -21,5 +22,7 @@ namespace BlockSizeCalculator {
     inline unsigned int GetMedianBlockSize(CBlockIndex*, unsigned int pastblocks = NUM_BLOCKS_FOR_MEDIAN_BLOCK);
     inline std::vector<unsigned int> GetBlockSizes(CBlockIndex*, unsigned int pastblocks = NUM_BLOCKS_FOR_MEDIAN_BLOCK);
     inline int GetBlockSize(CBlockIndex*);
+    uint32_t ComputeScaledBlockMaxSize(uint32_t nBlockSizeMax, unsigned int maxBlockSize);
+    void ClearBlockSizes(); // added for unit tests - have to clear out window sometimes
 }
 #endif

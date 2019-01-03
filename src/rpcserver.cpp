@@ -254,7 +254,7 @@ static const CRPCCommand vRPCCommands[] =
     { "spork",                  &spork,                  true,      false,      false },
     { "masternode",             &masternode,             true,      false,      true },
     { "masternodelist",         &masternodelist,         true,      false,      false },
-    
+
 #ifdef ENABLE_WALLET
     { "anonsend",               &anonsend,               false,     false,      true },
     { "getmininginfo",          &getmininginfo,          true,      false,     false },
@@ -329,6 +329,8 @@ static const CRPCCommand vRPCCommands[] =
     { "smsginbox",              &smsginbox,              false,     false,     false },
     { "smsgoutbox",             &smsgoutbox,             false,     false,     false },
     { "smsgbuckets",            &smsgbuckets,            false,     false,     false },
+    { "createtoken",            &createtoken,            false,     false,     false },
+    { "sendtoken",              &sendtoken,              false,     false,     false },
 #endif
 };
 

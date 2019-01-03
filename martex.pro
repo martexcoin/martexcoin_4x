@@ -1,5 +1,5 @@
 TEMPLATE = app
-VERSION = 2.7.4.2
+VERSION = 2.7.4.3
 TARGET = martexcoin-qt_${VERSION}
 INCLUDEPATH += src src/json src/qt src/qt/plugins/mrichtexteditor
 QT += core gui widgets network printsupport
