@@ -91,8 +91,13 @@ Value createtoken(const Array& params, bool fHelp) {
 
     TokenDB adb;
     //adb.Write(TokenID.GetHex(),strTK_NAME,strTK_SYMBOL,strTK_UNIT,strTK_FEE,tTokenTimeStamp);
-    adb.Write(tTokenTimeStamp);
-    
+    //adb.Write(tTokenTimeStamp);
+    //adb.Write(string("TokenIndex"), TokenID.GetHex());
+    //adb.Write((string("TokenIndex")), TokenID.GetHex());
+    //adb.Write(make_pair(string("TokenIndex"), TokenID.GetHex()), TokenID.GetHex());
+    adb.Write("TokenIndex", "TESTETETETT");
+    LogPrintf("Writing token id %d to token LevelDB  %dms\n", TokenID.GetHex(), GetTimeMillis() - nStart);
+
     //if (!adb.Read(tTokenTimeStamp))
            //LogPrintf("Invalid or missing tokens.dat; recreating\n");
            //return false;
@@ -100,11 +105,10 @@ Value createtoken(const Array& params, bool fHelp) {
     //LogPrintf("Loaded %s tokens from tokens.dat  %dms\n", adb.Read(tTokenTimeStamp), GetTimeMillis() - nStart);
 
     //adb.Write(tTokenTimeStamp);
-    LogPrintf("Flushed token id %d addresses to tokens.dat  %dms\n", TokenID.GetHex(), GetTimeMillis() - nStart);
+    //LogPrintf("Flushed token id %d addresses to tokens.dat  %dms\n", TokenID.GetHex(), GetTimeMillis() - nStart);
     //grava tokens.dat fim
 
     return ret;
-
 
 }
 
@@ -122,6 +126,7 @@ Value sendtoken(const Array& params, bool fHelp) {
     return ret;
 }
 
+/*
 
 //
 // TokenDB
@@ -227,3 +232,4 @@ TokenDB::Read(char key)
     LogPrintf("  %s\n", key);
 }
 
+*/

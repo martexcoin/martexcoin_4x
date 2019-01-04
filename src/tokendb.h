@@ -1,20 +1,59 @@
+// Copyright (c) 2019-2019 The MartteXcoin developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file license.txt or http://www.opensource.org/licenses/mit-license.php.
+
+#ifndef TOKEN_LEVELDB_H
+#define TOKEN_LEVELDB_H
+
+#include "main.h"
+#include <map>
+#include <string>
+#include <vector>
 #include <db_cxx.h>
+#include <leveldb/db.h>
+#include <leveldb/write_batch.h>
 
-extern char key;
-
-/** Tokens database (tokens.dat) */
+// Class that provides access to a LevelDB. Note that this class is frequently
+// instantiated on the stack and then destroyed again, so instantiation has to
+// be very cheap. Unfortunately that means, a TokenDB instance is actually just a
+// wrapper around some global state.
+//
+// A LevelDB is a key/value store that is optimized for fast usage on hard
+// disks. It prefers long read/writes to seeks and is based on a series of
+// sorted key/value mapping files that are stacked on top of each other, with
+// newer files overriding older files. A background thread compacts them
+// together when too many files stack up.
+//
+// Learn more: http://code.google.com/p/leveldb/
 class TokenDB
 {
-private:
-    boost::filesystem::path pathAddr;
 public:
-    TokenDB();
-    bool Write(char key);
-    Read(char key);
-};
+    TokenDB(const char* pszMode="r+");
+    ~TokenDB() {
+        // Note that this is not the same as Close() because it deletes only
+        // data scoped to this TxDB object.
+        delete activeTokenBatch;
+    }
 
-/*
+    // Destroys the underlying shared global state accessed by this TxDB.
+    void Close();
+
+private:
+    leveldb::DB *pdb;  // Points to the global instance.
+
+    // A batch stores up writes and deletes for atomic application. When this
+    // field is non-NULL, writes/deletes go there instead of directly to disk.
+    leveldb::WriteBatch *activeTokenBatch;
+    leveldb::Options options;
+    bool fReadOnly;
+    char nVersion;
+
 protected:
+    // Returns true and sets (value,false) if activeTokenBatch contains the given key
+    // or leaves value alone and sets deleted = true if activeTokenBatch contains a
+    // delete for it.
+    bool ScanTokenBatch(const CDataStream &key, std::string *value, bool *deleted) const;
+
     template<typename K, typename T>
     bool Read(const K& key, T& value)
     {
@@ -24,11 +63,11 @@ protected:
         std::string strValue;
 
         bool readFromDb = true;
-        if (activeBatch) {
+        if (activeTokenBatch) {
             // First we must search for it in the currently pending set of
             // changes to the db. If not found in the batch, go on to read disk.
             bool deleted = false;
-            readFromDb = ScanBatch(ssKey, &strValue, &deleted) == false;
+            readFromDb = ScanTokenBatch(ssKey, &strValue, &deleted) == false;
             if (deleted) {
                 return false;
             }
@@ -56,8 +95,8 @@ protected:
         return true;
     }
 
-    template<typename K, typename T>
-    bool Write(const K& key, const T& value)
+    //template<typename K, typename T>
+    bool Write(const char* key, const char* value)
     {
         if (fReadOnly)
             assert(!"Write called on database in read-only mode");
@@ -69,8 +108,8 @@ protected:
         ssValue.reserve(10000);
         ssValue << value;
 
-        if (activeBatch) {
-            activeBatch->Put(ssKey.str(), ssValue.str());
+        if (activeTokenBatch) {
+            activeTokenBatch->Put(ssKey.str(), ssValue.str());
             return true;
         }
         leveldb::Status status = pdb->Put(leveldb::WriteOptions(), ssKey.str(), ssValue.str());
@@ -92,8 +131,8 @@ protected:
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         ssKey.reserve(1000);
         ssKey << key;
-        if (activeBatch) {
-            activeBatch->Delete(ssKey.str());
+        if (activeTokenBatch) {
+            activeTokenBatch->Delete(ssKey.str());
             return true;
         }
         leveldb::Status status = pdb->Delete(leveldb::WriteOptions(), ssKey.str());
@@ -108,9 +147,9 @@ protected:
         ssKey << key;
         std::string unused;
 
-        if (activeBatch) {
+        if (activeTokenBatch) {
             bool deleted;
-            if (ScanBatch(ssKey, &unused, &deleted) && !deleted) {
+            if (ScanTokenBatch(ssKey, &unused, &deleted) && !deleted) {
                 return true;
             }
         }
@@ -120,5 +159,28 @@ protected:
         return status.IsNotFound() == false;
     }
 
+
+public:
+    bool TokenBegin();
+    bool TokenCommit();
+    bool TokenAbort()
+    {
+        delete activeTokenBatch;
+        activeTokenBatch = NULL;
+        return true;
+    }
+
+    bool TokenReadVersion(char nVersion)
+    {
+        nVersion = "0";
+        return Read("version", nVersion);
+    }
+
+    bool TokenWriteVersion(char nVersion)
+    {
+        return Write("version", nVersion);
+    }
 };
-*/
+
+
+#endif // TOKEN_DB_H
