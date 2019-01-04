@@ -19,7 +19,7 @@
 #include "util.h"
 #include "main.h"
 #include "chainparams.h"
-//#include "serialize.h"
+#include "serialize.h"
 
 using namespace std;
 using namespace boost;
@@ -28,8 +28,8 @@ leveldb::DB *tokendb; // global pointer for LevelDB object instance
 
 static leveldb::Options GetOptions() {
     leveldb::Options options;
-    int nCacheSizeMB = GetArg("-dbcache", 100);
-    options.block_cache = leveldb::NewLRUCache(nCacheSizeMB * 1048576);
+    int nCacheSizeMB = GetArg("-dbcache", 1);
+    options.block_cache = leveldb::NewLRUCache(nCacheSizeMB * 1);
     options.filter_policy = leveldb::NewBloomFilterPolicy(10);
     return options;
 }
@@ -38,23 +38,8 @@ void init_tokenindex(leveldb::Options& options, bool fRemoveOld = false) {
     // First time init.
     filesystem::path directory = GetDataDir() / "tokenleveldb";
 
-    if (fRemoveOld) {
-        filesystem::remove_all(directory); // remove directory
-        unsigned int nFile = 1;
+    filesystem::path strBlockFile = GetDataDir() / "tokenleveldb" / "token.dat";
 
-        while (true)
-        {
-            filesystem::path strBlockFile = GetDataDir() / strprintf("blk%04u.dat", nFile);
-
-            // Break if no such file
-            if( !filesystem::exists( strBlockFile ) )
-                break;
-
-            filesystem::remove(strBlockFile);
-
-            nFile++;
-        }
-    }
 
     filesystem::create_directory(directory);
     LogPrintf("Opening Token LevelDB in %s\n", directory.string());
@@ -196,4 +181,6 @@ bool TokenDB::ScanTokenBatch(const CDataStream &key, string *value, bool *delete
     }
     return scanner.foundEntry;
 }
+
+// practice it does not appear to be large.
 

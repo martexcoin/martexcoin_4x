@@ -6,6 +6,8 @@
 #define TOKEN_LEVELDB_H
 
 #include "main.h"
+#include "version.h"
+#include "clientversion.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -46,9 +48,9 @@ private:
     leveldb::WriteBatch *activeTokenBatch;
     leveldb::Options options;
     bool fReadOnly;
-    char nVersion;
+    int nVersion;
 
-protected:
+public:
     // Returns true and sets (value,false) if activeTokenBatch contains the given key
     // or leaves value alone and sets deleted = true if activeTokenBatch contains a
     // delete for it.
@@ -95,11 +97,11 @@ protected:
         return true;
     }
 
-    //template<typename K, typename T>
-    bool Write(const char* key, const char* value)
+    template<typename K, typename T>
+    bool Write(const K& key , const T& value)
     {
         if (fReadOnly)
-            assert(!"Write called on database in read-only mode");
+            assert(!"Write called on token database in read-only mode");
 
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         ssKey.reserve(1000);
@@ -112,9 +114,9 @@ protected:
             activeTokenBatch->Put(ssKey.str(), ssValue.str());
             return true;
         }
-        leveldb::Status status = pdb->Put(leveldb::WriteOptions(), ssKey.str(), ssValue.str());
+	leveldb::Status status = pdb->Put(leveldb::WriteOptions(), ssKey.str(), ssValue.str());
         if (!status.ok()) {
-            LogPrintf("LevelDB write failure: %s\n", status.ToString());
+            LogPrintf("Token LevelDB write failure: %s\n", status.ToString());
             return false;
         }
         return true;
@@ -126,7 +128,7 @@ protected:
         if (!pdb)
             return false;
         if (fReadOnly)
-            assert(!"Erase called on database in read-only mode");
+            assert(!"Erase called on token database in read-only mode");
 
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         ssKey.reserve(1000);
@@ -147,13 +149,6 @@ protected:
         ssKey << key;
         std::string unused;
 
-        if (activeTokenBatch) {
-            bool deleted;
-            if (ScanTokenBatch(ssKey, &unused, &deleted) && !deleted) {
-                return true;
-            }
-        }
-
 
         leveldb::Status status = pdb->Get(leveldb::ReadOptions(), ssKey.str(), &unused);
         return status.IsNotFound() == false;
@@ -172,13 +167,16 @@ public:
 
     bool TokenReadVersion(char nVersion)
     {
-        nVersion = "0";
-        return Read("version", nVersion);
+        nVersion = 0;
+	return Read(std::string("version"), nVersion);
+        //return 1;
     }
 
     bool TokenWriteVersion(char nVersion)
     {
-        return Write("version", nVersion);
+        //nVersion = "0";
+        //return 1;
+	return Write(std::string("version"), nVersion);
     }
 };
 
