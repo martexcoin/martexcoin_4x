@@ -7,5 +7,9 @@
 
 extern json_spirit::Value createtoken(const Array& params, bool fHelp);
 extern json_spirit::Value sendtoken(const Array& params, bool fHelp);
+extern json_spirit::Value searchtoken(const Array& params, bool fHelp);
+
+bool checkToken(const Array& params);
+
 
 #endif
