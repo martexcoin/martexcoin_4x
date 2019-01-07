@@ -18,6 +18,7 @@
 #include <ctime>
 #include <boost/lexical_cast.hpp>
 #include <boost/filesystem.hpp>
+//#include <charconv>
 
 
 using namespace std;
@@ -25,17 +26,11 @@ using namespace boost;
 using namespace boost::assign;
 using namespace json_spirit;
 
-
-/* createtoken(const Array& params, bool fHelp) : Object
-   Create Token via RPC */
-/* sendtoken(const Array& params, bool fHelp) : Object
-   Send Tokens via RPC */
-
 Value createtoken(const Array& params, bool fHelp) 
 {
     
     int64_t nStart = GetTimeMillis();
-    
+ 
     LogPrintf(" > Create Token Init \n");
     
     if (fHelp || params.size() != 5 || params.size() > 5)
@@ -138,66 +133,80 @@ Value createtoken(const Array& params, bool fHelp)
 
 }
 
-Value sendtoken(const Array& params, bool fHelp) {
+Value searchtoken(const Array& params, bool fHelp) 
+{
 
-    if (fHelp || params.size() != 0)
+    if (fHelp || params.size() != 1)
         throw runtime_error(
-            "sendtoken \n"
-            "Returns transaction id to transfer token.");
-
-    Array ret;
-    Object obj;
-    obj.push_back(Pair("New PubKey", getnewpubkey));
-    ret.push_back(obj);
-    return ret;
-}
-
-Value searchtoken(const Array& params, bool fHelp) {
-
-    if (fHelp || params.size() != 0)
-        throw runtime_error(
-            "sendtoken \n"
-            "Returns transaction id to transfer token.");
+            "searchtoken <tknsymbol>\n"
+            "Returns details token symbol.");
 
     TokenDB tdb;
     
-    std::string key = params[0].get_str();
-    
-    std::string value = tdb.Search(key.c_str());
-    
-    char valueToHash = value.c_str();
-    
-    
-    LogPrintf("Writing token HASH %s \n", value.c_str());
-    
-    
-    
-    CDataStream ssTokens(SER_DISK, CLIENT_VERSION);
-    
-    unsigned char pchMsgTmp[4];
-    ssTokens << FLATDATA(Params().MessageStart());
-    //ssTokens << FLATDATA(value.c_str());
-    
-    ssTokens << valueToHash;
-    
-    uint256 hash = Hash(ssTokens.begin(), ssTokens.end());
-    
-    ssTokens << hash;
-    
-    char v;
-    
-    ssTokens >> v;
-    
-    LogPrintf("Writing token VALUE %c \n", v);
-    
     Object ret;
     
-    ret.push_back(Pair("value", v));
+    std::string key = params[0].get_str();
     
+    std::string hexKey = HexStr(key.begin(), key.end());
+    
+    LogPrintf("Search token SYMBOL %s \n", key);
+    
+    std::string value = tdb.Search(hexKey.c_str());
+    
+    LogPrintf("Retorno HEX token SYMBOL %s \n", value.c_str()); 
+    
+    //unsigned int hexValue;
+
+    //std::stringstream valueToString;
+    
+    //std::string valueToString;
+    
+    //valueToString << std::hex << value.c_str();
+    
+    //valueToString >> value; takalepau
+    
+    //valueToString = strtoul(value.c_str(), NULL, 16);    
+    
+    //valueToString >> hexValue;
+
+    std::string str(value.c_str());
+    std::string res;
+    res.reserve(str.size() / 2);
+    for (int i = 0; i < str.size(); i += 2)
+    {
+        std::istringstream iss(str.substr(i, 2));
+        int temp;
+        iss >> std::hex >> temp;
+        res += static_cast<char>(temp);
+    }
+    std::cout << res;
+    ret.push_back(Pair("Response", res ));
+    //conpila pra v c vai
     return ret;
 }
 
-bool checkToken(const Array& params) {
+
+/*
+template<typename T>
+std::vector<T> hexstr_to_vec(const std::string& str, unsigned char chars_per_num = 2)
+{
+    std::vector<T> out(str.size() / chars_per_num, 0);
+
+    T value;
+    for (int i = 0; i < str.size() / chars_per_num; i++) {
+        std::from_chars<T>(
+            str.data() + (i * chars_per_num),
+            str.data() + (i * chars_per_num) + chars_per_num,
+            value,
+            16
+        );
+        out[i] = value;
+    }
+
+    return out;
+}
+
+/*bool checkToken(const Array& params) {
 
     TokenDB tdb;
     
@@ -213,112 +222,4 @@ bool checkToken(const Array& params) {
         
     
     return true;
-}
-
-/*
-
-//
-// TokenDB
-//
-
-TokenDB::TokenDB()
-{
-    pathAddr = GetDataDir() / "tokens.dat";
-}
-
-bool TokenDB::Write(char key)
-{
-    // Generate random temporary filename
-    unsigned short randv = 0;
-    GetRandBytes((unsigned char *)&randv, sizeof(randv));
-    std::string tmpfn = strprintf("tokens.dat.%04x", randv);
-
-    // serialize tokens, checksum data up to that point, then append csum
-    CDataStream ssTokens(SER_DISK, CLIENT_VERSION);
-    ssTokens << FLATDATA(Params().MessageStart());
-    ssTokens << key;
-    uint256 hash = Hash(ssTokens.begin(), ssTokens.end());
-    ssTokens << hash;
-
-    // open temp output file, and associate with CAutoFile
-    boost::filesystem::path pathTmp = GetDataDir() / tmpfn;
-    FILE *file = fopen(pathTmp.string().c_str(), "wb");
-    CAutoFile fileout = CAutoFile(file, SER_DISK, CLIENT_VERSION);
-    if (!fileout)
-        return error("CAddrman::Write() : open failed");
-
-    // Write and commit header, data
-    try {
-        fileout << ssTokens;
-    }
-    catch (std::exception &e) {
-        return error("CAddrman::Write() : I/O error");
-    }
-    FileCommit(fileout);
-    fileout.fclose();
-
-    // replace existing peers.dat, if any, with new peers.dat.XXXX
-    if (!RenameOver(pathTmp, pathAddr))
-        return error("CAddrman::Write() : Rename-into-place failed");
-
-    return true;
-}
-
-TokenDB::Read(char key)
-{
-    // open input file, and associate with CAutoFile
-    FILE *file = fopen(pathAddr.string().c_str(), "rb");
-    CAutoFile filein = CAutoFile(file, SER_DISK, CLIENT_VERSION);
-    if (!filein)
-        return error("CAddrman::Read() : open failed");
-
-    // use file size to size memory buffer
-    int fileSize = boost::filesystem::file_size(pathAddr);
-    int dataSize = fileSize - sizeof(uint256);
-    // Don't try to resize to a negative number if file is small
-    if ( dataSize < 0 )
-        dataSize = 0;
-    vector<unsigned char> vchData;
-    vchData.resize(dataSize);
-    uint256 hashIn;
-
-    // read data and checksum from file
-    try {
-        filein.read((char *)&vchData[0], dataSize);
-        filein >> hashIn;
-    }
-    catch (std::exception &e) {
-        return error("CAddrman::Read() 2 : I/O error or stream data corrupted");
-    }
-    filein.fclose();
-
-    CDataStream ssTokens(vchData, SER_DISK, CLIENT_VERSION);
-
-    // verify stored checksum matches input data
-    uint256 hashTmp = Hash(ssTokens.begin(), ssTokens.end());
-    if (hashIn != hashTmp)
-        return error("CAddrman::Read() : checksum mismatch; data corrupted");
-
-    unsigned char pchMsgTmp[4];
-    try {
-        // de-serialize file header (network specific magic number) and ..
-        ssTokens >> FLATDATA(pchMsgTmp);
-
-        // ... verify the network matches ours
-        if (memcmp(pchMsgTmp, Params().MessageStart(), sizeof(pchMsgTmp)))
-            return error("CAddrman::Read() : invalid network magic number");
-
-        // de-serialize address data into one CAddrMan object
-        ssTokens >> key;
-    }
-    catch (std::exception &e) {
-        return error("CAddrman::Read() : I/O error or stream data corrupted");
-    }
-
-    //return true;
-    //std::string s(std::istreambuf_iterator<char>(ssTokens), {});
-    //return key;
-    LogPrintf("  %s\n", key);
-}
-
-*/
+}*/

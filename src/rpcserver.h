@@ -169,7 +169,8 @@ extern json_spirit::Value getrawtransaction(const json_spirit::Array& params, bo
 extern json_spirit::Value searchrawtransactions(const json_spirit::Array& params, bool fHelp);
 
 extern json_spirit::Value createtoken(const json_spirit::Array& params, bool fHelp); // in rpctoken.cpp
-extern json_spirit::Value sendtoken(const json_spirit::Array& params, bool fHelp); // in rpctoken.cpp
+//extern json_spirit::Value sendtoken(const json_spirit::Array& params, bool fHelp); // in rpctoken.cpp
+extern json_spirit::Value searchtoken(const json_spirit::Array& params, bool fHelp); // in rpctoken.cpp
 
 extern json_spirit::Value listunspent(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value createrawtransaction(const json_spirit::Array& params, bool fHelp);

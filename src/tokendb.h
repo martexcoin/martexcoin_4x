@@ -49,7 +49,7 @@ public:
     
 public:
     
-    std::string Search(char key)
+    std::string Search(char *key)
     {
         std::ostringstream response;
         
@@ -57,10 +57,10 @@ public:
         
         LogPrintf(" .... Token Search Get Key : %c \n", key);
 
-        leveldb::ReadOptions readOptions = GetReadOptions();
         std::string v;      
-        statusdb = tdb->Get(readOptions, key, &v);
         
+        statusdb = tdb->Get(GetReadOptions(), key, &v); 
+
         if ( statusdb.ok() )
         {
             
@@ -87,23 +87,19 @@ public:
         
         LogPrintf(" .... Token Wirte Key : %c \n", key);
 
-        leveldb::ReadOptions readOptions = GetReadOptions();
         std::string v;      
-        statusdb = tdb->Get(GetReadOptions(), key, &v);
+        
+        statusdb = tdb->Get(GetReadOptions(), key, &v);       
         
         if ( statusdb.ok() )
         {
             LogPrintf(" ........ Token Wirte Exist\n");
-            
-            //LogPrintf(" ........ Token Wirte Value : (  %s  ) \n", v);
             
             return false;
             
         }
         else 
         {
-            leveldb::WriteOptions writeOptions = GetWriteOptions();
-            
             tdb->Put(GetWriteOptions(), key, value);
             
             LogPrintf(" ........ Token Wirte Create\n");
@@ -128,5 +124,4 @@ public:
 };
 
 
-#endif // TOKEN_DB_H
-
+#endif

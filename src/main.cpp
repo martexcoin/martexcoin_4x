@@ -25,7 +25,7 @@
 #include "spork.h"
 #include "smessage.h"
 #include "util.h"
-#include "rpctoken.h"
+#include "tokendb.h"
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
@@ -781,7 +781,7 @@ bool CTransaction::CheckTransaction() const
                     ///Run Token Check
                     
                     
-                    checkToken(args array);
+                    //checkToken(args array);
                     
                 }
                 
