@@ -10,6 +10,7 @@
 #include "util.h"
 #include "wallet.h"
 #include "walletdb.h"
+#include "walletdb.h"
 #include "main.h"
 #include "tokendb.h"
 #include <boost/assign/list_of.hpp>
@@ -18,8 +19,6 @@
 #include <ctime>
 #include <boost/lexical_cast.hpp>
 #include <boost/filesystem.hpp>
-//#include <charconv>
-
 
 using namespace std;
 using namespace boost;
@@ -43,8 +42,6 @@ Value createtoken(const Array& params, bool fHelp)
             "fee = Fee of Token\n"
             "Returns new token informations.");
 
-    //int TokenID = rand()/(float)RAND_MAX * (9999999999-1000000000) + 1000000000;
-
     CMarteXAddress address(params[0].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid MarteX address");
@@ -63,7 +60,6 @@ Value createtoken(const Array& params, bool fHelp)
 
     uint256 TokenID = GetRandHash();
 
-    // Parse the account first so we don't generate a key if there's an error
     string strAccount;
     string strTokenID;
 
@@ -80,6 +76,7 @@ Value createtoken(const Array& params, bool fHelp)
     Object ret;
     Object TK_HEAD;
     Object TK_CON;
+    Object OP_RETURN;
     
     TokenDB tdb;
     
@@ -106,6 +103,93 @@ Value createtoken(const Array& params, bool fHelp)
 
     if ( tdb.Write(hexKey.c_str(), hexValue.c_str()) )
     {
+        
+       ////
+
+
+
+ ///// NAo mexer estou fazendo propagacao.
+  /*
+
+         std::string tokenOpReturn;
+        
+        tokenOpReturn.append("544b4e");
+        tokenOpReturn.append(hexValue.c_str());
+        
+        OP_RETURN.push_back(Pair(0, "")); 
+        OP_RETURN.push_back(Pair(1, "{'miWZSvnyQSzw8B4WyAFfiprghpjePCVsY4':0.00015}"));
+        OP_RETURN.push_back(Pair(2, "5"));
+        OP_RETURN.push_back(Pair(3, "544b4e"));
+
+
+        string strAccount = AccountFromValue(params[0]);
+        Object sendTo = params[1].get_obj();
+        int nMinDepth = 1;
+        if (params.size() > 2)
+                nMinDepth = params[2].get_int();
+
+        CWalletTx wtx;
+        wtx.strFromAccount = strAccount;
+
+        set<CMarteXAddress> setAddress;
+        vector<pair<CScript, int64_t> > vecSend;
+
+        if (params.size() > 3 && params[3].type() != null_type && !params[3].get_str().empty())
+        {
+                wtx.mapValue["comment"] = params[3].get_str();
+                
+                std::vector<unsigned char> data = ParseHexV(params[3].get_str(),"Data");
+	CScript scriptN = CScript() << OP_RETURN << data;
+                vecSend.push_back(make_pair(scriptN, 0));
+        }
+
+        int64_t totalAmount = 0;
+        BOOST_FOREACH(const Pair& s, sendTo)
+        {
+                    CMarteXAddress address(s.name_);
+                    if (!address.IsValid())
+                            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid MarteX address: ")+s.name_);
+
+                    if (setAddress.count(address))
+                            throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ")+s.name_);
+                    setAddress.insert(address);
+
+                    CScript scriptPubKey;
+                    scriptPubKey.SetDestination(address.Get());
+                    CAmount nAmount = AmountFromValue(s.value_);
+                    totalAmount += nAmount;
+                    vecSend.push_back(make_pair(scriptPubKey, nAmount));
+        }
+
+        EnsureWalletIsUnlocked();
+
+        // Check funds
+        int64_t nBalance = GetAccountBalance(strAccount, nMinDepth, ISMINE_SPENDABLE);
+        if (totalAmount > nBalance)
+                throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Account has insufficient funds");
+
+        // Send
+        CReserveKey keyChange(pwalletMain);
+        int64_t nFeeRequired = 0;
+        int nChangePos;
+        std::string strFailReason;
+        bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, nChangePos, strFailReason);
+        if (!fCreated)
+        {
+                if (totalAmount + nFeeRequired > pwalletMain->GetBalance())
+                        throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
+                throw JSONRPCError(RPC_WALLET_ERROR, "Transaction creation failed");
+        }
+        if (!pwalletMain->CommitTransaction(wtx, keyChange))
+                throw JSONRPCError(RPC_WALLET_ERROR, "Transaction commit failed");
+
+        return wtx.GetHash().GetHex();
+        }
+        */
+////
+        
+        //sendmany "" '{"miWZSvnyQSzw8B4WyAFfiprghpjePCVsY4":0.00015}' 5 "546573746520544f4b454e204d5854"
+        
         TK_HEAD.push_back(Pair("Status", "CREATE" ));
         TK_HEAD.push_back(Pair("ID", TokenID.GetHex() ));
         TK_HEAD.push_back(Pair("Name", strTK_NAME ));
@@ -155,71 +239,34 @@ Value searchtoken(const Array& params, bool fHelp)
     
     LogPrintf("Retorno HEX token SYMBOL %s \n", value.c_str()); 
     
-    //unsigned int hexValue;
-
-    //std::stringstream valueToString;
-    
-    //std::string valueToString;
-    
-    //valueToString << std::hex << value.c_str();
-    
-    //valueToString >> value; takalepau
-    
-    //valueToString = strtoul(value.c_str(), NULL, 16);    
-    
-    //valueToString >> hexValue;
-
-    std::string str(value.c_str());
+    std::string strHex(value.c_str());
     std::string res;
-    res.reserve(str.size() / 2);
-    for (int i = 0; i < str.size(); i += 2)
+    res.reserve(strHex.size() / 2);
+    
+    for (int i = 0; i < strHex.size(); i += 2)
     {
-        std::istringstream iss(str.substr(i, 2));
-        int temp;
-        iss >> std::hex >> temp;
-        res += static_cast<char>(temp);
+        std::istringstream iss(strHex.substr(i, 2));
+        int cr;
+        iss >> std::hex >> cr;
+        res += static_cast<char>(cr);
     }
-    std::cout << res;
-    ret.push_back(Pair("Response", res ));
-    //conpila pra v c vai
+
+    std::string s = res;
+    std::string delimiter = ",";
+    std::string delimiter2 = ":";
+    size_t pos = 0;
+    std::string param;
+    while ((pos = s.find(delimiter)) != std::string::npos) 
+    {
+        param = s.substr(0, pos);
+        
+        size_t pos2 = param.find(delimiter2);
+        
+        ret.push_back(Pair(param.substr(0, pos2), param.substr(pos2+1, param.size()) ) );
+
+        s.erase(0, pos + delimiter.length());
+    }
+    //ret = res;
+    
     return ret;
 }
-
-
-/*
-template<typename T>
-std::vector<T> hexstr_to_vec(const std::string& str, unsigned char chars_per_num = 2)
-{
-    std::vector<T> out(str.size() / chars_per_num, 0);
-
-    T value;
-    for (int i = 0; i < str.size() / chars_per_num; i++) {
-        std::from_chars<T>(
-            str.data() + (i * chars_per_num),
-            str.data() + (i * chars_per_num) + chars_per_num,
-            value,
-            16
-        );
-        out[i] = value;
-    }
-
-    return out;
-}
-
-/*bool checkToken(const Array& params) {
-
-    TokenDB tdb;
-    
-    std::string key = params[0].get_str();
-    
-    std::string value = tdb.Search(key.c_str());
-    
-    char valueToHash = value.c_str();
-    
-    if (valueToHash.size() >  0)
-        return true;
-    else
-        
-    
-    return true;
-}*/
