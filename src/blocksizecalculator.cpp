@@ -19,15 +19,6 @@ unsigned int BlockSizeCalculator::ComputeBlockSize(CBlockIndex *pblockindex, uns
 	unsigned int proposedMaxBlockSize = 0;
 	unsigned int result = MIN_BLOCK_SIZE;
 
-	/*const Consensus::Params& params = Params().GetConsensus();
-
-	if (pblockindex->nHeight < (int)last_height_seen) {
-	 ::ClearBlockSizes();
-	}
-	else if (pblockindex->nHeight == (int)last_height_seen) {
-	    return last_result_returned;
-	}*/
-
 	LOCK(cs_main);
 
 	proposedMaxBlockSize = ::GetMedianBlockSize(pblockindex, pastblocks);
@@ -39,7 +30,7 @@ unsigned int BlockSizeCalculator::ComputeBlockSize(CBlockIndex *pblockindex, uns
 				std::numeric_limits<unsigned int>::max() :
 				result;
         if (result < MIN_BLOCK_SIZE) {
-            LogPrintf("ABS: in ComputeBlockSize limiting result (%u) to historic block size limit (%u)\n", result, MIN_BLOCK_SIZE);
+            //LogPrintf("ABS: in ComputeBlockSize limiting result (%u) to historic block size limit (%u)\n", result, MIN_BLOCK_SIZE);
             result = MIN_BLOCK_SIZE;
 		}
 	}
@@ -50,7 +41,7 @@ unsigned int BlockSizeCalculator::ComputeBlockSize(CBlockIndex *pblockindex, uns
 }
 
 inline unsigned int BlockSizeCalculator::GetMedianBlockSize(
-		CBlockIndex *pblockindex, unsigned int pastblocks) {
+	CBlockIndex *pblockindex, unsigned int pastblocks) {
 
 	blocksizes = ::GetBlockSizes(pblockindex, pastblocks);
 
@@ -68,7 +59,7 @@ inline unsigned int BlockSizeCalculator::GetMedianBlockSize(
 		} else {
 			median = blocksizes[vsize / 2];
 		}
-		LogPrintf("ABS: GetMedianBlockSize = %u\n", static_cast<unsigned int>(floor(median)));
+		//LogPrintf("ABS: GetMedianBlockSize = %u\n", static_cast<unsigned int>(floor(median)));
 		return static_cast<unsigned int>(floor(median));
 	} else {
 		return 0;
@@ -85,15 +76,15 @@ inline std::vector<unsigned int> BlockSizeCalculator::GetBlockSizes(
 		CBlockIndex *pblockindex, unsigned int pastblocks) {
 
 	if (pblockindex->nHeight < (int)pastblocks) {
-		LogPrintf("ABS: GetBlockSizes: nHeight (%u) < pastblocks, returning blocksizes unchanged\n", pblockindex->nHeight);
+		//LogPrintf("ABS: GetBlockSizes: nHeight (%u) < pastblocks, returning blocksizes unchanged\n", pblockindex->nHeight);
 		return blocksizes;
 	}
 
 	int firstBlock = pblockindex->nHeight - pastblocks;
-	LogPrintf("ABS: GetBlockSizes: firstBlock = %u\n", firstBlock);
+	//LogPrintf("ABS: GetBlockSizes: firstBlock = %u\n", firstBlock);
 
 	if (blocksizes.size() > 0) {
-		LogPrintf("ABS: GetBlockSizes: blocksizes.size() > 0 (%u)\n", blocksizes.size());
+		//LogPrintf("ABS: GetBlockSizes: blocksizes.size() > 0 (%u)\n", blocksizes.size());
 		int latestBlockSize = ::GetBlockSize(pblockindex);
 
 		if (latestBlockSize != -1) {
@@ -109,26 +100,26 @@ inline std::vector<unsigned int> BlockSizeCalculator::GetBlockSizes(
 					it = std::lower_bound(blocksizes.begin(), blocksizes.end(),
 							latestBlockSize);
 					blocksizes.insert(it, latestBlockSize);
-					LogPrintf("ABS: GetBlockSizes: inserting latest size %u\n", latestBlockSize);
+					//LogPrintf("ABS: GetBlockSizes: inserting latest size %u\n", latestBlockSize);
 				}
 		                else {
-		                    LogPrintf("ABS: GetBlockSizes: find yielded end of vector, not inserting latest size %u\n", latestBlockSize);
+		                    //LogPrintf("ABS: GetBlockSizes: find yielded end of vector, not inserting latest size %u\n", latestBlockSize);
 		                }
 			}
 
 		}
 
 	} else {
-		LogPrintf("ABS: GetBlockSizes: blocksizes.size() == 0, pushing back\n");
+		//LogPrintf("ABS: GetBlockSizes: blocksizes.size() == 0, pushing back\n");
 		while (pblockindex != NULL && pblockindex->nHeight > firstBlock) {
 
 			int blocksize = ::GetBlockSize(pblockindex);
 			if (blocksize != -1) {
 				blocksizes.push_back(blocksize);
-				LogPrintf("ABS: pushback: %u\n", blocksize);
+				//LogPrintf("ABS: pushback: %u\n", blocksize);
 			}
 		        else {
-	                	LogPrintf("ABS: GetBlockSizes: not pushing back block at height %u because GetBlockSize = -1 (strange)\n", pblockindex->nHeight);
+	                	//LogPrintf("ABS: GetBlockSizes: not pushing back block at height %u because GetBlockSize = -1 (strange)\n", pblockindex->nHeight);
 		        }
 			pblockindex = pblockindex->pprev;
 		}
@@ -142,7 +133,7 @@ inline std::vector<unsigned int> BlockSizeCalculator::GetBlockSizes(
 inline int BlockSizeCalculator::GetBlockSize(CBlockIndex *pblockindex) {
 
 	if (pblockindex == NULL) {
-		LogPrintf("ABS: GetBlockSize: returning -1 because pblockindex is NULL\n");
+		//LogPrintf("ABS: GetBlockSize: returning -1 because pblockindex is NULL\n");
 		return -1;
 	}
 
@@ -166,7 +157,7 @@ inline int BlockSizeCalculator::GetBlockSize(CBlockIndex *pblockindex) {
 	items_read = fread(&size, sizeof(uint32_t), 1, blockFile);
 	fclose(blockFile);
 	if (items_read != 1) {
-	    LogPrintf("ABS BSZ: GetBlockSize: returning -1 because items_read != 1\n");
+	    //LogPrintf("ABS BSZ: GetBlockSize: returning -1 because items_read != 1\n");
 	    return -1;
 	}
 	else {

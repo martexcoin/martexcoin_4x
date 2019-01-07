@@ -760,6 +760,12 @@ bool CTransaction::CheckTransaction() const
     if (::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return DoS(100, error("CTransaction::CheckTransaction() : size limits failed"));
 
+    /*
+    // Check op_return data
+    const CTxOut& op_retxout = vout[0];
+    LogPrintf("\n CTransaction::CheckTransaction() : OP_RETURN => %s \n", op_retxout.nValue);
+    */
+
     // Check for negative or overflow output values
     int64_t nValueOut = 0;
     for (unsigned int i = 0; i < vout.size(); i++)

@@ -976,30 +976,35 @@ Value sendmany(const Array& params, bool fHelp)
 
     CWalletTx wtx;
     wtx.strFromAccount = strAccount;
-    if (params.size() > 3 && params[3].type() != null_type && !params[3].get_str().empty())
-        wtx.mapValue["comment"] = params[3].get_str();
 
     set<CMarteXAddress> setAddress;
     vector<pair<CScript, int64_t> > vecSend;
 
+    if (params.size() > 3 && params[3].type() != null_type && !params[3].get_str().empty())
+    {
+        wtx.mapValue["comment"] = params[3].get_str();
+        
+        std::vector<unsigned char> data = ParseHexV(params[3].get_str(),"Data");
+	CScript scriptN = CScript() << OP_RETURN << data;
+        vecSend.push_back(make_pair(scriptN, 0));
+    }
+
     int64_t totalAmount = 0;
     BOOST_FOREACH(const Pair& s, sendTo)
     {
-        CMarteXAddress address(s.name_);
-        if (!address.IsValid())
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid MarteX address: ")+s.name_);
+          CMarteXAddress address(s.name_);
+          if (!address.IsValid())
+              throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid MarteX address: ")+s.name_);
 
-        if (setAddress.count(address))
-            throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ")+s.name_);
-        setAddress.insert(address);
+          if (setAddress.count(address))
+              throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ")+s.name_);
+          setAddress.insert(address);
 
-        CScript scriptPubKey;
-        scriptPubKey.SetDestination(address.Get());
-        CAmount nAmount = AmountFromValue(s.value_);
-
-        totalAmount += nAmount;
-
-        vecSend.push_back(make_pair(scriptPubKey, nAmount));
+          CScript scriptPubKey;
+          scriptPubKey.SetDestination(address.Get());
+          CAmount nAmount = AmountFromValue(s.value_);
+          totalAmount += nAmount;
+          vecSend.push_back(make_pair(scriptPubKey, nAmount));
     }
 
     EnsureWalletIsUnlocked();
