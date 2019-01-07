@@ -25,6 +25,7 @@
 #include "spork.h"
 #include "smessage.h"
 #include "util.h"
+#include "rpctoken.h"
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
@@ -760,17 +761,49 @@ bool CTransaction::CheckTransaction() const
     if (::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return DoS(100, error("CTransaction::CheckTransaction() : size limits failed"));
 
-    /*
-    // Check op_return data
-    const CTxOut& op_retxout = vout[0];
-    LogPrintf("\n CTransaction::CheckTransaction() : OP_RETURN => %s \n", op_retxout.nValue);
-    */
+   // MXT
+    for (unsigned int i = 0; i < vout.size(); i++)
+    {
+        const CTxOut& txout = vout[i];
+        
+        if (txout.nValue == 0)
+        {
+            if (txout.scriptPubKey.size() > 0)
+            {
+                std::string vchData(txout.scriptPubKey.begin(), txout.scriptPubKey.end());
+            
+                LogPrintf("teste script : %s \n" , vchData);
+                
+                if (vchData.find("TKN") != std::string::npos)
+                {
+                    LogPrintf("teste is TOKEN !!! \n");
+                    
+                    ///Run Token Check
+                    
+                    
+                    checkToken(args array);
+                    
+                }
+                
+                if (vchData.find("FLE") != std::string::npos)
+                {
+                    LogPrintf("teste is FILE !!! \n");
+                    
+                    //Run File Check
+                }
+                
+                break;
+            }
+            
+        }
+    }
 
-    // Check for negative or overflow output values
+     // Check for negative or overflow output values
     int64_t nValueOut = 0;
     for (unsigned int i = 0; i < vout.size(); i++)
     {
         const CTxOut& txout = vout[i];
+        
         if (txout.IsEmpty() && !IsCoinBase() && !IsCoinStake())
             return DoS(100, error("CTransaction::CheckTransaction() : txout empty for user transaction"));
         if (txout.nValue < 0)
@@ -824,7 +857,7 @@ int64_t GetMinFee(const CTransaction& tx, unsigned int nBytes, bool fAllowFree, 
         if (nBytes < (mode == GMF_SEND ? 1000 : (DEFAULT_BLOCK_PRIORITY_SIZE - 1000)))
             nMinFee = 0;
     }
-
+    
     // This code can be removed after enough miners have upgraded to version 0.9.
     // Until then, be safe when sending and require a fee if any output
     // is less than CENT:
@@ -3000,7 +3033,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                     CTxDestination address1;
                     ExtractDestination(payee, address1);
                     CMarteXAddress address2(address1);
-
+                    
                     if(!foundPaymentAndPayee) {
                         if(fDebug) { LogPrintf("CheckBlock() : Couldn't find masternode payment(%d|%d) or payee(%d|%s) nHeight %d. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, address2.ToString().c_str(), pindexBest->nHeight+1); }
                         return DoS(100, error("CheckBlock() : Couldn't find masternode payment or payee"));

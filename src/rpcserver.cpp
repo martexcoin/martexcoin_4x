@@ -329,8 +329,8 @@ static const CRPCCommand vRPCCommands[] =
     { "smsginbox",              &smsginbox,              false,     false,     false },
     { "smsgoutbox",             &smsgoutbox,             false,     false,     false },
     { "smsgbuckets",            &smsgbuckets,            false,     false,     false },
-    //{ "createtoken",            &createtoken,            false,     false,     false },
-    //{ "sendtoken",              &sendtoken,              false,     false,     false },
+    { "createtoken",            &createtoken,            false,     false,     false },
+    { "sendtoken",              &sendtoken,              false,     false,     false },
 #endif
 };
 
