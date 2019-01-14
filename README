@@ -28,7 +28,7 @@ encryptwallet "passphrase"
 getaccount "MarteX"
 	Cria um novo endereço público MarteX.
 getaccountaddress "account"
-	Exibe um endereço MarteX>
+	Exibe um endereço endereço Martex público de determinada conta.
 getaddednodeinfo <dns> [node]
 getaddressesbyaccount "account"
 getbalance ( "account" minconf includeWatchonly )
