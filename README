@@ -1,6 +1,7 @@
 README.md
+
 Sobre a MarteXcoin
-  É uma criptomoeda criada em meados de 2014-2015 com a finalida de ser superior e trazer mais funcionalidades que a DASH (projeto este no qual tem por base).
+ 	É uma criptomoeda criada em 13/05/2014 com a finalida de ser superior e trazer mais funcionalidades que a DASH (projeto este no qual tem por base).
 
 MarteXd help
 
@@ -8,7 +9,7 @@ addmultisigaddress nrequired ["key",...] ( "account" )
 addnode <node> <add|remove|onetry>
 addredeemscript <redeemScript> [account]
 anonsend <MarteX> <amount>
-  Inicia o processo de envio de moedas de maneira anônima. (Observação, uma documentação mais detalhada será feita sobre esta função).
+	Inicia o processo de envio de moedas de maneira anônima. (Observação, uma documentação mais detalhada será feita sobre esta função).
 backupwallet "destination"
 	Faz o backup (cópia) da carteira em um arquivo. Você deve digitar o diretório onde deverá ser gravado o arquivo.
 cclistcoins
@@ -31,7 +32,7 @@ getaccountaddress "account"
 getaddednodeinfo <dns> [node]
 getaddressesbyaccount "account"
 getbalance ( "account" minconf includeWatchonly )
-  Exibe o balanço geral de todos os enderoços adicionados na carteira.
+	Exibe o balanço geral de todos os enderoços adicionados na carteira.
 getbestblockhash
 getblock <hash> [txinfo]
 getblockbynumber <number> [txinfo]
@@ -41,17 +42,17 @@ getblockhash <index>
 getblocktemplate [params]
 getcheckpoint
 getconnectioncount
-  Exibe a quantidade de conexões peer-to-peer sua carteira possui.
+	Exibe a quantidade de conexões peer-to-peer sua carteira possui.
 getdifficulty
-  Exibe a dificuldade de mineração da moeda nas modalidades POW e POS.
+	Exibe a dificuldade de mineração da moeda nas modalidades POW e POS.
 getinfo
 	Expõe informações todas informações relevantes do Node.
 getmininginfo
-  Expõe informações sobre o estado de mineração da moeda.
+	Expõe informações sobre o estado de mineração da moeda.
 getnettotals
 getnewaddress ( "account" )
 getnewpubkey [account]
-  Gera uma nova chave pública para uma determinada conta??????????
+	Gera uma nova chave pública para uma determinada conta?????????? Se for um endereço HD.
 getnewstealthaddress [label]
 getpeerinfo
 	Exibe a quais peer você encontra-se conectado.
@@ -70,6 +71,7 @@ getworkex [data, coinbase]
 help [command]
 	Mostra todos os comandos disponíveis.
 importaddress "address" ( "label" rescan )
+	Importa um endereço público sem importar a chave privada.
 importprivkey <MarteXprivkey> [label] [rescan=true]
 	Importa uma chave privada.
 importstealthaddress <scan_secret> <spend_secret> [label]
