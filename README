@@ -1,1 +1,132 @@
 README.md
+Sobre a Martexcoin
+  É uma criptomoeda criada em 13/05/2014 com a finalidade de ser superior e trazer mais funcionalidades que a DASH (moeda na qual a MarteX é baseada). É uma criptomoeda híbrida e possui tanto mineração POW quanto POS e MarterNode.
+  
+  MarteXd help
+
+addmultisigaddress nrequired ["key",...] ( "account" )
+addnode <node> <add|remove|onetry>
+addredeemscript <redeemScript> [account]
+anonsend <MarteX> <amount>
+  Realiza uma transação de forma anônima. (Futuramente será disponibilizado uma manual explicando melhor seu funcionamento).
+backupwallet "destination"
+	Faz o backup (cópia) da carteira em um arquivo. Você deve digitar o diretório onde deverá ser gravado o arquivo.
+cclistcoins
+checkkernel [{"txid":txid,"vout":n},...] [createblocktemplate=false]
+checkwallet
+	Verifica a integridade da carteira.
+createmultisig nrequired ["key",...]
+createrawtransaction [{"txid":txid,"vout":n},...] {address:amount,...} ( locktime )
+decoderawtransaction <hex string>
+decodescript <hex string>
+dumpprivkey <MarteX>
+	Mostra a chave privada de determinado endereço público.
+dumpwallet <filename>
+encryptwallet "passphrase"
+	Adiciona uma senha para aumentar a segurança da carteira.
+getaccount "MarteX"
+	Cria um novo endereço público MarteX.
+getaccountaddress "account"
+	
+getaddednodeinfo <dns> [node]
+getaddressesbyaccount "account"
+getbalance ( "account" minconf includeWatchonly )
+getbestblockhash
+getblock <hash> [txinfo]
+getblockbynumber <number> [txinfo]
+getblockcount
+	Exibe a qunatidade de blocos existentes na blockchain.
+getblockhash <index>
+getblocktemplate [params]
+getcheckpoint
+getconnectioncount
+getdifficulty
+getinfo
+	Expõe informações todas informações relevantes do Node.
+getmininginfo
+getnettotals
+getnewaddress ( "account" )
+getnewpubkey [account]
+getnewstealthaddress [label]
+getpeerinfo
+	Exibe a quais peer você encontra-se conectado.
+getrawmempool
+getrawtransaction <txid> [verbose=0]
+getreceivedbyaccount "account" ( minconf )
+getreceivedbyaddress "MarteX" ( minconf )
+getstakereport
+getstakesubsidy <hex string>
+getstakinginfo
+getsubsidy [nTarget]
+gettransaction "txid" ( includeWatchonly )
+getvelocityinfo
+getwork [data]
+getworkex [data, coinbase]
+help [command]
+	Mostra todos os comandos disponíveis.
+importaddress "address" ( "label" rescan )
+importprivkey <MarteXprivkey> [label] [rescan=true]
+	Importa uma chave privada.
+importstealthaddress <scan_secret> <spend_secret> [label]
+importwallet <filename>
+	Importa uma carteira a partir de um arquivo.
+keypoolrefill ( newsize )
+listaccounts ( minconf includeWatchonly)
+listaddressgroupings
+listreceivedbyaccount ( minconf includeempty includeWatchonly)
+listreceivedbyaddress ( minconf includeempty includeWatchonly)
+listsinceblock ( "blockhash" target-confirmations includeWatchonly)
+liststealthaddresses [show_secrets=0]
+listtransactions ( "account" count from includeWatchonly)
+listunspent [minconf=1] [maxconf=9999999]  ["address",...]
+makekeypair [prefix]
+masternode "command"... ( "passphrase" )
+	Executa qualquer comando listado em help no masternode.
+masternodelist ( "mode" "filter" )
+move "fromaccount" "toaccount" amount ( minconf "comment" )
+ping
+	Exibe o ping sobre os peers que estás conectado.
+repairwallet
+	repara a wallet e retorna o valor em boolean (verdadeiro ou falso).
+resendtx
+reservebalance [<reserve> [amount]]
+scanforalltxns [fromHeight]
+scanforstealthtxns [fromHeight]
+searchrawtransactions <address> [verbose=1] [skip=0] [count=100]
+sendalert <message> <privatekey> <minver> <maxver> <priority> <id> [cancelupto]
+sendfrom "fromaccount" "toMarteX" amount ( minconf "comment" "comment-to" )
+sendmany "fromaccount" {"address":amount,...} ( minconf "comment" )
+sendrawtransaction <hex string>
+sendtoaddress "MarteX" amount ( "comment" "comment-to" )
+sendtostealthaddress <stealth_address> <amount> [comment] [comment-to] [narration]
+setaccount "MarteX" "account"
+	Nomei um endereço MarteX a um nome específico.
+settxfee amount
+signmessage "MarteX" "message"
+signrawtransaction <hex string> [{"txid":txid,"vout":n,"scriptPubKey":hex,"redeemScript":hex},...] [<privatekey1>,...] [sighashtype="ALL"]
+smsgaddkey <address> <pubkey>
+smsgbuckets [stats|dump]
+smsgdisable
+	Desabilita o serviço de mensagem.
+smsgenable
+	Habilita o serviço de mensagem.
+smsggetpubkey <address>
+smsginbox [all|unread|clear]
+smsglocalkeys [whitelist|all|wallet|recv <+/-> <address>|anon <+/-> <address>]
+smsgoptions [list|set <optname> <value>]
+	Exibe uma lista de todas as opções do comando acima.
+smsgoutbox [all|clear]
+smsgscanbuckets 
+smsgscanchain 
+smsgsend <addrFrom> <addrTo> <message>
+smsgsendanon <addrTo> <message>
+spork <name> [<value>]
+stop
+	Desligar o MarteX wallet.
+submitblock <hex data> [optional-params-obj]
+validateaddress <MarteX>
+	Valida um endereço MarteX e retorna em boolean (verdadeiro ou falso).
+validatepubkey <MarteXpubkey>
+	Valida um endereço MarteX público e retorna em boolean (verdadeiro ou falso).
+verifymessage <MarteX> <signature> <message>
+  
