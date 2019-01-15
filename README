@@ -2,6 +2,16 @@ README.md
 
 Sobre a MarteXcoin
  	É uma criptomoeda criada em 13/05/2014 com a finalida de ser superior e trazer mais funcionalidades que a DASH (projeto este no qual tem por base).
+	O MarteX [MXT] Blockchain é um protocolo de plataforma de contrato inteligente experimental que permite pagamentos instantâneos a qualquer pessoa, em qualquer parte do mundo, de uma forma privada e segura.
+	O MarteX [MXT] usa a tecnologia blockchain peer-to-peer desenvolvida pela Bitcoin para operar sem nenhuma autoridade central: gerenciar transações, executar contratos e emitir dinheiro é realizado coletivamente pela rede.
+	MarteX [MXT] é o nome do software de código aberto que permite o uso deste protocolo.
+	Especificações:
+	Algoritmo: X13.
+	Block time: 60 seconds.
+	5 milhões de moedas no total (POW/POS)-2% Premine
+	Dificuldade de re-target:todos os blocos.
+	Taxa de transação m[inima: 0,0001 MXT (as taxas são pagas aos mineradores).
+	Confirmações sobre Transações: 10, maturidade: 10.	
 
 MarteXd help
 
@@ -51,6 +61,7 @@ getmininginfo
 	Expõe informações sobre o estado de mineração da moeda.
 getnettotals
 getnewaddress ( "account" )
+	Cria um novo endereço público para uma determinada conta.
 getnewpubkey [account]
 	Gera uma nova chave pública para uma determinada conta?????????? Se for um endereço HD.
 getnewstealthaddress [label]
@@ -109,6 +120,7 @@ sendtostealthaddress <stealth_address> <amount> [comment] [comment-to] [narratio
 setaccount "MarteX" "account"
 	Nomei um endereço MarteX a um nome específico.
 settxfee amount
+	Altera o valor de taxas cobrado por node (falta confirmar).
 signmessage "MarteX" "message"
 signrawtransaction <hex string> [{"txid":txid,"vout":n,"scriptPubKey":hex,"redeemScript":hex},...] [<privatekey1>,...] [sighashtype="ALL"]
 smsgaddkey <address> <pubkey>
