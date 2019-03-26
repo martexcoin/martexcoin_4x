@@ -1212,18 +1212,17 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
                    s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
                }
 
-               std::string str(s, 34);
-               std::string rpcpass = "rpcpassword=" + str + "\n";
-               fprintf(ConfFile, rpcpass.c_str());
+               string str(s, 34);
+               fprintf(ConfFile, "rpcpassword=%s\n", str.c_str());
                fprintf(ConfFile, "port=51315\n");
                fprintf(ConfFile, "rpcport=51314\n");
                fprintf(ConfFile, "#rpcconnect=127.0.0.1\n");
                fprintf(ConfFile, "rpcallowip=127.0.0.1\n");
-               fprintf(ConfFile, "addnode=seed.martexcoin.org:51315\n");
-               fprintf(ConfFile, "addnode=seed1.martexcoin.org:51315\n");
-               fprintf(ConfFile, "addnode=seed2.martexcoin.org:51315\n");
-               fprintf(ConfFile, "addnode=seed3.martexcoin.org:51315\n");
-               fprintf(ConfFile, "addnode=seed4.martexcoin.org:51315\n");
+               fprintf(ConfFile, "addnode=seed.martexcoin.org\n");
+               fprintf(ConfFile, "addnode=seed1.martexcoin.org\n");
+               fprintf(ConfFile, "addnode=seed2.martexcoin.org\n");
+               fprintf(ConfFile, "addnode=seed3.martexcoin.org\n");
+               fprintf(ConfFile, "addnode=seed4.martexcoin.org\n");
 
                fclose(ConfFile);
 

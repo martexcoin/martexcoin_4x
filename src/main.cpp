@@ -1491,23 +1491,24 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
 {
     int64_t nSubsidy = nBlockPoWReward;
 
+    // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)
+    CAmount nSuperblockPart = 0;
+
     if(GetTime() > REWARD_MN_POW_SWITCH_TIME) {
-			nSubsidy = nBlockPoWReward_NEW;
+	nSubsidy = nBlockPoWReward_NEW;
     }
 
-	if (GetTime() > START_FOUNDATION_PAYMENTS_TESTNET && TestNet()){
-			nSubsidy = nBlockPoWReward_MMF;		
-	}else if (GetTime() > START_FOUNDATION_PAYMENTS && !TestNet()){
-			nSubsidy = nBlockPoWReward_MMF;
-	}	
-	
+    if (GetTime() > (TestNet() ? START_FOUNDATION_PAYMENTS_TESTNET : START_FOUNDATION_PAYMENTS)){
+	nSubsidy = nBlockPoWReward_MMF;
+    }
+
     if (nHeight > nReservePhaseStart && nHeight < nReservePhaseEnd) {
-      nSubsidy = nBlockRewardReserve;
+	nSubsidy = nBlockRewardReserve;
     }
 
     // Time Swap old version
     if (nHeight > nReservePhaseEnd && nHeight < 10080 && !TestNet()) {
-      nSubsidy = nSwapFaseReward;
+	nSubsidy = nSwapFaseReward;
     }
 
     if(randreward() <= 5000 && nHeight > 10080 && !TestNet()) { // 5% Chance of superblock
@@ -1518,13 +1519,21 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
         nSubsidy = nSuperPoWReward_NEW;
     }
 
-    else if(pindexBest->nMoneySupply > MAX_SINGLE_TX) {
-        LogPrint("MINEOUT", "GetProofOfWorkReward(): create=%s nFees=%d\n", FormatMoney(nFees), nFees);
-        return nFees;
+    //New reward PoW after block 1593000
+    if(nBestHeight >= (!TestNet() ? NEW_REWARD_SW_BLOCK : NEW_REWARD_SW_BLOCK_TESTNET))
+    {
+	nSubsidy = nBlockReward;
+	nSuperblockPart = nSubsidy/10;
+    }
+
+    if(pindexBest->nMoneySupply > MAX_SINGLE_TX) {
+	LogPrint("MINEOUT", "GetProofOfWorkReward(): create=%s nFees=%d\n", FormatMoney(nFees), nFees);
+	return nFees;
     }
 
     LogPrint("creation", "GetProofOfWorkReward() : create=%s nSubsidy=%d\n", FormatMoney(nSubsidy), nSubsidy);
-    return nSubsidy + nFees;
+    return nSubsidy + nFees - nSuperblockPart;
+
 }
 
 // miner's coin stake reward
@@ -1532,8 +1541,11 @@ int64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, int64_t nCoinAge, i
 {
     int64_t nSubsidy = nCoinAge * COIN_YEAR_REWARD * 33 / (365 * 33 + 8);
 
+    // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)
+    CAmount nSuperblockPart = 0;
+
     if(randreward() <= 20500) // 20.5% Chance of superblock
-        nSubsidy = nCoinAge * COIN_SPRB_REWARD * 33 / (365 * 33 + 8);
+	nSubsidy = nCoinAge * COIN_SPRB_REWARD * 33 / (365 * 33 + 8);
     if(nBestHeight > RWRD_FIX_TOGGLE) // Correct block reward payouts
     {
         nSubsidy = nCoinAge * COIN_YEAR_REWARD_FIXED * 33 / (365 * 33 + 8);
@@ -1543,13 +1555,22 @@ int64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, int64_t nCoinAge, i
         if(nBestHeight > MN_FIX_TOGGLE)
             nSubsidy = nCoinAge * MN_REWARD_FIXED * 33 / (365 * 33 + 8);
     }
-    else if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
+
+    //New reward PoS
+    if(nBestHeight >= (!TestNet() ? NEW_REWARD_SW_BLOCK : NEW_REWARD_SW_BLOCK_TESTNET))
+    {
+	nSubsidy = nBlockReward;
+	nSuperblockPart = nSubsidy/10;
+    }
+
+    if(pindexBest->nMoneySupply > MAX_SINGLE_TX)
     {
         LogPrint("MINEOUT", "GetProofOfStakeReward(): create=%s nFees=%d\n", FormatMoney(nFees), nFees);
         return nFees;
     }
+
     LogPrint("creation", "GetProofOfStakeReward(): create=%s nCoinAge=%d\n", FormatMoney(nSubsidy), nCoinAge);
-    return nSubsidy + nFees;
+    return nSubsidy + nFees - nSuperblockPart;
 }
 
 // ppcoin: find last block index up to pindex
@@ -2055,7 +2076,7 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs, map<uint256, CTx
             if (txPrev.IsCoinBase() || txPrev.IsCoinStake())
             {
                 int nSpendDepth;
-				int nCbMaturity = (GetTime() <= (!TestNet() ? NEW_MATURITY_SWITCH_TIME : NEW_MATURITY_SWITCH_TIME_TESTNET) ? nCoinbaseMaturity : nCoinbaseMaturity_NEW);
+		int nCbMaturity = (GetTime() <= (!TestNet() ? NEW_MATURITY_SWITCH_TIME : NEW_MATURITY_SWITCH_TIME_TESTNET) ? nCoinbaseMaturity : nCoinbaseMaturity_NEW);
                 if (IsConfirmedInNPrevBlocks(txindex, pindexBlock, nCbMaturity, nSpendDepth))
                     return error("ConnectInputs() : tried to spend %s at depth %d", txPrev.IsCoinBase() ? "coinbase" : "coinstake", nSpendDepth);
             }
@@ -5041,6 +5062,12 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue)
         ret = blockValue * 0.50; // 50%
         if(randreward() <= 5000) // 5% Chance of superblock correct
             ret = blockValue * 0.55; // 55%
+    }
+
+    //New reward PoW after block 1593000
+    if(nHeight >= (!TestNet() ? NEW_REWARD_SW_BLOCK : NEW_REWARD_SW_BLOCK_TESTNET))
+    {
+        ret = blockValue * 0.4; //40%
     }
 
     return ret;

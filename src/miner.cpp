@@ -124,9 +124,9 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
             return NULL;
         txNew.vout[0].scriptPubKey.SetDestination(pubkey.GetID());
         if (GetTime() > REWARD_MN_POW_SWITCH_TIME){
-            
-			// Set TX values
-			bool hasPayment = true;
+
+            // Set TX values
+            bool hasPayment = true;
             CScript payee,payeeF;
             CTxIn vin;
 
@@ -137,48 +137,41 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
                 if(winningNode){
                     payee = GetScriptForDestination(winningNode->pubkey.GetID());
                 } else {
-                    LogPrintf("CreateNewBlock PoW: Failed to detect masternode to pay\n");
-                    // pay the dev address if it can't detect					
-					std::vector<unsigned char> vchPubKey = ParseHex((!TestNet() ? mMVCDEV : tMVCDEV));
-					CPubKey pubKey(vchPubKey);
+                    // pay the dev address if it can't detect
+			std::vector<unsigned char> vchPubKey = ParseHex((!TestNet() ? mMVCDEV : tMVCDEV));
+			CPubKey pubKey(vchPubKey);
 
-					bool isValid = pubKey.IsValid();
-					bool isCompressed = pubKey.IsCompressed();
-					CKeyID keyID = pubKey.GetID();
+			bool isValid = pubKey.IsValid();
+			bool isCompressed = pubKey.IsCompressed();
+			CKeyID keyID = pubKey.GetID();
 
-					CMarteXAddress address;
-					address.Set(keyID);
-					payee = GetScriptForDestination(address.Get());
-					LogPrintf("CreateNewBlock PoW DEV\n");					
+			CMarteXAddress address;
+			address.Set(keyID);
+			payee = GetScriptForDestination(address.Get());
+			LogPrintf("CreateNewBlock PoW DEV\n");
                 }
             }
-			
+
             if(hasPayment)
-            {				
-				txNew.vout.resize(2);
-  				txNew.vout[1].scriptPubKey = payee;
-				
+            {
+		txNew.vout.resize(2);
+		txNew.vout[1].scriptPubKey = payee;
+
                 CTxDestination address1;
                 ExtractDestination(payee, address1);
                 CMarteXAddress address2(address1);
 
                 LogPrintf("PoW Masternode payment to %s\n", address2.ToString().c_str());
             }
-			
+
 			// Foundation Payments
-			int paymentsF = 1;	
+			int paymentsF = 1;
 			// start foundation payments
 			bool bFoundationPayment = false;
-			
-			if ( Params().NetworkID() == CChainParams::TESTNET ){
-				if (GetTime() > START_FOUNDATION_PAYMENTS_TESTNET ){
-					bFoundationPayment = true;
-				}
-			}else{
-				if (GetTime() > START_FOUNDATION_PAYMENTS){
-					bFoundationPayment = true;
-				}
-			}	
+
+			if (GetTime() > (TestNet() ? START_FOUNDATION_PAYMENTS_TESTNET : START_FOUNDATION_PAYMENTS)){
+				bFoundationPayment = true;
+			}
 
 			bool hasfoundationPay = true;
 			if(bFoundationPayment) {
@@ -186,10 +179,10 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
 				CMarteXAddress foundationaddress;
 				foundationaddress = CMarteXAddress(!TestNet() ? FOUNDATION_M : FOUNDATION_T);
 				payeeF = GetScriptForDestination(foundationaddress.Get());
-			}else{ 
+			}else{
 				hasfoundationPay = false;
 			}
-			
+
 			if(hasfoundationPay){
 				paymentsF = txNew.vout.size() + 1;
 				txNew.vout.resize(paymentsF);
@@ -202,8 +195,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
 				CMarteXAddress address3(address0);
 
 				LogPrintf("Foundation payment to %s\n", address3.ToString().c_str());
-			}			
-			
+			}
         }
     }
     else
@@ -429,20 +421,19 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
         }
 
 		bool bfoundationPay = false;
-		if ( Params().NetworkID() == CChainParams::TESTNET ){
-			if (GetTime() > START_FOUNDATION_PAYMENTS_TESTNET ){
-				bfoundationPay = true;
-			}
-		}else{
-			if (GetTime() > START_FOUNDATION_PAYMENTS){
-				bfoundationPay = true;
-			}
-		}	
-		
+		if (GetTime() > (TestNet() ? START_FOUNDATION_PAYMENTS_TESTNET : START_FOUNDATION_PAYMENTS))
+			bfoundationPay = true;
+
 		if (GetTime() > REWARD_MN_POW_SWITCH_TIME){
 			int64_t nblockValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
 			int64_t nmasternodePayment = 0.01 * COIN; // 1/6 of block 0.06 MXT
 			int64_t nfoundationPayment = 0.006 * COIN;	//10% of block 0.06 MXT
+			//New reward PoW after block 1593000
+			if(nBestHeight >= (!TestNet() ? NEW_REWARD_SW_BLOCK : NEW_REWARD_SW_BLOCK_TESTNET)){
+			    int64_t nblockValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees);
+			    int64_t nmasternodePayment = GetMasternodePayment(pindexPrev->nHeight + 1, nblockValue);
+			    int64_t nfoundationPayment = GetFoundationPayment(pindexPrev->nHeight + 1, nblockValue);
+			}
 
 	        // > MXT <
 	        if (!fProofOfStake && !bfoundationPay){  //miner + masternode 

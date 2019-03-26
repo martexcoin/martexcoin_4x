@@ -7,10 +7,7 @@
 #include "clientversion.h"
 #include <string>
 
-//
 // client versioning
-//
-
 static const int CLIENT_VERSION =
                            1000000 * CLIENT_VERSION_MAJOR
                          +   10000 * CLIENT_VERSION_MINOR
@@ -21,15 +18,11 @@ extern const std::string CLIENT_NAME;
 extern const std::string CLIENT_BUILD;
 extern const std::string CLIENT_DATE;
 
-//
 // database format versioning
-//
 static const int DATABASE_VERSION = 70509;
 
-//
 // network protocol versioning
-//
-static const int PROTOCOL_VERSION = 62018;
+static const int PROTOCOL_VERSION = 62019;
 
 // intial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
@@ -53,7 +46,7 @@ static const int CADDR_TIME_VERSION = 31402;
 
 // only request blocks from nodes outside this range of versions
 static const int NOBLKS_VERSION_START = 0;
-static const int NOBLKS_VERSION_END = 62017;
+static const int NOBLKS_VERSION_END = 62018;
 
 // BIP 0031, pong message, is enabled for all versions AFTER this one
 static const int BIP0031_VERSION = 60000;

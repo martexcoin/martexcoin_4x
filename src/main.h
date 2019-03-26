@@ -30,6 +30,9 @@
 #define FASTTX_SIGNATURES_REQUIRED           05
 #define FASTTX_SIGNATURES_TOTAL              10
 
+#define NEW_REWARD_SW_BLOCK_TESTNET 350000
+#define NEW_REWARD_SW_BLOCK 1593000
+
 // Define difficulty retarget algorithms
 enum DiffMode {
     DIFF_DEFAULT = 0, // Default to invalid 0
@@ -80,15 +83,15 @@ static const int64_t MIN_RELAY_TX_FEE_NEW = MIN_TX_FEE_NEW;
 static const unsigned int TX_FEE_SWITCH_TIME = 1526169600; // 13-Mai-18 00:00:00 UTC
 
 /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
-static const int nCoinbaseMaturity = 3; 
-static const int nCoinbaseMaturity_NEW = 150; 
+static const int nCoinbaseMaturity = 3;
+static const int nCoinbaseMaturity_NEW = 150;
 
 /** Minimum TX count (for relaying) */
 static const int64_t MIN_TX_COUNT = 0;
 /** Minimum TX value (for relaying) */
 static const int64_t MIN_TX_VALUE = 0.01 * COIN;
 /** No amount larger than this (in satoshi) is valid */
-static const int64_t MAX_SINGLE_TX = 5000000 * COIN; // 5 Million MarteX coins
+static const int64_t MAX_SINGLE_TX = 11600000 * COIN; // 11600 Million MarteX coins
 /** Moneyrange params */
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_SINGLE_TX); }
 /** Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp. */
@@ -189,6 +192,9 @@ static const int64_t nBlockPoWReward_MMF = 0.066 * COIN;
 static const int64_t nSuperPoWReward_NEW = 0.60 * COIN;
 /** Swap fase subsidy */
 static const int64_t nSwapFaseReward = 0 * COIN;
+/** NEW block subsidy after block 1593000 */
+static const int64_t nBlockReward = 2.5 * COIN;
+
 /** Genesis Block Height */
 static const int64_t nGenesisHeight = 0;
 /** Reserve Phase start block */
