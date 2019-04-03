@@ -1520,7 +1520,7 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
     }
 
     //New reward PoW after block 1593000
-    if(nBestHeight >= (!TestNet() ? NEW_REWARD_SW_BLOCK : NEW_REWARD_SW_BLOCK_TESTNET))
+    if(nHeight >= (!TestNet() ? NEW_REWARD_SW_BLOCK : NEW_REWARD_SW_BLOCK_TESTNET))
     {
 	nSubsidy = nBlockReward;
 	nSuperblockPart = nSubsidy/10;

@@ -4,6 +4,9 @@ MarteX [MXT] integration/staging tree
 ![MarteXcoin](https://raw.githubusercontent.com/martexcoin/martexcoin/master/src/qt/res/images/splash.png)
 
 ### Change log
+2.7.4.1
+- Fix
+
 2.7.4.0
 - New reward to 2.5 MXT after block 1593000/350000 main/testnet
 - New Supply to 11600000
