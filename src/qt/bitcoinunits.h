@@ -1,10 +1,15 @@
-#ifndef BITCOINUNITS_H
-#define BITCOINUNITS_H
+// Copyright (c) 2011-2015 The Bitcoin Core developers
+// Copyright (c) 2014-2019 The MarteX Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "util.h"
+#ifndef BITCOIN_QT_BITCOINUNITS_H
+#define BITCOIN_QT_BITCOINUNITS_H
 
-#include <QString>
+#include "amount.h"
+
 #include <QAbstractListModel>
+#include <QString>
 
 // U+2009 THIN SPACE = UTF-8 E2 80 89
 #define REAL_THIN_SP_CP 0x2009
@@ -37,7 +42,7 @@
 #define THIN_SP_UTF8 REAL_THIN_SP_UTF8
 #define THIN_SP_HTML HTML_HACK_SP
 
-/** Bitcoin unit definitions. Encapsulates parsing and formatting
+/** MarteX unit definitions. Encapsulates parsing and formatting
    and serves as list model for drop-down selection boxes.
 */
 class BitcoinUnits: public QAbstractListModel
@@ -47,14 +52,15 @@ class BitcoinUnits: public QAbstractListModel
 public:
     explicit BitcoinUnits(QObject *parent);
 
-    /** Bitcoin units.
+    /** MarteX units.
       @note Source: https://en.bitcoin.it/wiki/Units . Please add only sensible ones
      */
     enum Unit
     {
-        BTC,
-        mBTC,
-        uBTC
+        MXT,
+        mMXT,
+        uMXT,
+        valverde
     };
 
     enum SeparatorStyle
@@ -78,8 +84,6 @@ public:
     static QString description(int unit);
     //! Number of Satoshis (1e-8) per unit
     static qint64 factor(int unit);
-    //! Number of amount digits (to represent max number of coins)
-    static int amountDigits(int unit);
     //! Number of decimals left
     static int decimals(int unit);
     //! Format as string
@@ -87,6 +91,7 @@ public:
     static QString simpleFormat(int unit, const CAmount& amount, bool plussign=false, SeparatorStyle separators=separatorStandard);
     //! Format as string (with unit)
     static QString formatWithUnit(int unit, const CAmount& amount, bool plussign=false, SeparatorStyle separators=separatorStandard);
+    //! Format as HTML string (with unit)
     static QString formatHtmlWithUnit(int unit, const CAmount& amount, bool plussign=false, SeparatorStyle separators=separatorStandard);
     //! Format as string (with unit) but floor value up to "digits" settings
     static QString floorWithUnit(int unit, const CAmount& amount, bool plussign=false, SeparatorStyle separators=separatorStandard);
@@ -107,6 +112,7 @@ public:
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     ///@}
+
     static QString removeSpaces(QString text)
     {
         text.remove(' ');
@@ -125,4 +131,4 @@ private:
 };
 typedef BitcoinUnits::Unit BitcoinUnit;
 
-#endif // BITCOINUNITS_H
+#endif // BITCOIN_QT_BITCOINUNITS_H

@@ -1,12 +1,21 @@
-#include <QApplication>
+// Copyright (c) 2011-2015 The Bitcoin Core developers
+// Copyright (c) 2014-2019 The MarteX Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "guiutil.h"
 
 #include "bitcoinaddressvalidator.h"
 #include "bitcoinunits.h"
+#include "qvalidatedlineedit.h"
 #include "walletmodel.h"
 
+#include "primitives/transaction.h"
 #include "init.h"
+#include "policy/policy.h"
+#include "protocol.h"
+#include "script/script.h"
+#include "script/standard.h"
 #include "util.h"
 
 #ifdef WIN32
@@ -32,23 +41,31 @@
 #if BOOST_FILESYSTEM_VERSION >= 3
 #include <boost/filesystem/detail/utf8_codecvt_facet.hpp>
 #endif
+#include <boost/scoped_array.hpp>
 
 #include <QAbstractItemView>
+#include <QApplication>
 #include <QClipboard>
 #include <QDateTime>
 #include <QDesktopServices>
+#include <QDesktopWidget>
 #include <QDoubleValidator>
 #include <QFileDialog>
 #include <QFont>
 #include <QLineEdit>
 #include <QSettings>
-#include <QTextDocument> // For Qt::escape
+#include <QTextDocument> // for Qt::mightBeRichText
 #include <QThread>
+#include <QMouseEvent>
 
 #if QT_VERSION < 0x050000
 #include <QUrl>
 #else
 #include <QUrlQuery>
+#endif
+
+#if QT_VERSION >= 0x50200
+#include <QFontDatabase>
 #endif
 
 #if BOOST_FILESYSTEM_VERSION >= 3
@@ -58,10 +75,10 @@ static boost::filesystem::detail::utf8_codecvt_facet utf8;
 #if defined(Q_OS_MAC)
 extern double NSAppKitVersionNumber;
 #if !defined(NSAppKitVersionNumber10_8)
-#define NSAppKitVersionNumber10_8
+#define NSAppKitVersionNumber10_8 1187
 #endif
 #if !defined(NSAppKitVersionNumber10_9)
-#define NSAppKitVersionNumber10_9
+#define NSAppKitVersionNumber10_9 1265
 #endif
 #endif
 
@@ -77,8 +94,11 @@ QString dateTimeStr(qint64 nTime)
     return dateTimeStr(QDateTime::fromTime_t((qint32)nTime));
 }
 
-QFont bitcoinAddressFont()
+QFont fixedPitchFont()
 {
+#if QT_VERSION >= 0x50200
+    return QFontDatabase::systemFont(QFontDatabase::FixedFont);
+#else
     QFont font("Monospace");
 #if QT_VERSION >= 0x040800
     font.setStyleHint(QFont::Monospace);
@@ -86,13 +106,39 @@ QFont bitcoinAddressFont()
     font.setStyleHint(QFont::TypeWriter);
 #endif
     return font;
+#endif
 }
 
-void setupAddressWidget(QLineEdit *widget, QWidget *parent)
+// Just some dummy data to generate an convincing random-looking (but consistent) address
+static const uint8_t dummydata[] = {0xeb,0x15,0x23,0x1d,0xfc,0xeb,0x60,0x92,0x58,0x86,0xb6,0x7d,0x06,0x52,0x99,0x92,0x59,0x15,0xae,0xb1,0x72,0xc0,0x66,0x47};
+
+// Generate a dummy address with invalid CRC, starting with the network prefix.
+static std::string DummyAddress(const CChainParams &params)
 {
-    widget->setMaxLength(BitcoinAddressValidator::MaxAddressLength);
-    widget->setValidator(new BitcoinAddressValidator(parent));
-    widget->setFont(bitcoinAddressFont());
+    std::vector<unsigned char> sourcedata = params.Base58Prefix(CChainParams::PUBKEY_ADDRESS);
+    sourcedata.insert(sourcedata.end(), dummydata, dummydata + sizeof(dummydata));
+    for(int i=0; i<256; ++i) { // Try every trailing byte
+        std::string s = EncodeBase58(sourcedata.data(), sourcedata.data() + sourcedata.size());
+        if (!CBitcoinAddress(s).IsValid())
+            return s;
+        sourcedata[sourcedata.size()-1] += 1;
+    }
+    return "";
+}
+
+void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent)
+{
+    parent->setFocusProxy(widget);
+
+    widget->setFont(fixedPitchFont());
+#if QT_VERSION >= 0x040700
+    // We don't want translators to use own addresses in translations
+    // and this is the only place, where this address is supplied.
+    widget->setPlaceholderText(QObject::tr("Enter a MarteX address (e.g. %1)").arg(
+        QString::fromStdString(DummyAddress(Params()))));
+#endif
+    widget->setValidator(new BitcoinAddressEntryValidator(parent));
+    widget->setCheckValidator(new BitcoinAddressCheckValidator(parent));
 }
 
 void setupAmountWidget(QLineEdit *widget, QWidget *parent)
@@ -106,19 +152,26 @@ void setupAmountWidget(QLineEdit *widget, QWidget *parent)
 
 bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    // NovaCoin: check prefix
-    if(uri.scheme() != QString("MarteX"))
+    // return if URI is not valid or is no martex: URI
+    if(!uri.isValid() || uri.scheme() != QString("martex"))
         return false;
 
     SendCoinsRecipient rv;
     rv.address = uri.path();
+    // Trim any following forward slash which may have been added by the OS
+    if (rv.address.endsWith("/")) {
+        rv.address.truncate(rv.address.length() - 1);
+    }
     rv.amount = 0;
+
 #if QT_VERSION < 0x050000
     QList<QPair<QString, QString> > items = uri.queryItems();
 #else
     QUrlQuery uriQuery(uri);
     QList<QPair<QString, QString> > items = uriQuery.queryItems();
 #endif
+    
+    rv.fUseFastSend = false;
     for (QList<QPair<QString, QString> >::iterator i = items.begin(); i != items.end(); i++)
     {
         bool fShouldReturnFalse = false;
@@ -133,11 +186,23 @@ bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
             rv.label = i->second;
             fShouldReturnFalse = false;
         }
+        if (i->first == "IS")
+        {
+            if(i->second.compare(QString("1")) == 0)
+                rv.fUseFastSend = true;
+
+            fShouldReturnFalse = false;
+        }
+        if (i->first == "message")
+        {
+            rv.message = i->second;
+            fShouldReturnFalse = false;
+        }
         else if (i->first == "amount")
         {
             if(!i->second.isEmpty())
             {
-                if(!BitcoinUnits::parse(BitcoinUnits::BTC, i->second, &rv.amount))
+                if(!BitcoinUnits::parse(BitcoinUnits::MXT, i->second, &rv.amount))
                 {
                     return false;
                 }
@@ -157,16 +222,58 @@ bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 
 bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
 {
-    // Convert MarteX:// to MarteX:
+    // Convert martex:// to martex:
     //
-    //    Cannot handle this later, because bitcoin:// will cause Qt to see the part after // as host,
+    //    Cannot handle this later, because martex:// will cause Qt to see the part after // as host,
     //    which will lower-case it (and thus invalidate the address).
-    if(uri.startsWith("MarteX://", Qt::CaseInsensitive))
+    if(uri.startsWith("martex://", Qt::CaseInsensitive))
     {
-        uri.replace(0, 11, "MarteX:");
+        uri.replace(0, 7, "martex:");
     }
     QUrl uriInstance(uri);
     return parseBitcoinURI(uriInstance, out);
+}
+
+QString formatBitcoinURI(const SendCoinsRecipient &info)
+{
+    QString ret = QString("martex:%1").arg(info.address);
+    int paramCount = 0;
+
+    if (info.amount)
+    {
+        ret += QString("?amount=%1").arg(BitcoinUnits::format(BitcoinUnits::MXT, info.amount, false, BitcoinUnits::separatorNever));
+        paramCount++;
+    }
+
+    if (!info.label.isEmpty())
+    {
+        QString lbl(QUrl::toPercentEncoding(info.label));
+        ret += QString("%1label=%2").arg(paramCount == 0 ? "?" : "&").arg(lbl);
+        paramCount++;
+    }
+
+    if (!info.message.isEmpty())
+    {
+        QString msg(QUrl::toPercentEncoding(info.message));
+        ret += QString("%1message=%2").arg(paramCount == 0 ? "?" : "&").arg(msg);
+        paramCount++;
+    }
+    
+    if(info.fUseFastSend)
+    {
+        ret += QString("%1IS=1").arg(paramCount == 0 ? "?" : "&");
+        paramCount++;
+    }
+
+    return ret;
+}
+
+bool isDust(const QString& address, const CAmount& amount)
+{
+    CTxDestination dest = CBitcoinAddress(address.toStdString()).Get();
+    CScript script = GetScriptForDestination(dest);
+    CTxOut txOut(amount, script);
+    return txOut.IsDust(dustRelayFee);
 }
 
 QString HtmlEscape(const QString& str, bool fMultiLine)
@@ -202,10 +309,16 @@ void copyEntryData(QAbstractItemView *view, int column, int role)
     }
 }
 
-QString getSaveFileName(QWidget *parent, const QString &caption,
-                                 const QString &dir,
-                                 const QString &filter,
-                                 QString *selectedSuffixOut)
+QList<QModelIndex> getEntryData(QAbstractItemView *view, int column)
+{
+    if(!view || !view->selectionModel())
+        return QList<QModelIndex>();
+    return view->selectionModel()->selectedRows(column);
+}
+
+QString getSaveFileName(QWidget *parent, const QString &caption, const QString &dir,
+    const QString &filter,
+    QString *selectedSuffixOut)
 {
     QString selectedFilter;
     QString myDir;
@@ -221,6 +334,7 @@ QString getSaveFileName(QWidget *parent, const QString &caption,
     {
         myDir = dir;
     }
+    /* Directly convert path to native OS path separators */
     QString result = QDir::toNativeSeparators(QFileDialog::getSaveFileName(parent, caption, myDir, filter, &selectedFilter));
 
     /* Extract first suffix from filter pattern "Description (*.foo)" or "Description (*.foo *.bar ...) */
@@ -247,6 +361,41 @@ QString getSaveFileName(QWidget *parent, const QString &caption,
     /* Return selected suffix if asked to */
     if(selectedSuffixOut)
     {
+        *selectedSuffixOut = selectedSuffix;
+    }
+    return result;
+}
+
+QString getOpenFileName(QWidget *parent, const QString &caption, const QString &dir,
+    const QString &filter,
+    QString *selectedSuffixOut)
+{
+    QString selectedFilter;
+    QString myDir;
+    if(dir.isEmpty()) // Default to user documents location
+    {
+#if QT_VERSION < 0x050000
+        myDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+#else
+        myDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+#endif
+    }
+    else
+    {
+        myDir = dir;
+    }
+    /* Directly convert path to native OS path separators */
+    QString result = QDir::toNativeSeparators(QFileDialog::getOpenFileName(parent, caption, myDir, filter, &selectedFilter));
+
+    if(selectedSuffixOut)
+    {
+        /* Extract first suffix from filter pattern "Description (*.foo)" or "Description (*.foo *.bar ...) */
+        QRegExp filter_re(".* \\(\\*\\.(.*)[ \\)]");
+        QString selectedSuffix;
+        if(filter_re.exactMatch(selectedFilter))
+        {
+            selectedSuffix = filter_re.cap(1);
+        }
         *selectedSuffixOut = selectedSuffix;
     }
     return result;
@@ -289,20 +438,38 @@ void openDebugLogfile()
         QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathDebug)));
 }
 
+void openConfigfile()
+{
+    boost::filesystem::path pathConfig = GetConfigFile(GetArg("-conf", BITCOIN_CONF_FILENAME));
+
+    /* Open MarteX.conf with the associated application */
+    if (boost::filesystem::exists(pathConfig))
+        QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
+}
+
+void openMNConfigfile()
+{
+    boost::filesystem::path pathConfig = GetMasternodeConfigFile();
+
+    /* Open masternode.conf with the associated application */
+    if (boost::filesystem::exists(pathConfig))
+        QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
+}
+
 void showBackups()
 {
-    boost::filesystem::path pathBackups = GetDataDir() / "backups";
+    boost::filesystem::path backupsDir = GetBackupsDir();
 
     /* Open folder with default browser */
-    if (boost::filesystem::exists(pathBackups))
-        QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathBackups)));
+    if (boost::filesystem::exists(backupsDir))
+        QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(backupsDir)));
 }
 
 void SubstituteFonts(const QString& language)
 {
 #if defined(Q_OS_MAC)
 // Background:
-// OSX's default font changed in 10.9 and QT is unable to find it with its
+// OSX's default font changed in 10.9 and Qt is unable to find it with its
 // usual fallback methods when building against the 10.7 sdk or lower.
 // The 10.8 SDK added a function to let it find the correct fallback font.
 // If this fallback is not properly loaded, some characters may fail to
@@ -334,8 +501,9 @@ void SubstituteFonts(const QString& language)
 #endif
 }
 
-ToolTipToRichTextFilter::ToolTipToRichTextFilter(int size_threshold, QObject *parent) :
-    QObject(parent), size_threshold(size_threshold)
+ToolTipToRichTextFilter::ToolTipToRichTextFilter(int _size_threshold, QObject *parent) :
+    QObject(parent),
+    size_threshold(_size_threshold)
 {
 
 }
@@ -346,11 +514,14 @@ bool ToolTipToRichTextFilter::eventFilter(QObject *obj, QEvent *evt)
     {
         QWidget *widget = static_cast<QWidget*>(obj);
         QString tooltip = widget->toolTip();
-        if(tooltip.size() > size_threshold && !tooltip.startsWith("<qt") && !Qt::mightBeRichText(tooltip))
+        if(tooltip.size() > size_threshold && !tooltip.startsWith("<qt"))
         {
-            // Envelope with <qt></qt> to make sure Qt detects this as rich text
-            // Escape the current message as HTML and replace \n by <br>
-            tooltip = "<qt>" + HtmlEscape(tooltip, true) + "</qt>";
+            // Escape the current message as HTML and replace \n by <br> if it's not rich text
+            if(!Qt::mightBeRichText(tooltip))
+                tooltip = HtmlEscape(tooltip, true);
+            // Envelop with <qt></qt> to make sure Qt detects every tooltip as rich text
+            // and style='white-space:pre' to preserve line composition
+            tooltip = "<qt style='white-space:pre'>" + tooltip + "</qt>";
             widget->setToolTip(tooltip);
             return true;
         }
@@ -412,7 +583,7 @@ int TableViewLastColumnResizingFixer::getAvailableWidthForColumn(int column)
     return nResult;
 }
 
-// Make sure we don't make the columns wider than the tables viewport width.
+// Make sure we don't make the columns wider than the table's viewport width.
 void TableViewLastColumnResizingFixer::adjustTableColumnsWidth()
 {
     disconnectViewHeadersSignals();
@@ -446,7 +617,7 @@ void TableViewLastColumnResizingFixer::on_sectionResized(int logicalIndex, int o
     }
 }
 
-// When the tabless geometry is ready, we manually perform the stretch of the "Message" column,
+// When the table's geometry is ready, we manually perform the stretch of the "Message" column,
 // as the "Stretch" resize mode does not allow for interactive resizing.
 void TableViewLastColumnResizingFixer::on_geometriesChanged()
 {
@@ -462,7 +633,8 @@ void TableViewLastColumnResizingFixer::on_geometriesChanged()
  * Initializes all internal variables and prepares the
  * the resize modes of the last 2 columns of the table and
  */
-TableViewLastColumnResizingFixer::TableViewLastColumnResizingFixer(QTableView* table, int lastColMinimumWidth, int allColsMinimumWidth) :
+TableViewLastColumnResizingFixer::TableViewLastColumnResizingFixer(QTableView* table, int lastColMinimumWidth, int allColsMinimumWidth, QObject *parent) :
+    QObject(parent),
     tableView(table),
     lastColumnMinimumWidth(lastColMinimumWidth),
     allColumnsMinimumWidth(allColsMinimumWidth)
@@ -478,12 +650,17 @@ TableViewLastColumnResizingFixer::TableViewLastColumnResizingFixer(QTableView* t
 #ifdef WIN32
 boost::filesystem::path static StartupShortcutPath()
 {
-    return GetSpecialFolderPath(CSIDL_STARTUP) / "MarteX.lnk";
+    std::string chain = ChainNameFromCommandLine();
+    if (chain == CBaseChainParams::MAIN)
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "MarteX Core.lnk";
+    if (chain == CBaseChainParams::TESTNET) // Remove this special case when CBaseChainParams::TESTNET = "testnet4"
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "MarteX Core (testnet).lnk";
+    return GetSpecialFolderPath(CSIDL_STARTUP) / strprintf("MarteX Core (%s).lnk", chain);
 }
 
 bool GetStartOnSystemStartup()
 {
-    // check for MarteX.lnk
+    // check for "MarteX Core*.lnk"
     return boost::filesystem::exists(StartupShortcutPath());
 }
 
@@ -499,8 +676,8 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         // Get a pointer to the IShellLink interface.
         IShellLink* psl = NULL;
         HRESULT hres = CoCreateInstance(CLSID_ShellLink, NULL,
-                                CLSCTX_INPROC_SERVER, IID_IShellLink,
-                                reinterpret_cast<void**>(&psl));
+            CLSCTX_INPROC_SERVER, IID_IShellLink,
+            reinterpret_cast<void**>(&psl));
 
         if (SUCCEEDED(hres))
         {
@@ -508,20 +685,34 @@ bool SetStartOnSystemStartup(bool fAutoStart)
             TCHAR pszExePath[MAX_PATH];
             GetModuleFileName(NULL, pszExePath, sizeof(pszExePath));
 
-            TCHAR pszArgs[5] = TEXT("-min");
+            // Start client minimized
+            QString strArgs = "-min";
+            // Set -testnet /-regtest options
+            strArgs += QString::fromStdString(strprintf(" -testnet=%d -regtest=%d", GetBoolArg("-testnet", false), GetBoolArg("-regtest", false)));
+
+#ifdef UNICODE
+            boost::scoped_array<TCHAR> args(new TCHAR[strArgs.length() + 1]);
+            // Convert the QString to TCHAR*
+            strArgs.toWCharArray(args.get());
+            // Add missing '\0'-termination to string
+            args[strArgs.length()] = '\0';
+#endif
 
             // Set the path to the shortcut target
             psl->SetPath(pszExePath);
             PathRemoveFileSpec(pszExePath);
             psl->SetWorkingDirectory(pszExePath);
             psl->SetShowCmd(SW_SHOWMINNOACTIVE);
-            psl->SetArguments(pszArgs);
+#ifndef UNICODE
+            psl->SetArguments(strArgs.toStdString().c_str());
+#else
+            psl->SetArguments(args.get());
+#endif
 
             // Query IShellLink for the IPersistFile interface for
             // saving the shortcut in persistent storage.
             IPersistFile* ppf = NULL;
-            hres = psl->QueryInterface(IID_IPersistFile,
-                                       reinterpret_cast<void**>(&ppf));
+            hres = psl->QueryInterface(IID_IPersistFile, reinterpret_cast<void**>(&ppf));
             if (SUCCEEDED(hres))
             {
                 WCHAR pwsz[MAX_PATH];
@@ -541,11 +732,10 @@ bool SetStartOnSystemStartup(bool fAutoStart)
     }
     return true;
 }
-
 #elif defined(Q_OS_LINUX)
 
 // Follow the Desktop Application Autostart Spec:
-//  http://standards.freedesktop.org/autostart-spec/autostart-spec-latest.html
+// http://standards.freedesktop.org/autostart-spec/autostart-spec-latest.html
 
 boost::filesystem::path static GetAutostartDir()
 {
@@ -560,7 +750,10 @@ boost::filesystem::path static GetAutostartDir()
 
 boost::filesystem::path static GetAutostartFilePath()
 {
-    return GetAutostartDir() / "MarteX.desktop";
+    std::string chain = ChainNameFromCommandLine();
+    if (chain == CBaseChainParams::MAIN)
+        return GetAutostartDir() / "martexcore.desktop";
+    return GetAutostartDir() / strprintf("martexcore-%s.lnk", chain);
 }
 
 bool GetStartOnSystemStartup()
@@ -598,11 +791,15 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         boost::filesystem::ofstream optionFile(GetAutostartFilePath(), std::ios_base::out|std::ios_base::trunc);
         if (!optionFile.good())
             return false;
-        // Write a MarteX.desktop file to the autostart directory:
+        std::string chain = ChainNameFromCommandLine();
+        // Write a martexcore.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
-        optionFile << "Name=MarteX\n";
-        optionFile << "Exec=" << pszExePath << " -min\n";
+        if (chain == CBaseChainParams::MAIN)
+            optionFile << "Name=MarteX Core\n";
+        else
+            optionFile << strprintf("Name=MarteX Core (%s)\n", chain);
+        optionFile << "Exec=" << pszExePath << strprintf(" -min -testnet=%d -regtest=%d\n", GetBoolArg("-testnet", false), GetBoolArg("-regtest", false));
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
         optionFile.close();
@@ -612,6 +809,8 @@ bool SetStartOnSystemStartup(bool fAutoStart)
 
 
 #elif defined(Q_OS_MAC)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 // based on: https://github.com/Mozketo/LaunchAtLoginController/blob/master/LaunchAtLoginController.m
 
 #include <CoreFoundation/CoreFoundation.h>
@@ -620,13 +819,24 @@ bool SetStartOnSystemStartup(bool fAutoStart)
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl);
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl)
 {
-    // loop through the list of startup items and try to find the MarteX app
+    // loop through the list of startup items and try to find the MarteX Core app
     CFArrayRef listSnapshot = LSSharedFileListCopySnapshot(list, NULL);
     for(int i = 0; i < CFArrayGetCount(listSnapshot); i++) {
         LSSharedFileListItemRef item = (LSSharedFileListItemRef)CFArrayGetValueAtIndex(listSnapshot, i);
         UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
         CFURLRef currentItemURL = NULL;
+
+#if defined(MAC_OS_X_VERSION_MAX_ALLOWED) && MAC_OS_X_VERSION_MAX_ALLOWED >= 10100
+    if(&LSSharedFileListItemCopyResolvedURL)
+        currentItemURL = LSSharedFileListItemCopyResolvedURL(item, resolutionFlags, NULL);
+#if defined(MAC_OS_X_VERSION_MIN_REQUIRED) && MAC_OS_X_VERSION_MIN_REQUIRED < 10100
+    else
         LSSharedFileListItemResolve(item, resolutionFlags, &currentItemURL, NULL);
+#endif
+#else
+    LSSharedFileListItemResolve(item, resolutionFlags, &currentItemURL, NULL);
+#endif
+
         if(currentItemURL && CFEqual(currentItemURL, findUrl)) {
             // found
             CFRelease(currentItemURL);
@@ -654,7 +864,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
     LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, bitcoinAppUrl);
 
     if(fAutoStart && !foundItem) {
-        // add MarteX app to startup item list
+        // add MarteX Core app to startup item list
         LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, NULL, NULL, bitcoinAppUrl, NULL, NULL);
     }
     else if(!fAutoStart && foundItem) {
@@ -663,6 +873,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
     }
     return true;
 }
+#pragma GCC diagnostic pop
 #else
 
 bool GetStartOnSystemStartup() { return false; }
@@ -670,77 +881,78 @@ bool SetStartOnSystemStartup(bool fAutoStart) { return false; }
 
 #endif
 
-HelpMessageBox::HelpMessageBox(QWidget *parent) :
-    QMessageBox(parent)
+void migrateQtSettings()
 {
-    header = tr("MarteX-Qt") + " " + tr("version") + " " +
-        QString::fromStdString(FormatFullVersion()) + "\n\n" +
-        tr("Usage:") + "\n" +
-        "  MarteX-qt [" + tr("command-line options") + "]                     " + "\n";
-
-    coreOptions = QString::fromStdString(HelpMessage());
-
-    uiOptions = tr("UI options") + ":\n" +
-        "  -lang=<lang>           " + tr("Set language, for example \"de_DE\" (default: system locale)") + "\n" +
-        "  -min                   " + tr("Start minimized") + "\n" +
-        "  -splash                " + tr("Show splash screen on startup (default: 1)") + "\n";
-
-    setWindowTitle(tr("MarteX-Qt"));
-    setTextFormat(Qt::PlainText);
-    // setMinimumWidth is ignored for QMessageBox so put in non-breaking spaces to make it wider.
-    setText(header + QString(QChar(0x2003)).repeated(50));
-    setDetailedText(coreOptions + "\n" + uiOptions);
+    // Migration (12.1)
+    QSettings settings;
+    if(!settings.value("fMigrationDone121", false).toBool()) {
+        settings.remove("theme");
+        settings.remove("nWindowPos");
+        settings.remove("nWindowSize");
+        settings.setValue("fMigrationDone121", true);
+    }
 }
 
-void HelpMessageBox::printToConsole()
+void saveWindowGeometry(const QString& strSetting, QWidget *parent)
 {
-    // On other operating systems, the expected action is to print the message to the console.
-    QString strUsage = header + "\n" + coreOptions + "\n" + uiOptions;
-    fprintf(stdout, "%s", strUsage.toStdString().c_str());
+    QSettings settings;
+    settings.setValue(strSetting + "Pos", parent->pos());
+    settings.setValue(strSetting + "Size", parent->size());
 }
 
-void HelpMessageBox::showOrPrint()
+void restoreWindowGeometry(const QString& strSetting, const QSize& defaultSize, QWidget *parent)
 {
-#if defined(WIN32)
-        // On Windows, show a message box, as there is no stderr/stdout in windowed applications
-        exec();
-#else
-        // On other operating systems, print help text to console
-        printToConsole();
-#endif
+    QSettings settings;
+    QPoint pos = settings.value(strSetting + "Pos").toPoint();
+    QSize size = settings.value(strSetting + "Size", defaultSize).toSize();
+
+    parent->resize(size);
+    parent->move(pos);
+
+    if ((!pos.x() && !pos.y()) || (QApplication::desktop()->screenNumber(parent) == -1))
+    {
+        QRect screen = QApplication::desktop()->screenGeometry();
+        QPoint defaultPos = screen.center() -
+            QPoint(defaultSize.width() / 2, defaultSize.height() / 2);
+        parent->resize(defaultSize);
+        parent->move(defaultPos);
+    }
 }
 
-void SetBlackThemeQSS(QApplication& app)
+// Return name of current UI-theme or default theme if no theme was found
+QString getThemeName()
 {
-    app.setStyleSheet("QWidget        { background: rgb(41,44,48); }"
-                      "QFrame         { border: none; }"
-                      "QComboBox      { color: rgb(255,255,255); }"
-                      "QComboBox QAbstractItemView::item { color: rgb(255,255,255); }"
-                      "QPushButton    { background: rgb(226,189,121); color: rgb(21,21,21); }"
-                      "QDoubleSpinBox { background: rgb(63,67,72); color: rgb(255,255,255); border-color: rgb(194,194,194); }"
-                      "QLineEdit      { background: rgb(63,67,72); color: rgb(255,255,255); border-color: rgb(194,194,194); }"
-                      "QTextEdit      { background: rgb(63,67,72); color: rgb(255,255,255); }"
-                      "QPlainTextEdit { background: rgb(63,67,72); color: rgb(255,255,255); }"
-                      "QMenuBar       { background: rgb(41,44,48); color: rgb(110,116,126); }"
-                      "QMenu          { background: rgb(30,32,36); color: rgb(222,222,222); }"
-                      "QMenu::item:selected { background-color: rgb(48,140,198); }"
-                      "QLabel         { color: rgb(120,127,139); }"
-                      "QScrollBar     { color: rgb(255,255,255); }"
-                      "QCheckBox      { color: rgb(120,127,139); }"
-                      "QRadioButton   { color: rgb(120,127,139); }"
-                      "QTabBar::tab   { color: rgb(120,127,139); border: 1px solid rgb(78,79,83); border-bottom: none; padding: 5px; }"
-                      "QTabBar::tab:selected  { background: rgb(41,44,48); }"
-                      "QTabBar::tab:!selected { background: rgb(24,26,30); margin-top: 2px; }"
-                      "QTabWidget::pane { border: 1px solid rgb(78,79,83); }"
-                      "QToolButton    { background: rgb(30,32,36); color: rgb(116,122,134); border: none; border-left-color: rgb(30,32,36); border-left-style: solid; border-left-width: 6px; margin-top: 8px; margin-bottom: 8px; }"
-                      "QToolButton:checked { color: rgb(255,255,255); border: none; border-left-color: rgb(215,173,94); border-left-style: solid; border-left-width: 6px; }"
-                      "QProgressBar   { color: rgb(149,148,148); border-color: rgb(255,255,255); border-width: 3px; border-style: solid; }"
-                      "QProgressBar::chunk { background: rgb(255,255,255); }"
-                      "QTreeView::item { background: rgb(41,44,48); color: rgb(212,213,213); }"
-                      "QTreeView::item:selected { background-color: rgb(48,140,198); }"
-                      "QTableView     { background: rgb(66,71,78); color: rgb(212,213,213); gridline-color: rgb(157,160,165); }"
-                      "QHeaderView::section { background: rgb(29,34,39); color: rgb(255,255,255); }"
-                      "QToolBar       { background: rgb(30,32,36); border: none; }");
+    QSettings settings;
+    QString theme = settings.value("theme", "").toString();
+
+    if(!theme.isEmpty()){
+        return theme;
+    }
+    return QString("light");  
+}
+
+// Open CSS when configured
+QString loadStyleSheet()
+{
+    QString styleSheet;
+    QSettings settings;
+    QString cssName;
+    QString theme = settings.value("theme", "").toString();
+
+    if(!theme.isEmpty()){
+        cssName = QString(":/css/") + theme; 
+    }
+    else {
+        cssName = QString(":/css/light");  
+        settings.setValue("theme", "light");
+    }
+    
+    QFile qFile(cssName);      
+    if (qFile.open(QFile::ReadOnly)) {
+        styleSheet = QLatin1String(qFile.readAll());
+    }
+        
+    return styleSheet;
 }
 
 void setClipboard(const QString& str)
@@ -771,5 +983,117 @@ QString boostPathToQString(const boost::filesystem::path &path)
     return QString::fromStdString(path.string());
 }
 #endif
+
+QString formatDurationStr(int secs)
+{
+    QStringList strList;
+    int days = secs / 86400;
+    int hours = (secs % 86400) / 3600;
+    int mins = (secs % 3600) / 60;
+    int seconds = secs % 60;
+
+    if (days)
+        strList.append(QString(QObject::tr("%1 d")).arg(days));
+    if (hours)
+        strList.append(QString(QObject::tr("%1 h")).arg(hours));
+    if (mins)
+        strList.append(QString(QObject::tr("%1 m")).arg(mins));
+    if (seconds || (!days && !hours && !mins))
+        strList.append(QString(QObject::tr("%1 s")).arg(seconds));
+
+    return strList.join(" ");
+}
+
+QString formatServicesStr(quint64 mask)
+{
+    QStringList strList;
+
+    // Just scan the last 8 bits for now.
+    for (int i = 0; i < 8; i++) {
+        uint64_t check = 1 << i;
+        if (mask & check)
+        {
+            switch (check)
+            {
+            case NODE_NETWORK:
+                strList.append("NETWORK");
+                break;
+            case NODE_GETUTXO:
+                strList.append("GETUTXO");
+                break;
+            case NODE_BLOOM:
+                strList.append("BLOOM");
+                break;
+            case NODE_XTHIN:
+                strList.append("XTHIN");
+                break;
+            default:
+                strList.append(QString("%1[%2]").arg("UNKNOWN").arg(check));
+            }
+        }
+    }
+
+    if (strList.size())
+        return strList.join(" & ");
+    else
+        return QObject::tr("None");
+}
+
+QString formatPingTime(double dPingTime)
+{
+    return (dPingTime == std::numeric_limits<int64_t>::max()/1e6 || dPingTime == 0) ? QObject::tr("N/A") : QString(QObject::tr("%1 ms")).arg(QString::number((int)(dPingTime * 1000), 10));
+}
+
+QString formatTimeOffset(int64_t nTimeOffset)
+{
+  return QString(QObject::tr("%1 s")).arg(QString::number((int)nTimeOffset, 10));
+}
+
+QString formatNiceTimeOffset(qint64 secs)
+{
+    // Represent time from last generated block in human readable text
+    QString timeBehindText;
+    const int HOUR_IN_SECONDS = 60*60;
+    const int DAY_IN_SECONDS = 24*60*60;
+    const int WEEK_IN_SECONDS = 7*24*60*60;
+    const int YEAR_IN_SECONDS = 31556952; // Average length of year in Gregorian calendar
+    if(secs < 60)
+    {
+        timeBehindText = QObject::tr("%n second(s)","",secs);
+    }
+    else if(secs < 2*HOUR_IN_SECONDS)
+    {
+        timeBehindText = QObject::tr("%n minute(s)","",secs/60);
+    }
+    else if(secs < 2*DAY_IN_SECONDS)
+    {
+        timeBehindText = QObject::tr("%n hour(s)","",secs/HOUR_IN_SECONDS);
+    }
+    else if(secs < 2*WEEK_IN_SECONDS)
+    {
+        timeBehindText = QObject::tr("%n day(s)","",secs/DAY_IN_SECONDS);
+    }
+    else if(secs < YEAR_IN_SECONDS)
+    {
+        timeBehindText = QObject::tr("%n week(s)","",secs/WEEK_IN_SECONDS);
+    }
+    else
+    {
+        qint64 years = secs / YEAR_IN_SECONDS;
+        qint64 remainder = secs % YEAR_IN_SECONDS;
+        timeBehindText = QObject::tr("%1 and %2").arg(QObject::tr("%n year(s)", "", years)).arg(QObject::tr("%n week(s)","", remainder/WEEK_IN_SECONDS));
+    }
+    return timeBehindText;
+}
+
+void ClickableLabel::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_EMIT clicked(event->pos());
+}
+    
+void ClickableProgressBar::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_EMIT clicked(event->pos());
+}
 
 } // namespace GUIUtil

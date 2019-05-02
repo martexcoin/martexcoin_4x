@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MarteX Core
+Comment=MarteX P2P Cryptocurrency
+Comment[de]=Verbinde mit dem MarteX peer-to-peer Netzwerk
+Comment[fr]=MarteX, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=MarteX, eşten eşe kriptografik sanal para birimi
+Exec=martex-qt %u
+Terminal=false
+Type=Application
+Icon=martex128
+MimeType=x-scheme-handler/martex;
+Categories=Office;Finance;

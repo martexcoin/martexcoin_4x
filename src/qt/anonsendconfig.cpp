@@ -4,8 +4,8 @@
 #include "bitcoinunits.h"
 #include "guiconstants.h"
 #include "optionsmodel.h"
+#include "anonsend-client.h"
 #include "walletmodel.h"
-#include "init.h"
 
 #include <QMessageBox>
 #include <QPushButton>
@@ -40,9 +40,9 @@ void AnonsendConfig::clickBasic()
 
     QString strAmount(BitcoinUnits::formatWithUnit(
         model->getOptionsModel()->getDisplayUnit(), 1000 * COIN));
-    QMessageBox::information(this, tr("Anonsend Configuration"),
+    QMessageBox::information(this, tr("AnonSend Configuration"),
         tr(
-            "Anonsend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening MarteX's configuration screen."
+            "AnonSend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening MarteX's configuration screen."
         ).arg(strAmount)
     );
 
@@ -55,9 +55,9 @@ void AnonsendConfig::clickHigh()
 
     QString strAmount(BitcoinUnits::formatWithUnit(
         model->getOptionsModel()->getDisplayUnit(), 1000 * COIN));
-    QMessageBox::information(this, tr("Anonsend Configuration"),
+    QMessageBox::information(this, tr("AnonSend Configuration"),
         tr(
-            "Anonsend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening MarteX's configuration screen."
+            "AnonSend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening MarteX's configuration screen."
         ).arg(strAmount)
     );
 
@@ -70,9 +70,9 @@ void AnonsendConfig::clickMax()
 
     QString strAmount(BitcoinUnits::formatWithUnit(
         model->getOptionsModel()->getDisplayUnit(), 1000 * COIN));
-    QMessageBox::information(this, tr("Anonsend Configuration"),
+    QMessageBox::information(this, tr("AnonSend Configuration"),
         tr(
-            "Anonsend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening Bitcoin's configuration screen."
+            "AnonSend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening MarteX's configuration screen."
         ).arg(strAmount)
     );
 
@@ -83,9 +83,9 @@ void AnonsendConfig::configure(bool enabled, int coins, int rounds) {
 
     QSettings settings;
 
-    settings.setValue("nAnonsendRounds", rounds);
-    settings.setValue("nAnonymizeMarteXAmount", coins);
+    settings.setValue("nAnonSendRounds", rounds);
+    settings.setValue("nAnonSendAmount", coins);
 
-    nAnonsendRounds = rounds;
-    nAnonymizeMarteXAmount = coins;
+    anonSendClient.nAnonSendRounds = rounds;
+    anonSendClient.nAnonSendAmount = coins;
 }

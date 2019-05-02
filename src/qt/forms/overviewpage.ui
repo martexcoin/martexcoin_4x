@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>960</width>
-    <height>594</height>
+    <height>585</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -26,13 +26,16 @@
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop:0 #F0D0A0, stop:1 #F8D488); color:#000000;</string>
+      <string notr="true">QLabel { background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop:0 #F0D0A0, stop:1 #F8D488); color:#000000; }</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
      </property>
      <property name="margin">
       <number>3</number>
+     </property>
+     <property name="textInteractionFlags">
+      <set>Qt::TextSelectableByMouse</set>
      </property>
     </widget>
    </item>
@@ -66,9 +69,6 @@
             </item>
             <item>
              <widget class="QLabel" name="labelWalletStatus">
-              <property name="cursor">
-               <cursorShape>WhatsThisCursor</cursorShape>
-              </property>
               <property name="toolTip">
                <string>The displayed information may be out of date. Your wallet automatically synchronizes with the MarteX network after a connection is established, but this process has not completed yet.</string>
               </property>
@@ -103,7 +103,7 @@
             <property name="spacing">
              <number>12</number>
             </property>
-            <item row="3" column="2">
+            <item row="4" column="2">
              <widget class="QLabel" name="labelWatchPending">
               <property name="font">
                <font>
@@ -128,7 +128,7 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="4" column="1">
              <widget class="QLabel" name="labelUnconfirmed">
               <property name="font">
                <font>
@@ -153,7 +153,57 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="2">
+            <item row="2" column="2">
+             <widget class="QLabel" name="labelWatchStake">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="cursor">
+               <cursorShape>IBeamCursor</cursorShape>
+              </property>
+              <property name="toolTip">
+               <string>Unconfirmed transactions to watch-only addresses</string>
+              </property>
+              <property name="text">
+               <string notr="true">0.000 000 00 BTC</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="textInteractionFlags">
+               <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="labelStake">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="cursor">
+               <cursorShape>IBeamCursor</cursorShape>
+              </property>
+              <property name="toolTip">
+               <string>Total of transactions that have yet to be confirmed, and do not yet count toward the spendable balance</string>
+              </property>
+              <property name="text">
+               <string notr="true">0.000 000 00 BTC</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="textInteractionFlags">
+               <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
              <widget class="QLabel" name="labelWatchImmature">
               <property name="font">
                <font>
@@ -165,7 +215,7 @@
                <cursorShape>IBeamCursor</cursorShape>
               </property>
               <property name="toolTip">
-               <string>Mined balance in watch-only addresses that has not yet matured</string>
+               <string>Balance in watch-only addresses that has not yet matured</string>
               </property>
               <property name="text">
                <string notr="true">0.000 000 00 BTC</string>
@@ -204,14 +254,14 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
+            <item row="5" column="0">
              <widget class="QLabel" name="labelTotalText">
               <property name="text">
                <string>Total:</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
+            <item row="3" column="1">
              <widget class="QLabel" name="labelImmature">
               <property name="font">
                <font>
@@ -223,7 +273,7 @@
                <cursorShape>IBeamCursor</cursorShape>
               </property>
               <property name="toolTip">
-               <string>Mined balance that has not yet matured</string>
+               <string>Balance that has not yet matured</string>
               </property>
               <property name="text">
                <string notr="true">0.000 000 00 BTC</string>
@@ -236,7 +286,7 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="3">
+            <item row="2" column="3">
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -249,14 +299,21 @@
               </property>
              </spacer>
             </item>
-            <item row="4" column="0">
+            <item row="2" column="0">
+             <widget class="QLabel" name="labelStakeText">
+              <property name="text">
+               <string>Stake:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
              <widget class="QLabel" name="labelImmatureText">
               <property name="text">
                <string>Immature:</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="1">
+            <item row="5" column="1">
              <widget class="QLabel" name="labelTotal">
               <property name="font">
                <font>
@@ -281,7 +338,7 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="2">
+            <item row="5" column="2">
              <widget class="QLabel" name="labelWatchTotal">
               <property name="font">
                <font>
@@ -348,63 +405,6 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>Stake:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="labelStake">
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="cursor">
-               <cursorShape>IBeamCursor</cursorShape>
-              </property>
-              <property name="toolTip">
-               <string>Total of coins that was staked, and do not yet count toward the current balance</string>
-              </property>
-              <property name="text">
-               <string notr="true">0.000 000 00 BTC</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="textInteractionFlags">
-               <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QLabel" name="labelWatchStake">
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="cursor">
-               <cursorShape>IBeamCursor</cursorShape>
-              </property>
-              <property name="toolTip">
-               <string>Total of coins that was staked in watch-only addresses, and do not yet count toward the current watch-only balance</string>
-              </property>
-              <property name="text">
-               <string notr="true">0.000 000 00 BTC</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="textInteractionFlags">
-               <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="2">
              <widget class="QLabel" name="labelWatchAvailable">
               <property name="font">
@@ -430,7 +430,7 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="4" column="0">
              <widget class="QLabel" name="labelPendingText">
               <property name="text">
                <string>Pending:</string>
@@ -453,19 +453,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frameAnonsend">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>350</height>
-          </size>
-         </property>
+        <widget class="QFrame" name="frameAnonSend">
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
          </property>
@@ -475,11 +463,11 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
+         <layout class="QVBoxLayout" name="VerticalLayout_PS1">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="labelAnonSendHeader">
               <property name="font">
                <font>
                 <weight>75</weight>
@@ -487,12 +475,12 @@
                </font>
               </property>
               <property name="text">
-               <string>Anonsend</string>
+               <string>AnonSend</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="labelAnonsendSyncStatus">
+             <widget class="QLabel" name="labelAnonSendSyncStatus">
               <property name="toolTip">
                <string>The displayed information may be out of date. Your wallet automatically synchronizes with the MarteX network after a connection is established, but this process has not completed yet.</string>
               </property>
@@ -523,438 +511,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QPushButton" name="runAutoDenom">
-            <property name="palette">
-             <palette>
-              <active>
-               <colorrole role="WindowText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Button">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>239</red>
-                  <green>238</green>
-                  <blue>238</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Light">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>255</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Midlight">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>247</red>
-                  <green>246</green>
-                  <blue>246</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Dark">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>119</red>
-                  <green>119</green>
-                  <blue>119</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Mid">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>159</red>
-                  <green>159</green>
-                  <blue>159</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Text">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="BrightText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>255</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="ButtonText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Base">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>255</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Window">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>239</red>
-                  <green>238</green>
-                  <blue>238</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Shadow">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="AlternateBase">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>247</red>
-                  <green>246</green>
-                  <blue>246</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="ToolTipBase">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>220</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="ToolTipText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-              </active>
-              <inactive>
-               <colorrole role="WindowText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Button">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>239</red>
-                  <green>238</green>
-                  <blue>238</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Light">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>255</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Midlight">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>247</red>
-                  <green>246</green>
-                  <blue>246</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Dark">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>119</red>
-                  <green>119</green>
-                  <blue>119</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Mid">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>159</red>
-                  <green>159</green>
-                  <blue>159</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Text">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="BrightText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>255</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="ButtonText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Base">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>255</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Window">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>239</red>
-                  <green>238</green>
-                  <blue>238</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Shadow">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="AlternateBase">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>247</red>
-                  <green>246</green>
-                  <blue>246</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="ToolTipBase">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>220</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="ToolTipText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-              </inactive>
-              <disabled>
-               <colorrole role="WindowText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>119</red>
-                  <green>119</green>
-                  <blue>119</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Button">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>239</red>
-                  <green>238</green>
-                  <blue>238</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Light">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>255</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Midlight">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>247</red>
-                  <green>246</green>
-                  <blue>246</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Dark">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>119</red>
-                  <green>119</green>
-                  <blue>119</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Mid">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>159</red>
-                  <green>159</green>
-                  <blue>159</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Text">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>119</red>
-                  <green>119</green>
-                  <blue>119</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="BrightText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>255</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="ButtonText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>119</red>
-                  <green>119</green>
-                  <blue>119</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Base">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>239</red>
-                  <green>238</green>
-                  <blue>238</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Window">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>239</red>
-                  <green>238</green>
-                  <blue>238</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="Shadow">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="AlternateBase">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>239</red>
-                  <green>238</green>
-                  <blue>238</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="ToolTipBase">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>220</blue>
-                 </color>
-                </brush>
-               </colorrole>
-               <colorrole role="ToolTipText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
-              </disabled>
-             </palette>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="autoFillBackground">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QFormLayout" name="formLayout">
+           <layout class="QFormLayout" name="anonSendFormLayout">
             <property name="fieldGrowthPolicy">
              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
             </property>
@@ -965,21 +522,28 @@
              <number>12</number>
             </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="labelAnonSendEnabledText">
               <property name="text">
                <string>Status:</string>
               </property>
              </widget>
             </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="labelAnonSendEnabled">
+              <property name="text">
+               <string>Enabled/Disabled</string>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_7">
+             <widget class="QLabel" name="labelCompletitionText">
               <property name="text">
                <string>Completion:</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QProgressBar" name="anonsendProgress">
+             <widget class="QProgressBar" name="anonSendProgress">
               <property name="maximumSize">
                <size>
                 <width>154</width>
@@ -991,14 +555,14 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="2" column="0">
              <widget class="QLabel" name="labelAnonymizedText">
               <property name="text">
-               <string>Anonsend Balance:</string>
+               <string>AnonSend Balance:</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="2" column="1">
              <widget class="QLabel" name="labelAnonymized">
               <property name="font">
                <font>
@@ -1007,32 +571,32 @@
                </font>
               </property>
               <property name="text">
-               <string notr="true">0 TX</string>
+               <string notr="true">0 MXT</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_8">
+            <item row="3" column="0">
+             <widget class="QLabel" name="labelAmountAndRoundsText">
               <property name="text">
                <string>Amount and Rounds:</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
+            <item row="3" column="1">
              <widget class="QLabel" name="labelAmountRounds">
               <property name="text">
                <string>0 MXT / 0 Rounds</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_9">
+            <item row="4" column="0">
+             <widget class="QLabel" name="labelSubmittedDenomText">
               <property name="text">
                <string>Submitted Denom:</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
+            <item row="4" column="1">
              <widget class="QLabel" name="labelSubmittedDenom">
               <property name="toolTip">
                <string>The denominations you submitted to the Masternode.&lt;br&gt;To mix, other users must submit the exact same denominations.</string>
@@ -1042,88 +606,92 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="anonsendEnabled">
-              <property name="text">
-               <string>Enabled/Disabled</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
           <item>
-           <widget class="Line" name="lineLastMessage">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="anonsendStatus">
-            <property name="minimumSize">
-             <size>
-              <width>288</width>
-              <height>43</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>(Last Message)</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="anonsendAuto">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>Try to manually submit a Anonsend request.</string>
-            </property>
-            <property name="text">
-             <string>Try Mix</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="toggleAnonsend">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Start/Stop Mixing</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="anonsendReset">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>Reset the current status of Anonsend (can interrupt Anonsend if it's in the process of Mixing, which can cost you money!)</string>
-            </property>
-            <property name="autoFillBackground">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Reset</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout" name="VerticalLayout_PS">
+            <item>
+             <widget class="QLabel" name="labelAnonSendLastMessage">
+              <property name="text">
+               <string>(Last Message)</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="toggleAnonSend">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Start/Stop Mixing</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_debugbuttons">
+              <item>
+               <widget class="QPushButton" name="anonSendAuto">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string>Try to manually submit a AnonSend request.</string>
+                </property>
+                <property name="text">
+                 <string>Try Mix</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="anonSendReset">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string>Reset the current status of AnonSend (can interrupt AnonSend if it's in the process of Mixing, which can cost you money!)</string>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Reset</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="anonSendInfo">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string>Information about AnonSend and Mixing</string>
+                </property>
+                <property name="text">
+                 <string>Info</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -1171,9 +739,6 @@
             </item>
             <item>
              <widget class="QLabel" name="labelTransactionsStatus">
-              <property name="cursor">
-               <cursorShape>WhatsThisCursor</cursorShape>
-              </property>
               <property name="toolTip">
                <string>The displayed information may be out of date. Your wallet automatically synchronizes with the MarteX network after a connection is established, but this process has not completed yet.</string>
               </property>
@@ -1184,7 +749,7 @@
                <string notr="true">(out of sync)</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1224,6 +789,19 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </item>

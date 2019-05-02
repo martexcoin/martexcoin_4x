@@ -1,208 +1,246 @@
-// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2014-2019 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef ANONSEND_H
 #define ANONSEND_H
 
-#include "core.h"
-#include "main.h"
+#include "chain.h"
+#include "chainparams.h"
+#include "primitives/transaction.h"
+#include "pubkey.h"
 #include "sync.h"
-#include "activemasternode.h"
-#include "masternodeman.h"
-#include "masternode-payments.h"
-#include "anonsend-relay.h"
+#include "tinyformat.h"
+#include "timedata.h"
 
-class CTxIn;
-class CAnonsendPool;
-class CAnonSendSigner;
-class CMasterNodeVote;
-class CMarteXAddress;
-class CAnonsendQueue;
-class CAnonsendBroadcastTx;
-class CActiveMasternode;
+class CAnonSend;
+class CConnman;
 
-// pool states for mixing
-#define POOL_STATUS_UNKNOWN                    0 // waiting for update
-#define POOL_STATUS_IDLE                       1 // waiting for update
-#define POOL_STATUS_QUEUE                      2 // waiting in a queue
-#define POOL_STATUS_ACCEPTING_ENTRIES          3 // accepting entries
-#define POOL_STATUS_FINALIZE_TRANSACTION       4 // master node will broadcast what it accepted
-#define POOL_STATUS_SIGNING                    5 // check inputs/outputs, sign final tx
-#define POOL_STATUS_TRANSMISSION               6 // transmit transaction
-#define POOL_STATUS_ERROR                      7 // error
-#define POOL_STATUS_SUCCESS                    8 // success
+// timeouts
+static const int ANONSEND_AUTO_TIMEOUT_MIN       = 5;
+static const int ANONSEND_AUTO_TIMEOUT_MAX       = 15;
+static const int ANONSEND_QUEUE_TIMEOUT          = 30;
+static const int ANONSEND_SIGNING_TIMEOUT        = 15;
+
+//! minimum peer version accepted by mixing pool
+static const int MIN_ANONSEND_PEER_PROTO_VERSION = 70208;
+
+static const size_t ANONSEND_ENTRY_MAX_SIZE      = 9;
+
+// pool responses
+enum PoolMessage {
+    ERR_ALREADY_HAVE,
+    ERR_DENOM,
+    ERR_ENTRIES_FULL,
+    ERR_EXISTING_TX,
+    ERR_FEES,
+    ERR_INVALID_COLLATERAL,
+    ERR_INVALID_INPUT,
+    ERR_INVALID_SCRIPT,
+    ERR_INVALID_TX,
+    ERR_MAXIMUM,
+    ERR_MN_LIST,
+    ERR_MODE,
+    ERR_NON_STANDARD_PUBKEY,
+    ERR_NOT_A_MN, // not used
+    ERR_QUEUE_FULL,
+    ERR_RECENT,
+    ERR_SESSION,
+    ERR_MISSING_TX,
+    ERR_VERSION,
+    MSG_NOERR,
+    MSG_SUCCESS,
+    MSG_ENTRIES_ADDED,
+    ERR_INVALID_INPUT_COUNT,
+    MSG_POOL_MIN = ERR_ALREADY_HAVE,
+    MSG_POOL_MAX = MSG_ENTRIES_ADDED
+};
+
+// pool states
+enum PoolState {
+    POOL_STATE_IDLE,
+    POOL_STATE_QUEUE,
+    POOL_STATE_ACCEPTING_ENTRIES,
+    POOL_STATE_SIGNING,
+    POOL_STATE_ERROR,
+    POOL_STATE_SUCCESS,
+    POOL_STATE_MIN = POOL_STATE_IDLE,
+    POOL_STATE_MAX = POOL_STATE_SUCCESS
+};
 
 // status update message constants
-#define MASTERNODE_ACCEPTED                    1
-#define MASTERNODE_REJECTED                    0
-#define MASTERNODE_RESET                       -1
+enum PoolStatusUpdate {
+    STATUS_REJECTED,
+    STATUS_ACCEPTED
+};
 
-#define ANONSEND_QUEUE_TIMEOUT                 30
-#define ANONSEND_SIGNING_TIMEOUT               15
-
-// used for anonymous relaying of inputs/outputs/sigs
-#define ANONSEND_RELAY_IN                 1
-#define ANONSEND_RELAY_OUT                2
-#define ANONSEND_RELAY_SIG                3
-
-extern CAnonsendPool anonSendPool;
-extern CAnonSendSigner anonSendSigner;
-extern std::vector<CAnonsendQueue> vecAnonsendQueue;
-extern std::string strMasterNodePrivKey;
-extern map<uint256, CAnonsendBroadcastTx> mapAnonsendBroadcastTxes;
-extern CActiveMasternode activeMasternode;
-
-/** Holds an Anonsend input
+/** Holds an mixing input
  */
 class CTxDSIn : public CTxIn
 {
 public:
+    // memory only
+    CScript prevPubKey;
     bool fHasSig; // flag to indicate if signed
-    int nSentTimes; //times we've sent this anonymously
 
-    CTxDSIn(const CTxIn& in)
-    {
-        prevout = in.prevout;
-        scriptSig = in.scriptSig;
-        prevPubKey = in.prevPubKey;
-        nSequence = in.nSequence;
-        nSentTimes = 0;
-        fHasSig = false;
-    }
+    CTxDSIn(const CTxIn& txin, const CScript& script) :
+        CTxIn(txin),
+        prevPubKey(script),
+        fHasSig(false)
+        {}
+
+    CTxDSIn() :
+        CTxIn(),
+        prevPubKey(),
+        fHasSig(false)
+        {}
 };
 
-/** Holds an Anonsend output
- */
-class CTxDSOut : public CTxOut
+class CAnonsendAccept
 {
 public:
-    int nSentTimes; //times we've sent this anonymously
+    int nDenom;
+    int nInputCount;
+    CMutableTransaction txCollateral;
 
-    CTxDSOut(const CTxOut& out)
-    {
-        nValue = out.nValue;
-        nRounds = out.nRounds;
-        scriptPubKey = out.scriptPubKey;
-        nSentTimes = 0;
-    }
-};
+    CAnonsendAccept() :
+        nDenom(0),
+        nInputCount(0),
+        txCollateral(CMutableTransaction())
+        {};
 
-// A clients transaction in the anonsend pool
-class CAnonSendEntry
-{
-public:
-    bool isSet;
-    std::vector<CTxDSIn> sev;
-    std::vector<CTxDSOut> vout;
-    int64_t amount;
-    CTransaction collateral;
-    CTransaction txSupporting;
-    int64_t addedTime; // time in UTC milliseconds
+    CAnonsendAccept(int nDenom, int nInputCount, const CMutableTransaction& txCollateral) :
+        nDenom(nDenom),
+        nInputCount(nInputCount),
+        txCollateral(txCollateral)
+        {};
 
-    CAnonSendEntry()
-    {
-        isSet = false;
-        collateral = CTransaction();
-        amount = 0;
-    }
+    ADD_SERIALIZE_METHODS;
 
-    /// Add entries to use for Anonsend
-    bool Add(const std::vector<CTxIn> vinIn, int64_t amountIn, const CTransaction collateralIn, const std::vector<CTxOut> voutIn)
-    {
-        if(isSet){return false;}
-
-        BOOST_FOREACH(const CTxIn& in, vinIn)
-            sev.push_back(in);
-
-        BOOST_FOREACH(const CTxOut& out, voutIn)
-            vout.push_back(out);
-
-        amount = amountIn;
-        collateral = collateralIn;
-        isSet = true;
-        addedTime = GetTime();
-
-        return true;
-    }
-
-    bool AddSig(const CTxIn& vin)
-    {
-        BOOST_FOREACH(CTxDSIn& s, sev) {
-            if(s.prevout == vin.prevout && s.nSequence == vin.nSequence){
-                if(s.fHasSig){return false;}
-                s.scriptSig = vin.scriptSig;
-                s.prevPubKey = vin.prevPubKey;
-                s.fHasSig = true;
-
-                return true;
-            }
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action) {
+        READWRITE(nDenom);
+        int nVersion = s.GetVersion();
+        if (nVersion > 70208) {
+            READWRITE(nInputCount);
+        } else if (ser_action.ForRead()) {
+            nInputCount = 0;
         }
-
-        return false;
+        READWRITE(txCollateral);
     }
 
-    bool IsExpired()
+    friend bool operator==(const CAnonsendAccept& a, const CAnonsendAccept& b)
     {
-        return (GetTime() - addedTime) > ANONSEND_QUEUE_TIMEOUT;// 120 seconds
+        return a.nDenom == b.nDenom && a.txCollateral == b.txCollateral;
     }
+};
+
+// A clients transaction in the mixing pool
+class CDarkSendEntry
+{
+public:
+    std::vector<CTxDSIn> vecTxDSIn;
+    std::vector<CTxOut> vecTxOut;
+    CTransactionRef txCollateral;
+    // memory only
+    CService addr;
+
+    CDarkSendEntry() :
+        vecTxDSIn(std::vector<CTxDSIn>()),
+        vecTxOut(std::vector<CTxOut>()),
+        txCollateral(MakeTransactionRef()),
+        addr(CService())
+        {}
+
+    CDarkSendEntry(const std::vector<CTxDSIn>& vecTxDSIn, const std::vector<CTxOut>& vecTxOut, const CTransaction& txCollateral) :
+        vecTxDSIn(vecTxDSIn),
+        vecTxOut(vecTxOut),
+        txCollateral(MakeTransactionRef(txCollateral)),
+        addr(CService())
+        {}
+
+    ADD_SERIALIZE_METHODS;
+
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action) {
+        READWRITE(vecTxDSIn);
+        READWRITE(txCollateral);
+        READWRITE(vecTxOut);
+    }
+
+    bool AddScriptSig(const CTxIn& txin);
 };
 
 
 /**
- * A currently inprogress Anonsend merge and denomination information
+ * A currently in progress mixing merge and denomination information
  */
 class CAnonsendQueue
 {
 public:
-    CTxIn vin;
-    int64_t time;
     int nDenom;
-    bool ready; //ready for submit
+    int nInputCount;
+    COutPoint masternodeOutpoint;
+    int64_t nTime;
+    bool fReady; //ready for submit
     std::vector<unsigned char> vchSig;
+    // memory only
+    bool fTried;
 
-    CAnonsendQueue()
-    {
-        nDenom = 0;
-        vin = CTxIn();
-        time = 0;
-        vchSig.clear();
-        ready = false;
-    }
+    CAnonsendQueue() :
+        nDenom(0),
+        nInputCount(0),
+        masternodeOutpoint(COutPoint()),
+        nTime(0),
+        fReady(false),
+        vchSig(std::vector<unsigned char>()),
+        fTried(false)
+        {}
 
-    IMPLEMENT_SERIALIZE
-    (
+    CAnonsendQueue(int nDenom, int nInputCount, COutPoint outpoint, int64_t nTime, bool fReady) :
+        nDenom(nDenom),
+        nInputCount(nInputCount),
+        masternodeOutpoint(outpoint),
+        nTime(nTime),
+        fReady(fReady),
+        vchSig(std::vector<unsigned char>()),
+        fTried(false)
+        {}
+
+    ADD_SERIALIZE_METHODS;
+
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action) {
         READWRITE(nDenom);
-        READWRITE(vin);
-        READWRITE(time);
-        READWRITE(ready);
-        READWRITE(vchSig);
-    )
-
-    bool GetAddress(CService &addr)
-    {
-        CMasternode* pmn = mnodeman.Find(vin);
-        if(pmn != NULL)
-        {
-            addr = pmn->addr;
-            return true;
+        int nVersion = s.GetVersion();
+        if (nVersion > 70208) {
+            READWRITE(nInputCount);
+        } else if (ser_action.ForRead()) {
+            nInputCount = 0;
         }
-        return false;
+        if (nVersion == 70208 && (s.GetType() & SER_NETWORK)) {
+            // converting from/to old format
+            CTxIn txin{};
+            if (ser_action.ForRead()) {
+                READWRITE(txin);
+                masternodeOutpoint = txin.prevout;
+            } else {
+                txin = CTxIn(masternodeOutpoint);
+                READWRITE(txin);
+            }
+        } else {
+            // using new format directly
+            READWRITE(masternodeOutpoint);
+        }
+        READWRITE(nTime);
+        READWRITE(fReady);
+        if (!(s.GetType() & SER_GETHASH)) {
+            READWRITE(vchSig);
+        }
     }
 
-    /// Get the protocol version
-    bool GetProtocolVersion(int &protocolVersion)
-    {
-        CMasternode* pmn = mnodeman.Find(vin);
-        if(pmn != NULL)
-        {
-            protocolVersion = pmn->protocolVersion;
-            return true;
-        }
-        return false;
-    }
-
-    /** Sign this Anonsend transaction
+    uint256 GetSignatureHash() const;
+    /** Sign this mixing transaction
      *  \return true if all conditions are met:
      *     1) we have an active Masternode,
      *     2) we have a valid Masternode private key,
@@ -210,300 +248,195 @@ public:
      *     4) we verified the message successfully
      */
     bool Sign();
+    /// Check if we have a valid Masternode address
+    bool CheckSignature(const CPubKey& pubKeyMasternode) const;
 
-    bool Relay();
+    bool Relay(CConnman &connman);
 
-    /// Is this Anonsend expired?
-    bool IsExpired()
+    /// Is this queue expired?
+    bool IsExpired() { return GetAdjustedTime() - nTime > ANONSEND_QUEUE_TIMEOUT; }
+
+    std::string ToString() const
     {
-        return (GetTime() - time) > ANONSEND_QUEUE_TIMEOUT;// 120 seconds
+        return strprintf("nDenom=%d, nInputCount=%d, nTime=%lld, fReady=%s, fTried=%s, masternode=%s",
+                        nDenom, nInputCount, nTime, fReady ? "true" : "false", fTried ? "true" : "false", masternodeOutpoint.ToStringShort());
     }
 
-    /// Check if we have a valid Masternode address
-    bool CheckSignature();
-
+    friend bool operator==(const CAnonsendQueue& a, const CAnonsendQueue& b)
+    {
+        return a.nDenom == b.nDenom && a.nInputCount == b.nInputCount && a.masternodeOutpoint == b.masternodeOutpoint && a.nTime == b.nTime && a.fReady == b.fReady;
+    }
 };
 
-/** Helper class to store Anonsend transaction (tx) information.
+/** Helper class to store mixing transaction (tx) information.
  */
 class CAnonsendBroadcastTx
 {
-public:
-    CTransaction tx;
-    CTxIn vin;
-    vector<unsigned char> vchSig;
-    int64_t sigTime;
-};
-
-/** Helper object for signing and checking signatures
- */
-class CAnonSendSigner
-{
-public:
-    /// Is the inputs associated with this public key? (and there is 10000 MXT - checking if valid masternode)
-    bool IsVinAssociatedWithPubkey(CTxIn& vin, CPubKey& pubkey);
-    /// Set the private/public key values, returns true if successful
-    bool SetKey(std::string strSecret, std::string& errorMessage, CKey& key, CPubKey& pubkey);
-    /// Sign the message, returns true if successful
-    bool SignMessage(std::string strMessage, std::string& errorMessage, std::vector<unsigned char>& vchSig, CKey key);
-    /// Verify the message, returns true if succcessful
-    bool VerifyMessage(CPubKey pubkey, std::vector<unsigned char>& vchSig, std::string strMessage, std::string& errorMessage);
-};
-
-/** Used to keep track of current status of Anonsend pool
- */
-class CAnonsendPool
-{
 private:
+    // memory only
+    // when corresponding tx is 0-confirmed or conflicted, nConfirmedHeight is -1
+    int nConfirmedHeight;
+
+public:
+    CTransactionRef tx;
+    COutPoint masternodeOutpoint;
+    std::vector<unsigned char> vchSig;
+    int64_t sigTime;
+
+    CAnonsendBroadcastTx() :
+        nConfirmedHeight(-1),
+        tx(MakeTransactionRef()),
+        masternodeOutpoint(),
+        vchSig(),
+        sigTime(0)
+        {}
+
+    CAnonsendBroadcastTx(const CTransactionRef& _tx, COutPoint _outpoint, int64_t _sigTime) :
+        nConfirmedHeight(-1),
+        tx(_tx),
+        masternodeOutpoint(_outpoint),
+        vchSig(),
+        sigTime(_sigTime)
+        {}
+
+    ADD_SERIALIZE_METHODS;
+
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action) {
+        READWRITE(tx);
+        int nVersion = s.GetVersion();
+        if (nVersion == 70208 && (s.GetType() & SER_NETWORK)) {
+            // converting from/to old format
+            CTxIn txin{};
+            if (ser_action.ForRead()) {
+                READWRITE(txin);
+                masternodeOutpoint = txin.prevout;
+            } else {
+                txin = CTxIn(masternodeOutpoint);
+                READWRITE(txin);
+            }
+        } else {
+            // using new format directly
+            READWRITE(masternodeOutpoint);
+        }
+        if (!(s.GetType() & SER_GETHASH)) {
+            READWRITE(vchSig);
+        }
+        READWRITE(sigTime);
+    }
+
+    friend bool operator==(const CAnonsendBroadcastTx& a, const CAnonsendBroadcastTx& b)
+    {
+        return *a.tx == *b.tx;
+    }
+    friend bool operator!=(const CAnonsendBroadcastTx& a, const CAnonsendBroadcastTx& b)
+    {
+        return !(a == b);
+    }
+    explicit operator bool() const
+    {
+        return *this != CAnonsendBroadcastTx();
+    }
+
+    uint256 GetSignatureHash() const;
+
+    bool Sign();
+    bool CheckSignature(const CPubKey& pubKeyMasternode) const;
+
+    void SetConfirmedHeight(int nConfirmedHeightIn) { nConfirmedHeight = nConfirmedHeightIn; }
+    bool IsExpired(int nHeight);
+};
+
+// base class
+class CAnonSendBase
+{
+protected:
     mutable CCriticalSection cs_anonsend;
 
-    std::vector<CAnonSendEntry> entries; // Masternode entries
-    CTransaction finalTransaction; // the finalized transaction ready for signing
+    // The current mixing sessions in progress on the network
+    std::vector<CAnonsendQueue> vecAnonsendQueue;
 
-    int64_t lastTimeChanged; // last time the 'state' changed, in UTC milliseconds
+    std::vector<CDarkSendEntry> vecEntries; // Masternode/clients entries
 
-    unsigned int state; // should be one of the POOL_STATUS_XXX values
-    unsigned int entriesCount;
-    unsigned int lastEntryAccepted;
-    unsigned int countEntriesAccepted;
+    PoolState nState; // should be one of the POOL_STATE_XXX values
+    int64_t nTimeLastSuccessfulStep; // the time when last successful mixing step was performed
 
-    std::vector<CTxIn> lockedCoins;
+    int nSessionID; // 0 if no mixing session is active
 
-    std::string lastMessage;
-    bool unitTest;
+    CMutableTransaction finalMutableTransaction; // the finalized transaction ready for signing
 
-    int sessionID;
-
-    int sessionUsers; //N Users have said they'll join
-    bool sessionFoundMasternode; //If we've found a compatible Masternode
-    std::vector<CTransaction> vecSessionCollateral;
-
-    int cachedLastSuccess;
-
-    int minBlockSpacing; //required blocks between mixes
-    CTransaction txCollateral;
-
-    int64_t lastNewBlock;
-
-    //debugging data
-    std::string strAutoDenomResult;
+    void SetNull();
+    void CheckQueue();
 
 public:
-    enum messages {
-        ERR_ALREADY_HAVE,
-        ERR_DENOM,
-        ERR_ENTRIES_FULL,
-        ERR_EXISTING_TX,
-        ERR_FEES,
-        ERR_INVALID_COLLATERAL,
-        ERR_INVALID_INPUT,
-        ERR_INVALID_SCRIPT,
-        ERR_INVALID_TX,
-        ERR_MAXIMUM,
-        ERR_MN_LIST,
-        ERR_MODE,
-        ERR_NON_STANDARD_PUBKEY,
-        ERR_NOT_A_MN,
-        ERR_QUEUE_FULL,
-        ERR_RECENT,
-        ERR_SESSION,
-        ERR_MISSING_TX,
-        ERR_VERSION,
-        MSG_NOERR,
-        MSG_SUCCESS,
-        MSG_ENTRIES_ADDED
-    };
+    int nSessionDenom; //Users must submit an denom matching this
+    int nSessionInputCount; //Users must submit a count matching this
 
-    // where collateral should be made out to
-    CScript collateralPubKey;
+    CAnonSendBase() { SetNull(); }
 
-    CMasternode* pSubmittedToMasternode;
+    int GetQueueSize() const { return vecAnonsendQueue.size(); }
+    int GetState() const { return nState; }
+    std::string GetStateString() const;
 
-    int sessionDenom; //Users must submit an denom matching this
-
-    int cachedNumBlocks; //used for the overview screen
-
-    CAnonsendPool()
-    {
-        /* Anonsend uses collateral addresses to trust parties entering the pool
-            to behave themselves. If they don't it takes their money. */
-
-        cachedLastSuccess = 0;
-        cachedNumBlocks = std::numeric_limits<int>::max();
-        unitTest = false;
-        txCollateral = CTransaction();
-        minBlockSpacing = 0;
-        lastNewBlock = 0;
-
-        SetNull();
-    }
-
-    /** Process a Anonsend message using the Anonsend protocol
-     * \param pfrom
-     * \param strCommand lower case command string; valid values are:
-     *        Command  | Description
-     *        -------- | -----------------
-     *        dsa      | Anonsend Acceptable
-     *        dsc      | Anonsend Complete
-     *        dsf      | Anonsend Final tx
-     *        dsi      | Anonsend vIn
-     *        dsq      | Anonsend Queue
-     *        dss      | Anonsend Signal Final Tx
-     *        dssu     | Anonsend status update
-     *        dssub    | Anonsend Subscribe To
-     * \param vRecv
-     */
-    void ProcessMessageAnonsend(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
-
-    void InitCollateralAddress(){
-        SetCollateralAddress(Params().AnonsendPoolDummyAddress());
-    }
-
-    void SetMinBlockSpacing(int minBlockSpacingIn){
-        minBlockSpacing = minBlockSpacingIn;
-    }
-
-    bool SetCollateralAddress(std::string strAddress);
-    void Reset();
-    void SetNull();
-
-    void UnlockCoins();
-
-    bool IsNull() const
-    {
-        return state == POOL_STATUS_ACCEPTING_ENTRIES && entries.empty();
-    }
-
-    int GetState() const
-    {
-        return state;
-    }
-
-    std::string GetStatus();
-
-    int GetEntriesCount() const
-    {
-        return entries.size();
-    }
-
-    /// Get the time the last entry was accepted (time in UTC milliseconds)
-    int GetLastEntryAccepted() const
-    {
-        return lastEntryAccepted;
-    }
-
-    /// Get the count of the accepted entries
-    int GetCountEntriesAccepted() const
-    {
-        return countEntriesAccepted;
-    }
-
-    // Set the 'state' value, with some logging and capturing when the state changed
-    void UpdateState(unsigned int newState)
-    {
-        if (fMasterNode && (newState == POOL_STATUS_ERROR || newState == POOL_STATUS_SUCCESS)){
-            LogPrint("anonsend", "CAnonsendPool::UpdateState() - Can't set state to ERROR or SUCCESS as a Masternode. \n");
-            return;
-        }
-
-        LogPrintf("CAnonsendPool::UpdateState() == %d | %d \n", state, newState);
-        if(state != newState){
-            lastTimeChanged = GetTimeMillis();
-            if(fMasterNode) {
-                RelayStatus(anonSendPool.sessionID, anonSendPool.GetState(), anonSendPool.GetEntriesCount(), MASTERNODE_RESET);
-            }
-        }
-        state = newState;
-    }
-
-    /// Get the maximum number of transactions for the pool
-    int GetMaxPoolTransactions()
-    {
-        return Params().PoolMaxTransactions();
-    }
-
-    /// Do we have enough users to take entries?
-    bool IsSessionReady(){
-        return sessionUsers >= GetMaxPoolTransactions();
-    }
-
-    /// Are these outputs compatible with other client in the pool?
-    bool IsCompatibleWithEntries(std::vector<CTxOut>& vout);
-
-    /// Is this amount compatible with other client in the pool?
-    bool IsCompatibleWithSession(int64_t nAmount, CTransaction txCollateral, std::string& strReason);
-
-    /// Passively run Anonsend in the background according to the configuration in settings (only for QT)
-    bool DoAutomaticDenominating(bool fDryRun=false);
-    bool PrepareAnonsendDenominate();
-
-    /// from masternode-sync.h
-    bool IsBlockchainSynced();
-
-    /// Check for process in Anonsend
-    void Check();
-    void CheckFinalTransaction();
-    /// Charge fees to bad actors (Charge clients a fee if they're abusive)
-    void ChargeFees();
-    /// Rarely charge fees to pay miners
-    void ChargeRandomFees();
-    void CheckTimeout();
-    void CheckForCompleteQueue();
-    /// Check to make sure a signature matches an input in the pool
-    bool SignatureValid(const CScript& newSig, const CTxIn& newVin);
-    /// If the collateral is valid given by a client
-    bool IsCollateralValid(const CTransaction& txCollateral);
-    /// Add a clients entry to the pool
-    bool AddEntry(const std::vector<CTxIn>& newInput, const int64_t& nAmount, const CTransaction& txCollateral, const std::vector<CTxOut>& newOutput, std::string& error);
-    /// Add signature to a vin
-    bool AddScriptSig(const CTxIn& newVin);
-    /// Check that all inputs are signed. (Are all inputs signed?)
-    bool SignaturesComplete();
-    /// As a client, send a transaction to a Masternode to start the denomination process
-    void SendAnonsendDenominate(std::vector<CTxIn>& vin, std::vector<CTxOut>& vout, int64_t amount);
-    /// Get Masternode updates about the progress of Anonsend
-    bool StatusUpdate(int newState, int newEntriesCount, int newAccepted, std::string& error, int newSessionID=0);
-
-    /// As a client, check and sign the final transaction
-    bool SignFinalTransaction(CTransaction& finalTransactionNew, CNode* node);
-
-    /// Get the last valid block hash for a given modulus
-    bool GetLastValidBlockHash(uint256& hash, int mod=1, int nBlockHeight=0);
-    /// Process a new block
-    void NewBlock();
-    void CompletedTransaction(bool error, int errorID);
-    void ClearLastMessage();
-    /// Used for liquidity providers
-    bool SendRandomPaymentToSelf();
-
-    /// Split up large inputs or make fee sized inputs
-    bool MakeCollateralAmounts();
-    bool CreateDenominated(int64_t nTotalValue);
-
-    /// Get the denominations for a list of outputs (returns a bitshifted integer)
-    int GetDenominations(const std::vector<CTxOut>& vout, bool fSingleRandomDenom = false);
-    int GetDenominations(const std::vector<CTxDSOut>& vout);
-
-    void GetDenominationsToString(int nDenom, std::string& strDenom);
-
-    /// Get the denominations for a specific amount of tx.
-    int GetDenominationsByAmount(int64_t nAmount, int nDenomTarget=0); // is not used anymore?
-    int GetDenominationsByAmounts(std::vector<int64_t>& vecAmount);
-
-    std::string GetMessageByID(int messageID);
-
-    //
-    // Relay Anonsend Messages
-    //
-
-    void RelayFinalTransaction(const int sessionID, const CTransaction& txNew);
-    void RelaySignaturesAnon(std::vector<CTxIn>& vin);
-    void RelayInAnon(std::vector<CTxIn>& vin, std::vector<CTxOut>& vout);
-    void RelayIn(const std::vector<CTxDSIn>& vin, const int64_t& nAmount, const CTransaction& txCollateral, const std::vector<CTxDSOut>& vout);
-    void RelayStatus(const int sessionID, const int newState, const int newEntriesCount, const int newAccepted, const std::string error="");
-    void RelayCompletedTransaction(const int sessionID, const bool error, const std::string errorMessage);
+    int GetEntriesCount() const { return vecEntries.size(); }
 };
 
-void ThreadCheckAnonSendPool();
+// helper class
+class CAnonSend
+{
+private:
+    // make constructor, destructor and copying not available
+    CAnonSend() {}
+    ~CAnonSend() {}
+    CAnonSend(CAnonSend const&) = delete;
+    CAnonSend& operator= (CAnonSend const&) = delete;
+
+    static const CAmount COLLATERAL = 0.001 * COIN;
+
+    // static members
+    static std::vector<CAmount> vecStandardDenominations;
+    static std::map<uint256, CAnonsendBroadcastTx> mapDSTX;
+
+    static CCriticalSection cs_mapdstx;
+
+    static void CheckDSTXes(int nHeight);
+
+public:
+    static void InitStandardDenominations();
+    static std::vector<CAmount> GetStandardDenominations() { return vecStandardDenominations; }
+    static CAmount GetSmallestDenomination() { return vecStandardDenominations.back(); }
+
+    /// Get the denominations for a specific amount of martex.
+    static int GetDenominationsByAmounts(const std::vector<CAmount>& vecAmount);
+
+    static bool IsDenominatedAmount(CAmount nInputAmount);
+
+    /// Get the denominations for a list of outputs (returns a bitshifted integer)
+    static int GetDenominations(const std::vector<CTxOut>& vecTxOut, bool fSingleRandomDenom = false);
+    static std::string GetDenominationsToString(int nDenom);
+    static bool GetDenominationsBits(int nDenom, std::vector<int> &vecBitsRet);
+
+    static std::string GetMessageByID(PoolMessage nMessageID);
+
+    /// Get the maximum number of transactions for the pool
+    static int GetMaxPoolTransactions() { return Params().PoolMaxTransactions(); }
+
+    static CAmount GetMaxPoolAmount() { return vecStandardDenominations.empty() ? 0 : ANONSEND_ENTRY_MAX_SIZE * vecStandardDenominations.front(); }
+
+    /// If the collateral is valid given by a client
+    static bool IsCollateralValid(const CTransaction& txCollateral);
+    static CAmount GetCollateralAmount() { return COLLATERAL; }
+    static CAmount GetMaxCollateralAmount() { return COLLATERAL*4; }
+
+    static bool IsCollateralAmount(CAmount nInputAmount);
+
+    static void AddDSTX(const CAnonsendBroadcastTx& dstx);
+    static CAnonsendBroadcastTx GetDSTX(const uint256& hash);
+
+    static void UpdatedBlockTip(const CBlockIndex *pindex);
+    static void SyncTransaction(const CTransaction& tx, const CBlockIndex *pindex, int posInBlock);
+};
+
+void ThreadCheckAnonSend(CConnman& connman);
 
 #endif

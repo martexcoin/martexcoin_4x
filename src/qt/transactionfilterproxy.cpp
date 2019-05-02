@@ -1,11 +1,15 @@
+// Copyright (c) 2011-2014 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #include "transactionfilterproxy.h"
 
 #include "transactiontablemodel.h"
 #include "transactionrecord.h"
 
-#include <QDateTime>
-
 #include <cstdlib>
+
+#include <QDateTime>
 
 // Earliest date that can be represented (far in the past)
 const QDateTime TransactionFilterProxy::MIN_DATE = QDateTime::fromTime_t(0);
@@ -37,7 +41,7 @@ bool TransactionFilterProxy::filterAcceptsRow(int sourceRow, const QModelIndex &
     qint64 amount = llabs(index.data(TransactionTableModel::AmountRole).toLongLong());
     int status = index.data(TransactionTableModel::StatusRole).toInt();
 
-    if(!showInactive && (status == TransactionStatus::Conflicted || status == TransactionStatus::NotAccepted))
+    if(!showInactive && status == TransactionStatus::Conflicted)
         return false;
     if(!(TYPE(type) & typeFilter))
         return false;
@@ -62,9 +66,9 @@ void TransactionFilterProxy::setDateRange(const QDateTime &from, const QDateTime
     invalidateFilter();
 }
 
-void TransactionFilterProxy::setAddressPrefix(const QString &addrPrefix)
+void TransactionFilterProxy::setAddressPrefix(const QString &_addrPrefix)
 {
-    this->addrPrefix = addrPrefix;
+    this->addrPrefix = _addrPrefix;
     invalidateFilter();
 }
 
@@ -91,9 +95,9 @@ void TransactionFilterProxy::setLimit(int limit)
     this->limitRows = limit;
 }
 
-void TransactionFilterProxy::setShowInactive(bool showInactive)
+void TransactionFilterProxy::setShowInactive(bool _showInactive)
 {
-    this->showInactive = showInactive;
+    this->showInactive = _showInactive;
     invalidateFilter();
 }
 

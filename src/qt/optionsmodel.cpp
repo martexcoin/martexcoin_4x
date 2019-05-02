@@ -1,39 +1,57 @@
-// Copyright (c) 2011-2014 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2015 The Bitcoin Core developers
+// Copyright (c) 2014-2019 The MarteX Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#if defined(HAVE_CONFIG_H)
+#include "config/martex-config.h"
+#endif
+
 #include "optionsmodel.h"
 
 #include "bitcoinunits.h"
 #include "guiutil.h"
 
+#include "amount.h"
 #include "init.h"
-#include "main.h"
+#include "validation.h" // For DEFAULT_SCRIPTCHECK_THREADS
 #include "net.h"
+#include "netbase.h"
+#include "txdb.h" // for -dbcache defaults
+
 #ifdef ENABLE_WALLET
-#include "wallet.h"
-#include "walletdb.h"
+#include "wallet/wallet.h"
+#include "wallet/walletdb.h"
+
+#include "masternodeconfig.h"
+#include "anonsend-client.h"
 #endif
 
 #include <QNetworkProxy>
 #include <QSettings>
 #include <QStringList>
 
-bool fUseBlackTheme;
-
-OptionsModel::OptionsModel(QObject *parent) :
+OptionsModel::OptionsModel(QObject *parent, bool resetSettings) :
     QAbstractListModel(parent)
 {
-    Init();
+    Init(resetSettings);
 }
 
 void OptionsModel::addOverriddenOption(const std::string &option)
 {
-    strOverriddenByCommandLine += QString::fromStdString(option) + "=" + QString::fromStdString(mapArgs[option]) + " ";
+    strOverriddenByCommandLine += QString::fromStdString(option) + "=" + QString::fromStdString(GetArg(option, "")) + " ";
 }
 
 // Writes all missing QSettings with their default values
-void OptionsModel::Init()
+void OptionsModel::Init(bool resetSettings)
 {
+    if (resetSettings)
+        Reset();
+
+    checkAndMigrate();
+
+    this->resetSettings = resetSettings;
+
     QSettings settings;
 
     // Ensure restart flag is unset on client startup
@@ -42,42 +60,50 @@ void OptionsModel::Init()
     // These are Qt-only settings:
 
     // Window
+    if (!settings.contains("fHideTrayIcon"))
+        settings.setValue("fHideTrayIcon", false);
+    fHideTrayIcon = settings.value("fHideTrayIcon").toBool();
+    Q_EMIT hideTrayIconChanged(fHideTrayIcon);
+    
     if (!settings.contains("fMinimizeToTray"))
         settings.setValue("fMinimizeToTray", false);
-    fMinimizeToTray = settings.value("fMinimizeToTray").toBool();
+    fMinimizeToTray = settings.value("fMinimizeToTray").toBool() && !fHideTrayIcon;
 
     if (!settings.contains("fMinimizeOnClose"))
         settings.setValue("fMinimizeOnClose", false);
     fMinimizeOnClose = settings.value("fMinimizeOnClose").toBool();
 
-
     // Display
     if (!settings.contains("nDisplayUnit"))
-        settings.setValue("nDisplayUnit", BitcoinUnits::BTC);
+        settings.setValue("nDisplayUnit", BitcoinUnits::MXT);
     nDisplayUnit = settings.value("nDisplayUnit").toInt();
-    
-    fUseBlackTheme = settings.value("fUseBlackTheme", false).toBool();
-    
+
+    if (!settings.contains("strThirdPartyTxUrls"))
+        settings.setValue("strThirdPartyTxUrls", "");
+    strThirdPartyTxUrls = settings.value("strThirdPartyTxUrls", "").toString();
+
+    if (!settings.contains("theme"))
+        settings.setValue("theme", "");
+
+#ifdef ENABLE_WALLET
     if (!settings.contains("fCoinControlFeatures"))
         settings.setValue("fCoinControlFeatures", false);
     fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
 
-    // Dark Send
-    if (!settings.contains("nAnonsendRounds"))
-        settings.setValue("nAnonsendRounds", 2);
-    nAnonsendRounds = settings.value("nAnonsendRounds").toLongLong();
-    if (!settings.contains("nAnonymizeMarteXAmount"))
-        settings.setValue("nAnonymizeMarteXAmount", 1000);
-    nAnonymizeMarteXAmount = settings.value("nAnonymizeMarteXAmount").toLongLong();
-    if (settings.contains("nAnonsendRounds"))
-        SoftSetArg("-anonsendrounds", settings.value("nAnonsendRounds").toString().toStdString());
-    if (settings.contains("nAnonymizeMarteXAmount"))
-        SoftSetArg("-anonymizeMarteXamount", settings.value("nAnonymizeMarteXAmount").toString().toStdString());
+    if (!settings.contains("digits"))
+        settings.setValue("digits", "2");
 
+    if (!settings.contains("fShowMasternodesTab"))
+        settings.setValue("fShowMasternodesTab", masternodeConfig.getCount());
 
+    // AnonSend
+    if (!settings.contains("fShowAdvancedPSUI"))
+        settings.setValue("fShowAdvancedPSUI", false);
+    fShowAdvancedPSUI = settings.value("fShowAdvancedPSUI", false).toBool();
 
-
-
+    if (!settings.contains("fLowKeysWarning"))
+        settings.setValue("fLowKeysWarning", true);
+#endif // ENABLE_WALLET
 
     // These are shared with the core or have a command-line parameter
     // and we want command-line parameters to overwrite the GUI settings.
@@ -86,26 +112,60 @@ void OptionsModel::Init()
     //
     // If SoftSetArg() or SoftSetBoolArg() return false we were overridden
     // by command-line and show this in the UI.
+
+    // Main
+    if (!settings.contains("nDatabaseCache"))
+        settings.setValue("nDatabaseCache", (qint64)nDefaultDbCache);
+    if (!SoftSetArg("-dbcache", settings.value("nDatabaseCache").toString().toStdString()))
+        addOverriddenOption("-dbcache");
+
+    if (!settings.contains("nThreadsScriptVerif"))
+        settings.setValue("nThreadsScriptVerif", DEFAULT_SCRIPTCHECK_THREADS);
+    if (!SoftSetArg("-par", settings.value("nThreadsScriptVerif").toString().toStdString()))
+        addOverriddenOption("-par");
+
     // Wallet
 #ifdef ENABLE_WALLET
-    if (!settings.contains("nTransactionFee"))
-        settings.setValue("nTransactionFee", (GetTime() < TX_FEE_SWITCH_TIME ? (qint64)MIN_TX_FEE : (qint64)MIN_TX_FEE_NEW));
-    nTransactionFee = settings.value("nTransactionFee").toLongLong(); // if -paytxfee is set, this will be overridden later in init.cpp
-    if (mapArgs.count("-paytxfee"))
-        addOverriddenOption("-paytxfee");
-    nReserveBalance = settings.value("nReserveBalance").toLongLong();
-#endif
+    if (!settings.contains("bSpendZeroConfChange"))
+        settings.setValue("bSpendZeroConfChange", true);
+    if (!SoftSetBoolArg("-spendzeroconfchange", settings.value("bSpendZeroConfChange").toBool()))
+        addOverriddenOption("-spendzeroconfchange");
 
+    // AnonSend
+    if (!settings.contains("nAnonSendRounds"))
+        settings.setValue("nAnonSendRounds", DEFAULT_ANONSEND_ROUNDS);
+    if (!SoftSetArg("-anonsendrounds", settings.value("nAnonSendRounds").toString().toStdString()))
+        addOverriddenOption("-anonsendrounds");
+    anonSendClient.nAnonSendRounds = settings.value("nAnonSendRounds").toInt();
+
+    if (!settings.contains("nAnonSendAmount")) {
+        // for migration from old settings
+        if (!settings.contains("nAnonymizeMarteXAmount"))
+            settings.setValue("nAnonSendAmount", DEFAULT_ANONSEND_AMOUNT);
+        else
+            settings.setValue("nAnonSendAmount", settings.value("nAnonymizeMarteXAmount").toInt());
+    }
+    if (!SoftSetArg("-anonsendamount", settings.value("nAnonSendAmount").toString().toStdString()))
+        addOverriddenOption("-anonsendamount");
+    anonSendClient.nAnonSendAmount = settings.value("nAnonSendAmount").toInt();
+
+    if (!settings.contains("fAnonSendMultiSession"))
+        settings.setValue("fAnonSendMultiSession", DEFAULT_ANONSEND_MULTISESSION);
+    if (!SoftSetBoolArg("-anonsendmultisession", settings.value("fAnonSendMultiSession").toBool()))
+        addOverriddenOption("-anonsendmultisession");
+    anonSendClient.fAnonSendMultiSession = settings.value("fAnonSendMultiSession").toBool();
+#endif
 
     // Network
     if (!settings.contains("fUseUPnP"))
-#ifdef USE_UPNP
-        settings.setValue("fUseUPnP", true);
-#else
-        settings.setValue("fUseUPnP", false);
-#endif
+        settings.setValue("fUseUPnP", DEFAULT_UPNP);
     if (!SoftSetBoolArg("-upnp", settings.value("fUseUPnP").toBool()))
         addOverriddenOption("-upnp");
+
+    if (!settings.contains("fListen"))
+        settings.setValue("fListen", DEFAULT_LISTEN);
+    if (!SoftSetBoolArg("-listen", settings.value("fListen").toBool()))
+        addOverriddenOption("-listen");
 
     if (!settings.contains("fUseProxy"))
         settings.setValue("fUseProxy", false);
@@ -114,20 +174,24 @@ void OptionsModel::Init()
     // Only try to set -proxy, if user has enabled fUseProxy
     if (settings.value("fUseProxy").toBool() && !SoftSetArg("-proxy", settings.value("addrProxy").toString().toStdString()))
         addOverriddenOption("-proxy");
-    if (!settings.contains("nSocksVersion"))
-        settings.setValue("nSocksVersion", 5);
-    // Only try to set -socks, if user has enabled fUseProxy
-    if (settings.value("fUseProxy").toBool() && !SoftSetArg("-socks", settings.value("nSocksVersion").toString().toStdString()))
-        addOverriddenOption("-socks");
+    else if(!settings.value("fUseProxy").toBool() && !GetArg("-proxy", "").empty())
+        addOverriddenOption("-proxy");
+
+    if (!settings.contains("fUseSeparateProxyTor"))
+        settings.setValue("fUseSeparateProxyTor", false);
+    if (!settings.contains("addrSeparateProxyTor"))
+        settings.setValue("addrSeparateProxyTor", "127.0.0.1:9050");
+    // Only try to set -onion, if user has enabled fUseSeparateProxyTor
+    if (settings.value("fUseSeparateProxyTor").toBool() && !SoftSetArg("-onion", settings.value("addrSeparateProxyTor").toString().toStdString()))
+        addOverriddenOption("-onion");
+    else if(!settings.value("fUseSeparateProxyTor").toBool() && !GetArg("-onion", "").empty())
+        addOverriddenOption("-onion");
 
     // Display
     if (!settings.contains("language"))
         settings.setValue("language", "");
     if (!SoftSetArg("-lang", settings.value("language").toString().toStdString()))
         addOverriddenOption("-lang");
-
-
-
 
     language = settings.value("language").toString();
 }
@@ -138,11 +202,13 @@ void OptionsModel::Reset()
 
     // Remove all entries from our QSettings object
     settings.clear();
+    resetSettings = true; // Needed in martex.cpp during shotdown to also remove the window positions
 
     // default setting for OptionsModel::StartAtStartup - disabled
     if (GUIUtil::GetStartOnSystemStartup())
         GUIUtil::SetStartOnSystemStartup(false);
 }
+
 int OptionsModel::rowCount(const QModelIndex & parent) const
 {
     return OptionIDRowCount;
@@ -158,6 +224,8 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
         {
         case StartAtStartup:
             return GUIUtil::GetStartOnSystemStartup();
+        case HideTrayIcon:
+            return fHideTrayIcon;
         case MinimizeToTray:
             return fMinimizeToTray;
         case MapPortUPnP:
@@ -182,34 +250,59 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             QStringList strlIpPort = settings.value("addrProxy").toString().split(":", QString::SkipEmptyParts);
             return strlIpPort.at(1);
         }
-        case ProxySocksVersion:
-            return settings.value("nSocksVersion", 5);
+
+        // separate Tor proxy
+        case ProxyUseTor:
+            return settings.value("fUseSeparateProxyTor", false);
+        case ProxyIPTor: {
+            // contains IP at index 0 and port at index 1
+            QStringList strlIpPort = settings.value("addrSeparateProxyTor").toString().split(":", QString::SkipEmptyParts);
+            return strlIpPort.at(0);
+        }
+        case ProxyPortTor: {
+            // contains IP at index 0 and port at index 1
+            QStringList strlIpPort = settings.value("addrSeparateProxyTor").toString().split(":", QString::SkipEmptyParts);
+            return strlIpPort.at(1);
+        }
 
 #ifdef ENABLE_WALLET
-        case Fee:
-            // Attention: Init() is called before nTransactionFee is set in AppInit2()!
-            // To ensure we can change the fee on-the-fly update our QSetting when
-            // opening OptionsDialog, which queries Fee via the mapper.
-            if (nTransactionFee != settings.value("nTransactionFee").toLongLong())
-                settings.setValue("nTransactionFee", (qint64)nTransactionFee);
-            // Todo: Consider to revert back to use just nTransactionFee here, if we don't want
-            // -paytxfee to update our QSettings!
-            return settings.value("nTransactionFee");            
-        case ReserveBalance:
-            return QVariant((qint64) nReserveBalance);
+        case SpendZeroConfChange:
+            return settings.value("bSpendZeroConfChange");
+        case ShowMasternodesTab:
+            return settings.value("fShowMasternodesTab");
+        case ShowAdvancedPSUI:
+            return fShowAdvancedPSUI;
+        case LowKeysWarning:
+            return settings.value("fLowKeysWarning");
+        case AnonSendRounds:
+            return settings.value("nAnonSendRounds");
+        case AnonSendAmount:
+            return settings.value("nAnonSendAmount");
+        case AnonSendMultiSession:
+            return settings.value("fAnonSendMultiSession");
 #endif
         case DisplayUnit:
             return nDisplayUnit;
+        case ThirdPartyTxUrls:
+            return strThirdPartyTxUrls;
+#ifdef ENABLE_WALLET
+        case Digits:
+            return settings.value("digits");
+#endif // ENABLE_WALLET
+        case Theme:
+            return settings.value("theme");
         case Language:
             return settings.value("language");
+#ifdef ENABLE_WALLET
         case CoinControlFeatures:
             return fCoinControlFeatures;
-        case AnonsendRounds:
-            return QVariant(nAnonsendRounds);
-        case AnonymizeMarteXAmount:
-            return QVariant(nAnonymizeMarteXAmount);
-        case UseBlackTheme:
-            return QVariant(fUseBlackTheme);
+#endif // ENABLE_WALLET
+        case DatabaseCache:
+            return settings.value("nDatabaseCache");
+        case ThreadsScriptVerif:
+            return settings.value("nThreadsScriptVerif");
+        case Listen:
+            return settings.value("fListen");
         default:
             return QVariant();
         }
@@ -228,6 +321,11 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         {
         case StartAtStartup:
             successful = GUIUtil::SetStartOnSystemStartup(value.toBool());
+            break;
+        case HideTrayIcon:
+            fHideTrayIcon = value.toBool();
+            settings.setValue("fHideTrayIcon", fHideTrayIcon);
+    		Q_EMIT hideTrayIconChanged(fHideTrayIcon);
             break;
         case MinimizeToTray:
             fMinimizeToTray = value.toBool();
@@ -273,63 +371,159 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             }
         }
         break;
-        case ProxySocksVersion: {
-            if (settings.value("nSocksVersion") != value) {
-                settings.setValue("nSocksVersion", value.toInt());
+
+        // separate Tor proxy
+        case ProxyUseTor:
+            if (settings.value("fUseSeparateProxyTor") != value) {
+                settings.setValue("fUseSeparateProxyTor", value.toBool());
+                setRestartRequired(true);
+            }
+            break;
+        case ProxyIPTor: {
+            // contains current IP at index 0 and current port at index 1
+            QStringList strlIpPort = settings.value("addrSeparateProxyTor").toString().split(":", QString::SkipEmptyParts);
+            // if that key doesn't exist or has a changed IP
+            if (!settings.contains("addrSeparateProxyTor") || strlIpPort.at(0) != value.toString()) {
+                // construct new value from new IP and current port
+                QString strNewValue = value.toString() + ":" + strlIpPort.at(1);
+                settings.setValue("addrSeparateProxyTor", strNewValue);
                 setRestartRequired(true);
             }
         }
         break;
+        case ProxyPortTor: {
+            // contains current IP at index 0 and current port at index 1
+            QStringList strlIpPort = settings.value("addrSeparateProxyTor").toString().split(":", QString::SkipEmptyParts);
+            // if that key doesn't exist or has a changed port
+            if (!settings.contains("addrSeparateProxyTor") || strlIpPort.at(1) != value.toString()) {
+                // construct new value from current IP and new port
+                QString strNewValue = strlIpPort.at(0) + ":" + value.toString();
+                settings.setValue("addrSeparateProxyTor", strNewValue);
+                setRestartRequired(true);
+            }
+        }
+        break;
+
 #ifdef ENABLE_WALLET
-        case Fee: // core option - can be changed on-the-fly
-            // Todo: Add is valid check  and warn via message, if not
-            nTransactionFee = value.toLongLong();
-            settings.setValue("nTransactionFee", (qint64) nTransactionFee);
-            emit transactionFeeChanged(nTransactionFee);
+        case SpendZeroConfChange:
+            if (settings.value("bSpendZeroConfChange") != value) {
+                settings.setValue("bSpendZeroConfChange", value);
+                setRestartRequired(true);
+            }
             break;
-        case ReserveBalance:
-            nReserveBalance = value.toLongLong();
-            settings.setValue("nReserveBalance", (qint64) nReserveBalance);
-            emit reserveBalanceChanged(nReserveBalance);
+        case ShowMasternodesTab:
+            if (settings.value("fShowMasternodesTab") != value) {
+                settings.setValue("fShowMasternodesTab", value);
+                setRestartRequired(true);
+            }
+            break;
+        case ShowAdvancedPSUI:
+            fShowAdvancedPSUI = value.toBool();
+            settings.setValue("fShowAdvancedPSUI", fShowAdvancedPSUI);
+            Q_EMIT advancedPSUIChanged(fShowAdvancedPSUI);
+            break;
+        case LowKeysWarning:
+            settings.setValue("fLowKeysWarning", value);
+            break;
+        case AnonSendRounds:
+            if (settings.value("nAnonSendRounds") != value)
+            {
+                anonSendClient.nAnonSendRounds = value.toInt();
+                settings.setValue("nAnonSendRounds", anonSendClient.nAnonSendRounds);
+                Q_EMIT anonSendRoundsChanged();
+            }
+            break;
+        case AnonSendAmount:
+            if (settings.value("nAnonSendAmount") != value)
+            {
+                anonSendClient.nAnonSendAmount = value.toInt();
+                settings.setValue("nAnonSendAmount", anonSendClient.nAnonSendAmount);
+                Q_EMIT privateSentAmountChanged();
+            }
+            break;
+        case AnonSendMultiSession:
+            if (settings.value("fAnonSendMultiSession") != value)
+            {
+                anonSendClient.fAnonSendMultiSession = value.toBool();
+                settings.setValue("fAnonSendMultiSession", anonSendClient.fAnonSendMultiSession);
+            }
             break;
 #endif
         case DisplayUnit:
-            nDisplayUnit = value.toInt();
-            settings.setValue("nDisplayUnit", nDisplayUnit);
-            emit displayUnitChanged(nDisplayUnit);
+            setDisplayUnit(value);
             break;
+        case ThirdPartyTxUrls:
+            if (strThirdPartyTxUrls != value.toString()) {
+                strThirdPartyTxUrls = value.toString();
+                settings.setValue("strThirdPartyTxUrls", strThirdPartyTxUrls);
+                setRestartRequired(true);
+            }
+            break;
+#ifdef ENABLE_WALLET
+        case Digits:
+            if (settings.value("digits") != value) {
+                settings.setValue("digits", value);
+                setRestartRequired(true);
+            }
+            break;            
+#endif // ENABLE_WALLET
+        case Theme:
+            if (settings.value("theme") != value) {
+                settings.setValue("theme", value);
+                setRestartRequired(true);
+            }
+            break;            
         case Language:
             if (settings.value("language") != value) {
                 settings.setValue("language", value);
                 setRestartRequired(true);
             }
             break;
+#ifdef ENABLE_WALLET
         case CoinControlFeatures:
             fCoinControlFeatures = value.toBool();
             settings.setValue("fCoinControlFeatures", fCoinControlFeatures);
-            emit coinControlFeaturesChanged(fCoinControlFeatures);
+            Q_EMIT coinControlFeaturesChanged(fCoinControlFeatures);
             break;
-        case UseBlackTheme:
-            fUseBlackTheme = value.toBool();
-            settings.setValue("fUseBlackTheme", fUseBlackTheme);
+#endif // ENABLE_WALLET
+        case DatabaseCache:
+            if (settings.value("nDatabaseCache") != value) {
+                settings.setValue("nDatabaseCache", value);
+                setRestartRequired(true);
+            }
             break;
-        case AnonsendRounds:
-            nAnonsendRounds = value.toInt();
-            settings.setValue("nAnonsendRounds", nAnonsendRounds);
-            emit anonsendRoundsChanged(nAnonsendRounds);
+        case ThreadsScriptVerif:
+            if (settings.value("nThreadsScriptVerif") != value) {
+                settings.setValue("nThreadsScriptVerif", value);
+                setRestartRequired(true);
+            }
             break;
-        case AnonymizeMarteXAmount:
-            nAnonymizeMarteXAmount = value.toInt();
-            settings.setValue("nAnonymizeMarteXAmount", nAnonymizeMarteXAmount);
-            emit AnonymizeMarteXAmountChanged(nAnonymizeMarteXAmount);
+        case Listen:
+            if (settings.value("fListen") != value) {
+                settings.setValue("fListen", value);
+                setRestartRequired(true);
+            }
             break;
         default:
             break;
         }
     }
-    emit dataChanged(index, index);
+
+    Q_EMIT dataChanged(index, index);
 
     return successful;
+}
+
+/** Updates current unit in memory, settings and emits displayUnitChanged(newUnit) signal */
+void OptionsModel::setDisplayUnit(const QVariant &value)
+{
+    if (!value.isNull())
+    {
+        QSettings settings;
+        nDisplayUnit = value.toInt();
+        settings.setValue("nDisplayUnit", nDisplayUnit);
+        Q_EMIT displayUnitChanged(nDisplayUnit);
+    }
 }
 
 bool OptionsModel::getProxySettings(QNetworkProxy& proxy) const
@@ -338,25 +532,16 @@ bool OptionsModel::getProxySettings(QNetworkProxy& proxy) const
     // GUI settings can be overridden with -proxy.
     proxyType curProxy;
     if (GetProxy(NET_IPV4, curProxy)) {
-        if (curProxy.second == 5) {
-            proxy.setType(QNetworkProxy::Socks5Proxy);
-            proxy.setHostName(QString::fromStdString(curProxy.first.ToStringIP()));
-            proxy.setPort(curProxy.first.GetPort());
+        proxy.setType(QNetworkProxy::Socks5Proxy);
+        proxy.setHostName(QString::fromStdString(curProxy.proxy.ToStringIP()));
+        proxy.setPort(curProxy.proxy.GetPort());
 
-            return true;
-        }
-        else
-            return false;
+        return true;
     }
     else
         proxy.setType(QNetworkProxy::NoProxy);
 
-
-
-
-
-
-    return true;
+    return false;
 }
 
 void OptionsModel::setRestartRequired(bool fRequired)
@@ -371,8 +556,21 @@ bool OptionsModel::isRestartRequired()
     return settings.value("fRestartRequired", false).toBool();
 }
 
-
-qint64 OptionsModel::getReserveBalance()
+void OptionsModel::checkAndMigrate()
 {
-    return nReserveBalance;
+    // Migration of default values
+    // Check if the QSettings container was already loaded with this client version
+    QSettings settings;
+    static const char strSettingsVersionKey[] = "nSettingsVersion";
+    int settingsVersion = settings.contains(strSettingsVersionKey) ? settings.value(strSettingsVersionKey).toInt() : 0;
+    if (settingsVersion < CLIENT_VERSION)
+    {
+        // -dbcache was bumped from 100 to 300 in 0.13
+        // see https://github.com/bitcoin/bitcoin/pull/8273
+        // force people to upgrade to the new value if they are using 100MB
+        if (settingsVersion < 130000 && settings.contains("nDatabaseCache") && settings.value("nDatabaseCache").toLongLong() == 100)
+            settings.setValue("nDatabaseCache", (qint64)nDefaultDbCache);
+
+        settings.setValue(strSettingsVersionKey, CLIENT_VERSION);
+    }
 }

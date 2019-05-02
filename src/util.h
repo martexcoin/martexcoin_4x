@@ -1,414 +1,141 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2012 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2009-2015 The Bitcoin Core developers
+// Copyright (c) 2014-2019 The MarteX Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+/**
+ * Server/client environment: argument handling, config file parsing,
+ * logging, thread wrappers
+ */
 #ifndef BITCOIN_UTIL_H
 #define BITCOIN_UTIL_H
 
-#ifndef WIN32
-#include <sys/types.h>
-#include <sys/time.h>
-#include <sys/resource.h>
+#if defined(HAVE_CONFIG_H)
+#include "config/martex-config.h"
 #endif
 
-#include "serialize.h"
+#include "compat.h"
 #include "tinyformat.h"
+#include "utiltime.h"
+#include "amount.h"
 
+#include <atomic>
+#include <exception>
 #include <map>
-#include <list>
-#include <utility>
-#include <vector>
-#include <string>
-
-#include <boost/thread.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/date_time/gregorian/gregorian_types.hpp>
-#include <boost/date_time/posix_time/posix_time_types.hpp>
-
-#include <openssl/bio.h>
-#include <openssl/evp.h>
-#include <openssl/buffer.h>
-#include <openssl/crypto.h> // for OPENSSL_cleanse()
-#include <openssl/rand.h>
-#include <openssl/bn.h>
-
 #include <stdint.h>
+#include <string>
+#include <vector>
 
+#include <boost/filesystem/path.hpp>
+#include <boost/signals2/signal.hpp>
+#include <boost/thread/exceptions.hpp>
 
-class CNetAddr;
-class uint256;
+// Debugging macros
 
-static const int64_t COIN = 100000000;
-static const int64_t CENT = 1000000;
-
-typedef int64_t CAmount;
-
-#define BEGIN(a)            ((char*)&(a))
-#define END(a)              ((char*)&((&(a))[1]))
-#define UBEGIN(a)           ((unsigned char*)&(a))
-#define UEND(a)             ((unsigned char*)&((&(a))[1]))
-#define ARRAYLEN(array)     (sizeof(array)/sizeof((array)[0]))
-
-#define UVOIDBEGIN(a)        ((void*)&(a))
-#define CVOIDBEGIN(a)        ((const void*)&(a))
-#define UINTBEGIN(a)        ((uint32_t*)&(a))
-#define CUINTBEGIN(a)        ((const uint32_t*)&(a))
-
-/* Format characters for (s)size_t and ptrdiff_t */
-#if defined(_MSC_VER) || defined(__MSVCRT__)
-  /* (s)size_t and ptrdiff_t have the same size specifier in MSVC:
-     http://msdn.microsoft.com/en-us/library/tcxf1dw6%28v=vs.100%29.aspx
-   */
-  #define PRIszx    "Ix"
-  #define PRIszu    "Iu"
-  #define PRIszd    "Id"
-  #define PRIpdx    "Ix"
-  #define PRIpdu    "Iu"
-  #define PRIpdd    "Id"
-#else /* C99 standard */
-  #define PRIszx    "zx"
-  #define PRIszu    "zu"
-  #define PRIszd    "zd"
-  #define PRIpdx    "tx"
-  #define PRIpdu    "tu"
-  #define PRIpdd    "td"
-#endif
-
-// This is needed because the foreach macro can't get over the comma in pair<t1, t2>
-#define PAIRTYPE(t1, t2)    std::pair<t1, t2>
-
-// Align by increasing pointer, must have extra space at end of buffer
-template <size_t nBytes, typename T>
-T* alignup(T* p)
-{
-    union
-    {
-        T* ptr;
-        size_t n;
-    } u;
-    u.ptr = p;
-    u.n = (u.n + (nBytes-1)) & ~(nBytes-1);
-    return u.ptr;
-}
-
-#ifdef WIN32
-#define MSG_NOSIGNAL        0
-#define MSG_DONTWAIT        0
-
-#ifndef S_IRUSR
-#define S_IRUSR             0400
-#define S_IWUSR             0200
-#endif
+// Uncomment the following line to enable debugging messages
+// or enable on a per file basis prior to inclusion of util.h
+//#define ENABLE_MXT_DEBUG
+#ifdef ENABLE_MXT_DEBUG
+#define DBG( x ) x
 #else
-#define MAX_PATH            1024
+#define DBG( x )
 #endif
 
-inline void MilliSleep(int64_t n)
-{
-#if BOOST_VERSION >= 105000
-    boost::this_thread::sleep_for(boost::chrono::milliseconds(n));
-#else
-    boost::this_thread::sleep(boost::posix_time::milliseconds(n));
-#endif
-}
+//MarteX only features
 
-//Dark features
-
-extern bool fMasterNode;
+extern bool fMasternodeMode;
 extern bool fLiteMode;
-extern bool fEnableFastTx;
-extern int nFastTxDepth;
-extern int nAnonsendRounds;
-extern int nAnonymizeMarteXAmount;
-extern int nLiquidityProvider;
-extern bool fEnableAnonsend;
-extern int64_t enforceMasternodePaymentsTime;
-extern std::string strMasterNodeAddr;
-extern int nMasternodeMinProtocol;
-extern int keysLoaded;
-extern bool fSucessfullyLoaded;
-extern std::vector<int64_t> anonSendDenominations;
-extern std::map<std::string, std::string> mapArgs;
-extern std::map<std::string, std::vector<std::string> > mapMultiArgs;
+extern int nWalletBackups;
+
+static const bool DEFAULT_LOGTIMEMICROS  = false;
+static const bool DEFAULT_LOGIPS         = false;
+static const bool DEFAULT_LOGTIMESTAMPS  = true;
+static const bool DEFAULT_LOGTHREADNAMES = false;
+
+/** Signals for translation. */
+class CTranslationInterface
+{
+public:
+    /** Translate a message to the native language of the user. */
+    boost::signals2::signal<std::string (const char* psz)> Translate;
+};
+
+extern const std::map<std::string, std::vector<std::string> >& mapMultiArgs;
 extern bool fDebug;
-extern bool fDebugSmsg;
-extern bool fNoSmsg;
 extern bool fPrintToConsole;
 extern bool fPrintToDebugLog;
-extern bool fDaemon;
-extern bool fServer;
-extern bool fCommandLine;
-extern std::string strMiscWarning;
-extern bool fNoListen;
+
 extern bool fLogTimestamps;
-extern bool fMasternodeSoftLock;
-extern volatile bool fReopenDebugLog;
+extern bool fLogTimeMicros;
+extern bool fLogThreadNames;
+extern bool fLogIPs;
+extern std::atomic<bool> fReopenDebugLog;
+extern CTranslationInterface translationInterface;
 
-void RandAddSeed();
-void RandAddSeedPerfmon();
-std::string Hex2Ascii(const std::string& in);
+extern const char * const BITCOIN_CONF_FILENAME;
+extern const char * const BITCOIN_PID_FILENAME;
 
-/* Return true if log accepts specified category */
+/**
+ * Translation function: Call Translate signal on UI interface, which returns a boost::optional result.
+ * If no translation slot is registered, nothing is returned, and simply return the input.
+ */
+inline std::string _(const char* psz)
+{
+    boost::optional<std::string> rv = translationInterface.Translate(psz);
+    return rv ? (*rv) : psz;
+}
+
+void SetupEnvironment();
+bool SetupNetworking();
+
+/** Return true if log accepts specified category */
 bool LogAcceptCategory(const char* category);
-/* Send a string to the log output */
+/** Send a string to the log output */
 int LogPrintStr(const std::string &str);
 
-#define LogPrintf(...) LogPrint(NULL, __VA_ARGS__)
+#define LogPrint(category, ...) do { \
+    if (LogAcceptCategory((category))) { \
+        LogPrintStr(tinyformat::format(__VA_ARGS__)); \
+    } \
+} while(0)
 
-/* When we switch to C++11, this can be switched to variadic templates instead
- * of this macro-based construction (see tinyformat.h).
- */
-#define MAKE_ERROR_AND_LOG_FUNC(n)                                        \
-    /*   Print to debug.log if -debug=category switch is given OR category is NULL. */ \
-    template<TINYFORMAT_ARGTYPES(n)>                                          \
-    static inline int LogPrint(const char* category, const char* format, TINYFORMAT_VARARGS(n))  \
-    {                                                                                \
-        if(!LogAcceptCategory(category)) return 0;                                   \
-        return LogPrintStr(tfm::format(format, TINYFORMAT_PASSARGS(n)));             \
-    }                                                                                \
-    /*   Log error and return false */                                               \
-    template<TINYFORMAT_ARGTYPES(n)>                                                 \
-    static inline bool error(const char* format, TINYFORMAT_VARARGS(n))              \
-    {                                                                                \
-        LogPrintStr("ERROR: " + tfm::format(format, TINYFORMAT_PASSARGS(n)) + "\n"); \
-        return false;                                                                \
-    }                                                                                \
-    /*   Log error and return n */                                                   \
-    template<TINYFORMAT_ARGTYPES(n)>                                                 \
-    static inline int errorN(int rv, const char* format, TINYFORMAT_VARARGS(n))      \
-    {                                                                                \
-        LogPrintStr("ERROR: " + tfm::format(format, TINYFORMAT_PASSARGS(n)) + "\n"); \
-        return rv;                                                                   \
-    }
+#define LogPrintf(...) do { \
+    LogPrintStr(tinyformat::format(__VA_ARGS__)); \
+} while(0)
 
-
-TINYFORMAT_FOREACH_ARGNUM(MAKE_ERROR_AND_LOG_FUNC)
-
-/* Zero-arg versions of logging and error, these are not covered by
- * TINYFORMAT_FOREACH_ARGNUM
- */
-static inline int LogPrint(const char* category, const char* format)
+template<typename... Args>
+bool error(const char* fmt, const Args&... args)
 {
-    if(!LogAcceptCategory(category)) return 0;
-    return LogPrintStr(format);
-}
-static inline bool error(const char* format)
-{
-    LogPrintStr(std::string("ERROR: ") + format + "\n");
+    LogPrintStr("ERROR: " + tinyformat::format(fmt, args...) + "\n");
     return false;
 }
-static inline int errorN(int n, const char* format)
-{
-    LogPrintStr(std::string("ERROR: ") + format + "\n");
-    return n;
-}
 
-extern std::map<std::string, std::string> mapArgs;
-extern std::map<std::string, std::vector<std::string> > mapMultiArgs;
-
-void RandAddSeed();
-void RandAddSeedPerfmon();
-
-void PrintException(std::exception* pex, const char* pszThread);
-void PrintExceptionContinue(std::exception* pex, const char* pszThread);
-void ParseString(const std::string& str, char c, std::vector<std::string>& v);
-std::string FormatMoney(int64_t n, bool fPlus=false);
-bool ParseMoney(const std::string& str, int64_t& nRet);
-bool ParseMoney(const char* pszIn, int64_t& nRet);
-std::string SanitizeString(const std::string& str);
-std::vector<unsigned char> ParseHex(const char* psz);
-std::vector<unsigned char> ParseHex(const std::string& str);
-bool IsHex(const std::string& str);
-std::vector<unsigned char> DecodeBase64(const char* p, bool* pfInvalid = NULL);
-std::string DecodeBase64(const std::string& str);
-std::string EncodeBase64(const unsigned char* pch, size_t len);
-std::string EncodeBase64(const std::string& str);
-SecureString DecodeBase64Secure(const SecureString& input);
-SecureString EncodeBase64Secure(const SecureString& input);
-std::vector<unsigned char> DecodeBase32(const char* p, bool* pfInvalid = NULL);
-std::string DecodeBase32(const std::string& str);
-std::string EncodeBase32(const unsigned char* pch, size_t len);
-std::string EncodeBase32(const std::string& str);
+void PrintExceptionContinue(const std::exception *pex, const char* pszThread);
 void ParseParameters(int argc, const char*const argv[]);
-bool WildcardMatch(const char* psz, const char* mask);
-bool WildcardMatch(const std::string& str, const std::string& mask);
-void FileCommit(FILE *fileout);
+void FileCommit(FILE *file);
+bool TruncateFile(FILE *file, unsigned int length);
+int RaiseFileDescriptorLimit(int nMinFD);
+void AllocateFileRange(FILE *file, unsigned int offset, unsigned int length);
 bool RenameOver(boost::filesystem::path src, boost::filesystem::path dest);
+bool TryCreateDirectory(const boost::filesystem::path& p);
 boost::filesystem::path GetDefaultDataDir();
 const boost::filesystem::path &GetDataDir(bool fNetSpecific = true);
-boost::filesystem::path GetConfigFile();
+boost::filesystem::path GetBackupsDir();
+void ClearDatadirCache();
+boost::filesystem::path GetConfigFile(const std::string& confPath);
 boost::filesystem::path GetMasternodeConfigFile();
-boost::filesystem::path GetPidFile();
 #ifndef WIN32
+boost::filesystem::path GetPidFile();
 void CreatePidFile(const boost::filesystem::path &path, pid_t pid);
 #endif
-void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet, std::map<std::string, std::vector<std::string> >& mapMultiSettingsRet);
+void ReadConfigFile(const std::string& confPath);
 #ifdef WIN32
 boost::filesystem::path GetSpecialFolderPath(int nFolder, bool fCreate = true);
 #endif
-
-std::string getTimeString(int64_t timestamp, char *buffer, size_t nBuffer);
-std::string bytesReadable(uint64_t nBytes);
-
+void OpenDebugLog();
 void ShrinkDebugFile();
-bool GetRandBytes(unsigned char* buf, int num);
-int GetRandInt(int nMax);
-uint64_t GetRand(uint64_t nMax);
-uint256 GetRandHash();
-int64_t GetTime();
-void SetMockTime(int64_t nMockTimeIn);
-int64_t GetAdjustedTime();
-int64_t GetTimeOffset();
-std::string FormatFullVersion();
-std::string FormatSubVersion(const std::string& name, int nClientVersion, const std::vector<std::string>& comments);
-void AddTimeData(const CNetAddr& ip, int64_t nTime);
-void runCommand(std::string strCommand);
-long hex2long(const char* hexString);
-
-
-
-
-/**
- * Convert string to signed 32-bit integer with strict parse error feedback.
- * @returns true if the entire string could be parsed as valid integer,
- *   false if not the entire string could be parsed or when overflow or underflow occurred.
- */
-bool ParseInt32(const std::string& str, int32_t *out);
-
-
-/** 
- * Format a paragraph of text to a fixed width, adding spaces for
- * indentation to any added line.
- */
-std::string FormatParagraph(const std::string in, size_t width=79, size_t indent=0);
-
-
-
-inline std::string i64tostr(int64_t n)
-{
-    return strprintf("%d", n);
-}
-
-inline std::string itostr(int n)
-{
-    return strprintf("%d", n);
-}
-
-inline int64_t atoi64(const char* psz)
-{
-#ifdef _MSC_VER
-    return _atoi64(psz);
-#else
-    return strtoll(psz, NULL, 10);
-#endif
-}
-
-inline int64_t atoi64(const std::string& str)
-{
-#ifdef _MSC_VER
-    return _atoi64(str.c_str());
-#else
-    return strtoll(str.c_str(), NULL, 10);
-#endif
-}
-
-inline int atoi(const std::string& str)
-{
-    return atoi(str.c_str());
-}
-
-inline int roundint(double d)
-{
-    return (int)(d > 0 ? d + 0.5 : d - 0.5);
-}
-
-inline int64_t roundint64(double d)
-{
-    return (int64_t)(d > 0 ? d + 0.5 : d - 0.5);
-}
-
-inline int64_t abs64(int64_t n)
-{
-    return (n >= 0 ? n : -n);
-}
-
-inline std::string leftTrim(std::string src, char chr)
-{
-    std::string::size_type pos = src.find_first_not_of(chr, 0);
-
-    if(pos > 0)
-        src.erase(0, pos);
-
-    return src;
-}
-
-template<typename T>
-std::string HexStr(const T itbegin, const T itend, bool fSpaces=false)
-{
-    std::string rv;
-    static const char hexmap[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
-                                     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-    rv.reserve((itend-itbegin)*3);
-    for(T it = itbegin; it < itend; ++it)
-    {
-        unsigned char val = (unsigned char)(*it);
-        if(fSpaces && it != itbegin)
-            rv.push_back(' ');
-        rv.push_back(hexmap[val>>4]);
-        rv.push_back(hexmap[val&15]);
-    }
-
-    return rv;
-}
-
-template<typename T>
-inline std::string HexStr(const T& vch, bool fSpaces=false)
-{
-    return HexStr(vch.begin(), vch.end(), fSpaces);
-}
-
-inline int64_t GetPerformanceCounter()
-{
-    int64_t nCounter = 0;
-#ifdef WIN32
-    QueryPerformanceCounter((LARGE_INTEGER*)&nCounter);
-#else
-    timeval t;
-    gettimeofday(&t, NULL);
-    nCounter = (int64_t) t.tv_sec * 1000000 + t.tv_usec;
-#endif
-    return nCounter;
-}
-
-inline int64_t GetTimeMillis()
-{
-    return (boost::posix_time::ptime(boost::posix_time::microsec_clock::universal_time()) -
-            boost::posix_time::ptime(boost::gregorian::date(1970,1,1))).total_milliseconds();
-}
-
-inline int64_t GetTimeMicros()
-{
-    return (boost::posix_time::ptime(boost::posix_time::microsec_clock::universal_time()) -
-            boost::posix_time::ptime(boost::gregorian::date(1970,1,1))).total_microseconds();
-}
-
-std::string DateTimeStrFormat(const char* pszFormat, int64_t nTime);
-
-static const std::string strTimestampFormat = "%Y-%m-%d %H:%M:%S UTC";
-inline std::string DateTimeStrFormat(int64_t nTime)
-{
-    return DateTimeStrFormat(strTimestampFormat.c_str(), nTime);
-}
-
-
-template<typename T>
-void skipspaces(T& it)
-{
-    while (isspace(*it))
-        ++it;
-}
+void runCommand(const std::string& strCommand);
 
 inline bool IsSwitchChar(char c)
 {
@@ -418,6 +145,14 @@ inline bool IsSwitchChar(char c)
     return c == '-';
 #endif
 }
+
+/**
+ * Return true if the given argument has been manually set
+ *
+ * @param strArg Argument to get (e.g. "-foo")
+ * @return true if the argument has been set
+ */
+bool IsArgSet(const std::string& strArg);
 
 /**
  * Return string argument or default value
@@ -464,167 +199,44 @@ bool SoftSetArg(const std::string& strArg, const std::string& strValue);
  */
 bool SoftSetBoolArg(const std::string& strArg, bool fValue);
 
+// Forces a arg setting
+void ForceSetArg(const std::string& strArg, const std::string& strValue);
+void ForceSetMultiArgs(const std::string& strArg, const std::vector<std::string>& values);
+void ForceRemoveArg(const std::string& strArg);
+
 /**
- * MWC RNG of George Marsaglia
- * This is intended to be fast. It has a period of 2^59.3, though the
- * least significant 16 bits only have a period of about 2^30.1.
+ * Format a string to be used as group of options in help messages
  *
- * @return random value
+ * @param message Group name (e.g. "RPC server options:")
+ * @return the formatted string
  */
-extern uint32_t insecure_rand_Rz;
-extern uint32_t insecure_rand_Rw;
-static inline uint32_t insecure_rand(void)
-{
-  insecure_rand_Rz=36969*(insecure_rand_Rz&65535)+(insecure_rand_Rz>>16);
-  insecure_rand_Rw=18000*(insecure_rand_Rw&65535)+(insecure_rand_Rw>>16);
-  return (insecure_rand_Rw<<16)+insecure_rand_Rz;
-}
+std::string HelpMessageGroup(const std::string& message);
 
 /**
- * Seed insecure_rand using the random pool.
- * @param Deterministic Use a determinstic seed
+ * Format a string to be used as option description in help messages
+ *
+ * @param option Option message (e.g. "-rpcuser=<user>")
+ * @param message Option description (e.g. "Username for JSON-RPC connections")
+ * @return the formatted string
  */
-void seed_insecure_rand(bool fDeterministic=false);
+std::string HelpMessageOpt(const std::string& option, const std::string& message);
 
 /**
- * Timing-attack-resistant comparison.
- * Takes time proportional to length
- * of first argument.
+ * Return the number of physical cores available on the current system.
+ * @note This does not count virtual cores, such as those provided by HyperThreading
+ * when boost is newer than 1.56.
  */
-template <typename T>
-bool TimingResistantEqual(const T& a, const T& b)
-{
-    if (b.size() == 0) return a.size() == 0;
-    size_t accumulator = a.size() ^ b.size();
-    for (size_t i = 0; i < a.size(); i++)
-        accumulator |= a[i] ^ b[i%b.size()];
-    return accumulator == 0;
-}
-
-/** Median filter over a stream of values.
- * Returns the median of the last N numbers
- */
-template <typename T> class CMedianFilter
-{
-private:
-    std::vector<T> vValues;
-    std::vector<T> vSorted;
-    unsigned int nSize;
-public:
-    CMedianFilter(unsigned int size, T initial_value):
-        nSize(size)
-    {
-        vValues.reserve(size);
-        vValues.push_back(initial_value);
-        vSorted = vValues;
-    }
-
-    void input(T value)
-    {
-        if(vValues.size() == nSize)
-        {
-            vValues.erase(vValues.begin());
-        }
-        vValues.push_back(value);
-
-        vSorted.resize(vValues.size());
-        std::copy(vValues.begin(), vValues.end(), vSorted.begin());
-        std::sort(vSorted.begin(), vSorted.end());
-    }
-
-    T median() const
-    {
-        int size = vSorted.size();
-        assert(size>0);
-        if(size & 1) // Odd number of elements
-        {
-            return vSorted[size/2];
-        }
-        else // Even number of elements
-        {
-            return (vSorted[size/2-1] + vSorted[size/2]) / 2;
-        }
-    }
-
-    int size() const
-    {
-        return vValues.size();
-    }
-
-    std::vector<T> sorted () const
-    {
-        return vSorted;
-    }
-};
-
-#ifdef WIN32
-inline void SetThreadPriority(int nPriority)
-{
-    SetThreadPriority(GetCurrentThread(), nPriority);
-}
-#else
-
-#define THREAD_PRIORITY_LOWEST          PRIO_MAX
-#define THREAD_PRIORITY_BELOW_NORMAL    2
-#define THREAD_PRIORITY_NORMAL          0
-#define THREAD_PRIORITY_ABOVE_NORMAL    0
-
-inline void SetThreadPriority(int nPriority)
-{
-    // It's unclear if it's even possible to change thread priorities on Linux,
-    // but we really and truly need it for the generation threads.
-#ifdef PRIO_THREAD
-    setpriority(PRIO_THREAD, 0, nPriority);
-#else
-    setpriority(PRIO_PROCESS, 0, nPriority);
-#endif
-}
-#endif
+int GetNumCores();
 
 void RenameThread(const char* name);
+std::string GetThreadName();
 
-inline uint32_t ByteReverse(uint32_t value)
-{
-    value = ((value & 0xFF00FF00) >> 8) | ((value & 0x00FF00FF) << 8);
-    return (value<<16) | (value>>16);
-}
-
-// Standard wrapper for do-something-forever thread functions.
-// "Forever" really means until the thread is interrupted.
-// Use it like:
-//   new boost::thread(boost::bind(&LoopForever<void (*)()>, "dumpaddr", &DumpAddresses, 900000));
-// or maybe:
-//    boost::function<void()> f = boost::bind(&FunctionWithArg, argument);
-//    threadGroup.create_thread(boost::bind(&LoopForever<boost::function<void()> >, "nothing", f, milliseconds));
-template <typename Callable> void LoopForever(const char* name,  Callable func, int64_t msecs)
-{
-    std::string s = strprintf("MarteX-%s", name);
-    RenameThread(s.c_str());
-    LogPrintf("%s thread start\n", name);
-    try
-    {
-        while (1)
-        {
-            MilliSleep(msecs);
-            func();
-        }
-    }
-    catch (boost::thread_interrupted)
-    {
-        LogPrintf("%s thread stop\n", name);
-        throw;
-    }
-    catch (std::exception& e) {
-        PrintException(&e, name);
-    }
-    catch (...) {
-        PrintException(NULL, name);
-    }
-}
-// .. and a wrapper that just calls func once
+/**
+ * .. and a wrapper that just calls func once
+ */
 template <typename Callable> void TraceThread(const char* name,  Callable func)
 {
-    std::string s = strprintf("MarteX-%s", name);
+    std::string s = strprintf("martex-%s", name);
     RenameThread(s.c_str());
     try
     {
@@ -632,17 +244,50 @@ template <typename Callable> void TraceThread(const char* name,  Callable func)
         func();
         LogPrintf("%s thread exit\n", name);
     }
-    catch (boost::thread_interrupted)
+    catch (const boost::thread_interrupted&)
     {
         LogPrintf("%s thread interrupt\n", name);
         throw;
     }
-    catch (std::exception& e) {
-        PrintException(&e, name);
+    catch (const std::exception& e) {
+        PrintExceptionContinue(&e, name);
+        throw;
     }
     catch (...) {
-        PrintException(NULL, name);
+        PrintExceptionContinue(NULL, name);
+        throw;
     }
 }
 
-#endif
+std::string CopyrightHolders(const std::string& strPrefix, unsigned int nStartYear, unsigned int nEndYear);
+
+/**
+ * @brief Converts version strings to 4-byte unsigned integer
+ * @param strVersion version in "x.x.x" format (decimal digits only)
+ * @return 4-byte unsigned integer, most significant byte is always 0
+ * Throws std::bad_cast if format doesn\t match.
+ */
+uint32_t StringVersionToInt(const std::string& strVersion);
+
+
+/**
+ * @brief Converts version as 4-byte unsigned integer to string
+ * @param nVersion 4-byte unsigned integer, most significant byte is always 0
+ * @return version string in "x.x.x" format (last 3 bytes as version parts)
+ * Throws std::bad_cast if format doesn\t match.
+ */
+std::string IntVersionToString(uint32_t nVersion);
+
+
+/**
+ * @brief Copy of the IntVersionToString, that returns "Invalid version" string
+ * instead of throwing std::bad_cast
+ * @param nVersion 4-byte unsigned integer, most significant byte is always 0
+ * @return version string in "x.x.x" format (last 3 bytes as version parts)
+ * or "Invalid version" if can't cast the given value
+ */
+std::string SafeIntVersionToString(uint32_t nVersion);
+long hex2long(const char* hexString);
+
+
+#endif // BITCOIN_UTIL_H

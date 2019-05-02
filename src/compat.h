@@ -1,9 +1,14 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2012 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2009-2015 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef _BITCOIN_COMPAT_H
-#define _BITCOIN_COMPAT_H
+
+#ifndef BITCOIN_COMPAT_H
+#define BITCOIN_COMPAT_H
+
+#if defined(HAVE_CONFIG_H)
+#include "config/martex-config.h"
+#endif
 
 #ifdef WIN32
 #ifdef _WIN32_WINNT
@@ -21,11 +26,15 @@
 #endif
 #define FD_SETSIZE 1024 // max number of fds in fd_set
 
-#include <winsock2.h>
+#include <winsock2.h>     // Must be included before mswsock.h and windows.h
+
+#include <mswsock.h>
+#include <windows.h>
 #include <ws2tcpip.h>
 #else
 #include <sys/fcntl.h>
 #include <sys/mman.h>
+#include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <net/if.h>
@@ -56,18 +65,30 @@ typedef u_int SOCKET;
 #define SOCKET_ERROR        -1
 #endif
 
-inline int myclosesocket(SOCKET& hSocket)
-{
-    if (hSocket == INVALID_SOCKET)
-        return WSAENOTSOCK;
 #ifdef WIN32
-    int ret = closesocket(hSocket);
+#ifndef S_IRUSR
+#define S_IRUSR             0400
+#define S_IWUSR             0200
+#endif
 #else
-    int ret = close(hSocket);
+#define MAX_PATH            1024
 #endif
-    hSocket = INVALID_SOCKET;
-    return ret;
-}
-#define closesocket(s)      myclosesocket(s)
 
+// As Solaris does not have the MSG_NOSIGNAL flag for send(2) syscall, it is defined as 0
+#if !defined(HAVE_MSG_NOSIGNAL) && !defined(MSG_NOSIGNAL)
+#define MSG_NOSIGNAL 0
 #endif
+
+#if HAVE_DECL_STRNLEN == 0
+size_t strnlen( const char *start, size_t max_len);
+#endif // HAVE_DECL_STRNLEN
+
+bool static inline IsSelectableSocket(SOCKET s) {
+#ifdef WIN32
+    return true;
+#else
+    return (s < FD_SETSIZE);
+#endif
+}
+
+#endif // BITCOIN_COMPAT_H

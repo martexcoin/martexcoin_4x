@@ -1,5 +1,5 @@
-#ifndef ANONSENDCONFIG_H
-#define ANONSENDCONFIG_H
+#ifndef DARKSENDCONFIG_H
+#define DARKSENDCONFIG_H
 
 #include <QDialog>
 
@@ -27,11 +27,11 @@ private:
     WalletModel *model;
     void configure(bool enabled, int coins, int rounds);
 
-private slots:
+private Q_SLOTS:
 
     void clickBasic();
     void clickHigh();
     void clickMax();
 };
 
-#endif // ANONSENDCONFIG_H
+#endif // DARKSENDCONFIG_H

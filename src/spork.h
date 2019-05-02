@@ -1,103 +1,85 @@
-// Copyright (c) 2015 The MarteX developers
-// Copyright (c) 2009-2012 The Darkcoin developers
+// Copyright (c) 2014-2019 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #ifndef SPORK_H
 #define SPORK_H
 
-#include "bignum.h"
-#include "sync.h"
+#include "hash.h"
 #include "net.h"
+#include "utilstrencodings.h"
 #include "key.h"
-
-#include "util.h"
-#include "script.h"
-#include "base58.h"
-#include "main.h"
-
-using namespace std;
-using namespace boost;
-
-// Don't ever reuse these IDs for other sporks
-#define SPORK_1_MASTERNODE_PAYMENTS_ENFORCEMENT               10000
-#define SPORK_2_FASTTX                                      10001
-#define SPORK_3_FASTTX_BLOCK_FILTERING                      10002
-#define SPORK_4_NOTUSED                                       10003
-#define SPORK_5_MAX_VALUE                                     10004
-#define SPORK_6_REPLAY_BLOCKS                                 10005
-#define SPORK_7_MASTERNODE_SCANNING                           10006
-#define SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT                10007
-#define SPORK_9_MASTERNODE_BUDGET_ENFORCEMENT                 10008
-#define SPORK_10_MASTERNODE_PAY_UPDATED_NODES                 10009
-#define SPORK_11_RESET_BUDGET                                 10010
-#define SPORK_12_RECONSIDER_BLOCKS                            10011
-#define SPORK_13_ENABLE_SUPERBLOCKS                           10012
-
-#define SPORK_1_MASTERNODE_PAYMENTS_ENFORCEMENT_DEFAULT       4070908800   // OFF
-#define SPORK_2_FASTTX_DEFAULT                              0            // ON
-#define SPORK_3_FASTTX_BLOCK_FILTERING_DEFAULT              0            // ON
-#define SPORK_4_RECONVERGE_DEFAULT                            0            // ON - BUT NOT USED
-#define SPORK_5_MAX_VALUE_DEFAULT                             3000000      // 3,000,000 MXT
-#define SPORK_6_REPLAY_BLOCKS_DEFAULT                         0            // ON - BUT NOT USED
-#define SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT_DEFAULT        4070908800   // OFF
-#define SPORK_9_MASTERNODE_BUDGET_ENFORCEMENT_DEFAULT         4070908800   // OFF
-#define SPORK_10_MASTERNODE_PAY_UPDATED_NODES_DEFAULT         4070908800   // OFF
-#define SPORK_11_RESET_BUDGET_DEFAULT                         0            // ON
-#define SPORK_12_RECONSIDER_BLOCKS_DEFAULT                    0            // ON
-#define SPORK_13_ENABLE_SUPERBLOCKS_DEFAULT                   4070908800   // OFF
 
 class CSporkMessage;
 class CSporkManager;
 
-#include "bignum.h"
-#include "net.h"
-#include "key.h"
-#include "util.h"
-#include "protocol.h"
-#include "anonsend.h"
-#include <boost/lexical_cast.hpp>
+/*
+    Don't ever reuse these IDs for other sporks
+    - This would result in old clients getting confused about which spork is for what
+*/
+static const int SPORK_2_FASTSEND_ENABLED                            = 10001;
+static const int SPORK_3_FASTSEND_BLOCK_FILTERING                    = 10002;
+static const int SPORK_5_FASTSEND_MAX_VALUE                          = 10004;
+static const int SPORK_6_NEW_SIGS                                       = 10005;
+static const int SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT                 = 10007;
+static const int SPORK_9_SUPERBLOCKS_ENABLED                            = 10008;
+static const int SPORK_10_MASTERNODE_PAY_UPDATED_NODES                  = 10009;
+static const int SPORK_12_RECONSIDER_BLOCKS                             = 10011;
+static const int SPORK_14_REQUIRE_SENTINEL_FLAG                         = 10013;
 
-using namespace std;
-using namespace boost;
+static const int SPORK_START                                            = SPORK_2_FASTSEND_ENABLED;
+static const int SPORK_END                                              = SPORK_14_REQUIRE_SENTINEL_FLAG;
 
+extern std::map<int, int64_t> mapSporkDefaults;
 extern std::map<uint256, CSporkMessage> mapSporks;
-extern std::map<int, CSporkMessage> mapSporksActive;
 extern CSporkManager sporkManager;
 
-void ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
-int64_t GetSporkValue(int nSporkID);
-bool IsSporkActive(int nSporkID);
-void ExecuteSpork(int nSporkID, int nValue);
-//void ReprocessBlocks(int nBlocks);
-
 //
-// Spork Class
-// Keeps track of all of the network spork settings
+// Spork classes
+// Keep track of all of the network spork settings
 //
 
 class CSporkMessage
 {
-public:
+private:
     std::vector<unsigned char> vchSig;
+
+public:
     int nSporkID;
     int64_t nValue;
     int64_t nTimeSigned;
 
-    uint256 GetHash(){
-        uint256 n = Hash(BEGIN(nSporkID), END(nTimeSigned));
-        return n;
-    }
+    CSporkMessage(int nSporkID, int64_t nValue, int64_t nTimeSigned) :
+        nSporkID(nSporkID),
+        nValue(nValue),
+        nTimeSigned(nTimeSigned)
+        {}
+
+    CSporkMessage() :
+        nSporkID(0),
+        nValue(0),
+        nTimeSigned(0)
+        {}
+
 
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
-	unsigned int nSerSize = 0;
+    inline void SerializationOp(Stream& s, Operation ser_action) {
         READWRITE(nSporkID);
         READWRITE(nValue);
         READWRITE(nTimeSigned);
-        READWRITE(vchSig);
-	}
+        if (!(s.GetType() & SER_GETHASH)) {
+            READWRITE(vchSig);
+        }
+    }
+
+    uint256 GetHash() const;
+    uint256 GetSignatureHash() const;
+
+    bool Sign(const CKey& key);
+    bool CheckSignature(const CKeyID& pubKeyId) const;
+    void Relay(CConnman& connman);
 };
 
 
@@ -105,26 +87,26 @@ class CSporkManager
 {
 private:
     std::vector<unsigned char> vchSig;
+    std::map<int, CSporkMessage> mapSporksActive;
 
-    std::string strMasterPrivKey;
-    std::string strTestPubKey;
-    std::string strMainPubKey;
+    CKeyID sporkPubKeyID;
+    CKey sporkPrivKey;
 
 public:
 
-    CSporkManager() {
-        strMainPubKey = "04d244288a8c6ebbf491443ebfa1207275d71cb009f201c118b00cf8e77641c7f1e63e330ba909842c009af375c0f5c1c7368e8d7e2066168c40ce3cb629cf212f";
-        strTestPubKey = "04d244288a8c6ebbf491443ebfa1207275d71cb009f201c118b00cf8e77641c7f1e63e330ba909842c009af375c0f5c1c7368e8d7e2066168c40ce3cb629cf212f";
-    }
+    CSporkManager() {}
 
-    std::string GetSporkNameByID(int id);
-    int GetSporkIDByName(std::string strName);
-    bool UpdateSpork(int nSporkID, int64_t nValue);
-    bool SetPrivKey(std::string strPrivKey);
-    bool CheckSignature(CSporkMessage& spork);
-    bool Sign(CSporkMessage& spork);
-    void Relay(CSporkMessage& msg);
+    void ProcessSpork(CNode* pfrom, const std::string& strCommand, CDataStream& vRecv, CConnman& connman);
+    void ExecuteSpork(int nSporkID, int nValue);
+    bool UpdateSpork(int nSporkID, int64_t nValue, CConnman& connman);
 
+    bool IsSporkActive(int nSporkID);
+    int64_t GetSporkValue(int nSporkID);
+    int GetSporkIDByName(const std::string& strName);
+    std::string GetSporkNameByID(int nSporkID);
+
+    bool SetSporkAddress(const std::string& strAddress);
+    bool SetPrivKey(const std::string& strPrivKey);
 };
 
 #endif

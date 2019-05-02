@@ -1,16 +1,10 @@
 
-// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2014-2019 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef SRC_MASTERNODECONFIG_H_
 #define SRC_MASTERNODECONFIG_H_
-
-#include <string>
-#include <vector>
-
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
 
 class CMasternodeConfig;
 extern CMasternodeConfig masternodeConfig;
@@ -30,7 +24,7 @@ public:
         std::string outputIndex;
     public:
 
-        CMasternodeEntry(std::string alias, std::string ip, std::string privKey, std::string txHash, std::string outputIndex) {
+        CMasternodeEntry(const std::string& alias, const std::string& ip, const std::string& privKey, const std::string& txHash, const std::string& outputIndex) {
             this->alias = alias;
             this->ip = ip;
             this->privKey = privKey;
@@ -84,11 +78,15 @@ public:
     }
 
     void clear();
-    bool read(boost::filesystem::path path);
-    void add(std::string alias, std::string ip, std::string privKey, std::string txHash, std::string outputIndex);
+    bool read(std::string& strErrRet);
+    void add(const std::string& alias, const std::string& ip, const std::string& privKey, const std::string& txHash, const std::string& outputIndex);
 
     std::vector<CMasternodeEntry>& getEntries() {
         return entries;
+    }
+
+    int getCount() {
+        return (int)entries.size();
     }
 
 private:
