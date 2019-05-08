@@ -328,7 +328,7 @@
 #define PACKAGE_URL "https://martexcoin.org/"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "3.0.0"
+#define PACKAGE_VERSION 3.0.0
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */

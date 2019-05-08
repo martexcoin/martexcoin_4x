@@ -17,7 +17,7 @@ class CCoinsViewCache;
 /** Default for -blockmaxsize, which controls the maximum size of block the mining code will create **/
 static const unsigned int DEFAULT_BLOCK_MAX_SIZE = 2000000;
 /** Default for -blockprioritysize, maximum space for zero/low-fee transactions **/
-static const unsigned int DEFAULT_BLOCK_PRIORITY_SIZE = 10000; // was 50000 in 0.12.0 and it is 0 in Bitcoin since 0.12
+static const unsigned int DEFAULT_BLOCK_PRIORITY_SIZE = 10000; // was 50000 in 3.0.0 and it is 0 in Bitcoin since 0.12
 /** Default for -blockmintxfee, which sets the minimum feerate for a transaction in blocks created by mining code **/
 static const unsigned int DEFAULT_BLOCK_MIN_TX_FEE = 1000;
 /** The maximum allowed size for a serialized block, in bytes (network rule) */

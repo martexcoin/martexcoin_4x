@@ -82,7 +82,7 @@ Darkcoin was rebranded to MarteX.
 
 MarteX Core tree 0.12.0.x was a fork of Bitcoin Core tree 0.10.
 
-MarteX Core tree 0.12.1.x was a fork of Bitcoin Core tree 0.12.
+MarteX Core tree "3.0.0".x was a fork of Bitcoin Core tree 0.12.
 
 These release are considered obsolete. Old release notes can be found here:
 
@@ -92,7 +92,7 @@ These release are considered obsolete. Old release notes can be found here:
 - [v0.12.2.3](https://github.com/martexcoin/martexcoin/blob/master/doc/release-notes/martex/release-notes-0.12.2.3.md) released Jan/12/2018
 - [v0.12.2.2](https://github.com/martexcoin/martexcoin/blob/master/doc/release-notes/martex/release-notes-0.12.2.2.md) released Dec/17/2017
 - [v0.12.2](https://github.com/martexcoin/martexcoin/blob/master/doc/release-notes/martex/release-notes-0.12.2.md) released Nov/08/2017
-- [v0.12.1](https://github.com/martexcoin/martexcoin/blob/master/doc/release-notes/martex/release-notes-0.12.1.md) released Feb/06/2017
+- [v"3.0.0"](https://github.com/martexcoin/martexcoin/blob/master/doc/release-notes/martex/release-notes-"3.0.0".md) released Feb/06/2017
 - [v0.12.0](https://github.com/martexcoin/martexcoin/blob/master/doc/release-notes/martex/release-notes-0.12.0.md) released Jun/15/2015
 - [v0.11.2](https://github.com/martexcoin/martexcoin/blob/master/doc/release-notes/martex/release-notes-0.11.2.md) released Mar/04/2015
 - [v0.11.1](https://github.com/martexcoin/martexcoin/blob/master/doc/release-notes/martex/release-notes-0.11.1.md) released Feb/10/2015
