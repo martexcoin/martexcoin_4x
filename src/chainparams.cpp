@@ -123,25 +123,26 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 210240; // Note: actual number of blocks per calendar year with DGW v3 is ~200700 (for example 449750 - 249050)
+        consensus.nSubsidyHalvingInterval = 1051200; // Note: actual number of blocks per calendar year with DGW v3 is ~1051200
         consensus.nMasternodePaymentsStartBlock = 100000; // not true, but it's ok as long as it's less then nMasternodePaymentsIncreaseBlock
         consensus.nMasternodePaymentsIncreaseBlock = 158000; // actual historical value
         consensus.nMasternodePaymentsIncreasePeriod = 576*30; // 17280 - actual historical value
         consensus.nFastSendConfirmationsRequired = 6;
         consensus.nFastSendKeepLock = 24;
-        consensus.nBudgetPaymentsStartBlock = 328008; // actual historical value
-        consensus.nBudgetPaymentsCycleBlocks = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
+        consensus.nBudgetPaymentsStartBlock = 1593000; // actual historical value
+        consensus.nBudgetPaymentsCycleBlocks = 86400; // ~(60*24*30)*2(PoW+PoS)
         consensus.nBudgetPaymentsWindowBlocks = 100;
-        consensus.nSuperblockStartBlock = 11614820; // The block at which 12.1 goes live (end of final 12.0 budget cycle)
-        consensus.nSuperblockStartHash = uint256S("0000000000020cb27c7ef164d21003d5d20cdca2f54dd9a9ca6d45f4d47f8aa3");
-        consensus.nSuperblockCycle = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
+        consensus.nSuperblockStartBlock = 1715000; // The block at which 12.1 goes live (end of final 12.0 budget cycle)
+        //consensus.nSuperblockStartHash = uint256S("0000000000020cb27c7ef164d21003d5d20cdca2f54dd9a9ca6d45f4d47f8aa3");
+        consensus.nSuperblockStartHash = uint256();
+        consensus.nSuperblockCycle = 86400; // ~(60*24*30)*2(PoW+PoS)
         consensus.nGovernanceMinQuorum = 10;
         consensus.nGovernanceFilterElements = 20000;
         consensus.nMasternodeMinimumConfirmations = 15;
         consensus.BIP34Height = 951;
-        consensus.BIP34Hash = uint256S("0x000001f35e70f7c5705f64c6c5cc3dea9449e74d5b5c7cf74dad1bcca14a8012");
-        consensus.BIP65Height = 619382; // 00000000000076d8fcea02ec0963de4abfd01e771fec0863f960c2c64fe6f357
-        consensus.BIP66Height = 245817; // 00000000000b1fa2dfa312863570e13fae9ca7b5566cb27e55422620b469aefa
+        consensus.BIP34Hash = uint256S("0x7ddcf72d9e31466227bf81a2347075e6b695b640e827150e305ae30c187f3391");
+        consensus.BIP65Height = 619382; // 5e23c03499a66db18b0d31d629aca131ff05d62d5ee2c529fcc1b625e7ef382b
+        consensus.BIP66Height = 245817; // 9de2c3735a02aa4633741e25638a7859075140c329c8232fb2b962f0f97366d7
         consensus.DIP0001Height = 782208;
         bool fNegative;
         bool fOverflow;
@@ -151,7 +152,7 @@ public:
         consensus.powLimit = ArithToUint256(bnTarget);
         consensus.posLimit = ArithToUint256(bnTarget);
         consensus.nPowTargetTimespan = 24 * 60 * 60; // MarteX: 1 day
-        consensus.nPowTargetSpacing = 1 * 60; // MarteX: 1 minute
+        consensus.nPowTargetSpacing = 2 * 60; // MarteX: 2 minute
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 15200;
@@ -185,7 +186,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000111111"); // 888900
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x0000000000000026c29d576073ab51ebd1d3c938de02e9a44c7ee9e16f82db28"); // 888900
+        consensus.defaultAssumeValid = uint256S("0x8475b4ab4bd41b150466c32c8188cf57ba22336cc6576f68dc9fc56aea5510cd"); // 888900
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -268,7 +269,7 @@ public:
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
         consensus.posLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
         consensus.nPowTargetTimespan = 24 * 60 * 60; // MarteX: 1 day
-        consensus.nPowTargetSpacing = 1 * 60; // MarteX: 1 minute
+        consensus.nPowTargetSpacing = 2 * 60; // MarteX: 2 minute
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 4002; // nPowKGWHeight >= nPowDGWHeight means "no KGW"

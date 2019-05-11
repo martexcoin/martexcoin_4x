@@ -1,4 +1,4 @@
-MarteX Core "3.0.0"
+MarteX Core 3.0.0
 =====================
 
 Intro

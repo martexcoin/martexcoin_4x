@@ -10,11 +10,11 @@ SetCompressor /SOLID lzma
 !define URL https://martexcoin.org/
 
 # MUI Symbol Definitions
-!define MUI_ICON "/media/programas/martexcoin_gitlab/share/pixmaps/bitcoin.ico"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "/media/programas/martexcoin_gitlab/share/pixmaps/nsis-wizard.bmp"
+!define MUI_ICON "/media/programas/martexcoin/share/pixmaps/bitcoin.ico"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "/media/programas/martexcoin/share/pixmaps/nsis-wizard.bmp"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_RIGHT
-!define MUI_HEADERIMAGE_BITMAP "/media/programas/martexcoin_gitlab/share/pixmaps/nsis-header.bmp"
+!define MUI_HEADERIMAGE_BITMAP "/media/programas/martexcoin/share/pixmaps/nsis-header.bmp"
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
@@ -22,7 +22,7 @@ SetCompressor /SOLID lzma
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "MarteX Core"
 !define MUI_FINISHPAGE_RUN $INSTDIR\martex-qt
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "/media/programas/martexcoin_gitlab/share/pixmaps/nsis-wizard.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "/media/programas/martexcoin/share/pixmaps/nsis-wizard.bmp"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
 # Included files
@@ -48,7 +48,7 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile /media/programas/martexcoin_gitlab/martexcore-${VERSION}-win-setup.exe
+OutFile /media/programas/martexcoin/martexcore-${VERSION}-win-setup.exe
 !if "" == "64"
 InstallDir $PROGRAMFILES64\MarteXCore
 !else
@@ -73,14 +73,14 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File /media/programas/martexcoin_gitlab/release/martex-qt
-    File /oname=COPYING.txt /media/programas/martexcoin_gitlab/COPYING
-    File /oname=readme.txt /media/programas/martexcoin_gitlab/doc/README_windows.txt
+    File /media/programas/martexcoin/release/martex-qt
+    File /oname=COPYING.txt /media/programas/martexcoin/COPYING
+    File /oname=readme.txt /media/programas/martexcoin/doc/README_windows.txt
     SetOutPath $INSTDIR\daemon
-    File /media/programas/martexcoin_gitlab/release/martexd
-    File /media/programas/martexcoin_gitlab/release/martex-cli
+    File /media/programas/martexcoin/release/martexd
+    File /media/programas/martexcoin/release/martex-cli
     SetOutPath $INSTDIR\doc
-    File /r /media/programas/martexcoin_gitlab/doc\*.*
+    File /r /media/programas/martexcoin/doc\*.*
     SetOutPath $INSTDIR
     WriteRegStr HKCU "${REGKEY}\Components" Main 1
 SectionEnd

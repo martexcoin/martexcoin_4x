@@ -1,4 +1,4 @@
-MarteX Core "3.0.0"
+MarteX Core 3.0.0
 =====================
 
 This is the official reference wallet for MarteX digital currency and comprises the backbone of the MarteX peer-to-peer network. You can [download MarteX Core](https://www.martexcoin.org/downloads/) or [build it yourself](#building) using the guides below.

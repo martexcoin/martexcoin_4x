@@ -1,4 +1,4 @@
-Protocol Documentation - "3.0.0"
+Protocol Documentation - 3.0.0
 =====================================
 
 This document describes the protocol extensions for all additional functionality build into the MarteX protocol. This doesn't include any of the Bitcoin protocol, which has been left intact in the MarteX project. For more information about the core protocol, please see https://en.bitcoin.it/w/index.php?title#Protocol_documentation&action#edit
