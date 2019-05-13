@@ -22,7 +22,7 @@ packages:
 - "ca-certificates"
 - "python"
 remotes:
-- "url": "https://gitlab.com/martexcoin/martexcoin.git"
+- "url": "https://github.com/martexcoin/martexcoin.git"
   "dir": "martexcoin"
 files: []
 script: |
