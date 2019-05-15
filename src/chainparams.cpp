@@ -229,7 +229,7 @@ public:
         fRequireStandard = true;
         fMineBlocksOnDemand = false;
         fAllowMultipleAddressesFromGroup = false;
-        fAllowMultiplePorts = false;
+        fAllowMultiplePorts = true;
 
         nPoolMaxTransactions = 3;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
