@@ -9,7 +9,7 @@
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
 /* Version Build */
-#define CLIENT_VERSION_BUILD 0
+#define CLIENT_VERSION_BUILD 1
 
 /* Version is release */
 #define CLIENT_VERSION_IS_RELEASE true
@@ -328,7 +328,7 @@
 #define PACKAGE_URL "https://martexcoin.org/"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION 3.0.0
+#define PACKAGE_VERSION "3.0.0"
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
