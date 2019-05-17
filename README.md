@@ -1,4 +1,4 @@
-MarteX Core staging tree 3.0.0
+MarteX Core staging tree 3.0.1
 ===============================
 
 `master:` [![Build Status](https://travis-ci.org/martexcoin/martexcoin.svg?branch=master)](https://travis-ci.org/martexcoin/martexcoin) `develop:` [![Build Status](https://travis-ci.org/martexcoin/martexcoin.svg?branch=develop)](https://travis-ci.org/martexcoin/martexcoin/branches)
