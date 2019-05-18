@@ -17,13 +17,13 @@
   <string>APPL</string>
 
   <key>CFBundleGetInfoString</key>
-  <string>3.0.0, Copyright © 2009-2019 The Bitcoin Core developers, 2014-2019 The MarteX Core developers</string>
+  <string>3.0.1, Copyright © 2009-2019 The Bitcoin Core developers, 2014-2019 The MarteX Core developers</string>
 
   <key>CFBundleShortVersionString</key>
-  <string>3.0.0</string>
+  <string>3.0.1</string>
 
   <key>CFBundleVersion</key>
-  <string>3.0.0</string>
+  <string>3.0.1</string>
 
   <key>CFBundleSignature</key>
   <string>????</string>

@@ -5,7 +5,7 @@ SetCompressor /SOLID lzma
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 3.0.0
+!define VERSION 3.0.1
 !define COMPANY "MarteX Core project"
 !define URL https://martexcoin.org/
 
@@ -58,7 +58,7 @@ CRCCheck on
 XPStyle on
 BrandingText " "
 ShowInstDetails show
-VIProductVersion ${VERSION}.0
+VIProductVersion ${VERSION}.1
 VIAddVersionKey ProductName "MarteX Core"
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"

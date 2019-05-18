@@ -21,7 +21,7 @@
 #define CLIENT_VERSION_MINOR 0
 
 /* Build revision */
-#define CLIENT_VERSION_REVISION 1
+#define CLIENT_VERSION_REVISION 2
 
 /* Copyright holder(s) before %s replacement */
 #define COPYRIGHT_HOLDERS "The %s developers"
@@ -319,7 +319,7 @@
 #define PACKAGE_NAME "MarteX Core"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "MarteX Core 3.0.0"
+#define PACKAGE_STRING "MarteX Core 3.0.1"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "martexcore"
@@ -328,7 +328,7 @@
 #define PACKAGE_URL "https://martexcoin.org/"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "3.0.0"
+#define PACKAGE_VERSION "3.0.1"
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
