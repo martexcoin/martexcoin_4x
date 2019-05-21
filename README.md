@@ -1,9 +1,15 @@
 MarteX Core staging tree 3.0.2
 ===============================
+[![logo](https://img.shields.io/badge/Martexcoin-Cryptocurrency-blue.svg)](https://www.martexcoin.org)
+![issues](https://img.shields.io/github/issues/martexcoin/martexcoin.svg)
+![forks](https://img.shields.io/github/forks/martexcoin/martexcoin.svg)
+![stars](https://img.shields.io/github/stars/martexcoin/martexcoin.svg)
+![license](https://img.shields.io/github/license/martexcoin/martexcoin.svg)
+![downloads](https://img.shields.io/github/downloads/martexcoin/martexcoin/total.svg)
 
 `master:` [![Build Status](https://travis-ci.org/martexcoin/martexcoin.svg?branch=master)](https://travis-ci.org/martexcoin/martexcoin) `develop:` [![Build Status](https://travis-ci.org/martexcoin/martexcoin.svg?branch=develop)](https://travis-ci.org/martexcoin/martexcoin/branches)
 
-https://www.martexcoin.org
+
 
 
 What is MarteX?
