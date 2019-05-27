@@ -1235,8 +1235,7 @@ bool CWallet::LoadToWallet(const CWalletTx& wtxIn)
 bool CWallet::AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlockIndex* pIndex, int posInBlock, bool fUpdate)
 {
     {
-        AssertLockHeld(cs_wallet);
-
+	LOCK(cs_wallet);
         if (posInBlock != -1) {
             BOOST_FOREACH(const CTxIn& txin, tx.vin) {
                 std::pair<TxSpends::const_iterator, TxSpends::const_iterator> range = mapTxSpends.equal_range(txin.prevout);
@@ -1328,7 +1327,7 @@ bool CWallet::AbandonTransaction(const uint256& hashTx)
 
 void CWallet::MarkConflicted(const uint256& hashBlock, const uint256& hashTx)
 {
-    LOCK2(cs_main, cs_wallet);
+    LOCK(cs_wallet);
 
     int conflictconfirms = 0;
     if (mapBlockIndex.count(hashBlock)) {
@@ -5760,7 +5759,6 @@ bool CWallet::CreateCoinStake(unsigned int nBits, int64_t nTime, int nBlockHeigh
         if(!txoutMasternodeRet.IsNull()){
             payee = txoutMasternodeRet.scriptPubKey;
         }else{
-            LogPrintf("CreateCoinStake:: Failed to detect masternode to pay\n");
             // pay the dev address if it can't detect
             std::vector<unsigned char> vchPubKey = ParseHex((!(Params().NetworkIDString() == CBaseChainParams::TESTNET) ? mMVCDEV : tMVCDEV));
             CPubKey pubKey(vchPubKey);
@@ -5772,7 +5770,6 @@ bool CWallet::CreateCoinStake(unsigned int nBits, int64_t nTime, int nBlockHeigh
             CBitcoinAddress address;
             address.Set(keyID);
             payee = GetScriptForDestination(address.Get());
-            LogPrintf("CreateNewBlock PoW DEV\n");
         }
     } else {
         hasPayment = false;
@@ -5924,66 +5921,74 @@ void CWallet::EraseFromWallet(const uint256 &hash)
     return;
 }
 
-// ppcoin: check 'spent' consistency between wallet and txindex
-// ppcoin: fix wallet spent state according to txindex
-// void CWallet::FixSpentCoins(int& nMismatchFound, int64_t& nBalanceInQuestion, bool fCheckOnly)
-// {
-//     nMismatchFound = 0;
-//     nBalanceInQuestion = 0;
-//
-//     LOCK(cs_wallet);
-//     std::vector<CWalletTx*> vCoins;
-//     vCoins.reserve(mapWallet.size());
-//     for (std::map<uint256, CWalletTx>::iterator it = mapWallet.begin(); it != mapWallet.end(); ++it)
-//         vCoins.push_back(&(*it).second);
-//
-//     BOOST_FOREACH(CWalletTx* pcoin, vCoins)
-//     {
-//         // Find the corresponding transaction index
-//         CDiskTxPos txindex;
-// 	      if (!pblocktree->ReadTxIndex(pcoin->GetHash(), txindex))
-//             continue;
-//             for (unsigned int n=0; n < pcoin->tx->vout.size(); n++)
-//             {
-//                 if (IsMine(pcoin->tx->vout[n]) && pcoin->IsSpent(n))
-//                 {
-//                     LogPrintf("FixSpentCoins found lost coin %s MXT %s[%d], %s\n",
-//                         FormatMoney(pcoin->tx->vout[n].nValue), pcoin->GetHash().ToString(), n, fCheckOnly? "repair not attempted" : "repairing");
-//
-//                     nMismatchFound++;
-//                     nBalanceInQuestion += pcoin->tx->vout[n].nValue;
-//                     if (!fCheckOnly)
-//                     {
-//                         pcoin->MarkUnspent(n);
-//                         pcoin->WriteToDisk();
-//                     }
-//                 }
-//                 else if (IsMine(pcoin->tx->vout[n]) && !pcoin->IsSpent(n))
-//                 {
-//                     LogPrintf("FixSpentCoins found spent coin %s MXT %s[%d], %s\n",
-//                         FormatMoney(pcoin->tx->vout[n].nValue), pcoin->GetHash().ToString(), n, fCheckOnly? "repair not attempted" : "repairing");
-//
-//                     nMismatchFound++;
-//                     nBalanceInQuestion += pcoin->tx->vout[n].nValue;
-//                     if (!fCheckOnly)
-//                     {
-//                         pcoin->MarkSpent(n);
-//                         pcoin->WriteToDisk();
-//                     }
-//                 }
-//
-//             }
-//
-//             if(IsMine(*pcoin->tx) && (pcoin->tx->IsCoinBase() || pcoin->tx->IsCoinStake()) && pcoin->GetDepthInMainChain() < 5)
-//             {
-//                 LogPrintf("FixSpentCoins %s tx %s\n", fCheckOnly ? "found" : "removed", pcoin->GetHash().ToString().c_str());
-//                 if (!fCheckOnly)
-//                 {
-//                     EraseFromWallet(pcoin->GetHash());
-//                 }
-//             }
-//      }
-// }
+// check 'spent' consistency between wallet and txindex
+// fix wallet spent state according to txindex
+// remove orphan Coinbase and Coinstake
+void CWallet::FixSpentCoins(int& nMismatchFound, int64_t& nBalanceInQuestion, int& nOrphansFound, bool fCheckOnly)
+{
+    nMismatchFound = 0;
+    nBalanceInQuestion = 0;
+    nOrphansFound = 0;
+
+    LOCK(cs_wallet);
+    std::vector<CWalletTx*> vCoins;
+    vCoins.reserve(mapWallet.size());
+    for (std::map<uint256, CWalletTx>::iterator it = mapWallet.begin(); it != mapWallet.end(); ++it)
+        vCoins.push_back(&(*it).second);
+
+     BOOST_FOREACH(CWalletTx* pcoin, vCoins)
+     {
+         uint256 hash = pcoin->GetHash();
+         // Find the corresponding transaction index
+         CDiskTxPos txindex;
+ 	     if (!pblocktree->ReadTxIndex(pcoin->GetHash(), txindex))
+             continue;
+             for (unsigned int n=0; n < pcoin->tx->vout.size(); n++)
+             {
+                 bool fUpdated = false;
+                 if (IsMine(pcoin->tx->vout[n]) && IsSpent(pcoin->GetHash(),n))
+                 {
+                     LogPrintf("FixSpentCoins found lost coin %s MXT %s[%d], %s\n",
+                         FormatMoney(pcoin->tx->vout[n].nValue), pcoin->GetHash().ToString(), n, fCheckOnly? "repair not attempted" : "repairing");
+
+                     nMismatchFound++;
+                     nBalanceInQuestion += pcoin->tx->vout[n].nValue;
+                     if (!fCheckOnly)
+                     {
+                         fUpdated = true;
+                         pcoin->MarkUnspent(n);
+                         pcoin->WriteToDisk();
+                     }
+                 }
+                 else if (IsMine(pcoin->tx->vout[n]) && !IsSpent(pcoin->GetHash(),n))
+                 {
+                     LogPrintf("FixSpentCoins found spent coin %s MXT %s[%d], %s\n",
+                         FormatMoney(pcoin->tx->vout[n].nValue), pcoin->GetHash().ToString(), n, fCheckOnly? "repair not attempted" : "repairing");
+
+                     nMismatchFound++;
+                     nBalanceInQuestion += pcoin->tx->vout[n].nValue;
+                     if (!fCheckOnly)
+                     {
+                         fUpdated = true;
+                         pcoin->MarkSpent(n);
+                         pcoin->WriteToDisk();
+                     }
+                 }
+                 NotifyTransactionChanged(this, hash, CT_UPDATED);
+             }
+
+             if(IsMine(*pcoin->tx) && (pcoin->tx->IsCoinBase() || pcoin->tx->IsCoinStake()) && pcoin->GetDepthInMainChain() == 0)
+             {
+                 LogPrintf("FixSpentCoins %s tx %s\n", fCheckOnly ? "found" : "removed", pcoin->GetHash().ToString().c_str());
+
+                 if (!fCheckOnly)
+                 {
+                     EraseFromWallet(pcoin->GetHash());
+                     NotifyTransactionChanged(this, hash, CT_UPDATED);
+                 }
+             }
+      }
+}
 
 bool CWallet::SignBlock(CBlockTemplate *pblocktemplate, int nHeight)
 {

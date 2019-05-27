@@ -36,13 +36,13 @@ config.log
 config.status
 configure
 libtool
-#src/config/martex-config.h
-#src/config/martex-config.h.in
-#src/config/stamp-h1
+src/config/martex-config.h
+src/config/martex-config.h.in
+src/config/stamp-h1
 share/setup.nsi
 share/qt/Info.plist
 
-#src/univalue/gen
+src/univalue/gen
 
 src/qt/*.moc
 src/qt/moc_*.cpp
@@ -80,7 +80,7 @@ libconftest.dylib*
 
 # Compilation and Qt preprocessor part
 *.qm
-#Makefile
+Makefile
 martex-qt
 MarteX-Qt.app
 
@@ -134,36 +134,3 @@ make
 # CLion
 .idea
 cmake-build-debug
-
-martex.pro.user
-qrc_bitcoin.cpp
-.qmake.stash
-MarteX-qt
-Makefile
-Makefile.Debug
-Makefile.Release
-object_script.MarteX-qt.Debug
-object_script.MarteX-qt.Release
-release/*
-build/*.o
-build/*.cpp
-build/*.moc
-build/ui_*
-build/*.h
-src/MarteXd
-src/obj/*.o
-src/obj/*.P
-src/obj-test/*.o
-src/obj-test/*.P
-src/obj/build.h
-src/leveldb/db/*.o
-src/leveldb/helpers/memenv/*.o
-src/leveldb/port/*.o
-src/leveldb/table/*.o
-src/leveldb/util/*.o
-src/leveldb/libleveldb.a
-src/leveldb/libmemenv.a
-src/qt/locale/*.qm
-src/clean.sh
-src/MarteXd.exe
-

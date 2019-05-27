@@ -9,7 +9,7 @@
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
 /* Version Build */
-#define CLIENT_VERSION_BUILD 1
+#define CLIENT_VERSION_BUILD 2
 
 /* Version is release */
 #define CLIENT_VERSION_IS_RELEASE true
@@ -319,7 +319,7 @@
 #define PACKAGE_NAME "MarteX Core"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "MarteX Core 3.0.1"
+#define PACKAGE_STRING "MarteX Core 3.0.2"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "martexcore"
@@ -328,7 +328,7 @@
 #define PACKAGE_URL "https://martexcoin.org/"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "3.0.1"
+#define PACKAGE_VERSION "3.0.2"
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */

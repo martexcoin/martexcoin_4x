@@ -151,7 +151,7 @@ public:
         bnTarget.SetCompact(0x1e3fffff, &fNegative, &fOverflow);
         consensus.powLimit = ArithToUint256(bnTarget);
         consensus.posLimit = ArithToUint256(bnTarget);
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // MarteX: 1 day
+        consensus.nPowTargetTimespan = 10 * 60; // MarteX: 10 min
         consensus.nPowTargetSpacing = 2 * 60; // MarteX: 2 minute
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
@@ -167,14 +167,14 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1486252800; // Feb 5th, 2017
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1517788800; // Feb 5th, 2018
-        
+
         // Deployment of DIP0001
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].bit = 1;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nStartTime = 1508025600; // Oct 15th, 2017
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nTimeout = 1539561600; // Oct 15th, 2018
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nWindowSize = 4032;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nThreshold = 3226; // 80% of 4032
-        
+
         // Deployment of BIP147
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].bit = 2;
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nStartTime = 1524477600; // Apr 23th, 2018
@@ -183,7 +183,7 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nThreshold = 3226; // 80% of 4032
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000111111"); // 888900
+        consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000004499388104106b542"); // 888900
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x8475b4ab4bd41b150466c32c8188cf57ba22336cc6576f68dc9fc56aea5510cd"); // 888900
@@ -235,6 +235,42 @@ public:
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
 
         strSporkAddress = "MHqNjNs6VWkUDXA7fj8HuCzBzECNqhzFkr";
+
+        checkpointData = (CCheckpointData) {
+            boost::assign::map_list_of
+            (     0, uint256S("0x617fc383b07fbab3505213b41fe34f9705b92d854a9f72593cb616e4726e155c"))
+            (  1500, uint256S("0xb5a149ba0d464837b3a7125242260b4c84b0ec9918a9f84ba3d1efb7142b912a"))
+            (  9918, uint256S("0xbeb9f4fe6264d21912923923d35a490b529e6221b474808309cf48245a33d14e"))
+            ( 16912, uint256S("0x2a2816aa9e0f5a6d5a2ef4f375e1c83481187935d6a7823fd01f49d409d6ed8f"))
+            ( 23912, uint256S("0x2e1854683abfa6458691c907dbab8cfd77a6e0ebe6117b774a8f27424a1760d0"))
+            ( 35457, uint256S("0xf88790ce6476cd4b694d17512c5f1f34d50b747462635efdf9e3dc8f3d6b8362"))
+            ( 45479, uint256S("0xf848d60c6483997770dac2e88f48b8128762c47329393df7e57954ad6157cde8"))
+            ( 55895, uint256S("0x757f1d1289d115151c30539ecac339c125d866c7267c754fd337b168ca7156d6"))
+            ( 68899, uint256S("0x91a5c5df389e5983013be36f9d0870f08bb5f78bdaec32582cf5aa0793691772"))
+            ( 74619, uint256S("0xeeb023a6a7ca4ff9f3007abb19d3900107eea11f72363c97618924f4c4702374"))
+            ( 75095, uint256S("0x8b2eb0051856ce9f8c31afc495b3cfb948a97244663409c7418924a459d24369"))
+            ( 88805, uint256S("0x407da90696cd4f3db6a3fa65dd5f14818cd559fad084e7421d4cd9138a32ed0d"))
+            ( 107996, uint256S("0x399401999d00f054497b0a5189957d568237d417b78af09bbf2f0071c84e9840"))
+            ( 137993, uint256S("0x230ac694157c523e3b0894587f5a4f003e180b913b049489f6517ab473585b73"))
+            ( 167996, uint256S("0x3fe6760f6daf5e9371c3d24c915174cf0bba3ec541e1bb9517f6f19dbcb7d018"))
+            ( 207992, uint256S("0x05bd2ed01f6a7815bddf30b56bef0f4a8c00da9156e43f6a9e8e3e25487c93b7"))
+            ( 312645, uint256S("0x00484a83353616fbde8d86a93c48e89c4facbf993126acfc6c163559ccf08735"))
+            ( 407452, uint256S("0xef122d0c6e0f1d71b9f803e58ce52e952d186a7a386703001df8ff1dc3fb7f57"))
+            ( 523412, uint256S("0x9b9a7952624668f7a8e06fc592b371b98d5355c575c9285243a2ba41069d3a11"))
+            ( 523930, uint256S("0xb7e4b36ec249c665e64f1e93e370f2a385a4f732610c2b17d22e18a51309bf62"))
+            ( 750000, uint256S("0x41d0a1255a06ec652bd525ecb3fe280efa7b1020139642cf4412b34b491ede68"))
+            ( 888900, uint256S("0x8475b4ab4bd41b150466c32c8188cf57ba22336cc6576f68dc9fc56aea5510cd"))
+            ( 967800, uint256S("0xbd953dea29cce275befc317e5d772e3e5dce6e811a6257ffdeb3a00d6fc11541"))
+            (1680167, uint256S("0xe4ff3619d84659b7f7c3ff4ab92124d116d3c35414145f31fc42743fd92e8047"))
+        };
+
+        chainTxData = ChainTxData{
+            1558648960, // * UNIX timestamp of last known number of transactions
+            2692460,    // * total number of transactions between genesis and that timestamp
+                        //   (the tx=... number in the SetBestChain debug.log lines)
+            100         // * estimated number of transactions per second after that timestamp
+        };
+
     }
 };
 static CMainParams mainParams;
@@ -268,7 +304,7 @@ public:
         consensus.DIP0001Height = 5500;
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
         consensus.posLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // MarteX: 1 day
+        consensus.nPowTargetTimespan = 10 * 60; // MarteX: 10 min
         consensus.nPowTargetSpacing = 2 * 60; // MarteX: 2 minute
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
@@ -279,19 +315,19 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
-        
+
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1544655600; // Dec 13th, 2018
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1576191600; // Dec 13th, 2019
-        
+
         // Deployment of DIP0001
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].bit = 1;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nStartTime = 1544655600; // Dec 13th, 2018
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nTimeout = 1576191600; // Dec 13th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nThreshold = 50; // 50% of 100
-        
+
         // Deployment of BIP147
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].bit = 2;
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nStartTime = 1544655600; // Dec 13th, 2018
@@ -300,10 +336,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nThreshold = 50; // 50% of 100
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000000000003cd72a542"); // 4000
+        consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000000076f82ad138686c2"); // 4000
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x00000ce22113f3eb8636e225d6a1691e132fdd587aed993e1bc9b07a0235eea4"); // 4000
+        consensus.defaultAssumeValid = uint256S("0x8ad40d557632ce92ac361c5c8407a2364431c94167e52e9f4f23d09b0161e379"); // 4000
 
         pchMessageStart[0] = 0x70;
         pchMessageStart[1] = 0x35;
@@ -350,13 +386,14 @@ public:
             (    261, uint256S("0x00000c26026d0815a7e2ce4fa270775f61403c040647ff2c3091f99e894a4618"))
             (   1999, uint256S("0x00000052e538d27fa53693efe6fb6892a0c1d26c0235f599171c48a3cce553b1"))
             (   2999, uint256S("0x0000024bc3f4f4cb30d29827c13d921ad77d2c6072e586c7f60d83c2722cdcc5"))
+            ( 252537, uint256S("0xae0ee06e545780e3bb9ff108141557d750cbcab2fb6a4c03b2eb4b99d5ff1f13"))
         };
 
         chainTxData = ChainTxData{
-            1544707462, // * UNIX timestamp of last known number of transactions
-            4100,       // * total number of transactions between genesis and that timestamp
+            1558746545, // * UNIX timestamp of last known number of transactions
+            473679,     // * total number of transactions between genesis and that timestamp
                         //   (the tx=... number in the SetBestChain debug.log lines)
-            0.01        // * estimated number of transactions per second after that timestamp
+            100        // * estimated number of transactions per second after that timestamp
         };
 
     }
@@ -390,7 +427,7 @@ public:
         consensus.BIP66Height = 1; // BIP66 activated immediately on devnet
         consensus.DIP0001Height = 2; // DIP0001 activated immediately on devnet
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 1
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // MarteX: 1 day
+        consensus.nPowTargetTimespan = 10 * 60; // MarteX: 10 min
         consensus.nPowTargetSpacing = 2.5 * 60; // MarteX: 2.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
