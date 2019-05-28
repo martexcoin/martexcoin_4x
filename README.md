@@ -7,11 +7,6 @@ MarteX Core staging tree 3.0.2
 ![license](https://img.shields.io/github/license/martexcoin/martexcoin.svg)
 ![downloads](https://img.shields.io/github/downloads/martexcoin/martexcoin/total.svg)
 
-`master:` [![Build Status](https://travis-ci.org/martexcoin/martexcoin.svg?branch=master)](https://travis-ci.org/martexcoin/martexcoin) `develop:` [![Build Status](https://travis-ci.org/martexcoin/martexcoin.svg?branch=develop)](https://travis-ci.org/martexcoin/martexcoin/branches)
-
-
-
-
 What is MarteX?
 ----------------
 
