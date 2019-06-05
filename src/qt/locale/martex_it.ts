@@ -651,8 +651,8 @@
 <context>
     <name>ClientModel</name>
     <message>
-        <source>Total: %1 (PS compatible: %2 / Enabled: %3)</source>
-        <translation>Totale: %1 (PS compatibile: %2 / Abilitato: %3)</translation>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
+        <translation>Totale: %1 (FS compatibile: %2 / Abilitato: %3)</translation>
     </message>
     <message>
         <source>Network Alert</source>
@@ -726,8 +726,8 @@
         <translation>Ricevuto con indirizzo</translation>
     </message>
     <message>
-        <source>PS Rounds</source>
-        <translation>Round di PS</translation>
+        <source>FS Rounds</source>
+        <translation>Round di FS</translation>
     </message>
     <message>
         <source>Date</source>
@@ -1035,7 +1035,7 @@
     </message>
     <message>
         <source>AnonSend information</source>
-        <translation>Informazioni di Private Send</translation>
+        <translation>Informazioni di Anon Send</translation>
     </message>
     <message>
         <source>&lt;h3&gt;AnonSend Basics&lt;/h3&gt; AnonSend gives you true financial privacy by obscuring the origins of your funds. All the MarteX in your wallet is comprised of different "inputs" which you can think of as separate, discrete coins.&lt;br&gt; AnonSend uses an innovative process to mix your inputs with the inputs of two other people, without having your coins ever leave your wallet. You retain control of your money at all times.&lt;hr&gt; &lt;b&gt;The AnonSend process works like this:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;AnonSend begins by breaking your transaction inputs down into standard denominations. These denominations are 0.01 MXT, 0.1 MXT, 1 MXT and 10 MXT -- sort of like the paper money you use every day.&lt;/li&gt; &lt;li&gt;Your wallet then sends requests to specially configured software nodes on the network, called "masternodes." These masternodes are informed then that you are interested in mixing a certain denomination. No identifiable information is sent to the masternodes, so they never know "who" you are.&lt;/li&gt; &lt;li&gt;When two other people send similar messages, indicating that they wish to mix the same denomination, a mixing session begins. The masternode mixes up the inputs and instructs all three users' wallets to pay the now-transformed input back to themselves. Your wallet pays that denomination directly to itself, but in a different address (called a change address).&lt;/li&gt; &lt;li&gt;In order to fully obscure your funds, your wallet must repeat this process a number of times with each denomination. Each time the process is completed, it's called a "round." Each round of AnonSend makes it exponentially more difficult to determine where your funds originated.&lt;/li&gt; &lt;li&gt;This mixing process happens in the background without any intervention on your part. When you wish to make a transaction, your funds will already be anonymized. No additional waiting is required.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;IMPORTANT:&lt;/b&gt; Your wallet only contains 1000 of these "change addresses." Every time a mixing event happens, up to 9 of your addresses are used up. This means those 1000 addresses last for about 100 mixing events. When 900 of them are used, your wallet must create more addresses. It can only do this, however, if you have automatic backups enabled.&lt;br&gt; Consequently, users who have backups disabled will also have AnonSend disabled. &lt;hr&gt;For more info see &lt;a href="https://martexcoin.org/wiki/display/DOC/AnonSend"&gt;https://martexcoin.org/wiki/display/DOC/AnonSend&lt;/a&gt;         </source>

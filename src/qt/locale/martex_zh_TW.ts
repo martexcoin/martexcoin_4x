@@ -651,7 +651,7 @@
 <context>
     <name>ClientModel</name>
     <message>
-        <source>Total: %1 (PS compatible: %2 / Enabled: %3)</source>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
         <translation>總量:  %1 (匿名發送兼容 : %2 / 可用 : %3)</translation>
     </message>
     <message>
@@ -726,7 +726,7 @@
         <translation>收款位址</translation>
     </message>
     <message>
-        <source>PS Rounds</source>
+        <source>FS Rounds</source>
         <translation>匿名發送循環</translation>
     </message>
     <message>

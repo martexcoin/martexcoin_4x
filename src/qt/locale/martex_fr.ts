@@ -651,8 +651,8 @@
 <context>
     <name>ClientModel</name>
     <message>
-        <source>Total: %1 (PS compatible: %2 / Enabled: %3)</source>
-        <translation>Total : %1 (PS compatibles : %2 / activés : %3)</translation>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
+        <translation>Total : %1 (FS compatibles : %2 / activés : %3)</translation>
     </message>
     <message>
         <source>Network Alert</source>
@@ -726,7 +726,7 @@
         <translation>Reçu avec adresse</translation>
     </message>
     <message>
-        <source>PS Rounds</source>
+        <source>FS Rounds</source>
         <translation>cycles AnonSend</translation>
     </message>
     <message>

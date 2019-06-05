@@ -651,8 +651,8 @@
 <context>
     <name>ClientModel</name>
     <message>
-        <source>Total: %1 (PS compatible: %2 / Enabled: %3)</source>
-        <translation>Tổng số: %1 (Tương thích PS: %2 / Sẵn sàng: %3)</translation>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
+        <translation>Tổng số: %1 (Tương thích FS: %2 / Sẵn sàng: %3)</translation>
     </message>
     <message>
         <source>Network Alert</source>
@@ -726,8 +726,8 @@
         <translation>Nhận được với địa chỉ</translation>
     </message>
     <message>
-        <source>PS Rounds</source>
-        <translation>Các vòng PS</translation>
+        <source>FS Rounds</source>
+        <translation>Các vòng FS</translation>
     </message>
     <message>
         <source>Date</source>
@@ -5026,7 +5026,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Unable to locate enough AnonSend non-denominated funds for this transaction.</source>
-        <translation>Không thể tìm đủ lượng ngân sách chưa phân mệnh giá Private Send cho giao dịch  này.</translation>
+        <translation>Không thể tìm đủ lượng ngân sách chưa phân mệnh giá Anon Send cho giao dịch  này.</translation>
     </message>
     <message>
         <source>Use N separate masternodes for each denominated input to mix funds (%u-%u, default: %u)</source>

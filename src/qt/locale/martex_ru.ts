@@ -651,8 +651,8 @@
 <context>
     <name>ClientModel</name>
     <message>
-        <source>Total: %1 (PS compatible: %2 / Enabled: %3)</source>
-        <translation>Всего: %1 (Совместимых с PS: %2 / Активных: %3)</translation>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
+        <translation>Всего: %1 (Совместимых с FS: %2 / Активных: %3)</translation>
     </message>
     <message>
         <source>Network Alert</source>
@@ -726,8 +726,8 @@
         <translation>Получено на адрес</translation>
     </message>
     <message>
-        <source>PS Rounds</source>
-        <translation>Раунды PS</translation>
+        <source>FS Rounds</source>
+        <translation>Раунды FS</translation>
     </message>
     <message>
         <source>Date</source>

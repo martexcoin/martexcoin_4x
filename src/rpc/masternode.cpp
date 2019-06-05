@@ -204,7 +204,7 @@ UniValue masternode(const JSONRPCRequest& request)
             UniValue obj(UniValue::VOBJ);
 
             obj.push_back(Pair("total", total));
-            obj.push_back(Pair("ps_compatible", ps));
+            obj.push_back(Pair("fs_compatible", ps));
             obj.push_back(Pair("enabled", enabled));
             obj.push_back(Pair("qualify", nCount));
 
@@ -226,7 +226,7 @@ UniValue masternode(const JSONRPCRequest& request)
             return nCount;
 
         if (strMode == "all")
-            return strprintf("Total: %d (PS Compatible: %d / Enabled: %d / Qualify: %d)",
+            return strprintf("Total: %d (FS Compatible: %d / Enabled: %d / Qualify: %d)",
                 total, ps, enabled, nCount);
     }
 

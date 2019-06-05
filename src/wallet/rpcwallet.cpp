@@ -2842,6 +2842,9 @@ extern UniValue importmulti(const JSONRPCRequest& request);
 extern UniValue dumphdinfo(const JSONRPCRequest& request);
 extern UniValue importelectrumwallet(const JSONRPCRequest& request);
 
+extern UniValue checkwallet(const JSONRPCRequest& request);
+extern UniValue repairwallet(const JSONRPCRequest& request);
+
 static const CRPCCommand commands[] =
 { //  category              name                        actor (function)           okSafeMode
     //  --------------------- ------------------------    -----------------------    ----------
@@ -2897,6 +2900,8 @@ static const CRPCCommand commands[] =
     { "wallet",             "fastsendtoaddress",     &fastsendtoaddress,     false,  {"address","amount","comment","comment_to","subtractfeefromamount"} },
     { "wallet",             "dumphdinfo",               &dumphdinfo,               true,   {} },
     { "wallet",             "importelectrumwallet",     &importelectrumwallet,     true,   {"filename", "index"} },
+    { "wallet",             "checkwallet",              &checkwallet,              true,   {} },
+    { "wallet",             "repairwallet",             &repairwallet,             true,   {} },
 
     { "hidden",             "setbip69enabled",          &setbip69enabled,          true,   {} },
 };

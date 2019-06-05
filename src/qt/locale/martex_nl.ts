@@ -651,8 +651,8 @@
 <context>
     <name>ClientModel</name>
     <message>
-        <source>Total: %1 (PS compatible: %2 / Enabled: %3)</source>
-        <translation>Totaal: %1 (PS compatibel: %2 / ingeschakeld: %3)</translation>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
+        <translation>Totaal: %1 (FS compatibel: %2 / ingeschakeld: %3)</translation>
     </message>
     <message>
         <source>Network Alert</source>
@@ -726,8 +726,8 @@
         <translation>Ontvangst adressen</translation>
     </message>
     <message>
-        <source>PS Rounds</source>
-        <translation>PS Rondes</translation>
+        <source>FS Rounds</source>
+        <translation>FS Rondes</translation>
     </message>
     <message>
         <source>Date</source>

@@ -680,7 +680,7 @@ bool CheckStake(CBlock* pblock, CWallet& wallet)
         std::shared_ptr<const CBlock> shared_pblock = std::make_shared<const CBlock>(*pblock);
         if (!ProcessNewBlock(Params(), shared_pblock, true, NULL))
             return error("CheckStake() : ProcessBlock, block not accepted");
-        else
+        /*else
         {
             //ProcessBlock successful for PoS. now FixSpentCoins.
             int nMismatchSpent;
@@ -689,12 +689,12 @@ bool CheckStake(CBlock* pblock, CWallet& wallet)
             {
               LOCK(wallet.cs_wallet);
               wallet.FixSpentCoins(nMismatchSpent, nBalanceInQuestion, nOrphansFound);
-              if (nMismatchSpent != 0 || nOrphansFound != 0)
+              if (nMismatchSpent != 0)
               {
                   LogPrintf("PoS mismatched spent coins = %d , balance affects = %d and Orphan blocks = %d \n", nMismatchSpent, nBalanceInQuestion, nOrphansFound);
               }
             }
-        }
+        }*/
     }
 
     return true;

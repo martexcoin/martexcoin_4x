@@ -1807,7 +1807,7 @@ void CConnman::ThreadOpenConnections()
                 continue;
 
             // only connect to full nodes
-            if ((addr.nServices & REQUIRED_SERVICES) != REQUIRED_SERVICES)
+            if (!Params().AllowMultiplePorts() && (addr.nServices & REQUIRED_SERVICES) != REQUIRED_SERVICES)
                 continue;
 
             // only consider very recently tried nodes after 30 failed attempts
@@ -1820,12 +1820,12 @@ void CConnman::ThreadOpenConnections()
                 nRequiredServices = REQUIRED_SERVICES;
             }
 
-            if ((addr.nServices & nRequiredServices) != nRequiredServices) {
+            if (!Params().AllowMultiplePorts() && (addr.nServices & nRequiredServices) != nRequiredServices) {
                 continue;
             }
 
             // do not allow non-default ports, unless after 50 invalid addresses selected already
-            if (addr.GetPort() != Params().GetDefaultPort() && addr.GetPort() != GetListenPort() && nTries < 50)
+            if (!Params().AllowMultiplePorts() && addr.GetPort() != Params().GetDefaultPort() && addr.GetPort() != GetListenPort() && nTries < 50)
                 continue;
 
             addrConnect = addr;

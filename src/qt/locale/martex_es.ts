@@ -651,8 +651,8 @@
 <context>
     <name>ClientModel</name>
     <message>
-        <source>Total: %1 (PS compatible: %2 / Enabled: %3)</source>
-        <translation>Total: %1 (PS Compatible: %2 / Habilitado: %3)</translation>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
+        <translation>Total: %1 (FS Compatible: %2 / Habilitado: %3)</translation>
     </message>
     <message>
         <source>Network Alert</source>
@@ -726,8 +726,8 @@
         <translation>Recibido con la dirección</translation>
     </message>
     <message>
-        <source>PS Rounds</source>
-        <translation>Rondas PS</translation>
+        <source>FS Rounds</source>
+        <translation>Rondas FS</translation>
     </message>
     <message>
         <source>Date</source>

@@ -1,4 +1,4 @@
-MarteX Core staging tree 3.0.2
+MarteX Core staging tree 3.0.3
 ===============================
 [![logo](https://img.shields.io/badge/Martexcoin-Cryptocurrency-blue.svg)](https://www.martexcoin.org)
 ![issues](https://img.shields.io/github/issues/martexcoin/martexcoin.svg)

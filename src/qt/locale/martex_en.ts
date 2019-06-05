@@ -827,8 +827,8 @@
     <name>ClientModel</name>
     <message>
         <location filename="../clientmodel.cpp" line="+86"/>
-        <source>Total: %1 (PS compatible: %2 / Enabled: %3)</source>
-        <translation>Total: %1 (PS compatible: %2 / Enabled: %3)</translation>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
+        <translation>Total: %1 (FS compatible: %2 / Enabled: %3)</translation>
     </message>
     <message>
         <location line="+126"/>
@@ -920,8 +920,8 @@
     </message>
     <message>
         <location line="+5"/>
-        <source>PS Rounds</source>
-        <translation>PS Rounds</translation>
+        <source>FS Rounds</source>
+        <translation>FS Rounds</translation>
     </message>
     <message>
         <location line="+5"/>

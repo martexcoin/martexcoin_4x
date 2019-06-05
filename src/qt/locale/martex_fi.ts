@@ -651,8 +651,8 @@
 <context>
     <name>ClientModel</name>
     <message>
-        <source>Total: %1 (PS compatible: %2 / Enabled: %3)</source>
-        <translation>Yhteensä: %1 (PS yht.sopivia: %2 / Käytössä: %3)</translation>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
+        <translation>Yhteensä: %1 (FS yht.sopivia: %2 / Käytössä: %3)</translation>
     </message>
     <message>
         <source>Network Alert</source>
@@ -726,8 +726,8 @@
         <translation>Vastaanotettu osoitteeseen</translation>
     </message>
     <message>
-        <source>PS Rounds</source>
-        <translation>PS Kierrokset</translation>
+        <source>FS Rounds</source>
+        <translation>FS Kierrokset</translation>
     </message>
     <message>
         <source>Date</source>

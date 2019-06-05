@@ -1303,3 +1303,72 @@ UniValue importmulti(const JSONRPCRequest& mainRequest)
 
     return response;
 }
+
+/* Wallet integrity check */
+UniValue checkwallet(const JSONRPCRequest& request) {
+
+    if (!EnsureWalletIsAvailable(request.fHelp))
+        return NullUniValue;
+
+    if (request.fHelp || request.params.size() > 0)
+        throw std::runtime_error(
+            "checkwallet\n"
+            "\nWallet integrity check.\n"
+            "\nExamples:\n"
+            + HelpExampleCli("checkwallet", "\"\"")
+            + HelpExampleCli("checkwallet", "\"\"")
+            + HelpExampleRpc("checkwallet", "\"\"")
+        );
+
+    int nMismatchSpent;
+    int nOrphansFound;
+    int64_t nBalanceInQuestion;
+    pwalletMain->FixSpentCoins(nMismatchSpent, nBalanceInQuestion, nOrphansFound, true);
+
+    UniValue result(UniValue::VOBJ);
+    if(nMismatchSpent == 0 && nOrphansFound == 0)
+        result.push_back(Pair("wallet check passed", true));
+    else
+    {
+        result.push_back(Pair("mismatched spent coins", nMismatchSpent));
+        result.push_back(Pair("amount in question", ValueFromAmount(nBalanceInQuestion)));
+        result.push_back(Pair("orphans found", nOrphansFound));
+    }
+
+    return(result);
+}
+
+
+/* Wallet repair (removal of failed and orphaned transactions) */
+UniValue repairwallet(const JSONRPCRequest& request) {
+
+    if (!EnsureWalletIsAvailable(request.fHelp))
+        return NullUniValue;
+
+    if (request.fHelp || request.params.size() > 0)
+        throw std::runtime_error(
+            "repairwallet\n"
+            "\nWallet repair if any mismatches found.\n"
+            "\nExamples:\n"
+            + HelpExampleCli("repairwallet", "\"\"")
+            + HelpExampleCli("repairwallet", "\"\"")
+            + HelpExampleRpc("repairwallet", "\"\"")
+        );
+
+    int nMismatchSpent;
+    int nOrphansFound;
+    int64_t nBalanceInQuestion;
+    pwalletMain->FixSpentCoins(nMismatchSpent, nBalanceInQuestion, nOrphansFound, false);
+
+    UniValue result(UniValue::VOBJ);
+    if(nMismatchSpent == 0 && nOrphansFound == 0)
+        result.push_back(Pair("wallet check passed", true));
+    else
+    {
+        result.push_back(Pair("mismatched spent coins", nMismatchSpent));
+        result.push_back(Pair("amount affected by repair", ValueFromAmount(nBalanceInQuestion)));
+        result.push_back(Pair("orphans removed", nOrphansFound));
+    }
+
+    return(result);
+}

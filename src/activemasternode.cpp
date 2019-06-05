@@ -166,10 +166,9 @@ void CActiveMasternode::ManageStateInitial(CConnman& connman)
         return;
     }
 
-    /*
-    int mainnetDefaultPort = Params(CBaseChainParams::MAIN).GetDefaultPort();    
+    int mainnetDefaultPort = Params(CBaseChainParams::MAIN).GetDefaultPort();
     if(Params().NetworkIDString() == CBaseChainParams::MAIN) {
-        if(service.GetPort() != mainnetDefaultPort) {
+        if(service.GetPort() != mainnetDefaultPort  && !Params().AllowMultiplePorts()) {
             nState = ACTIVE_MASTERNODE_NOT_CAPABLE;
             strNotCapableReason = strprintf("Invalid port: %u - only %d is supported on mainnet.", service.GetPort(), mainnetDefaultPort);
             LogPrintf("CActiveMasternode::ManageStateInitial -- %s: %s\n", GetStateString(), strNotCapableReason);
@@ -181,7 +180,6 @@ void CActiveMasternode::ManageStateInitial(CConnman& connman)
         LogPrintf("CActiveMasternode::ManageStateInitial -- %s: %s\n", GetStateString(), strNotCapableReason);
         return;
     }
-    */
 
     // Check socket connectivity
     LogPrintf("CActiveMasternode::ManageStateInitial -- Checking inbound connection to '%s'\n", service.ToString());

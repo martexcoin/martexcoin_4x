@@ -651,7 +651,7 @@
 <context>
     <name>ClientModel</name>
     <message>
-        <source>Total: %1 (PS compatible: %2 / Enabled: %3)</source>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
         <translation>Total: %1 (Compatível c/ EP: %2 / Habilitado: %3)</translation>
     </message>
     <message>
@@ -726,7 +726,7 @@
         <translation>Recebido com endereço</translation>
     </message>
     <message>
-        <source>PS Rounds</source>
+        <source>FS Rounds</source>
         <translation>Rounds de EP</translation>
     </message>
     <message>
