@@ -31,6 +31,8 @@
 #include "utilstrencodings.h"
 #include "validationinterface.h"
 
+#include <boost/algorithm/string/predicate.hpp>
+
 #include "spork.h"
 #include "governance.h"
 #include "fastsend.h"
@@ -1424,6 +1426,22 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         if (pfrom->fInbound && addrMe.IsRoutable())
         {
             SeenLocal(addrMe);
+        }
+
+        std::string version_old;
+        bool found_3021 = boost::contains(cleanSubVer, "/MarteX Core:3.0.2.1/");
+        bool found_3022 = boost::contains(cleanSubVer, "/MarteX Core:3.0.2.2/");
+        bool found_3001 = boost::contains(cleanSubVer, "/MarteX Core:3.0.0.1/");
+        bool found_300 = boost::contains(cleanSubVer, "/MarteX Core:3.0.0/");
+        if (found_300 || found_3001 || found_3021 || found_3022)
+        {
+            version_old = "< 3.0.3.1";
+            // disconnect from peers older than this version
+            LogPrintf("peer=%d using obsolete version %s disconnecting\n", pfrom->id, cleanSubVer);
+            connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, strCommand, REJECT_OBSOLETE,
+                               strprintf("Version must be %s or greater", version_old)));
+            pfrom->fDisconnect = true;
+            return false;
         }
 
         // Be shy and don't send version until we hear

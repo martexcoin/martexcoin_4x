@@ -3,6 +3,14 @@
 todo.txt
 reset-files.bash
 
+#build
+Makefile
+doc/man/Makefile
+share/qt/Info.plist
+share/setup.nsi
+src/Makefile
+src/config/martex-config.h
+
 *.tar.gz
 
 *.exe
