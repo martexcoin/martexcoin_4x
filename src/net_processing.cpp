@@ -30,9 +30,6 @@
 #include "utilmoneystr.h"
 #include "utilstrencodings.h"
 #include "validationinterface.h"
-
-#include <boost/algorithm/string/predicate.hpp>
-
 #include "spork.h"
 #include "governance.h"
 #include "fastsend.h"
@@ -45,12 +42,17 @@
 #include "anonsend-server.h"
 
 #include <boost/thread.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 
 #if defined(NDEBUG)
 # error "MarteX Core cannot be compiled without assertions."
 #endif
 
 std::atomic<int64_t> nTimeBestReceived(0); // Used only to inform the wallet of when we last received a block
+
+/** Old subversions **/
+std::string version_old;
+bool found_3021, found_3022, found_3001, found_300;
 
 struct IteratorComparator
 {
@@ -1428,11 +1430,11 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             SeenLocal(addrMe);
         }
 
-        std::string version_old;
-        bool found_3021 = boost::contains(cleanSubVer, "/MarteX Core:3.0.2.1/");
-        bool found_3022 = boost::contains(cleanSubVer, "/MarteX Core:3.0.2.2/");
-        bool found_3001 = boost::contains(cleanSubVer, "/MarteX Core:3.0.0.1/");
-        bool found_300 = boost::contains(cleanSubVer, "/MarteX Core:3.0.0/");
+        found_3021 = boost::contains(cleanSubVer, "/MarteX Core:3.0.2.1/");
+        found_3022 = boost::contains(cleanSubVer, "/MarteX Core:3.0.2.2/");
+        found_3001 = boost::contains(cleanSubVer, "/MarteX Core:3.0.0.1/");
+        found_300 = boost::contains(cleanSubVer, "/MarteX Core:3.0.0/");
+
         if (found_300 || found_3001 || found_3021 || found_3022)
         {
             version_old = "< 3.0.3.1";
