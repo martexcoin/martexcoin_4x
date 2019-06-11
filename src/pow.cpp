@@ -348,10 +348,12 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
 
     if(pindexLast->nHeight + 1 > change){
         if ((Params().NetworkIDString() == CBaseChainParams::TESTNET) && pindexLast->nHeight + 1 < 198500){
-  			return DarkGravityWave(pindexLast, fProofOfStake);
-  		}else{
+            return DarkGravityWave(pindexLast, fProofOfStake);
+	}else if ((Params().NetworkIDString() == CBaseChainParams::TESTNET) && pindexLast->nHeight + 1 > 252580){ //VRX Teste
+            return Terminal_Velocity_RateX(pindexLast, fProofOfStake);
+  	}else{
   	    return GetNextTargetRequired_new(pindexLast, fProofOfStake);
-      }
+        }
     }else{
       return GetNextTargetRequired_legacy(pindexLast, fProofOfStake);
     }
