@@ -32,7 +32,7 @@ extern CFastSend fastsend;
 static const int MIN_FASTSEND_DEPTH              = 0;
 static const int MAX_FASTSEND_DEPTH              = 60;
 /// Default number of "pseudo-confirmations" for an FastSend tx
-static const int DEFAULT_FASTSEND_DEPTH          = 5;
+static const int DEFAULT_FASTSEND_DEPTH          = 10;
 
 static const int MIN_FASTSEND_PROTO_VERSION      = 70208;
 
