@@ -155,12 +155,6 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     coinbaseTx.vin[0].prevout.SetNull();
     coinbaseTx.vout.resize(1);
 
-    addPriorityTxs();
-
-    int nPackagesSelected = 0;
-    int nDescendantsUpdated = 0;
-    addPackageTxs(nPackagesSelected, nDescendantsUpdated);
-
     int64_t nTime1 = GetTimeMicros();
 
     if (!fProofOfStake)
@@ -225,7 +219,20 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
       assert(coinbaseTx.vin[0].scriptSig.size() <= 100);
       coinbaseTx.vout[0].SetEmpty();
 
+      // Add dummy coinstake tx as first transaction
+      pblock->vtx.emplace_back();
+      CMutableTransaction coinStakeTx;
+      coinStakeTx.vin.resize(1);
+      coinStakeTx.vin[0].prevout.SetNull();
+      coinStakeTx.vout.resize(1);
+      pblock->vtx[1] = MakeTransactionRef(std::move(coinStakeTx));
     }
+
+    addPriorityTxs();
+
+    int nPackagesSelected = 0;
+    int nDescendantsUpdated = 0;
+    addPackageTxs(nPackagesSelected, nDescendantsUpdated);
 
     nLastBlockTx = nBlockTx;
     nLastBlockSize = nBlockSize;

@@ -6034,7 +6034,7 @@ bool CWallet::SignBlock(CBlockTemplate *pblocktemplate, int nHeight)
                 //    if (it->nTime > txCoinStake.nTime) { it = pblock->vtx.erase(it); } else { ++it; }
 
                 // Insert coinstake as txn0
-                pblock->vtx.insert(pblock->vtx.end(), MakeTransactionRef(txCoinStake));
+                pblock->vtx[1] = MakeTransactionRef(std::move(txCoinStake));
 
                 bool mutated;
                 pblock->hashMerkleRoot = BlockMerkleRoot(*pblock, &mutated);
