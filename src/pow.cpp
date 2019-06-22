@@ -108,7 +108,8 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, bool fProofOfStake)
         arith_uint256 PastDifficultyAverage;
         arith_uint256 PastDifficultyAveragePrev;
 
-        if (BlockLastSolved == NULL || BlockLastSolved->nHeight == 0 || BlockLastSolved->nHeight < PastBlocksMax) {
+	// make sure we have at least (nPastBlocks + 1) blocks, otherwise just return powLimit
+        if (BlockLastSolved == NULL || BlockLastSolved->nHeight == 0 || BlockLastSolved->nHeight < PastBlocksMax || BlockLastSolved->nHeight == Params().GetConsensus().nPowDGWHeight) {
             return nProofOfWorkLimit.GetCompact();
         }
 
@@ -351,6 +352,8 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
             return DarkGravityWave(pindexLast, fProofOfStake);
 	}else if ((Params().NetworkIDString() == CBaseChainParams::TESTNET) && pindexLast->nHeight + 1 > 252580){ //VRX Teste
             return Terminal_Velocity_RateX(pindexLast, fProofOfStake);
+	}else if ((Params().NetworkIDString() == CBaseChainParams::MAIN) && pindexLast->nHeight >= Params().GetConsensus().nPowDGWHeight){
+            return DarkGravityWave(pindexLast, fProofOfStake);
   	}else{
   	    return GetNextTargetRequired_new(pindexLast, fProofOfStake);
         }
