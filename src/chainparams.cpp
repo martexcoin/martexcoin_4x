@@ -65,17 +65,6 @@ static CBlock CreateDevNetGenesisBlock(const uint256 &prevBlockHash, const std::
     return genesis;
 }
 
-/**
- * Build the genesis block. Note that the output of its generation
- * transaction cannot be spent since it did not originally exist in the
- * database.
- *
- * CBlock(hash=00000ffd590b14, ver=1, hashPrevBlock=00000000000000, hashMerkleRoot=e0028e, nTime=1390095618, nBits=1e0ffff0, nNonce=28917698, vtx=1)
- *   CTransaction(hash=e0028e, ver=1, vin.size=1, vout.size=1, nLockTime=0)
- *     CTxIn(COutPoint(000000, -1), coinbase 04ffff001d01044c5957697265642030392f4a616e2f3230313420546865204772616e64204578706572696d656e7420476f6573204c6976653a204f76657273746f636b2e636f6d204973204e6f7720416363657074696e6720426974636f696e73)
- *     CTxOut(nValue=50.00000000, scriptPubKey=0xA9037BAC7050C479B121CF)
- *   vMerkleTree: e0028e
- */
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     const char* pszTimestamp = "E quando eu pensar em desistir, lembro-me dos motivos que te fizeram aguentar ate agora!";
@@ -130,12 +119,11 @@ public:
         consensus.nFastSendConfirmationsRequired = 6;
         consensus.nFastSendKeepLock = 24;
         consensus.nBudgetPaymentsStartBlock = 1593000; // actual historical value
-        consensus.nBudgetPaymentsCycleBlocks = 86400; // ~(60*24*30)*2(PoW+PoS)
+        consensus.nBudgetPaymentsCycleBlocks = 21800; // ~(60*24*30)/2(PoW+PoS)
         consensus.nBudgetPaymentsWindowBlocks = 100;
         consensus.nSuperblockStartBlock = 1715000; // The block at which 12.1 goes live (end of final 12.0 budget cycle)
-        //consensus.nSuperblockStartHash = uint256S("0000000000020cb27c7ef164d21003d5d20cdca2f54dd9a9ca6d45f4d47f8aa3");
-        consensus.nSuperblockStartHash = uint256();
-        consensus.nSuperblockCycle = 86400; // ~(60*24*30)*2(PoW+PoS)
+        consensus.nSuperblockStartHash = uint256S("07f5207ae95f3c8f2bfb9ece4528b7ada8fc99461a0c376bed52de2d855b2773");
+        consensus.nSuperblockCycle = 21800; // ~(60*24*30)/2(PoW+PoS)
         consensus.nGovernanceMinQuorum = 10;
         consensus.nGovernanceFilterElements = 20000;
         consensus.nMasternodeMinimumConfirmations = 15;
