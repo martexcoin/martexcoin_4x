@@ -52,7 +52,7 @@ std::atomic<int64_t> nTimeBestReceived(0); // Used only to inform the wallet of 
 
 /** Old subversions **/
 std::string version_old;
-bool found_3021, found_3022, found_3001, found_300, found_3031, found_3032, found_3033;
+bool found_3021, found_3022, found_3001, found_300, found_3031, found_3032, found_3033, found_304;
 
 struct IteratorComparator
 {
@@ -1437,10 +1437,11 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
 	found_3031 = boost::contains(cleanSubVer, "/MarteX Core:3.0.3.1/");
 	found_3032 = boost::contains(cleanSubVer, "/MarteX Core:3.0.3.2/");
 	found_3033 = boost::contains(cleanSubVer, "/MarteX Core:3.0.3.3/");
+	found_304 = boost::contains(cleanSubVer, "/MarteX Core:3.0.4/");
 
-        if (found_300 || found_3001 || found_3021 || found_3022 || found_3031 || found_3032 || found_3033)
+        if (found_300 || found_3001 || found_3021 || found_3022 || found_3031 || found_3032 || found_3033 || found_304)
         {
-            version_old = "< 3.0.4.0";
+            version_old = "< 3.0.4.1";
             // disconnect from peers older than this version
             LogPrintf("peer=%d using obsolete version %s disconnecting\n", pfrom->id, cleanSubVer);
             connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, strCommand, REJECT_OBSOLETE,
