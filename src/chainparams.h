@@ -85,6 +85,7 @@ public:
     const CCheckpointData& Checkpoints() const { return checkpointData; }
     const ChainTxData& TxData() const { return chainTxData; }
     int PoolMaxTransactions() const { return nPoolMaxTransactions; }
+    int64_t MinStakeInput() const { return nMinStakeInput; }
     int FulfilledRequestExpireTime() const { return nFulfilledRequestExpireTime; }
     const std::string& SporkAddress() const { return strSporkAddress; }
     uint32_t GetStakeTimestampMask(int nHeight) const { return nStakeTimestampMask; }
@@ -113,6 +114,7 @@ protected:
     CCheckpointData checkpointData;
     ChainTxData chainTxData;
     int nPoolMaxTransactions;
+    uint64_t nMinStakeInput;
     int nFulfilledRequestExpireTime;
     std::string strSporkAddress;
     uint32_t nStakeTimestampMask = (1 << 4) -1;

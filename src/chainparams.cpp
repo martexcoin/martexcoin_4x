@@ -195,7 +195,6 @@ public:
         assert(consensus.hashGenesisBlock == uint256S("0x617fc383b07fbab3505213b41fe34f9705b92d854a9f72593cb616e4726e155c"));
         assert(genesis.hashMerkleRoot == uint256S("0x04035aa1d2a55488b3a8e4f84beb66e30a428140e88071ac83b7b333b0425e48"));
 
-
         vSeeds.push_back(CDNSSeedData("seed0", "seed.martexcoin.org"));
         vSeeds.push_back(CDNSSeedData("seed1", "seed1.martexcoin.org"));
         vSeeds.push_back(CDNSSeedData("seed2", "seed2.martexcoin.org"));
@@ -218,6 +217,8 @@ public:
         fMineBlocksOnDemand = false;
         fAllowMultipleAddressesFromGroup = false;
         fAllowMultiplePorts = true;
+
+	nMinStakeInput = 5 * COIN;  /* min stake amount */
 
         nPoolMaxTransactions = 3;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
@@ -364,6 +365,8 @@ public:
         fAllowMultipleAddressesFromGroup = false;
         fAllowMultiplePorts = true;
 
+        nMinStakeInput = 5 * COIN;  /* min stake amount */
+
         nPoolMaxTransactions = 3;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
@@ -492,6 +495,8 @@ public:
         fMineBlocksOnDemand = false;
         fAllowMultipleAddressesFromGroup = true;
         fAllowMultiplePorts = true;
+
+        nMinStakeInput = 5 * COIN;  /* min stake amount */
 
         nPoolMaxTransactions = 3;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes

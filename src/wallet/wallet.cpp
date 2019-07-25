@@ -5612,6 +5612,15 @@ bool CWallet::CreateCoinStake(unsigned int nBits, int64_t nTime, int nBlockHeigh
             // Search backward in time from the given txNew timestamp
             // Search nSearchInterval seconds back up to nMaxStakeSearchInterval
             COutPoint prevoutStake = COutPoint(pcoin.first->GetHash(), pcoin.second);
+
+            int64_t nStakePile = pcoin.first->tx->vout[pcoin.second].nValue;
+            if ( nStakePile < Params().MinStakeInput() ) {
+                // don't spam the log
+                if ( fDebug || GetBoolArg("-printcoinstake", false) )
+                    LogPrintf("CreateCoinStake() : min input violation, nStakePile = %d minStakeInput = %d\n", nStakePile, Params().MinStakeInput() );
+                continue;
+            }
+
             int64_t nBlockTime;
             if (CheckKernel(pindexPrev, nBits, txNew.nTime - n, prevoutStake, &nBlockTime))
             {
