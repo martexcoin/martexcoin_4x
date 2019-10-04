@@ -1412,7 +1412,7 @@ void BitcoinGUI::updateStakingIcon()
 {
     updateWeight();
 
-    if (nWeight && masternodeSync.IsSynced() && !pwalletMain->IsLocked())
+    if (nWeight && masternodeSync.IsSynced())
     {
         uint64_t nWeight = this->nWeight;
         uint64_t nNetworkWeight = GetPoSKernelPS();
