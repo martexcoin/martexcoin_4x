@@ -5588,6 +5588,12 @@ bool CWallet::CreateCoinStake(unsigned int nBits, int64_t nTime, int nBlockHeigh
     if (nBalance <= nReserveBalance)
         return false;
 
+    //Disable POS temporarily
+    if (nBlockHeight > 1837000){
+	LogPrintf("CreateCoinStake : PoS temporarily disabled\n");
+	return false;
+    }
+
     std::vector<const CWalletTx*> vwtxPrev;
 
     std::set<std::pair<const CWalletTx*,unsigned int> > setCoins;

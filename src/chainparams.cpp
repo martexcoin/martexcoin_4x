@@ -171,10 +171,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nThreshold = 3226; // 80% of 4032
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000073c695120d17c0a76"); // 1775837
+        consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000007800a5ebdfd3e7e93"); // 1836997
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x514166616dd8c1dd50e0fdf224fbe1a6f4f6a911cc0aa7bf9d90d3ec5f3d37a2"); // 1775837
+        consensus.defaultAssumeValid = uint256S("0xaca8b0a56715316704bbca364e0d5914a72e26f80d258d11f5ce9666bf901632"); // 1836997
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -252,11 +252,12 @@ public:
             ( 967800, uint256S("0xbd953dea29cce275befc317e5d772e3e5dce6e811a6257ffdeb3a00d6fc11541"))
             (1680167, uint256S("0xe4ff3619d84659b7f7c3ff4ab92124d116d3c35414145f31fc42743fd92e8047"))
             (1775837, uint256S("0x514166616dd8c1dd50e0fdf224fbe1a6f4f6a911cc0aa7bf9d90d3ec5f3d37a2"))
+            (1836997, uint256S("0xaca8b0a56715316704bbca364e0d5914a72e26f80d258d11f5ce9666bf901632"))
         };
 
         chainTxData = ChainTxData{
-            1569759673, // * UNIX timestamp of last known number of transactions
-            2829277,    // * total number of transactions between genesis and that timestamp
+            1574949648, // * UNIX timestamp of last known number of transactions
+            2923569,    // * total number of transactions between genesis and that timestamp
                         //   (the tx=... number in the SetBestChain debug.log lines)
             100         // * estimated number of transactions per second after that timestamp
         };
