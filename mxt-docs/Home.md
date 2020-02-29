@@ -8,7 +8,7 @@ Detalhes da MarteXCoin
 Ticker: MXT
 Distribuição: POW / POS / Masternodes
 Hash: Algoritmo X13 (13 camadas de encriptação)
-Emissão total: 5.000.000 (POW / POS) - premine de 2%
+Emissão total: 11.600.000 (POW / POS) - premine de 2%
 Divisão máxima: 0.00000000. Oito dígitos após o ponto.
 Taxa mínima de transação por bloco: 0.0001 MXT (pago aos mineradores)
 Confirmações em carteira: 3 para transferências e 152 para novos blocos
