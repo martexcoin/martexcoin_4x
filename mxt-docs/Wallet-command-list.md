@@ -1,4 +1,4 @@
-Availabe Configuration commands to be set in zcore.conf or after zcored / zcore-qt binaries.
+Availabe Configuration commands to be set in MarteX.conf or after martexcoin / martexcoin-qt binaries.
 
 Category | Command | Description
 -|-|-
