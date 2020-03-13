@@ -25,6 +25,7 @@ Open souce code (Código livre)
 GitHub (Desenvolvedores):  2
 GitHub Stars:  26
 Repositório GitHub :  https://github.com/martexcoin/martexcoin
+Whitepaper: https://drive.google.com/file/d/1ArqnFqVJZxrfCqrqiPCXGxvJElc85P4-/view?usp=sharing
 
 Quer saber mais sobre a MartexCoin, acesse o site: https://martexcoin.org/
 Siga no facebook: https://www.facebook.com/martexcoin
