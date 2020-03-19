@@ -1,6 +1,6 @@
  ## **Requirements:**
 
-> 5000 ZCR
+> 5000 MXT
 
 > Dedicated IP
 
