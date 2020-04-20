@@ -1442,9 +1442,9 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
 	found_3042 = boost::contains(cleanSubVer, "/MarteX Core:3.0.4.2/");
     found_3051 = boost::contains(cleanSubVer, "/MarteX Core:3.0.5.1/");
 
-        if (found_300 || found_3001 || found_3021 || found_3022 || found_3031 || found_3032 || found_3033 || found_304 || found_3041 || found_3042 || found_3051)
+        if (found_300 || found_3001 || found_3021 || found_3022 || found_3031 || found_3032 || found_3033 || found_304 || found_3041 || found_3042)
         {
-            version_old = "< 3.0.6.1";
+            version_old = "< 3.0.5.1";
             // disconnect from peers older than this version
             LogPrintf("peer=%d using obsolete version %s disconnecting\n", pfrom->id, cleanSubVer);
             connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, strCommand, REJECT_OBSOLETE,
