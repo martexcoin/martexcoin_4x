@@ -5589,7 +5589,7 @@ bool CWallet::CreateCoinStake(unsigned int nBits, int64_t nTime, int nBlockHeigh
         return false;
 
     //Disable POS temporarily
-    if (nBlockHeight > 1837000){
+    if (nBlockHeight > 1837000 && nBlockHeight < 1950000){
 	LogPrintf("CreateCoinStake : PoS temporarily disabled\n");
 	return false;
     }
