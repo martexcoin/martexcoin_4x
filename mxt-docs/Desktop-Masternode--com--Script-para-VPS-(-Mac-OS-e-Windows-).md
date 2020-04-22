@@ -31,7 +31,7 @@ mn1 127.0.0.2:51315 93HaYBVUCYjEMeeH1Y4sBGLALQZE1Yc1K64xiqgX37tGBDQL8Xg 2bcd3c84
 
 #### 10. Siga os passos no terminal da VPS, inicie o script executando:
 ```
-sudo curl -o- https://raw.githubusercontent.com/martexcoin/martexcoin/masternode-auto/master/install.sh | bash
+sudo curl -o- https://raw.githubusercontent.com/martexcoin/mxt-mn/master/MXT_deploy_mn.sh | bash
 ```
 
 * Siga as instruções do script.
