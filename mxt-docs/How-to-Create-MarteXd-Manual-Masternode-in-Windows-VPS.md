@@ -4,7 +4,7 @@
 
 > Dedicated IP
 
-> Port 15315 Available
+> Port 51315 Available
 
 > Download your Wallet (QT or Daemon)
 
@@ -82,8 +82,6 @@ INDEX = Second data returned of command in the step 5
 ***
 
 ## **FAQ**
-
-**For more informations acess: https://forum.martexcoin.org/d/38-configura-o-masternode?**
 
 **Will I receives every block?**
 
