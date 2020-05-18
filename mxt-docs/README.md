@@ -102,3 +102,5 @@ RPC Port    | Network
  - In the future we will create a repository called documents in martexcoin.
  
  - Documentation for developers is present in the following directory:[Development documents](https://github.com/martexcoin/martexcoin/tree/master/doc)
+
+- New proposals for MarsXcoin is present in the following directory:[MarteXCoin Proposal](https://github.com/martexcoin/proposal)
