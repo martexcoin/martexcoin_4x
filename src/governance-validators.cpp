@@ -108,6 +108,11 @@ bool CProposalValidator::ValidateStartEndEpoch(bool fCheckExpiration)
         return false;
     }
 
+    if((nEndEpoch - nStartEpoch) > 10627000) {
+        strErrorMessages += "end_epoch is greater than allowed;";
+        return false;
+    }
+
     if(fCheckExpiration && nEndEpoch <= GetAdjustedTime()) {
         strErrorMessages += "expired;";
         return false;
@@ -130,6 +135,10 @@ bool CProposalValidator::ValidatePaymentAmount()
         return false;
     }
 
+    if(dValue > 5450) {
+        strErrorMessages += "payment_amount is payment higher than reserved;";
+        return false;
+    }
     // TODO: Should check for an amount which exceeds the budget but this is
     // currently difficult because start and end epochs are defined in terms of
     // clock time instead of block height.
