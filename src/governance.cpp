@@ -366,19 +366,23 @@ void CGovernanceManager::AddGovernanceObject(CGovernanceObject& govobj, CConnman
 
 void CGovernanceManager::UpdateCachesAndClean()
 {
+    // Return on initial sync, spammed the debug.log and provided no use
+    if (!masternodeSync.IsBlockchainSynced()) {
+        return;
+    }
+
     LogPrint("gobject", "CGovernanceManager::UpdateCachesAndClean\n");
 
     std::vector<uint256> vecDirtyHashes = mnodeman.GetAndClearDirtyGovernanceObjectHashes();
 
     LOCK2(cs_main, cs);
 
-    for(size_t i = 0; i < vecDirtyHashes.size(); ++i) {
-        object_m_it it = mapObjects.find(vecDirtyHashes[i]);
-        if(it == mapObjects.end()) {
+    for (const uint256& nHash : vecDirtyHashes) {
+        object_m_it it = mapObjects.find(nHash);
+        if (it == mapObjects.end()) {
             continue;
         }
         it->second.ClearMasternodeVotes();
-        it->second.fDirtyCache = true;
     }
 
     ScopedLockBool guard(cs, fRateChecksEnabled, false);
@@ -389,11 +393,10 @@ void CGovernanceManager::UpdateCachesAndClean()
     object_m_it it = mapObjects.begin();
     int64_t nNow = GetAdjustedTime();
 
-    while(it != mapObjects.end())
-    {
+    while (it != mapObjects.end()) {
         CGovernanceObject* pObj = &((*it).second);
 
-        if(!pObj) {
+        if (!pObj) {
             ++it;
             continue;
         }
@@ -402,7 +405,7 @@ void CGovernanceManager::UpdateCachesAndClean()
         std::string strHash = nHash.ToString();
 
         // IF CACHE IS NOT DIRTY, WHY DO THIS?
-        if(pObj->IsSetDirtyCache()) {
+        if (pObj->IsSetDirtyCache()) {
             // UPDATE LOCAL VALIDITY AGAINST CRYPTO DATA
             pObj->UpdateLocalValidity();
 
@@ -417,28 +420,27 @@ void CGovernanceManager::UpdateCachesAndClean()
         LogPrint("gobject", "CGovernanceManager::UpdateCachesAndClean -- Checking object for deletion: %s, deletion time = %d, time since deletion = %d, delete flag = %d, expired flag = %d\n",
                  strHash, pObj->GetDeletionTime(), nTimeSinceDeletion, pObj->IsSetCachedDelete(), pObj->IsSetExpired());
 
-        if((pObj->IsSetCachedDelete() || pObj->IsSetExpired()) &&
-           (nTimeSinceDeletion >= GOVERNANCE_DELETION_DELAY)) {
+        if ((pObj->IsSetCachedDelete() || pObj->IsSetExpired()) &&
+            (nTimeSinceDeletion >= GOVERNANCE_DELETION_DELAY)) {
             LogPrintf("CGovernanceManager::UpdateCachesAndClean -- erase obj %s\n", (*it).first.ToString());
             mnodeman.RemoveGovernanceObject(pObj->GetHash());
 
             // Remove vote references
             const object_ref_cm_t::list_t& listItems = cmapVoteToObject.GetItemList();
             object_ref_cm_t::list_cit lit = listItems.begin();
-            while(lit != listItems.end()) {
-                if(lit->value == pObj) {
+            while (lit != listItems.end()) {
+                if (lit->value == pObj) {
                     uint256 nKey = lit->key;
                     ++lit;
                     cmapVoteToObject.Erase(nKey);
-                }
-                else {
+                } else {
                     ++lit;
                 }
             }
 
             int64_t nTimeExpired{0};
 
-            if(pObj->GetObjectType() == GOVERNANCE_OBJECT_PROPOSAL) {
+            if (pObj->GetObjectType() == GOVERNANCE_OBJECT_PROPOSAL) {
                 // keep hashes of deleted proposals forever
                 nTimeExpired = std::numeric_limits<int64_t>::max();
             } else {
@@ -451,13 +453,10 @@ void CGovernanceManager::UpdateCachesAndClean()
         } else {
             // NOTE: triggers are handled via triggerman
             if (pObj->GetObjectType() == GOVERNANCE_OBJECT_PROPOSAL) {
-                CProposalValidator validator(pObj->GetDataAsHexString());
+                CProposalValidator validator(pObj->GetDataAsHexString(), true);
                 if (!validator.Validate()) {
-                    LogPrintf("CGovernanceManager::UpdateCachesAndClean -- set for deletion expired obj %s\n", (*it).first.ToString());
-                    pObj->fCachedDelete = true;
-                    if (pObj->nDeletionTime == 0) {
-                        pObj->nDeletionTime = nNow;
-                    }
+                    LogPrintf("CGovernanceManager::UpdateCachesAndClean -- set for deletion expired obj %s\n", strHash);
+                    pObj->PrepareDeletion(nNow);
                 }
             }
             ++it;
@@ -466,11 +465,12 @@ void CGovernanceManager::UpdateCachesAndClean()
 
     // forget about expired deleted objects
     hash_time_m_it s_it = mapErasedGovernanceObjects.begin();
-    while(s_it != mapErasedGovernanceObjects.end()) {
-        if(s_it->second < nNow)
+    while (s_it != mapErasedGovernanceObjects.end()) {
+        if (s_it->second < nNow) {
             mapErasedGovernanceObjects.erase(s_it++);
-        else
+        } else {
             ++s_it;
+        }
     }
 
     LogPrintf("CGovernanceManager::UpdateCachesAndClean -- %s\n", ToString());

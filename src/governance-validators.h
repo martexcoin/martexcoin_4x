@@ -12,12 +12,13 @@
 class CProposalValidator
 {
 private:
-    UniValue               objJSON;
-    bool                   fJSONValid;
-    std::string            strErrorMessages;
+    UniValue objJSON;
+    bool fJSONValid;
+    bool fAllowLegacyFormat;
+    std::string strErrorMessages;
 
 public:
-    CProposalValidator(const std::string& strDataHexIn = std::string());
+    CProposalValidator(const std::string& strDataHexIn = std::string(), bool fAllowLegacyFormat = true);
 
     bool Validate(bool fCheckExpiration = true);
 

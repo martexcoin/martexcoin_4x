@@ -272,6 +272,15 @@ public:
 
     void UpdateSentinelVariables();
 
+    void PrepareDeletion(int64_t nDeletionTime_)
+    {
+        fCachedDelete = true;
+        if (nDeletionTime == 0) {
+            nDeletionTime = nDeletionTime_;
+        }
+    }
+
+
     CAmount GetMinCollateralFee() const;
 
     UniValue GetJSONObject();

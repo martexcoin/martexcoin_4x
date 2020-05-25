@@ -118,7 +118,7 @@ UniValue gobject(const JSONRPCRequest& request)
         CGovernanceObject govobj(hashParent, nRevision, nTime, uint256(), strDataHex);
 
         if(govobj.GetObjectType() == GOVERNANCE_OBJECT_PROPOSAL) {
-            CProposalValidator validator(strDataHex);
+            CProposalValidator validator(strDataHex, false);
             if(!validator.Validate())  {
                 throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid proposal data, error messages:" + validator.GetErrorMessages());
             }
@@ -167,7 +167,7 @@ UniValue gobject(const JSONRPCRequest& request)
         CGovernanceObject govobj(hashParent, nRevision, nTime, uint256(), strDataHex);
 
         if(govobj.GetObjectType() == GOVERNANCE_OBJECT_PROPOSAL) {
-            CProposalValidator validator(strDataHex);
+            CProposalValidator validator(strDataHex, false);
             if(!validator.Validate())  {
                 throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid proposal data, error messages:" + validator.GetErrorMessages());
             }
@@ -261,7 +261,7 @@ UniValue gobject(const JSONRPCRequest& request)
              << std::endl; );
 
         if(govobj.GetObjectType() == GOVERNANCE_OBJECT_PROPOSAL) {
-            CProposalValidator validator(strDataHex);
+            CProposalValidator validator(strDataHex, false);
             if(!validator.Validate())  {
                 throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid proposal data, error messages:" + validator.GetErrorMessages());
             }
