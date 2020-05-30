@@ -99,6 +99,6 @@ Installation
 After building using the Windows subsystem it can be useful to copy the compiled
 executables to a directory on the windows drive in the same directory structure
 as they appear in the release `.zip` archive. This can be done in the following
-way. This will install to `c:\workspace\martexcoin`, for example:
+way. This will install to `c:\workspace\martex`, for example:
 
-    make install DESTDIR=/mnt/c/workspace/martexcoin
+    make install DESTDIR=/mnt/c/workspace/martex

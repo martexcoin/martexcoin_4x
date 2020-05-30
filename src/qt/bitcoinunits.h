@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -60,7 +60,7 @@ public:
         MXT,
         mMXT,
         uMXT,
-        valverde
+        valverdes
     };
 
     enum SeparatorStyle

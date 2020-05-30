@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 
 #include "base58.h"

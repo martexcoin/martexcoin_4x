@@ -30,7 +30,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/thread.hpp>
 
-extern std::unique_ptr<CConnman> g_connman;
+std::unique_ptr<CConnman> g_connman;
 FastRandomContext insecure_rand_ctx(true);
 
 extern bool fPrintToConsole;
@@ -115,7 +115,7 @@ CBlock
 TestChain100Setup::CreateAndProcessBlock(const std::vector<CMutableTransaction>& txns, const CScript& scriptPubKey)
 {
     const CChainParams& chainparams = Params();
-    std::unique_ptr<CBlockTemplate> pblocktemplate = BlockAssembler(chainparams).CreateNewBlock(scriptPubKey);
+    std::unique_ptr<CBlockTemplate> pblocktemplate = BlockAssembler(chainparams).CreateNewBlock(nullptr, chainparams, scriptPubKey, false);
     CBlock& block = pblocktemplate->block;
 
     // Replace mempool-selected txns with just coinbase plus passed-in txns:
@@ -153,4 +153,14 @@ CTxMemPoolEntry TestMemPoolEntryHelper::FromTx(const CTransaction &txn, CTxMemPo
 void Shutdown(void* parg)
 {
   exit(0);
+}
+
+void StartShutdown()
+{
+  exit(0);
+}
+
+bool ShutdownRequested()
+{
+  return false;
 }

@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -40,10 +40,11 @@ WalletModel::WalletModel(const PlatformStyle *platformStyle, CWallet *_wallet, O
     transactionTableModel(0),
     recentRequestsTableModel(0),
     cachedBalance(0),
-    cachedStake(0),
     cachedUnconfirmedBalance(0),
     cachedImmatureBalance(0),
+    cachedStakeBalance(0),
     cachedAnonymizedBalance(0),
+    cachedStakeInputs(0),
     cachedWatchOnlyBalance(0),
     cachedWatchUnconfBalance(0),
     cachedWatchImmatureBalance(0),
@@ -74,25 +75,21 @@ WalletModel::~WalletModel()
 
 CAmount WalletModel::getBalance(const CCoinControl *coinControl) const
 {
-    // if (coinControl)
-    // {
-    //     CAmount nBalance = 0;
-    //     std::vector<COutput> vCoins;
-    //     wallet->AvailableCoins(vCoins, true, coinControl);
-    //     BOOST_FOREACH(const COutput& out, vCoins)
-    //         if(out.fSpendable)
-    //             nBalance += out.tx->tx->vout[out.i].nValue;
-    //
-    //     return nBalance;
-    // }
+    if (coinControl)
+    {
+        CAmount nBalance = 0;
+        std::vector<COutput> vCoins;
+        wallet->AvailableCoins(vCoins, true, coinControl);
+        BOOST_FOREACH(const COutput& out, vCoins)
+            if(out.fSpendable)
+                nBalance += out.tx->tx->vout[out.i].nValue;
+
+        return nBalance;
+    }
 
     return wallet->GetBalance();
 }
 
-CAmount WalletModel::getStake() const
-{
-    return wallet->GetStake();
-}
 
 CAmount WalletModel::getAnonymizedBalance() const
 {
@@ -109,6 +106,16 @@ CAmount WalletModel::getImmatureBalance() const
     return wallet->GetImmatureBalance();
 }
 
+CAmount WalletModel::getStakeBalance() const
+{
+    return wallet->GetStake();
+}
+int WalletModel::getStakeInputs()  const {
+
+    return wallet->GetStakeInputs();
+
+}
+
 bool WalletModel::haveWatchOnly() const
 {
     return fHaveWatchOnly;
@@ -118,11 +125,6 @@ CAmount WalletModel::getWatchBalance() const
 {
     return wallet->GetWatchOnlyBalance();
 }
-
-// CAmount WalletModel::getWatchStake() const
-// {
-//     return wallet->GetWatchOnlyStake();
-// }
 
 CAmount WalletModel::getWatchUnconfirmedBalance() const
 {
@@ -171,13 +173,15 @@ void WalletModel::pollBalanceChanged()
 void WalletModel::checkBalanceChanged()
 {
     CAmount newBalance = getBalance();
-    CAmount newStake = getStake();
     CAmount newUnconfirmedBalance = getUnconfirmedBalance();
     CAmount newImmatureBalance = getImmatureBalance();
+    CAmount newStakeBalance = getStakeBalance();
+    int newStakeInputs = getStakeInputs();
     CAmount newAnonymizedBalance = getAnonymizedBalance();
     CAmount newWatchOnlyBalance = 0;
     CAmount newWatchUnconfBalance = 0;
     CAmount newWatchImmatureBalance = 0;
+
     if (haveWatchOnly())
     {
         newWatchOnlyBalance = getWatchBalance();
@@ -185,21 +189,22 @@ void WalletModel::checkBalanceChanged()
         newWatchImmatureBalance = getWatchImmatureBalance();
     }
 
-    if(cachedBalance != newBalance || cachedUnconfirmedBalance != newUnconfirmedBalance || cachedImmatureBalance != newImmatureBalance ||
+    if(cachedBalance != newBalance || cachedUnconfirmedBalance != newUnconfirmedBalance || cachedImmatureBalance != newImmatureBalance || cachedStakeBalance != newStakeBalance || cachedStakeInputs != newStakeInputs ||
         cachedAnonymizedBalance != newAnonymizedBalance || cachedTxLocks != nCompleteTXLocks ||
-        cachedWatchOnlyBalance != newWatchOnlyBalance || cachedWatchUnconfBalance != newWatchUnconfBalance || cachedWatchImmatureBalance != newWatchImmatureBalance || cachedStake != newStake)
+        cachedWatchOnlyBalance != newWatchOnlyBalance || cachedWatchUnconfBalance != newWatchUnconfBalance || cachedWatchImmatureBalance != newWatchImmatureBalance )
     {
         cachedBalance = newBalance;
-        cachedStake = newStake;
         cachedUnconfirmedBalance = newUnconfirmedBalance;
         cachedImmatureBalance = newImmatureBalance;
+        cachedStakeBalance = newStakeBalance;
+        cachedStakeInputs = newStakeInputs;
         cachedAnonymizedBalance = newAnonymizedBalance;
         cachedTxLocks = nCompleteTXLocks;
         cachedWatchOnlyBalance = newWatchOnlyBalance;
         cachedWatchUnconfBalance = newWatchUnconfBalance;
         cachedWatchImmatureBalance = newWatchImmatureBalance;
-        Q_EMIT balanceChanged(newBalance, newStake, newUnconfirmedBalance, newImmatureBalance, newAnonymizedBalance,
-                            newWatchOnlyBalance, newWatchUnconfBalance, newWatchImmatureBalance);
+        Q_EMIT balanceChanged(newBalance, newUnconfirmedBalance, newImmatureBalance, newAnonymizedBalance,
+                            newWatchOnlyBalance, newWatchUnconfBalance, newWatchImmatureBalance, newStakeBalance, newStakeInputs);
     }
 }
 
@@ -247,7 +252,9 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 
     QSet<QString> setAddress; // Used to detect duplicates
     int nAddresses = 0;
-
+	if(fWalletUnlockStakingOnly){
+		return InvalidUnlock;
+		}
     // Pre-check input data for validity
     Q_FOREACH(const SendCoinsRecipient &rcp, recipients)
     {
@@ -276,7 +283,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             total += subtotal;
         }
         else
-        {   // User-entered MarteX address / amount:
+        {   // User-entered martex address / amount:
             if(!validateAddress(rcp.address))
             {
                 return InvalidAddress;

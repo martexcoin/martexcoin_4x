@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -25,7 +25,7 @@ private:
     bool fUnitTest;
 
     /// Add a clients entry to the pool
-    bool AddEntry(const CDarkSendEntry& entryNew, PoolMessage& nMessageIDRet);
+    bool AddEntry(const CAnonSendEntry& entryNew, PoolMessage& nMessageIDRet);
     /// Add signature to a txin
     bool AddScriptSig(const CTxIn& txin);
 

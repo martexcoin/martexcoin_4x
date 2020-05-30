@@ -1,8 +1,8 @@
 Source: martex
 Section: utils
 Priority: optional
-Maintainer: Holger Schinzel <holger@martexcoin.org>
-Uploaders: Holger Schinzel <holger@martexcoin.org>
+Maintainer: Holger Schinzel <holger@martex.org>
+Uploaders: Holger Schinzel <holger@martex.org>
 Build-Depends: debhelper,
  devscripts,
  automake,

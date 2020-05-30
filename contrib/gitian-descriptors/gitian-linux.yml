@@ -1,5 +1,5 @@
 ---
-name: "martex-linux-3.0"
+name: "martex-linux-4.0"
 enable_cache: true
 suites:
 - "trusty"
@@ -28,8 +28,8 @@ packages:
 - "ca-certificates"
 - "python"
 remotes:
-- "url": "https://github.com/martexcoin/martexcoin.git"
-  "dir": "martexcoin"
+- "url": "https://github.com/marcianovc/mxt_martex.git"
+  "dir": "mxt_martex"
 files: []
 script: |
 
@@ -113,7 +113,7 @@ script: |
   chmod +x ${WRAP_DIR}/${prog}
   done
 
-  cd martexcoin
+  cd mxt_martex
   BASEPREFIX=`pwd`/depends
   # Build dependencies for each host
   for i in $HOSTS; do

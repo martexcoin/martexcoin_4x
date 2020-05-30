@@ -1,6 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,7 +13,6 @@
 #include "fastsend.h"
 #include "validation.h"
 #include "policy/policy.h"
-#include "pow.h"
 #include "primitives/transaction.h"
 #include "rpc/server.h"
 #include "streams.h"
@@ -55,7 +54,7 @@ double GetDifficulty(const CBlockIndex* blockindex)
         if (chainActive.Tip() == NULL)
             return 1.0;
         else
-            blockindex = GetLastBlockIndex(chainActive.Tip(), false);
+            blockindex = chainActive.Tip();
     }
 
     int nShift = (blockindex->nBits >> 24) & 0xff;
@@ -1063,8 +1062,8 @@ UniValue gettxout(const JSONRPCRequest& request)
             "     \"hex\" : \"hex\",        (string) \n"
             "     \"reqSigs\" : n,          (numeric) Number of required signatures\n"
             "     \"type\" : \"pubkeyhash\", (string) The type, eg pubkeyhash\n"
-            "     \"addresses\" : [          (array of string) array of MarteX addresses\n"
-            "        \"address\"     (string) MarteX address\n"
+            "     \"addresses\" : [          (array of string) array of martex addresses\n"
+            "        \"address\"     (string) martex address\n"
             "        ,...\n"
             "     ]\n"
             "  },\n"

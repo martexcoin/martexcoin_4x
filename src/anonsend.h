@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -136,7 +136,7 @@ public:
 };
 
 // A clients transaction in the mixing pool
-class CDarkSendEntry
+class CAnonSendEntry
 {
 public:
     std::vector<CTxDSIn> vecTxDSIn;
@@ -145,14 +145,14 @@ public:
     // memory only
     CService addr;
 
-    CDarkSendEntry() :
+    CAnonSendEntry() :
         vecTxDSIn(std::vector<CTxDSIn>()),
         vecTxOut(std::vector<CTxOut>()),
         txCollateral(MakeTransactionRef()),
         addr(CService())
         {}
 
-    CDarkSendEntry(const std::vector<CTxDSIn>& vecTxDSIn, const std::vector<CTxOut>& vecTxOut, const CTransaction& txCollateral) :
+    CAnonSendEntry(const std::vector<CTxDSIn>& vecTxDSIn, const std::vector<CTxOut>& vecTxOut, const CTransaction& txCollateral) :
         vecTxDSIn(vecTxDSIn),
         vecTxOut(vecTxOut),
         txCollateral(MakeTransactionRef(txCollateral)),
@@ -356,7 +356,7 @@ protected:
     // The current mixing sessions in progress on the network
     std::vector<CAnonsendQueue> vecAnonsendQueue;
 
-    std::vector<CDarkSendEntry> vecEntries; // Masternode/clients entries
+    std::vector<CAnonSendEntry> vecEntries; // Masternode/clients entries
 
     PoolState nState; // should be one of the POOL_STATE_XXX values
     int64_t nTimeLastSuccessfulStep; // the time when last successful mixing step was performed

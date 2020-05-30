@@ -30,6 +30,7 @@
 #include "utilmoneystr.h"
 #include "utilstrencodings.h"
 #include "validationinterface.h"
+
 #include "spork.h"
 #include "governance.h"
 #include "fastsend.h"
@@ -52,7 +53,7 @@ std::atomic<int64_t> nTimeBestReceived(0); // Used only to inform the wallet of 
 
 /** Old subversions **/
 std::string version_old;
-bool found_3021, found_3022, found_3001, found_300, found_3031, found_3032, found_3033, found_304, found_3041, found_3042, found_3051;
+bool found_3021, found_3022, found_3001, found_300, found_3031, found_3032, found_3033, found_304, found_3041, found_3042;
 
 struct IteratorComparator
 {
@@ -917,12 +918,12 @@ bool static AlreadyHave(const CInv& inv) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
     case MSG_BLOCK:
         return mapBlockIndex.count(inv.hash);
 
-    /*
+    /* 
         MarteX Related Inventory Messages
 
         --
 
-        We shouldn't update the sync times for each of the messages when we already have it.
+        We shouldn't update the sync times for each of the messages when we already have it. 
         We're going to be asking many nodes upfront for the full inventory list, so we'll get duplicates of these.
         We want to only update the time on new hits, so that we can time out appropriately if needed.
     */
@@ -1434,13 +1435,12 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         found_3022 = boost::contains(cleanSubVer, "/MarteX Core:3.0.2.2/");
         found_3001 = boost::contains(cleanSubVer, "/MarteX Core:3.0.0.1/");
         found_300 = boost::contains(cleanSubVer, "/MarteX Core:3.0.0/");
-	found_3031 = boost::contains(cleanSubVer, "/MarteX Core:3.0.3.1/");
-	found_3032 = boost::contains(cleanSubVer, "/MarteX Core:3.0.3.2/");
-	found_3033 = boost::contains(cleanSubVer, "/MarteX Core:3.0.3.3/");
-	found_304 = boost::contains(cleanSubVer, "/MarteX Core:3.0.4/");
-	found_3041 = boost::contains(cleanSubVer, "/MarteX Core:3.0.4.1/");
-	found_3042 = boost::contains(cleanSubVer, "/MarteX Core:3.0.4.2/");
-    found_3051 = boost::contains(cleanSubVer, "/MarteX Core:3.0.5.1/");
+        found_3031 = boost::contains(cleanSubVer, "/MarteX Core:3.0.3.1/");
+        found_3032 = boost::contains(cleanSubVer, "/MarteX Core:3.0.3.2/");
+        found_3033 = boost::contains(cleanSubVer, "/MarteX Core:3.0.3.3/");
+        found_304 = boost::contains(cleanSubVer, "/MarteX Core:3.0.4/");
+        found_3041 = boost::contains(cleanSubVer, "/MarteX Core:3.0.4.1/");
+        found_3042 = boost::contains(cleanSubVer, "/MarteX Core:3.0.4.2/");
 
         if (found_300 || found_3001 || found_3021 || found_3022 || found_3031 || found_3032 || found_3033 || found_304 || found_3041 || found_3042)
         {
@@ -2450,7 +2450,7 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
 
     else if (strCommand == NetMsgType::HEADERS && !fImporting && !fReindex) // Ignore headers received while importing
     {
-        std::vector<CBlock> blocks; //TODO: Remove after upgrade
+	std::vector<CBlock> blocks; //TODO: Remove after upgrade
         std::vector<CBlockHeader> headers;
 
         // Bypass the normal CBlock deserialization, as we don't want to risk deserializing 2000 full blocks.
@@ -2460,21 +2460,22 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             Misbehaving(pfrom->GetId(), 20);
             return error("headers message size = %u", nCount);
         }
-        blocks.resize(nCount);
+	blocks.resize(nCount);
         headers.resize(nCount);
 
-        if(pfrom->nVersion < PROTOCOL_VERSION){
+	if(pfrom->nVersion < PROTOCOL_VERSION){
           for (unsigned int n = 0; n < nCount; n++) {
               vRecv >> blocks[n];
               ReadCompactSize(vRecv); // ignore tx count; assume it is 0.
               headers[n] = blocks[n].GetBlockHeader();
           }
-        }else{
+	}else{
           for (unsigned int n = 0; n < nCount; n++) {
               vRecv >> headers[n];
               ReadCompactSize(vRecv); // ignore tx count; assume it is 0.
           }
         }
+
 
         if (nCount == 0) {
             // Nothing interesting. Stop asking this peers for more headers.

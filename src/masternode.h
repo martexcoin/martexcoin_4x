@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -152,7 +152,7 @@ struct masternode_info_t
 };
 
 //
-// The Masternode Class. For managing the Anonsend process. It contains the input of the 1000MXT, signature to prove
+// The Masternode Class. For managing the Anonsend process. It contains the input of the 5000MXT, signature to prove
 // it's the one who own that ip address and code for calculating the payment election.
 //
 class CMasternode : public masternode_info_t
@@ -247,6 +247,7 @@ public:
     static CollateralStatus CheckCollateral(const COutPoint& outpoint, const CPubKey& pubkey);
     static CollateralStatus CheckCollateral(const COutPoint& outpoint, const CPubKey& pubkey, int& nHeightRet);
     void Check(bool fForce = false);
+void SetBlk(int blk);
 
     bool IsBroadcastedWithin(int nSeconds) { return GetAdjustedTime() - sigTime < nSeconds; }
 

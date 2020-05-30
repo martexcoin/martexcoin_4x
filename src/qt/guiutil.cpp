@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -96,17 +96,7 @@ QString dateTimeStr(qint64 nTime)
 
 QFont fixedPitchFont()
 {
-#if QT_VERSION >= 0x50200
     return QFontDatabase::systemFont(QFontDatabase::FixedFont);
-#else
-    QFont font("Monospace");
-#if QT_VERSION >= 0x040800
-    font.setStyleHint(QFont::Monospace);
-#else
-    font.setStyleHint(QFont::TypeWriter);
-#endif
-    return font;
-#endif
 }
 
 // Just some dummy data to generate an convincing random-looking (but consistent) address
@@ -170,7 +160,7 @@ bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
     QUrlQuery uriQuery(uri);
     QList<QPair<QString, QString> > items = uriQuery.queryItems();
 #endif
-    
+
     rv.fUseFastSend = false;
     for (QList<QPair<QString, QString> >::iterator i = items.begin(); i != items.end(); i++)
     {
@@ -258,7 +248,7 @@ QString formatBitcoinURI(const SendCoinsRecipient &info)
         ret += QString("%1message=%2").arg(paramCount == 0 ? "?" : "&").arg(msg);
         paramCount++;
     }
-    
+
     if(info.fUseFastSend)
     {
         ret += QString("%1IS=1").arg(paramCount == 0 ? "?" : "&");
@@ -928,7 +918,7 @@ QString getThemeName()
     if(!theme.isEmpty()){
         return theme;
     }
-    return QString("light");  
+    return QString("light");
 }
 
 // Open CSS when configured
@@ -940,18 +930,18 @@ QString loadStyleSheet()
     QString theme = settings.value("theme", "").toString();
 
     if(!theme.isEmpty()){
-        cssName = QString(":/css/") + theme; 
+        cssName = QString(":/css/") + theme;
     }
     else {
-        cssName = QString(":/css/light");  
+        cssName = QString(":/css/light");
         settings.setValue("theme", "light");
     }
-    
-    QFile qFile(cssName);      
+
+    QFile qFile(cssName);
     if (qFile.open(QFile::ReadOnly)) {
         styleSheet = QLatin1String(qFile.readAll());
     }
-        
+
     return styleSheet;
 }
 
@@ -1090,7 +1080,7 @@ void ClickableLabel::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_EMIT clicked(event->pos());
 }
-    
+
 void ClickableProgressBar::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_EMIT clicked(event->pos());

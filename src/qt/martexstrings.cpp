@@ -80,15 +80,15 @@ QT_TRANSLATE_NOOP("martex-core", ""
 "Error: Listening for incoming connections failed (listen returned error %s)"),
 QT_TRANSLATE_NOOP("martex-core", ""
 "Execute command when a relevant alert is received or we see a really long "
-"fork (%s in cmd is replaced by message)"),
+"fork (%s in cmd is replmartex by message)"),
 QT_TRANSLATE_NOOP("martex-core", ""
 "Execute command when a wallet FastSend transaction is successfully locked "
-"(%s in cmd is replaced by TxID)"),
+"(%s in cmd is replmartex by TxID)"),
 QT_TRANSLATE_NOOP("martex-core", ""
-"Execute command when a wallet transaction changes (%s in cmd is replaced by "
+"Execute command when a wallet transaction changes (%s in cmd is replmartex by "
 "TxID)"),
 QT_TRANSLATE_NOOP("martex-core", ""
-"Execute command when the best block changes (%s in cmd is replaced by block "
+"Execute command when the best block changes (%s in cmd is replmartex by block "
 "hash)"),
 QT_TRANSLATE_NOOP("martex-core", ""
 "Failed to create backup, file already exists! This could happen if you "

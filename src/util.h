@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -39,7 +39,7 @@
 #ifdef ENABLE_MXT_DEBUG
 #define DBG( x ) x
 #else
-#define DBG( x )
+#define DBG( x ) 
 #endif
 
 //MarteX only features
@@ -136,6 +136,7 @@ boost::filesystem::path GetSpecialFolderPath(int nFolder, bool fCreate = true);
 void OpenDebugLog();
 void ShrinkDebugFile();
 void runCommand(const std::string& strCommand);
+void SetThreadPriority(int nPriority);
 
 inline bool IsSwitchChar(char c)
 {
@@ -228,7 +229,6 @@ std::string HelpMessageOpt(const std::string& option, const std::string& message
  */
 int GetNumCores();
 
-void SetThreadPriority(int nPriority);
 void RenameThread(const char* name);
 std::string GetThreadName();
 
@@ -289,6 +289,5 @@ std::string IntVersionToString(uint32_t nVersion);
  */
 std::string SafeIntVersionToString(uint32_t nVersion);
 long hex2long(const char* hexString);
-
 
 #endif // BITCOIN_UTIL_H

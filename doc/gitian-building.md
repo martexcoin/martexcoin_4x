@@ -309,7 +309,7 @@ Clone the git repositories for MarteX Core and Gitian.
 
 ```bash
 git clone https://github.com/devrandom/gitian-builder.git
-git clone https://github.com/martexcoin/martexcoin
+git clone https://github.com/martexcoin/martex
 git clone https://github.com/martexcoin/gitian.sigs.git
 ```
 
@@ -371,12 +371,12 @@ tail -f var/build.log
 Output from `gbuild` will look something like
 
 ```bash
-    Initialized empty Git repository in /home/debian/gitian-builder/inputs/martexcoin/.git/
+    Initialized empty Git repository in /home/debian/gitian-builder/inputs/martex/.git/
     remote: Counting objects: 57959, done.
     remote: Total 57959 (delta 0), reused 0 (delta 0), pack-reused 57958
     Receiving objects: 100% (57959/57959), 53.76 MiB | 484.00 KiB/s, done.
     Resolving deltas: 100% (41590/41590), done.
-    From https://github.com/martexcoin/martexcoin
+    From https://github.com/martexcoin/martex
     ... (new tags, new branch etc)
     --- Building for trusty amd64 ---
     Stopping target if it is up
@@ -402,18 +402,18 @@ and inputs.
 
 For example:
 ```bash
-URL=https://github.com/crowning-/martexcoin.git
+URL=https://github.com/crowning-/martex.git
 COMMIT=b616fb8ef0d49a919b72b0388b091aaec5849b96
-./bin/gbuild --commit martexcoin=${COMMIT} --url martexcoin=${URL} ../martexcoin/contrib/gitian-descriptors/gitian-linux.yml
-./bin/gbuild --commit martexcoin=${COMMIT} --url martexcoin=${URL} ../martexcoin/contrib/gitian-descriptors/gitian-win.yml
-./bin/gbuild --commit martexcoin=${COMMIT} --url martexcoin=${URL} ../martexcoin/contrib/gitian-descriptors/gitian-osx.yml
+./bin/gbuild --commit martex=${COMMIT} --url martex=${URL} ../martex/contrib/gitian-descriptors/gitian-linux.yml
+./bin/gbuild --commit martex=${COMMIT} --url martex=${URL} ../martex/contrib/gitian-descriptors/gitian-win.yml
+./bin/gbuild --commit martex=${COMMIT} --url martex=${URL} ../martex/contrib/gitian-descriptors/gitian-osx.yml
 ```
 
 Building fully offline
 -----------------------
 
 For building fully offline including attaching signatures to unsigned builds, the detached-sigs repository
-and the martexcoin git repository with the desired tag must both be available locally, and then gbuild must be
+and the martex git repository with the desired tag must both be available locally, and then gbuild must be
 told where to find them. It also requires an apt-cacher-ng which is fully-populated but set to offline mode, or
 manually disabling gitian-builder's use of apt-get to update the VM build environment.
 
@@ -432,7 +432,7 @@ cd /path/to/gitian-builder
 LXC_ARCH=amd64 LXC_SUITE=trusty on-target -u root apt-get update
 LXC_ARCH=amd64 LXC_SUITE=trusty on-target -u root \
   -e DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends -y install \
-  $( sed -ne '/^packages:/,/[^-] .*/ {/^- .*/{s/"//g;s/- //;p}}' ../martexcoin/contrib/gitian-descriptors/*|sort|uniq )
+  $( sed -ne '/^packages:/,/[^-] .*/ {/^- .*/{s/"//g;s/- //;p}}' ../martex/contrib/gitian-descriptors/*|sort|uniq )
 LXC_ARCH=amd64 LXC_SUITE=trusty on-target -u root apt-get -q -y purge grub
 LXC_ARCH=amd64 LXC_SUITE=trusty on-target -u root -e DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
 ```
@@ -452,12 +452,12 @@ Then when building, override the remote URLs that gbuild would otherwise pull fr
 ```bash
 
 cd /some/root/path/
-git clone https://github.com/martexcoin/martexcoin-detached-sigs.git
+git clone https://github.com/martexcoin/martex-detached-sigs.git
 
-BTCPATH=/some/root/path/martexcoin
+BTCPATH=/some/root/path/martex
 SIGPATH=/some/root/path/martex-detached-sigs
 
-./bin/gbuild --url martexcoin=${BTCPATH},signature=${SIGPATH} ../martexcoin/contrib/gitian-descriptors/gitian-win-signer.yml
+./bin/gbuild --url martex=${BTCPATH},signature=${SIGPATH} ../martex/contrib/gitian-descriptors/gitian-win-signer.yml
 ```
 
 Signing externally
@@ -484,6 +484,6 @@ Uploading signatures (not yet implemented)
 ---------------------
 
 In the future it will be possible to push your signatures (both the `.assert` and `.assert.sig` files) to the
-[martexcoin/gitian.sigs](https://github.com/martexcoin/gitian.sigs/) repository, or if that's not possible to create a pull
+[martex/gitian.sigs](https://github.com/martexcoin/gitian.sigs/) repository, or if that's not possible to create a pull
 request.
 There will be an official announcement when this repository is online.

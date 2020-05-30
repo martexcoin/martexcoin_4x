@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef FASTSEND_H
@@ -32,7 +32,7 @@ extern CFastSend fastsend;
 static const int MIN_FASTSEND_DEPTH              = 0;
 static const int MAX_FASTSEND_DEPTH              = 60;
 /// Default number of "pseudo-confirmations" for an FastSend tx
-static const int DEFAULT_FASTSEND_DEPTH          = 10;
+static const int DEFAULT_FASTSEND_DEPTH          = 5;
 
 static const int MIN_FASTSEND_PROTO_VERSION      = 70208;
 

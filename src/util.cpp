@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -106,7 +106,10 @@ namespace boost {
 
 } // namespace boost
 
-
+static const char alphanum[] =
+      "0123456789"
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      "abcdefghijklmnopqrstuvwxyz";
 
 //MarteX only features
 bool fMasternodeMode = false;
@@ -654,9 +657,31 @@ void ReadConfigFile(const std::string& confPath)
     if (!streamConfig.good()){
         // Create empty MarteX.conf if it does not excist
         FILE* configFile = fopen(GetConfigFile(confPath).string().c_str(), "a");
-        if (configFile != NULL)
+        if (configFile != NULL){
+            fprintf(configFile, "listen=1\n");
+            fprintf(configFile, "server=1\n");
+            fprintf(configFile, "daemon=1\n");
+            fprintf(configFile, "txindex=1\n");
+            fprintf(configFile, "maxconnections=500\n");
+            fprintf(configFile, "rpcuser=yourusername\n");
+            char s[34];
+            for (int i = 0; i < 34; ++i)
+            {
+                s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+            }
+            std::string str(s, 34);
+            std::string rpcpass = "rpcpassword=" + str + "\n";
+            fprintf(configFile, rpcpass.c_str());
+            fprintf(configFile, "port=51315\n");
+            fprintf(configFile, "rpcport=51314\n");
+            fprintf(configFile, "addnode=seed.martexcoin.org\n");
+            fprintf(configFile, "addnode=seed1.martexcoin.org\n");
+            fprintf(configFile, "addnode=seed2.martexcoin.org\n");
+            fprintf(configFile, "addnode=seed3.martexcoin.org\n");
+            fprintf(configFile, "addnode=seed4.martexcoin.org\n");
             fclose(configFile);
         return; // Nothing to read, so just return
+	}
     }
 
     {
@@ -946,6 +971,19 @@ bool SetupNetworking()
     return true;
 }
 
+void SetThreadPriority(int nPriority)
+{
+#ifdef WIN32
+    SetThreadPriority(GetCurrentThread(), nPriority);
+#else // WIN32
+#ifdef PRIO_THREAD
+    setpriority(PRIO_THREAD, 0, nPriority);
+#else // PRIO_THREAD
+    setpriority(PRIO_PROCESS, 0, nPriority);
+#endif // PRIO_THREAD
+#endif // WIN32
+}
+
 int GetNumCores()
 {
 #if BOOST_VERSION >= 105600
@@ -1054,17 +1092,4 @@ long hex2long(const char* hexString)
     }
 
     return ret;
-}
-
-void SetThreadPriority(int nPriority)
-{
-#ifdef WIN32
-    SetThreadPriority(GetCurrentThread(), nPriority);
-#else // WIN32
-#ifdef PRIO_THREAD
-    setpriority(PRIO_THREAD, 0, nPriority);
-#else  // PRIO_THREAD
-    setpriority(PRIO_PROCESS, 0, nPriority);
-#endif // PRIO_THREAD
-#endif // WIN32
 }

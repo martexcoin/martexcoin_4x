@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -331,10 +331,11 @@ void CMasternode::UpdateLastPaid(const CBlockIndex *pindex, int nMaxBlocksToScan
             CBlock block;
             if(!ReadBlockFromDisk(block, BlockReading, Params().GetConsensus()))
                 continue; // shouldn't really happen
+            const auto& coinbaseTransaction = (BlockReading->nHeight > Params().GetConsensus().nLastPoWBlock ? block.vtx[1] : block.vtx[0]);
 
-            CAmount nMasternodePayment = GetMasternodePayment(BlockReading->nHeight, block.vtx[0]->GetValueOut());
+            CAmount nMasternodePayment = GetMasternodePayment(BlockReading->nHeight, BlockReading->nMint);
 
-            for (const auto& txout : block.vtx[0]->vout)
+            for (const auto& txout : coinbaseTransaction->vout)
                 if(mnpayee == txout.scriptPubKey && nMasternodePayment == txout.nValue) {
                     nBlockLastPaid = BlockReading->nHeight;
                     nTimeLastPaid = BlockReading->nTime;
@@ -381,10 +382,9 @@ bool CMasternodeBroadcast::Create(const std::string& strService, const std::stri
     CService service;
     if (!Lookup(strService.c_str(), service, 0, false))
         return Log(strprintf("Invalid address %s for masternode.", strService));
-
     int mainnetDefaultPort = Params(CBaseChainParams::MAIN).GetDefaultPort();
     if (Params().NetworkIDString() == CBaseChainParams::MAIN) {
-        if (service.GetPort() != mainnetDefaultPort  && !Params().AllowMultiplePorts())
+        if (service.GetPort() != mainnetDefaultPort && !Params().AllowMultiplePorts())
             return Log(strprintf("Invalid port %u for masternode %s, only %d is supported on mainnet.", service.GetPort(), strService, mainnetDefaultPort));
     } else if (service.GetPort() == mainnetDefaultPort)
         return Log(strprintf("Invalid port %u for masternode %s, %d is the only supported on mainnet.", service.GetPort(), strService, mainnetDefaultPort));

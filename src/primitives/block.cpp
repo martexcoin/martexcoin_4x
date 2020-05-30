@@ -5,12 +5,10 @@
 
 #include "primitives/block.h"
 
-#include "consensus/merkle.h"
-#include "crypto/common.h"
-#include "crypto/hashblock.h"
 #include "hash.h"
 #include "tinyformat.h"
 #include "utilstrencodings.h"
+#include "crypto/common.h"
 
 uint256 CBlockHeader::GetHash() const
 {
@@ -22,7 +20,7 @@ uint256 CBlockHeader::GetHash() const
 
 uint256 CBlockHeader::GetPoWHash() const
 {
- return Hash9(BEGIN(nVersion), END(nNonce));
+ return HashX13(BEGIN(nVersion), END(nNonce));
 }
 
 std::string CBlock::ToString() const

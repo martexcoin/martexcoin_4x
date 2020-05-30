@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,6 +13,7 @@
 #include "netmessagemaker.h"
 #include "spork.h"
 #include "util.h"
+#include "wallet/wallet.h"
 
 #include <boost/lexical_cast.hpp>
 
@@ -34,12 +35,26 @@ CCriticalSection cs_mapMasternodePaymentVotes;
 *   - When non-superblocks are detected, the normal schedule should be maintained
 */
 
-bool IsBlockValueValid(const CBlock& block, int nBlockHeight, CAmount blockReward, std::string& strErrorRet)
+bool IsBlockValueValid(const CBlock& block, int nBlockHeight, CAmount expectedReward, CAmount actualReward, std::string& strErrorRet)
 {
     strErrorRet = "";
+    //const auto& coinbaseTransaction = (nBlockHeight > Params().GetConsensus().nLastPoWBlock ? block.vtx[1] : block.vtx[0]);
+    const auto& coinbaseTransaction = (block.IsProofOfStake() ? block.vtx[1] : block.vtx[0]);
 
-    bool isBlockRewardValueMet = (block.vtx[0]->GetValueOut() <= blockReward);
-    if(fDebug) LogPrintf("block.vtx[0]->GetValueOut() %lld <= blockReward %lld\n", block.vtx[0]->GetValueOut(), blockReward);
+    //bool isBlockRewardValueMet = (actualReward <= expectedReward);
+    //bool isBlockRewardValueMet = (block.vtx[0]->GetValueOut() <= expectedReward);
+    bool isBlockRewardValueMet;
+    if(nBlockHeight > Params().GetConsensus().nLastPoWBlock && Params().NetworkIDString() != CBaseChainParams::TESTNET){
+        if(block.IsProofOfStake()){
+             isBlockRewardValueMet = (block.vtx[1]->GetValueOut() <= expectedReward);
+             //LogPrintf("IsBlockValueValid: PoS GetValueOut() - %lld \n", block.vtx[1]->GetValueOut());
+        }else{
+             isBlockRewardValueMet = (block.vtx[0]->GetValueOut() <= expectedReward);
+             //LogPrintf("IsBlockValueValid: PoW GetValueOut() - %lld \n", block.vtx[0]->GetValueOut());
+        }
+    }
+    if(fDebug)
+	LogPrintf("IsBlockValueValid: isBlockRewardValueMet %s | actualReward %lld <= blockReward %lld | Block Type: %s\n", isBlockRewardValueMet ? "true" : "false", actualReward, expectedReward, block.IsProofOfStake() ? "PoS" : "PoW");
 
     // we are still using budgets, but we have no data about them anymore,
     // all we know is predefined budget cycle and window
@@ -57,7 +72,7 @@ bool IsBlockValueValid(const CBlock& block, int nBlockHeight, CAmount blockRewar
                 LogPrint("gobject", "IsBlockValueValid -- WARNING: Client synced but old budget system is disabled, checking block value against block reward\n");
                 if(!isBlockRewardValueMet) {
                     strErrorRet = strprintf("coinbase pays too much at height %d (actual=%d vs limit=%d), exceeded block reward, old budgets are disabled",
-                                            nBlockHeight, block.vtx[0]->GetValueOut(), blockReward);
+                                            nBlockHeight, actualReward, expectedReward);
                 }
                 return isBlockRewardValueMet;
             }
@@ -68,15 +83,15 @@ bool IsBlockValueValid(const CBlock& block, int nBlockHeight, CAmount blockRewar
         // LogPrint("gobject", "IsBlockValueValid -- Block is not in budget cycle window, checking block value against block reward\n");
         if(!isBlockRewardValueMet) {
             strErrorRet = strprintf("coinbase pays too much at height %d (actual=%d vs limit=%d), exceeded block reward, block is not in old budget cycle window",
-                                    nBlockHeight, block.vtx[0]->GetValueOut(), blockReward);
+                                    nBlockHeight, actualReward, expectedReward);
         }
         return isBlockRewardValueMet;
     }
 
     // superblocks started
 
-    CAmount nSuperblockMaxValue =  blockReward + CSuperblock::GetPaymentsLimit(nBlockHeight);
-    bool isSuperblockMaxValueMet = (block.vtx[0]->GetValueOut() <= nSuperblockMaxValue);
+    CAmount nSuperblockMaxValue =  expectedReward + CSuperblock::GetPaymentsLimit(nBlockHeight);
+    bool isSuperblockMaxValueMet = (actualReward <= nSuperblockMaxValue);
 
     LogPrint("gobject", "block.vtx[0]->GetValueOut() %lld <= nSuperblockMaxValue %lld\n", block.vtx[0]->GetValueOut(), nSuperblockMaxValue);
 
@@ -86,13 +101,13 @@ bool IsBlockValueValid(const CBlock& block, int nBlockHeight, CAmount blockRewar
             if(fDebug) LogPrintf("IsBlockPayeeValid -- WARNING: Not enough data, checking superblock max bounds only\n");
             if(!isSuperblockMaxValueMet) {
                 strErrorRet = strprintf("coinbase pays too much at height %d (actual=%d vs limit=%d), exceeded superblock max value",
-                                        nBlockHeight, block.vtx[0]->GetValueOut(), nSuperblockMaxValue);
+                                        nBlockHeight, actualReward, nSuperblockMaxValue);
             }
             return isSuperblockMaxValueMet;
         }
         if(!isBlockRewardValueMet) {
             strErrorRet = strprintf("coinbase pays too much at height %d (actual=%d vs limit=%d), exceeded block reward, only regular blocks are allowed at this height",
-                                    nBlockHeight, block.vtx[0]->GetValueOut(), blockReward);
+                                    nBlockHeight, actualReward, expectedReward);
         }
         // it MUST be a regular block otherwise
         return isBlockRewardValueMet;
@@ -102,7 +117,7 @@ bool IsBlockValueValid(const CBlock& block, int nBlockHeight, CAmount blockRewar
 
     if(sporkManager.IsSporkActive(SPORK_9_SUPERBLOCKS_ENABLED)) {
         if(CSuperblockManager::IsSuperblockTriggered(nBlockHeight)) {
-            if(CSuperblockManager::IsValid(*block.vtx[0], nBlockHeight, blockReward)) {
+            if(CSuperblockManager::IsValid(coinbaseTransaction, nBlockHeight, actualReward, expectedReward)) {
                 LogPrint("gobject", "IsBlockValueValid -- Valid superblock at height %d: %s", nBlockHeight, block.vtx[0]->ToString());
                 // all checks are done in CSuperblock::IsValid, nothing to do here
                 return true;
@@ -117,14 +132,14 @@ bool IsBlockValueValid(const CBlock& block, int nBlockHeight, CAmount blockRewar
         LogPrint("gobject", "IsBlockValueValid -- No triggered superblock detected at height %d\n", nBlockHeight);
         if(!isBlockRewardValueMet) {
             strErrorRet = strprintf("coinbase pays too much at height %d (actual=%d vs limit=%d), exceeded block reward, no triggered superblock detected",
-                                    nBlockHeight, block.vtx[0]->GetValueOut(), blockReward);
+                                    nBlockHeight, actualReward, expectedReward);
         }
     } else {
         // should NOT allow superblocks at all, when superblocks are disabled
         LogPrint("gobject", "IsBlockValueValid -- Superblocks are disabled, no superblocks allowed\n");
         if(!isBlockRewardValueMet) {
             strErrorRet = strprintf("coinbase pays too much at height %d (actual=%d vs limit=%d), exceeded block reward, superblocks are disabled",
-                                    nBlockHeight, block.vtx[0]->GetValueOut(), blockReward);
+                                    nBlockHeight, actualReward, expectedReward);
         }
     }
 
@@ -132,7 +147,7 @@ bool IsBlockValueValid(const CBlock& block, int nBlockHeight, CAmount blockRewar
     return isBlockRewardValueMet;
 }
 
-bool IsBlockPayeeValid(const CTransaction& txNew, int nBlockHeight, CAmount blockReward)
+bool IsBlockPayeeValid(const CTransactionRef& txNew, int nBlockHeight, CAmount expectedReward, CAmount actualReward)
 {
     if(!masternodeSync.IsSynced() || fLiteMode) {
         //there is no budget data to use to check anything, let's just accept the longest chain
@@ -158,12 +173,12 @@ bool IsBlockPayeeValid(const CTransaction& txNew, int nBlockHeight, CAmount bloc
 
     if(sporkManager.IsSporkActive(SPORK_9_SUPERBLOCKS_ENABLED)) {
         if(CSuperblockManager::IsSuperblockTriggered(nBlockHeight)) {
-            if(CSuperblockManager::IsValid(txNew, nBlockHeight, blockReward)) {
-                LogPrint("gobject", "IsBlockPayeeValid -- Valid superblock at height %d: %s", nBlockHeight, txNew.ToString());
+            if(CSuperblockManager::IsValid(txNew, nBlockHeight, expectedReward, actualReward)) {
+                LogPrint("gobject", "IsBlockPayeeValid -- Valid superblock at height %d: %s", nBlockHeight, txNew->ToString());
                 return true;
             }
 
-            LogPrintf("IsBlockPayeeValid -- ERROR: Invalid superblock detected at height %d: %s", nBlockHeight, txNew.ToString());
+            LogPrintf("IsBlockPayeeValid -- ERROR: Invalid superblock detected at height %d: %s", nBlockHeight, txNew->ToString());
             // should NOT allow such superblocks, when superblocks are enabled
             return false;
         }
@@ -176,12 +191,12 @@ bool IsBlockPayeeValid(const CTransaction& txNew, int nBlockHeight, CAmount bloc
 
     // IF THIS ISN'T A SUPERBLOCK OR SUPERBLOCK IS INVALID, IT SHOULD PAY A MASTERNODE DIRECTLY
     if(mnpayments.IsTransactionValid(txNew, nBlockHeight)) {
-        LogPrint("mnpayments", "IsBlockPayeeValid -- Valid masternode payment at height %d: %s", nBlockHeight, txNew.ToString());
+        LogPrint("mnpayments", "IsBlockPayeeValid -- Valid masternode payment at height %d: %s", nBlockHeight, txNew->ToString());
         return true;
     }
 
     if(sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
-        LogPrintf("IsBlockPayeeValid -- ERROR: Invalid masternode payment detected at height %d: %s", nBlockHeight, txNew.ToString());
+        LogPrintf("IsBlockPayeeValid -- ERROR: Invalid masternode payment detected at height %d: %s", nBlockHeight, txNew->ToString());
         return false;
     }
 
@@ -260,8 +275,16 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int nBlockH
         masternode_info_t mnInfo;
         if(!mnodeman.GetNextMasternodeInQueueForPayment(nBlockHeight, true, nCount, mnInfo)) {
             // ...and we can't calculate it on our own
-            LogPrintf("CMasternodePayments::FillBlockPayee -- Failed to detect masternode to pay\n");
-            return;
+            LogPrintf("CMasternodePayments::FillBlockPayee -- Failed to detect masternode, pay to DEV\n");
+
+            // pay the dev address if it can't detect
+            std::vector<unsigned char> vchPubKey = ParseHex((!(Params().NetworkIDString() == CBaseChainParams::TESTNET) ? mMVCDEV : tMVCDEV));
+            CPubKey pubKey(vchPubKey);
+            CKeyID keyID = pubKey.GetID();
+            CBitcoinAddress address;
+            address.Set(keyID);
+            payee = GetScriptForDestination(address.Get());
+            //return;
         }
         // fill payee with locally calculated winner and hope for the best
         payee = GetScriptForDestination(mnInfo.pubKeyCollateralAddress.GetID());
@@ -580,14 +603,14 @@ bool CMasternodeBlockPayees::HasPayeeWithVotes(const CScript& payeeIn, int nVote
     return false;
 }
 
-bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew) const
+bool CMasternodeBlockPayees::IsTransactionValid(const CTransactionRef& txNew) const
 {
     LOCK(cs_vecPayees);
 
     int nMaxSignatures = 0;
     std::string strPayeesPossible = "";
 
-    CAmount nMasternodePayment = GetMasternodePayment(nBlockHeight, txNew.GetValueOut());
+    CAmount nMasternodePayment = GetMasternodePayment(nBlockHeight, txNew->GetValueOut());
 
     //require at least MNPAYMENTS_SIGNATURES_REQUIRED signatures
 
@@ -602,7 +625,7 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew) const
 
     for (const auto& payee : vecPayees) {
         if (payee.GetVoteCount() >= MNPAYMENTS_SIGNATURES_REQUIRED) {
-            for (const auto& txout : txNew.vout) {
+            for (const auto& txout : txNew->vout) {
                 if (payee.GetPayee() == txout.scriptPubKey && nMasternodePayment == txout.nValue) {
                     LogPrint("mnpayments", "CMasternodeBlockPayees::IsTransactionValid -- Found required payment\n");
                     return true;
@@ -657,7 +680,7 @@ std::string CMasternodePayments::GetRequiredPaymentsString(int nBlockHeight) con
     return it == mapMasternodeBlocks.end() ? "Unknown" : it->second.GetRequiredPaymentsString();
 }
 
-bool CMasternodePayments::IsTransactionValid(const CTransaction& txNew, int nBlockHeight) const
+bool CMasternodePayments::IsTransactionValid(const CTransactionRef& txNew, int nBlockHeight) const
 {
     LOCK(cs_mapMasternodeBlocks);
 
@@ -1094,4 +1117,20 @@ void CMasternodePayments::UpdatedBlockTip(const CBlockIndex *pindex, CConnman& c
 
     CheckBlockVotes(nFutureBlock - 1);
     ProcessBlock(nFutureBlock, connman);
+}
+void AdjustMasternodePayment(CMutableTransaction &tx, const CTxOut &txoutMasternodePayment)
+{
+return;
+/*
+    auto it = std::find(std::begin(tx.vout), std::end(tx.vout), txoutMasternodePayment);
+
+    if(it != std::end(tx.vout))
+    {
+        long mnPaymentOutIndex = std::distance(std::begin(tx.vout), it);
+        auto masternodePayment = tx.vout[mnPaymentOutIndex].nValue;
+        // For the special transaction the vout of MNpayemnt is the first.
+        long i = tx.vout.size() - 2;
+        tx.vout[i].nValue -= masternodePayment; // last vout is mn payment.
+    }
+*/
 }

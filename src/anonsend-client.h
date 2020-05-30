@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -140,7 +140,7 @@ private:
     /// As a client, check and sign the final transaction
     bool SignFinalTransaction(const CTransaction& finalTransactionNew, CNode* pnode, CConnman& connman);
 
-    void RelayIn(const CDarkSendEntry& entry, CConnman& connman);
+    void RelayIn(const CAnonSendEntry& entry, CConnman& connman);
 
     void SetNull();
 

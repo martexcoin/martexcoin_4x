@@ -1,5 +1,5 @@
-#ifndef DARKSENDCONFIG_H
-#define DARKSENDCONFIG_H
+#ifndef ANONSENDCONFIG_H
+#define ANONSENDCONFIG_H
 
 #include <QDialog>
 
@@ -34,4 +34,4 @@ private Q_SLOTS:
     void clickMax();
 };
 
-#endif // DARKSENDCONFIG_H
+#endif // ANONSENDCONFIG_H

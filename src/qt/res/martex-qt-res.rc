@@ -19,12 +19,14 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
+
             VALUE "CompanyName",        "MarteX"
             VALUE "FileDescription",    PACKAGE_NAME " (GUI node for MarteX)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "martex-qt"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
+
             VALUE "OriginalFilename",   "martex-qt.exe"
             VALUE "ProductName",        PACKAGE_NAME
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR

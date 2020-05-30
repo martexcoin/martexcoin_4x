@@ -23,14 +23,14 @@
 
 Only used in pre-0.8.0
 ---------------------
-* blktree/*; block chain index (LevelDB); since pre-0.8, replaced by blocks/index/* in 0.8.0
-* coins/*; unspent transaction output database (LevelDB); since pre-0.8, replaced by chainstate/* in 0.8.0
+* blktree/*; block chain index (LevelDB); since pre-0.8, replmartex by blocks/index/* in 0.8.0
+* coins/*; unspent transaction output database (LevelDB); since pre-0.8, replmartex by chainstate/* in 0.8.0
 
 Only used before 0.8.0
 ---------------------
-* blkindex.dat: block chain index database (BDB); replaced by {chainstate/*,blocks/index/*,blocks/rev000??.dat} in 0.8.0
-* blk000?.dat: block data (custom, 2 GiB per file); replaced by blocks/blk000??.dat in 0.8.0
+* blkindex.dat: block chain index database (BDB); replmartex by {chainstate/*,blocks/index/*,blocks/rev000??.dat} in 0.8.0
+* blk000?.dat: block data (custom, 2 GiB per file); replmartex by blocks/blk000??.dat in 0.8.0
 
 Only used before 0.7.0
 ---------------------
-* addr.dat: peer IP address database (BDB); replaced by peers.dat in 0.7.0
+* addr.dat: peer IP address database (BDB); replmartex by peers.dat in 0.7.0

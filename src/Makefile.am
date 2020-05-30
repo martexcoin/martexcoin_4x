@@ -1,5 +1,5 @@
 # Copyright (c) 2013-2016 The Bitcoin Core developers
-# Copyright (c) 2014-2018 The MarteX Core developers
+# Copyright (c) 2014-2018 The martex Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -25,23 +25,23 @@ BITCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAG
 BITCOIN_INCLUDES += -I$(srcdir)/secp256k1/include
 BITCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
 
-LIBBITCOIN_SERVER=libmartex_server.a
-LIBBITCOIN_COMMON=libmartex_common.a
-LIBBITCOIN_CONSENSUS=libmartex_consensus.a
-LIBBITCOIN_CLI=libmartex_cli.a
-LIBBITCOIN_UTIL=libmartex_util.a
-LIBBITCOIN_CRYPTO=crypto/libmartex_crypto.a
-LIBBITCOINQT=qt/libmartexqt.a
+LIBBITCOIN_SERVER=libbitcoin_server.a
+LIBBITCOIN_COMMON=libbitcoin_common.a
+LIBBITCOIN_CONSENSUS=libbitcoin_consensus.a
+LIBBITCOIN_CLI=libbitcoin_cli.a
+LIBBITCOIN_UTIL=libbitcoin_util.a
+LIBBITCOIN_CRYPTO=crypto/libbitcoin_crypto.a
+LIBBITCOINQT=qt/libbitcoinqt.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 
 if ENABLE_ZMQ
-LIBBITCOIN_ZMQ=libmartex_zmq.a
+LIBBITCOIN_ZMQ=libbitcoin_zmq.a
 endif
 if BUILD_BITCOIN_LIBS
 LIBBITCOINCONSENSUS=libmartexconsensus.la
 endif
 if ENABLE_WALLET
-LIBBITCOIN_WALLET=libmartex_wallet.a
+LIBBITCOIN_WALLET=libbitcoin_wallet.a
 endif
 
 $(LIBSECP256K1): $(wildcard secp256k1/src/*) $(wildcard secp256k1/include/*)
@@ -58,6 +58,7 @@ EXTRA_LIBRARIES += \
   $(LIBBITCOIN_CLI) \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_ZMQ)
+
 
 lib_LTLIBRARIES = $(LIBBITCOINCONSENSUS)
 
@@ -127,7 +128,8 @@ BITCOIN_CORE_H = \
   fastsend.h \
   key.h \
   keepass.h \
-	kernel.h \
+  kernel.h \
+  blocksigner.h \
   keystore.h \
   dbwrapper.h \
   limitedmap.h \
@@ -202,12 +204,12 @@ obj/build.h: FORCE
 	@$(MKDIR_P) $(builddir)/obj
 	@$(top_srcdir)/share/genbuild.sh $(abs_top_builddir)/src/obj/build.h \
 	  $(abs_top_srcdir)
-libmartex_util_a-clientversion.$(OBJEXT): obj/build.h
+libbitcoin_util_a-clientversion.$(OBJEXT): obj/build.h
 
 # server: shared between martexd and martex-qt
-libmartex_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
-libmartex_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_server_a_SOURCES = \
+libbitcoin_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
+libbitcoin_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_server_a_SOURCES = \
   activemasternode.cpp \
   addrman.cpp \
   addrdb.cpp \
@@ -228,7 +230,6 @@ libmartex_server_a_SOURCES = \
   governance-validators.cpp \
   governance-vote.cpp \
   governance-votedb.cpp \
-	kernel.cpp \
   masternode.cpp \
   masternode-payments.cpp \
   masternode-sync.cpp \
@@ -270,9 +271,9 @@ libmartex_server_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 if ENABLE_ZMQ
-libmartex_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
-libmartex_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_zmq_a_SOURCES = \
+libbitcoin_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
+libbitcoin_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_zmq_a_SOURCES = \
   zmq/zmqabstractnotifier.cpp \
   zmq/zmqnotificationinterface.cpp \
   zmq/zmqpublishnotifier.cpp
@@ -281,10 +282,12 @@ endif
 
 # wallet: shared between martexd and martex-qt, but only linked
 # when wallet enabled
-libmartex_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libmartex_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_wallet_a_SOURCES = \
+libbitcoin_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_wallet_a_SOURCES = \
+  kernel.cpp \
   keepass.cpp \
+  blocksigner.cpp \
   anonsend-client.cpp \
   anonsend-util.cpp \
   wallet/crypter.cpp \
@@ -297,13 +300,12 @@ libmartex_wallet_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 # crypto primitives library
-crypto_libmartex_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_CONFIG_INCLUDES) $(PIC_FLAGS)
-crypto_libmartex_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) $(PIC_FLAGS)
-crypto_libmartex_crypto_a_SOURCES = \
+crypto_libbitcoin_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_CONFIG_INCLUDES) $(PIC_FLAGS)
+crypto_libbitcoin_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) $(PIC_FLAGS)
+crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/aes.cpp \
   crypto/aes.h \
   crypto/common.h \
-	crypto/hashblock.h \
   crypto/hmac_sha256.cpp \
   crypto/hmac_sha256.h \
   crypto/hmac_sha512.cpp \
@@ -319,40 +321,41 @@ crypto_libmartex_crypto_a_SOURCES = \
   crypto/sha512.h
 
 # x13
-crypto_libmartex_crypto_a_SOURCES += \
+crypto_libbitcoin_crypto_a_SOURCES += \
   crypto/blake.c \
   crypto/bmw.c \
   crypto/cubehash.c \
   crypto/echo.c \
-	crypto/fugue.c \
   crypto/groestl.c \
-	crypto/hamsi.c \
-	crypto/hamsi_helper.c \
   crypto/jh.c \
   crypto/keccak.c \
   crypto/luffa.c \
   crypto/shavite.c \
   crypto/simd.c \
   crypto/skein.c \
+  crypto/hamsi.c \
+  crypto/hamsi_helper.c \
+  crypto/fugue.c \
   crypto/sph_blake.h \
   crypto/sph_bmw.h \
   crypto/sph_cubehash.h \
   crypto/sph_echo.h \
-	crypto/sph_fugue.h \
   crypto/sph_groestl.h \
-	crypto/sph_hamsi.h \
   crypto/sph_jh.h \
   crypto/sph_keccak.h \
   crypto/sph_luffa.h \
   crypto/sph_shavite.h \
   crypto/sph_simd.h \
   crypto/sph_skein.h \
+  crypto/sph_hamsi.h \
+  crypto/sph_fugue.h \
   crypto/sph_types.h
 
+
 # consensus: shared between all executables that validate any consensus rules.
-libmartex_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libmartex_consensus_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_consensus_a_SOURCES = \
+libbitcoin_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_consensus_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_consensus_a_SOURCES = \
   amount.h \
   arith_uint256.cpp \
   arith_uint256.h \
@@ -385,9 +388,9 @@ libmartex_consensus_a_SOURCES = \
   version.h
 
 # common: shared between martexd, and martex-qt and non-server tools
-libmartex_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libmartex_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_common_a_SOURCES = \
+libbitcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_common_a_SOURCES = \
   amount.cpp \
   base58.cpp \
   bip39.cpp \
@@ -411,9 +414,9 @@ libmartex_common_a_SOURCES = \
 # util: shared between all executables.
 # This library *must* be included to make sure that the glibc
 # backward-compatibility objects and their sanity checks are linked.
-libmartex_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libmartex_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_util_a_SOURCES = \
+libbitcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_util_a_SOURCES = \
   support/lockedpool.cpp \
   chainparamsbase.cpp \
   clientversion.cpp \
@@ -432,20 +435,20 @@ libmartex_util_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
-libmartex_util_a_SOURCES += compat/glibc_compat.cpp
+libbitcoin_util_a_SOURCES += compat/glibc_compat.cpp
 endif
 
 # cli: shared between martex-cli and martex-qt
-libmartex_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libmartex_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_cli_a_SOURCES = \
+libbitcoin_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_cli_a_SOURCES = \
   rpc/client.cpp \
   $(BITCOIN_CORE_H)
 
-nodist_libmartex_util_a_SOURCES = $(srcdir)/obj/build.h
+nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
-# martexd binary #
+# bitcoind binary #
 martexd_SOURCES = martexd.cpp
 martexd_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 martexd_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
@@ -467,6 +470,7 @@ martexd_LDADD = \
   $(LIBLEVELDB) \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
+
 
 martexd_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
 
@@ -511,8 +515,9 @@ martex_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 
 # martexconsensus library #
 if BUILD_BITCOIN_LIBS
+
 include_HEADERS = script/martexconsensus.h
-libmartexconsensus_la_SOURCES = $(crypto_libmartex_crypto_a_SOURCES) $(libmartex_consensus_a_SOURCES)
+libmartexconsensus_la_SOURCES = $(crypto_libbitcoin_crypto_a_SOURCES) $(libbitcoin_consensus_a_SOURCES)
 
 if GLIBC_BACK_COMPAT
   libmartexconsensus_la_SOURCES += compat/glibc_compat.cpp

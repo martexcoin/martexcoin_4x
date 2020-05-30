@@ -68,9 +68,9 @@ can then be controlled by group membership.
 3b) Mac OS X
 
 Binary:              `/usr/local/bin/martexd`  
-Configuration file:  `~/Library/Application Support/MXT/MarteX.conf`  
-Data directory:      `~/Library/Application Support/MXT`
-Lock file:           `~/Library/Application Support/MXT/.lock`
+Configuration file:  `~/Library/Application Support/MarteXCore/MarteX.conf`  
+Data directory:      `~/Library/Application Support/MarteXCore`
+Lock file:           `~/Library/Application Support/MarteXCore/.lock`
 
 4. Installing Service Configuration
 -----------------------------------
@@ -104,18 +104,18 @@ use old versions of Upstart and do not supply the start-stop-daemon utility.
 Copy martexd.init to /etc/init.d/martexd. Test by running `service martexd start`.
 
 Using this script, you can adjust the path and flags to the martexd program by
-setting the MARTEXD and FLAGS environment variables in the file
+setting the MarteXD and FLAGS environment variables in the file
 /etc/sysconfig/martexd. You can also use the DAEMONOPTS environment variable here.
 
 4e) Mac OS X
 
-Copy org.mxt.martexd.plist into ~/Library/LaunchAgents. Load the launch agent by
-running `launchctl load ~/Library/LaunchAgents/org.mxt.martexd.plist`.
+Copy org.martex.martexd.plist into ~/Library/LaunchAgents. Load the launch agent by
+running `launchctl load ~/Library/LaunchAgents/org.martex.martexd.plist`.
 
 This Launch Agent will cause martexd to start whenever the user logs in.
 
 NOTE: This approach is intended for those wanting to run martexd as the current user.
-You will need to modify org.mxt.martexd.plist if you intend to use it as a
+You will need to modify org.martex.martexd.plist if you intend to use it as a
 Launch Daemon with a dedicated martexcore user.
 
 5. Auto-respawn

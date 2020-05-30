@@ -52,11 +52,11 @@ reachable from the Tor network. Add these lines to your /etc/tor/torrc (or equiv
 config file):
 
 	HiddenServiceDir /var/lib/tor/martexcore-service/
-	HiddenServicePort 9999 127.0.0.1:9999
-	HiddenServicePort 19999 127.0.0.1:19999
+	HiddenServicePort 24126 127.0.0.1:24126
+	HiddenServicePort 24130 127.0.0.1:24130
 
 The directory can be different of course, but (both) port numbers should be equal to
-your martexd's P2P listen port (9999 by default).
+your martexd's P2P listen port (24126 by default).
 
 	-externalip=X   You can tell MarteX Core about its publicly reachable address using
 	                this option, and this can be a .onion address. Given the above
@@ -91,7 +91,7 @@ as well, use `discover` instead:
 
 	./martexd ... -discover
 
-and open port 9999 on your firewall (or use -upnp).
+and open port 24126 on your firewall (or use -upnp).
 
 If you only want to use Tor to reach onion addresses, but not use it as a proxy
 for normal IPv4/IPv6 communication, use:
@@ -103,8 +103,8 @@ for normal IPv4/IPv6 communication, use:
 ------------------------------------
 
 * [darkcoinie7ghp67.onion](http://darkcoinie7ghp67.onion/)
-* [mxttalkwaybgxnoq.onion](http://mxttalkwaybgxnoq.onion/)
-* [mxtcoinooditvool.onion](http://mxtcoinooditvool.onion/)
+* [drktalkwaybgxnoq.onion](http://drktalkwaybgxnoq.onion/)
+* [drkcoinooditvool.onion](http://drkcoinooditvool.onion/)
 * [darkcoxbtzggpmcc.onion](http://darkcoxbtzggpmcc.onion/)
 * [ssapp53tmftyjmjb.onion](http://ssapp53tmftyjmjb.onion/)
 * [j2dfl3cwxyxpbc7s.onion](http://j2dfl3cwxyxpbc7s.onion/)

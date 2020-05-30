@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>576</width>
-    <height>402</height>
+    <height>505</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabMain">
       <attribute name="title">
@@ -164,32 +164,12 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="showAdvancedPSUI">
+           <widget class="QCheckBox" name="showGovernanceTab">
             <property name="toolTip">
-             <string>Show additional information and buttons for AnonSend on overview screen.</string>
+             <string>Show additional tab listing all proposal on the network.</string>
             </property>
             <property name="text">
-             <string>Enable advanced AnonSend interface</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="lowKeysWarning">
-            <property name="toolTip">
-             <string>Show warning dialog when AnonSend detects that wallet has very low number of keys left.</string>
-            </property>
-            <property name="text">
-             <string>Warn if AnonSend is running out of keys</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="anonSendMultiSession">
-            <property name="toolTip">
-             <string>Whether to use experimental AnonSend mode with multiple mixing sessions per block.&lt;br/&gt;Note: You must use this feature carefully.&lt;br/&gt;Make sure you always have recent wallet (auto)backup in a safe place!</string>
-            </property>
-            <property name="text">
-             <string>Enable AnonSend &amp;multi-session</string>
+             <string>Show Governance Tab</string>
             </property>
            </widget>
           </item>
@@ -207,76 +187,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4_Wallet">
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="toolTip">
-            <string>This setting determines the amount of individual masternodes that an input will be anonymized through.&lt;br/&gt;More rounds of anonymization gives a higher degree of privacy, but also costs more in fees.</string>
-           </property>
-           <property name="text">
-            <string>AnonSend rounds to use</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="anonSendRounds">
-           <property name="minimum">
-            <number>2</number>
-           </property>
-           <property name="maximum">
-            <number>8</number>
-           </property>
-           <property name="value">
-            <number>4</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="toolTip">
-            <string>This amount acts as a threshold to turn off AnonSend once it's reached.</string>
-           </property>
-           <property name="statusTip">
-            <string notr="true"/>
-           </property>
-           <property name="whatsThis">
-            <string notr="true"/>
-           </property>
-           <property name="accessibleName">
-            <string notr="true"/>
-           </property>
-           <property name="accessibleDescription">
-            <string notr="true"/>
-           </property>
-           <property name="text">
-            <string>Amount of MarteX to keep anonymized</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="anonSendAmount">
-           <property name="minimum">
-            <number>2</number>
-           </property>
-           <property name="maximum">
-            <number>2000</number>
-           </property>
-           <property name="singleStep">
-            <number>10</number>
-           </property>
-           <property name="value">
-            <number>1000</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_Wallet">
+        <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -780,7 +691,7 @@ https://www.transifex.com/projects/p/martex/</string>
          <item>
           <widget class="QLabel" name="thirdPartyTxUrlsLabel">
            <property name="toolTip">
-            <string>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items.&lt;br/&gt;%s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</string>
+            <string>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items.&lt;br/&gt;%s in the URL is replmartex by transaction hash. Multiple URLs are separated by vertical bar |.</string>
            </property>
            <property name="text">
             <string>Third party transaction URLs</string>
@@ -793,7 +704,7 @@ https://www.transifex.com/projects/p/martex/</string>
          <item>
           <widget class="QLineEdit" name="thirdPartyTxUrls">
            <property name="toolTip">
-            <string>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items.&lt;br/&gt;%s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</string>
+            <string>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items.&lt;br/&gt;%s in the URL is replmartex by transaction hash. Multiple URLs are separated by vertical bar |.</string>
            </property>
           </widget>
          </item>

@@ -19,7 +19,12 @@ inline unsigned int MaxBlockSigOps(bool fDIP0001Active /*= false */)
     return MaxBlockSize(fDIP0001Active) / 50;
 }
 /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
-static const int COINBASE_MATURITY = 150;
+static const int COINBASE_MATURITY = 3;
+static const int COINBASE_MATURITY_TESTNET = 3;
+static const int COINBASE_MATURITY_NEW = 150;
+
+#define NEW_MATURITY_SWITCH_TIME_TESTNET 1537056000 // Sun, 16 Sep 2018 00:00:00 UTC
+#define NEW_MATURITY_SWITCH_TIME 1538352000 // Mon, 01 Oct 2018 00:00:00 UTC
 
 /** Flags for nSequence and nLockTime locks */
 enum {

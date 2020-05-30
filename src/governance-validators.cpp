@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -109,13 +109,13 @@ bool CProposalValidator::ValidateStartEndEpoch(bool fCheckExpiration)
         return false;
     }
 
-    if((nEndEpoch - nStartEpoch) > 10627000) {
-        strErrorMessages += "end_epoch is greater than allowed;";
+    if(fCheckExpiration && nEndEpoch <= GetAdjustedTime()) {
+        strErrorMessages += "expired;";
         return false;
     }
 
-    if(fCheckExpiration && nEndEpoch <= GetAdjustedTime()) {
-        strErrorMessages += "expired;";
+    if((nEndEpoch - nStartEpoch) > 10627000) {
+        strErrorMessages += "end_epoch is greater than allowed;";
         return false;
     }
 
@@ -140,6 +140,7 @@ bool CProposalValidator::ValidatePaymentAmount()
         strErrorMessages += "payment_amount is payment higher than reserved;";
         return false;
     }
+
     // TODO: Should check for an amount which exceeds the budget but this is
     // currently difficult because start and end epochs are defined in terms of
     // clock time instead of block height.

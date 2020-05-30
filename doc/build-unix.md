@@ -67,6 +67,8 @@ Build requirements:
 
     sudo apt-get install build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils
 
+For Ubuntu versions starting with Bionic (18.04), or Debian versions starting with Stretch, use libssl1.0-dev above instead of libssl-dev.
+
 Options when installing required Boost library files:
 
 1. On at least Ubuntu 14.04+ and Debian 7+ there are generic names for the
@@ -168,10 +170,10 @@ Berkeley DB
 It is recommended to use Berkeley DB 4.8. If you have to build it yourself:
 
 ```bash
-MARTEX_ROOT=$(pwd)
+MarteX_ROOT=$(pwd)
 
-# Pick some path to install BDB to, here we create a directory within the martexcoin directory
-BDB_PREFIX="${MARTEX_ROOT}/db4"
+# Pick some path to install BDB to, here we create a directory within the martex directory
+BDB_PREFIX="${MarteX_ROOT}/db4"
 mkdir -p $BDB_PREFIX
 
 # Fetch the source and verify that it is not tampered with
@@ -187,7 +189,7 @@ cd db-4.8.30.NC/build_unix/
 make install
 
 # Configure MarteX Core to use our own-built instance of BDB
-cd $MARTEX_ROOT
+cd $MarteX_ROOT
 ./autogen.sh
 ./configure LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/" # (other args...)
 ```
@@ -276,8 +278,8 @@ Setup and Build Example: Arch Linux
 This example lists the steps necessary to setup and build a command line only, non-wallet distribution of the latest changes on Arch Linux:
 
     pacman -S git base-devel boost libevent python
-    git clone https://github.com/martexcoin/martexcoin.git
-    cd martexcoin/
+    git clone https://github.com/martexcoin/martex.git
+    cd martex/
     ./autogen.sh
     ./configure --disable-wallet --without-gui --without-miniupnpc
     make check

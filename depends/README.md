@@ -1,59 +1,17 @@
-### Usage
+MacOSX-SDKs
+---
+**10.1.5 - 10.13**
 
-To build dependencies for the current arch+OS:
+A collection of those pesky SDK folders.  Compiled from various releases of XCode.
 
-    make
+If you don't need this entire repository, each SDK is available [here](https://github.com/phracker/MacOSX-SDKs/releases).
 
-To build for another arch/OS:
 
-    make HOST=host-platform-triplet
+<sub>Outdated versions: **[mediafire](http://www.mediafire.com/?a4g384ysgy5rg)** /  **[mega.co.nz](https://mega.co.nz/#F!H8xGhaDD!Uv5BTPr0LP7IU5pj0WGCKg)** / 
+**[mediafire](http://www.mediafire.com/?abr89fy4uaz3z)** /  **[mega.co.nz](https://mega.co.nz/#F!4U4SXAxa!ZVltflL2O_5q57R0BVsPTg)**.
+</sub>
 
-For example:
+**Important**
 
-    make HOST=x86_64-w64-mingw32 -j4
-
-A prefix will be generated that's suitable for plugging into MarteX's
-configure. In the above example, a dir named x86_64-w64-mingw32 will be
-created. To use it for MarteX:
-
-    ./configure --prefix=`pwd`/depends/x86_64-w64-mingw32
-
-Common `host-platform-triplets` for cross compilation are:
-
-- `i686-w64-mingw32` for Win32
-- `x86_64-w64-mingw32` for Win64
-- `x86_64-apple-darwin11` for MacOSX
-- `arm-linux-gnueabihf` for Linux ARM 32 bit
-- `aarch64-linux-gnu` for Linux ARM 64 bit
-
-No other options are needed, the paths are automatically configured.
-
-Dependency Options:
-The following can be set when running make: make FOO=bar
-
-    SOURCES_PATH: downloaded sources will be placed here
-    BASE_CACHE: built packages will be placed here
-    SDK_PATH: Path where sdk's can be found (used by OSX)
-    FALLBACK_DOWNLOAD_PATH: If a source file can't be fetched, try here before giving up
-    NO_QT: Don't download/build/cache qt and its dependencies
-    NO_WALLET: Don't download/build/cache libs needed to enable the wallet
-    NO_UPNP: Don't download/build/cache packages needed for enabling upnp
-    DEBUG: disable some optimizations and enable more runtime checking
-    HOST_ID_SALT: Optional salt to use when generating host package ids
-    BUILD_ID_SALT: Optional salt to use when generating build package ids
-
-If some packages are not built, for example `make NO_WALLET=1`, the appropriate
-options will be passed to MarteX Core's configure. In this case, `--disable-wallet`.
-
-Additional targets:
-
-    download: run 'make download' to fetch all sources without building them
-    download-osx: run 'make download-osx' to fetch all sources needed for osx builds
-    download-win: run 'make download-win' to fetch all sources needed for win builds
-    download-linux: run 'make download-linux' to fetch all sources needed for linux builds
-
-### Other documentation
-
-- [description.md](description.md): General description of the depends system
-- [packages.md](packages.md): Steps for adding packages
-
+Modern versions of Xcode (7.3+) need you to edit the `MinimumSDKVersion` in this file to use older SDKs:
+`/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Info.plist`

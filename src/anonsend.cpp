@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include "anonsend.h"
@@ -21,7 +21,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-bool CDarkSendEntry::AddScriptSig(const CTxIn& txin)
+bool CAnonSendEntry::AddScriptSig(const CTxIn& txin)
 {
     for (auto& txdsin : vecTxDSIn) {
         if(txdsin.prevout == txin.prevout && txdsin.nSequence == txin.nSequence) {

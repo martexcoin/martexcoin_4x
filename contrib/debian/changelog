@@ -55,7 +55,7 @@ bitcoin (0.13.0-trusty1) trusty; urgency=medium
 
  -- Matt Corallo (BlueMatt) <matt@mattcorallo.com>  Sun, 04 Sep 2016 22:09:00 -0400
 
-bitcoin (3.0.0-trusty1) trusty; urgency=medium
+bitcoin (0.12.1-trusty1) trusty; urgency=medium
 
   * New upstream release.
 
@@ -293,7 +293,7 @@ bitcoin (0.5.3-natty0) natty; urgency=low
 
   * New upstream release.
 
- -- Luke MarteXjr <luke+bitcoin+deb@martexjr.org>  Tue, 10 Jan 2012 15:57:00 -0500
+ -- Luke Dashjr <luke+bitcoin+deb@martex.org>  Tue, 10 Jan 2012 15:57:00 -0500
 
 bitcoin (0.5.2-natty1) natty; urgency=low
 
@@ -308,7 +308,7 @@ bitcoin (0.5.2-natty0) natty; urgency=low
 
   * New upstream release.
 
- -- Luke MarteXjr <luke+bitcoin+deb@martexjr.org>  Fri, 16 Dec 2011 17:57:00 -0500
+ -- Luke Dashjr <luke+bitcoin+deb@martex.org>  Fri, 16 Dec 2011 17:57:00 -0500
 
 bitcoin (0.5.1-natty0) natty; urgency=low
 

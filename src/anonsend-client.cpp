@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2020 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include "anonsend-client.h"
@@ -429,7 +429,7 @@ bool CAnonSendClient::SendDenominate(const std::vector<CTxDSIn>& vecTxDSIn, cons
     }
 
     // store our entry for later use
-    CDarkSendEntry entry(vecTxDSIn, vecTxOut, txMyCollateral);
+    CAnonSendEntry entry(vecTxDSIn, vecTxOut, txMyCollateral);
     vecEntries.push_back(entry);
     RelayIn(entry, connman);
     nTimeLastSuccessfulStep = GetTime();
@@ -1423,7 +1423,7 @@ bool CAnonSendClient::CreateDenominated(const CompactTallyItem& tallyItem, bool 
     return true;
 }
 
-void CAnonSendClient::RelayIn(const CDarkSendEntry& entry, CConnman& connman)
+void CAnonSendClient::RelayIn(const CAnonSendEntry& entry, CConnman& connman)
 {
     if(!infoMixingMasternode.fInfoValid) return;
 

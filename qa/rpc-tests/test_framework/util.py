@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Copyright (c) 2014-2016 The Bitcoin Core developers
-# Copyright (c) 2014-2019 The MarteX Core developers
+# Copyright (c) 2014-2020 The MarteX Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -270,7 +270,7 @@ def initialize_chain(test_dir, num_nodes, cachedir, extra_args=None, redirect_st
         # Create cache directories, run martexds:
         for i in range(MAX_NODES):
             datadir=initialize_datadir(cachedir, i)
-            args = [ os.getenv("MARTEXD", "martexd"), "-server", "-keypool=1", "-datadir="+datadir, "-discover=0", "-mocktime="+str(GENESISTIME) ]
+            args = [ os.getenv("MarteXD", "martexd"), "-server", "-keypool=1", "-datadir="+datadir, "-discover=0", "-mocktime="+str(GENESISTIME) ]
             if i > 0:
                 args.append("-connect=127.0.0.1:"+str(p2p_port(0)))
             if extra_args is not None:
@@ -358,7 +358,7 @@ def start_node(i, dirname, extra_args=None, rpchost=None, timewait=None, binary=
     """
     datadir = os.path.join(dirname, "node"+str(i))
     if binary is None:
-        binary = os.getenv("MARTEXD", "martexd")
+        binary = os.getenv("MarteXD", "martexd")
     # RPC tests still depend on free transactions
     args = [ binary, "-datadir="+datadir, "-server", "-keypool=1", "-discover=0", "-rest", "-blockprioritysize=50000", "-mocktime="+str(get_mocktime()) ]
     # Don't try auto backups (they fail a lot when running tests)
