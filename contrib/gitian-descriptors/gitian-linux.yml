@@ -28,8 +28,8 @@ packages:
 - "ca-certificates"
 - "python"
 remotes:
-- "url": "https://github.com/marcianovc/mxt_martex.git"
-  "dir": "mxt_martex"
+- "url": "https://github.com/martexcoin/martexcoin.git"
+  "dir": "martexcoin"
 files: []
 script: |
 
@@ -113,7 +113,7 @@ script: |
   chmod +x ${WRAP_DIR}/${prog}
   done
 
-  cd mxt_martex
+  cd martexcoin
   BASEPREFIX=`pwd`/depends
   # Build dependencies for each host
   for i in $HOSTS; do

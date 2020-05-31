@@ -28,8 +28,8 @@ packages:
 - "python-setuptools"
 - "fonts-tuffy"
 remotes:
-- "url": "https://github.com/marcianovc/mxt_martex.git"
-  "dir": "mxt_martex"
+- "url": "https://github.com/martexcoin/martexcoin.git"
+  "dir": "martexcoin"
 files:
 - "MacOSX10.11.sdk.tar.gz"
 script: |
@@ -83,7 +83,7 @@ script: |
   create_per-host_faketime_wrappers "2000-01-01 12:00:00"
   export PATH=${WRAP_DIR}:${PATH}
 
-  cd mxt_martex
+  cd martexcoin
   BASEPREFIX=`pwd`/depends
 
   mkdir -p ${BASEPREFIX}/SDKs
