@@ -211,6 +211,7 @@ CAmount GetStakeReward(CAmount blockReward, unsigned int percentage)
 {
     return (blockReward / 100) * percentage;
 }
+
 bool CWallet::CreateCoinStakeKernel(CScript &kernelScript, const CScript &stakeScript,
                                     unsigned int nBits, const CBlock &blockFrom,
                                     unsigned int nTxPrevOffset, const CTransactionRef &txPrev,
@@ -242,6 +243,7 @@ bool CWallet::CreateCoinStakeKernel(CScript &kernelScript, const CScript &stakeS
     }
     return false;
 }
+
 void CWallet::FillCoinStakePayments(CMutableTransaction &transaction,
                                     const CScript &scriptPubKeyOut,
                                     const COutPoint &stakePrevout,
@@ -4061,13 +4063,6 @@ bool CWallet::CreateCoinStake(unsigned int nBits, CAmount blockReward, CMutableT
     CScript scriptEmpty;
     scriptEmpty.clear();
     txNew.vout.emplace_back(CTxOut(0, scriptEmpty));
-
-    //Disable POS temporarily
-    int nBlockHeight = chainActive.Tip()->nHeight + 1;
-    if (nBlockHeight > 1837000 && nBlockHeight < 1944750){
-        LogPrintf("CreateCoinStake : PoS temporarily disabled\n");
-        return false;
-    }
 
     // Choose coins to use
     CAmount nBalance = GetBalance();
