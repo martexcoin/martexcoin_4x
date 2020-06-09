@@ -352,15 +352,14 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
             return DarkGravityWave(pindexLast, fProofOfStake);
 	}else if ((Params().NetworkIDString() == CBaseChainParams::TESTNET) && pindexLast->nHeight + 1 > 252580){ //VRX Teste
             return Terminal_Velocity_RateX(pindexLast, fProofOfStake);
-	}else if ((Params().NetworkIDString() == CBaseChainParams::MAIN) && pindexLast->nHeight >= Params().GetConsensus().nPowDGWHeight){
+	}else if ((Params().NetworkIDString() == CBaseChainParams::MAIN) && pindexLast->nHeight >= Params().GetConsensus().nPowDGWHeight && pindexLast->nHeight <= 1948358){
             return DarkGravityWave(pindexLast, fProofOfStake);
-  	}else{
+  	}else if ((Params().NetworkIDString() == CBaseChainParams::MAIN) && pindexLast->nHeight > 1948358){
   	    return GetNextTargetRequired_new(pindexLast, fProofOfStake);
         }
     }else{
       return GetNextTargetRequired_legacy(pindexLast, fProofOfStake);
     }
-
 }
 
 unsigned int GetNextWorkRequiredBTC(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
