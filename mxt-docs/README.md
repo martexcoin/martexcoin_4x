@@ -43,22 +43,6 @@ Anonymous transactions
 ```
 *** 
 
-### Wiki Index
-
-Tutorial    | Description        | Link
-------------|--------------------|--------
-General OS  | How to Update      | [Go](https://github.com/martexcoin/martexcoin/wiki/How-to-update-wallet)
-Linux       | Build Wallet       | [Go](https://github.com/martexcoin/martexcoin/wiki/How-to-compile-MarteXd-on-Linux)
-Linux       | Create Masternode in VPS | [Go](https://github.com/martexcoin/martexcoin/wiki/How-to-create-MarteXd-Masternode-Linux-VPS)
-Windows     | Create Masternode in VPS | [Go](https://github.com/martexcoin/martexcoin/wiki/How-to-Create-MarteXd-Masternode-in-Windows-VPS)
-Backup      | How to backup | [Go](https://github.com/martexcoin/martexcoin/wiki/How-to-make-an-Backup)
-Linux | Protection Against DDoS | [Go](https://github.com/martexcoin/martexcoin/wiki/How-to-protect-your-Masternode-VPS-against-DDoS-attack---Linux)
-Development | PHP connection to RPC | [Go](https://github.com/martexcoin/martexcoin/wiki/PHP-RPC)
-Development | RPC commands | [Go](https://github.com/martexcoin/martexcoin/wiki/RPC-commands)
-Development | Wallet commands | [Go](https://github.com/martexcoin/martexcoin/wiki/Wallet-command-list)
-
-
-***
 
 ### Block reward
 
@@ -97,10 +81,10 @@ RPC Port    | Network
 
 #Official documentations
 
- - Better user documentation is being made in the following repository::[User documentation](https://github.com/MarteXcoin-documentation/Documentation)
+ - Better user documentation is being made in the following repository[User documentation](https://github.com/MarteXcoin-documentation/Documentation)
  
  - In the future we will create a repository called documents in martexcoin.
  
- - Documentation for developers is present in the following directory:[Development documents](https://github.com/martexcoin/martexcoin/tree/master/doc)
+ - Documentation for developers is present in the following directory[Development documents](https://github.com/martexcoin/martexcoin/tree/master/doc)
 
-- New proposals for MarsXcoin is present in the following directory:[MarteXCoin Proposal](https://github.com/martexcoin/proposal)
+- New proposals for MarsXcoin is present in the following directory[MarteXCoin Proposal](https://github.com/martexcoin/proposal)
