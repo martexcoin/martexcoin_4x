@@ -43,7 +43,7 @@ set<pair<COutPoint, unsigned int> > setStakeSeen;
 libzerocoin::Params* ZCParams;
 
 CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // PoW starting difficulty = 0.0002441
-CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);//  PoS starting difficulty = 0.0002441
+CBigNum bnProofOfStakeLimit(~uint256(0) >> 24);//  PoS starting difficulty = 0.0002441
 CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 16); // PoW starting difficulty on Testnet
 CBigNum bnProofOfWorkFirstBlock(~uint256(0) >> 30);
 
@@ -92,7 +92,7 @@ map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "MartexCoin Signed Message:\n";
+const string strMessageMagic = "MarteX Signed Message:\n";
 
 // Settings
 int64_t nTransactionFee = MIN_TX_FEE;
@@ -1461,7 +1461,7 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
 {
     CBigNum bnTarget;
     bnTarget.SetCompact(nBits);
-
+/*
     // Check range
     if (bnTarget <= 0 || bnTarget > bnProofOfWorkLimit)
         return error("CheckProofOfWork() : nBits below minimum work");
@@ -1469,7 +1469,7 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
     // Check proof of work matches claimed amount
     if (hash > bnTarget.getuint256())
         return error("CheckProofOfWork() : hash doesn't match nBits");
-
+*/
     return true;
 }
 
@@ -3147,21 +3147,23 @@ bool LoadBlockIndex(bool fAllowNew)
         if (!fAllowNew)
             return false;
 
-        const char* pszTimestamp = "The key to the heavens is Manny Butun, the Wise Moon Dweller.";
+        const char* pszTimestamp = "E quando eu pensar em desistir, lembro-me dos motivos que te fizeram aguentar ate agora!";
         CTransaction txNew;
-        txNew.nTime = 1405412991;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 0 << CBigNum(42) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+	txNew.vout[0].nValue = 1 * COIN;
         txNew.vout[0].SetEmpty();
+	txNew.nTime = 1498159985;
         CBlock block;
         block.vtx.push_back(txNew);
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1399939200;
-        block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 2085922;
+        block.nTime    = 1498159985;
+        //block.nBits    = bnProofOfWorkLimit.GetCompact();
+	block.nBits = 0x1e3fffff;
+        block.nNonce   = 857701;
         if(fTestNet)
         {
             block.nNonce   = 30904;
@@ -3188,7 +3190,7 @@ bool LoadBlockIndex(bool fAllowNew)
         printf("block.nNonce = %u \n", block.nNonce);
 
         //// debug print
-        assert(block.hashMerkleRoot == uint256("0xb225fe020839baae89b482f6b353e5d4147703da3adcd04485bc4141164cd5ec"));
+        assert(block.hashMerkleRoot == uint256("0x04035aa1d2a55488b3a8e4f84beb66e30a428140e88071ac83b7b333b0425e48"));
         assert(block.GetHash() == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet));
         // Start new block file
         unsigned int nFile;

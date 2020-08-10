@@ -307,6 +307,7 @@ void ProcessMessageAnonsend(CNode* pfrom, std::string& strCommand, CDataStream& 
 
             //if(!AcceptableInputs(mempool, state, tx)){
             bool* pfMissingInputs;
+            //bool pfMissingInputs = false;
 	    if(!AcceptableInputs(mempool, tx, false, pfMissingInputs)){
                 printf("dsi -- transaction not valid! \n");
                 error = _("Transaction not valid.");
@@ -977,7 +978,8 @@ bool CAnonSendPool::IsCollateralValid(const CTransaction& txCollateral){
     if(fDebug) printf("CAnonSendPool::IsCollateralValid %s\n", txCollateral.ToString().c_str());
 
     //if(!AcceptableInputs(mempool, state, txCollateral)){
-    bool* pfMissingInputs = false;
+    //bool pfMissingInputs = false;
+    bool* pfMissingInputs;
     if(!AcceptableInputs(mempool, txCollateral, false, pfMissingInputs)){
         if(fDebug) printf ("CAnonSendPool::IsCollateralValid - didn't pass IsAcceptable\n");
         return false;
@@ -1158,6 +1160,7 @@ void CAnonSendPool::SendAnonsendDenominate(std::vector<CTxIn>& vin, std::vector<
 
         //if(!AcceptableInputs(mempool, state, tx)){
 	bool* pfMissingInputs;
+	//bool pfMissingInputs = false;
 	if(!AcceptableInputs(mempool, tx, false, pfMissingInputs)){
             printf("dsi -- transaction not valid! %s \n", tx.ToString().c_str());
             return;
