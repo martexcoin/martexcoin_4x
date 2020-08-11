@@ -1,8 +1,8 @@
 Source: martex
 Section: utils
 Priority: optional
-Maintainer: Holger Schinzel <holger@martexcoin.org>
-Uploaders: Holger Schinzel <holger@martexcoin.org>
+Maintainer: Holger Schinzel <holger@martex.org>
+Uploaders: Holger Schinzel <holger@martex.org>
 Build-Depends: debhelper,
  devscripts,
  automake,
@@ -27,8 +27,8 @@ Build-Depends: debhelper,
  libzmq3-dev
 Standards-Version: 3.9.2
 Homepage: https://www.martexcoin.org/
-Vcs-Git: git://github.com/martexcoin/martexcoin.git
-Vcs-Browser: https://github.com/martexcoin/martexcoin
+Vcs-Git: git://github.com/martexcoin/martex.git
+Vcs-Browser: https://github.com/martexcoin/martex
 
 Package: martexd
 Architecture: any

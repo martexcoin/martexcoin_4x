@@ -303,7 +303,7 @@ void CTxMemPool::UpdateForRemoveFromMempool(const setEntries &entriesToRemove, b
         // should be a bit faster.
         // However, if we happen to be in the middle of processing a reorg, then
         // the mempool can be in an inconsistent state.  In this case, the set
-        // of ancestors reachable via mapLinks will be the same as the set of
+        // of ancestors reachable via mapLinks will be the same as the set of 
         // ancestors whose packages include this transaction, because when we
         // add a new transaction to the mempool in addUnchecked(), we assume it
         // has no children, and in the case of a reorg where that assumption is
@@ -691,6 +691,9 @@ void CTxMemPool::removeForReorg(const CCoinsViewCache *pcoins, unsigned int nMem
     // Remove transactions spending a coinbase which are now immature and no-longer-final transactions
     LOCK(cs);
     setEntries txToRemove;
+    int nCbMaturity = (GetTime() <= (!(Params().NetworkIDString() == CBaseChainParams::TESTNET) ? NEW_MATURITY_SWITCH_TIME : NEW_MATURITY_SWITCH_TIME_TESTNET) ? COINBASE_MATURITY : COINBASE_MATURITY_NEW);
+    if((Params().NetworkIDString() == CBaseChainParams::TESTNET))
+        nCbMaturity = COINBASE_MATURITY_TESTNET;
     for (indexed_transaction_set::const_iterator it = mapTx.begin(); it != mapTx.end(); it++) {
         const CTransaction& tx = it->GetTx();
         LockPoints lp = it->GetLockPoints();
@@ -706,7 +709,6 @@ void CTxMemPool::removeForReorg(const CCoinsViewCache *pcoins, unsigned int nMem
                     continue;
                 const Coin &coin = pcoins->AccessCoin(txin.prevout);
                 if (nCheckFrequency != 0) assert(!coin.IsSpent());
-                int nCbMaturity = (GetTime() <= (!(Params().NetworkIDString() == CBaseChainParams::TESTNET) ? NEW_MATURITY_SWITCH_TIME : NEW_MATURITY_SWITCH_TIME_TESTNET) ? nCoinbaseMaturity : nCoinbaseMaturity_NEW);
                 if (coin.IsSpent() || (coin.IsCoinBase() && ((signed long)nMemPoolHeight) - coin.nHeight < nCbMaturity)) {
                     txToRemove.insert(it);
                     break;
@@ -1041,7 +1043,7 @@ CTxMemPool::WriteFeeEstimates(CAutoFile& fileout) const
 {
     try {
         LOCK(cs);
-        fileout << 3000000; // version required to read: 3.0.0.0 or later
+        fileout << 120300; // version required to read: 0.12.00 or later
         fileout << CLIENT_VERSION; // version that wrote the file
         minerPolicyEstimator->Write(fileout);
     }
@@ -1135,7 +1137,7 @@ bool CCoinsViewMemPool::GetCoin(const COutPoint &outpoint, Coin &coin) const {
     CTransactionRef ptx = mempool.get(outpoint.hash);
     if (ptx) {
         if (outpoint.n < ptx->vout.size()) {
-            coin = Coin(ptx->vout[outpoint.n], MEMPOOL_HEIGHT, false);
+            coin = Coin(ptx->vout[outpoint.n], MEMPOOL_HEIGHT, false, false);
             return true;
         } else {
             return false;

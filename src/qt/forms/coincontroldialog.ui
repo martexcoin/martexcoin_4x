@@ -448,7 +448,7 @@
      </column>
      <column>
       <property name="text">
-       <string>FS Rounds</string>
+       <string>PS Rounds</string>
       </property>
      </column>
      <column>

@@ -164,26 +164,26 @@ public:
         return (nValue == -1);
     }
 
+    bool IsEmpty() const
+    {
+        return (nValue == 0 && scriptPubKey.empty());
+    }
     void SetEmpty()
     {
         nValue = 0;
         scriptPubKey.clear();
     }
 
-    bool IsEmpty() const
-    {
-        return (nValue == 0 && scriptPubKey.empty());
-    }
 
     CAmount GetDustThreshold(const CFeeRate &minRelayTxFee) const
     {
-        // "Dust" is defined in terms of CTransaction::minRelayTxFee, which has units valverde-per-kilobyte.
+        // "Dust" is defined in terms of CTransaction::minRelayTxFee, which has units valverdes-per-kilobyte.
         // If you'd pay more than 1/3 in fees to spend something, then we consider it dust.
         // A typical spendable txout is 34 bytes big, and will need a CTxIn of at least 148 bytes to spend
-        // i.e. total is 148 + 32 = 182 bytes. Default -minrelaytxfee is 1000 valverde per kB
-        // and that means that fee per spendable txout is 182 * 1000 / 1000 = 182 valverde.
-        // So dust is a spendable txout less than 546 * minRelayTxFee / 1000 (in valverde)
-        // i.e. 182 * 3 = 546 valverde with default -minrelaytxfee = minRelayTxFee = 1000 valverde per kB.
+        // i.e. total is 148 + 32 = 182 bytes. Default -minrelaytxfee is 1000 valverdes per kB
+        // and that means that fee per spendable txout is 182 * 1000 / 1000 = 182 valverdes.
+        // So dust is a spendable txout less than 546 * minRelayTxFee / 1000 (in valverdes)
+        // i.e. 182 * 3 = 546 valverdes with default -minrelaytxfee = minRelayTxFee = 1000 valverdes per kB.
         if (scriptPubKey.IsUnspendable())
             return 0;
 
@@ -265,7 +265,7 @@ public:
     template <typename Stream>
     inline void Serialize(Stream& s) const {
         s << this->nVersion;
-        s << nTime;
+	s << nTime;
         s << vin;
         s << vout;
         s << nLockTime;
@@ -307,6 +307,12 @@ public:
         return (vin.size() == 1 && vin[0].prevout.IsNull());
     }
 
+    bool IsCoinStake() const
+    {
+        // ppcoin: the coin stake transaction is marked with the first output empty
+        return (vin.size() > 0 && (!vin[0].prevout.IsNull()) && vout.size() >= 2 && vout[0].IsEmpty());
+    }
+
     friend bool operator==(const CTransaction& a, const CTransaction& b)
     {
         return a.hash == b.hash;
@@ -315,12 +321,6 @@ public:
     friend bool operator!=(const CTransaction& a, const CTransaction& b)
     {
         return a.hash != b.hash;
-    }
-
-    bool IsCoinStake() const
-    {
-        // ppcoin: the coin stake transaction is marked with the first output empty
-        return (vin.size() > 0 && (!vin[0].prevout.IsNull()) && vout.size() >= 2 && vout[0].IsEmpty());
     }
 
     std::string ToString() const;
@@ -343,7 +343,7 @@ struct CMutableTransaction
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action) {
         READWRITE(this->nVersion);
-        READWRITE(nTime);
+	READWRITE(nTime);
         READWRITE(vin);
         READWRITE(vout);
         READWRITE(nLockTime);

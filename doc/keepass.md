@@ -37,13 +37,13 @@ Sample initialization flow from _martex-qt_ console (this needs to be done only 
  - Start _martex-qt_
  - Open console
  - Type "_keepass init_" in martex-qt console
- - Keepass pops up and asks for an association id, fill that in, for example, "_mymxtwallet_"
- - You should get a response like this "_Association successful. Id: mymxtwalletmartex - Key: AgQkcs6cI7v9tlSYKjG/+s8wJrGALHl3jLosJpPLzUE=_"
- - Edit _MarteX.conf_ and fill in these values
+ - Keepass pops up and asks for an association id, fill that in, for example, "_mydrkwallet_"
+ - You should get a response like this "_Association successful. Id: mydrkwalletmartex - Key: AgQkcs6cI7v9tlSYKjG/+s8wJrGALHl3jLosJpPLzUE=_"
+ - Edit _martex.conf_ and fill in these values
 ```
 keepass=1
 keepasskey=AgQkcs6cI7v9tlSYKjG/+s8wJrGALHl3jLosJpPLzUE=
-keepassid=mymxtwallet
+keepassid=mydrkwallet
 keepassname=testwallet
 ```
  - Restart _martex-qt_

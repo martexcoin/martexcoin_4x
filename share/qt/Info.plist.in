@@ -71,7 +71,7 @@
         <string>application/x-martex-payment-request</string>
         <key>public.filename-extension</key>
         <array>
-          <string>martexpaymentrequest</string>
+          <string>martexcoinmentrequest</string>
         </array>
       </dict>
     </dict>

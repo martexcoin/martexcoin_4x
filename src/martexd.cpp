@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2017 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -33,8 +33,8 @@
  *
  * \section intro_sec Introduction
  *
- * This is the developer documentation of the reference client for an experimental new digital currency called MarteX (https://www.martexcoin.org/),
- * which enables instant payments to anyone, anywhere in the world. MarteX uses peer-to-peer technology to operate
+ * This is the developer documentation of the reference client for an experimental new digital currency called martex (https://www.martexcoin.org/),
+ * which enables instant payments to anyone, anywhere in the world. martex uses peer-to-peer technology to operate
  * with no central authority: managing transactions and issuing money are carried out collectively by the network.
  *
  * The software is a community-driven open source project, released under the MIT license.
@@ -73,7 +73,7 @@ bool AppInit(int argc, char* argv[])
     //
     // Parameters
     //
-    // If Qt is used, parameters/MarteX.conf are parsed in qt/martex.cpp's main()
+    // If Qt is used, parameters/martex.conf are parsed in qt/martex.cpp's main()
     ParseParameters(argc, argv);
 
     // Process help and version before taking care about datadir

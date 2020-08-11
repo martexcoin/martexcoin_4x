@@ -38,13 +38,14 @@ public:
     void showOutOfSyncWarning(bool fShow);
 
 public Q_SLOTS:
-    void anonSendStatus();
-    void setBalance(const CAmount& balance, const CAmount& stake, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, const CAmount& anonymizedBalance,
-                    const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
+    void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, const CAmount& anonymizedBalance,
+                    const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance, const CAmount& stakeBalance, const int stakeInputs);
+    void setBlockChainInfo(int count, const QDateTime& blockDate, double nVerificationProgress, bool headers);
 
 Q_SIGNALS:
     void transactionClicked(const QModelIndex &index);
     void outOfSyncWarningClicked();
+
 
 private:
     QTimer *timer;
@@ -52,9 +53,10 @@ private:
     ClientModel *clientModel;
     WalletModel *walletModel;
     CAmount currentBalance;
-    CAmount currentStakeBalance;
     CAmount currentUnconfirmedBalance;
     CAmount currentImmatureBalance;
+    CAmount currentStakeBalance;
+    int currentStakeInputs;
     CAmount currentAnonymizedBalance;
     CAmount currentWatchOnlyBalance;
     CAmount currentWatchUnconfBalance;
@@ -69,12 +71,7 @@ private:
     void DisableAnonSendCompletely();
 
 private Q_SLOTS:
-    void toggleAnonSend();
-    void anonSendAuto();
-    void anonSendReset();
-    void anonSendInfo();
     void updateDisplayUnit();
-    void updateAnonSendProgress();
     void updateAdvancedPSUI(bool fShowAdvancedPSUI);
     void handleTransactionClicked(const QModelIndex &index);
     void updateAlerts(const QString &warnings);
@@ -83,3 +80,5 @@ private Q_SLOTS:
 };
 
 #endif // BITCOIN_QT_OVERVIEWPAGE_H
+
+

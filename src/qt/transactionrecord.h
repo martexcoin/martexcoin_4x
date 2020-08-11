@@ -76,18 +76,19 @@ public:
     {
         Other,
         Generated,
+        StakeMint,
         SendToAddress,
         SendToOther,
         RecvWithAddress,
         RecvFromOther,
         SendToSelf,
-        StakeMint,
         RecvWithAnonSend,
         AnonSendDenominate,
         AnonSendCollateralPayment,
         AnonSendMakeCollaterals,
         AnonSendCreateDenominations,
-        AnonSend
+        AnonSend,
+        MNReward
     };
 
     /** Number of confirmation recommended for accepting a transaction */

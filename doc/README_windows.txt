@@ -1,4 +1,4 @@
-MarteX Core 3.0.0
+MarteX Core 0.12.1
 =====================
 
 Intro
@@ -19,5 +19,5 @@ depending on the speed of your computer and network connection, the synchronizat
 process can take anywhere from a few hours to a day or more.
 
 See the martex wiki at:
-  https://martexcoin.org/wiki/
+  https://martexcoin.atlassian.net/wiki/
 for more help and information.

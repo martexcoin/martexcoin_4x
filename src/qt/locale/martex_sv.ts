@@ -58,12 +58,12 @@
         <translation>Mottagaradresser</translation>
     </message>
     <message>
-        <source>These are your MarteX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>De här är dina MarteX-adresser för att skicka betalningar. Kontrollera alltid mängden och mottagaradressen innan du skickar mynt.</translation>
+        <source>These are your martex addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>De här är dina martex-adresser för att skicka betalningar. Kontrollera alltid mängden och mottagaradressen innan du skickar mynt.</translation>
     </message>
     <message>
-        <source>These are your MarteX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>De här är dina MarteX-adresser för betalningsmottagningar. Det rekommenderas att använda en ny mottagaradress för varje transaktion.</translation>
+        <source>These are your martex addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>De här är dina martex-adresser för betalningsmottagningar. Det rekommenderas att använda en ny mottagaradress för varje transaktion.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -164,8 +164,8 @@
         <translation>Bekräfta plånbokskryptering</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR MXT&lt;/b&gt;!</source>
-        <translation>Varning: Om du krypterar din plånbok och förlorar din lösenfras kommer du att &lt;b&gt;FÖRLORA ALLA DINA MXT&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR martex&lt;/b&gt;!</source>
+        <translation>Varning: Om du krypterar din plånbok och förlorar din lösenfras kommer du att &lt;b&gt;FÖRLORA ALLA DINA martex&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -176,11 +176,11 @@
         <translation>Plånbok krypterad</translation>
     </message>
     <message>
-        <source>MarteX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your martexs from being stolen by malware infecting your computer.</source>
-        <translation>MarteX kommer nu att färdigställa krypteringsprocessen. Kom ihåg att krypteringen av din plånbok inte kan skydda dig helt och hållet från att dina MarteX stjäls av skadeprogram som har infekterat din dator.</translation>
+        <source>martex will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your martexs from being stolen by malware infecting your computer.</source>
+        <translation>martex kommer nu att färdigställa krypteringsprocessen. Kom ihåg att krypteringen av din plånbok inte kan skydda dig helt och hållet från att dina martex stjäls av skadeprogram som har infekterat din dator.</translation>
     </message>
     <message>
-        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
+        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replmartex with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
         <translation>VIKTIGT: Alla tidigare säkerhetskopior du har gjort av plånboksfilen bör ersättas med den nygenererade krypterade plånboksfilen. Av säkerhetsskäl kommer tidigare säkerhetskopior av den okrypterade plånboksfilen bli oanvändbara så fort du använder den nya krypterade plånboken.</translation>
     </message>
     <message>
@@ -219,8 +219,8 @@
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core
+        <source>martex Core</source>
+        <translation>martex Core
 </translation>
     </message>
     <message>
@@ -244,8 +244,8 @@
         <translation>&amp;Skicka</translation>
     </message>
     <message>
-        <source>Send coins to a MarteX address</source>
-        <translation>Skicka mynt till en MarteX-adress</translation>
+        <source>Send coins to a martex address</source>
+        <translation>Skicka mynt till en martex-adress</translation>
     </message>
     <message>
         <source>&amp;Receive</source>
@@ -253,7 +253,7 @@
     </message>
     <message>
         <source>Request payments (generates QR codes and martex: URIs)</source>
-        <translation>Begär betalningar (genererar QR-koder och MarteX:-URI:s)</translation>
+        <translation>Begär betalningar (genererar QR-koder och martex:-URI:s)</translation>
     </message>
     <message>
         <source>&amp;Transactions</source>
@@ -272,8 +272,8 @@
         <translation>Avsluta applikationen</translation>
     </message>
     <message>
-        <source>&amp;About MarteX Core</source>
-        <translation>&amp;Om MarteX Core</translation>
+        <source>&amp;About martex Core</source>
+        <translation>&amp;Om martex Core</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
@@ -288,8 +288,8 @@
         <translation>&amp;Alternativ...</translation>
     </message>
     <message>
-        <source>Modify configuration options for MarteX</source>
-        <translation>Anpassa konfigurationsalternatv för MarteX</translation>
+        <source>Modify configuration options for martex</source>
+        <translation>Anpassa konfigurationsalternatv för martex</translation>
     </message>
     <message>
         <source>&amp;Show / Hide</source>
@@ -340,16 +340,16 @@
         <translation>Signera &amp;meddelande...</translation>
     </message>
     <message>
-        <source>Sign messages with your MarteX addresses to prove you own them</source>
-        <translation>Signera meddelanden med dina MarteX-adresser för att bevisa att du äger dem</translation>
+        <source>Sign messages with your martex addresses to prove you own them</source>
+        <translation>Signera meddelanden med dina martex-adresser för att bevisa att du äger dem</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
         <translation>&amp;Bekräfta meddelande...</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified MarteX addresses</source>
-        <translation>Bekräfta meddelanden för att garantera att de signerades med de angivna MarteX-adresserna</translation>
+        <source>Verify messages to ensure they were signed with specified martex addresses</source>
+        <translation>Bekräfta meddelanden för att garantera att de signerades med de angivna martex-adresserna</translation>
     </message>
     <message>
         <source>&amp;Information</source>
@@ -405,15 +405,15 @@
     </message>
     <message>
         <source>Open a martex: URI or payment request</source>
-        <translation>Öppna en MarteX-URI eller betalningsbegäran</translation>
+        <translation>Öppna en martex-URI eller betalningsbegäran</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
         <translation>&amp;Kommandoradalternativ</translation>
     </message>
     <message>
-        <source>Show the MarteX Core help message to get a list with possible MarteX command-line options</source>
-        <translation>Visa MarteX Core-hjälpmeddelandet för att få en lista med möjliga MarteX-kommandoradalternativ</translation>
+        <source>Show the martex Core help message to get a list with possible martex command-line options</source>
+        <translation>Visa martex Core-hjälpmeddelandet för att få en lista med möjliga martex-kommandoradalternativ</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -758,28 +758,28 @@ Adress: %4
         <translation>Vänligen välj en integritetsnivå.</translation>
     </message>
     <message>
-        <source>Use 2 separate masternodes to mix funds up to 1000 MXT</source>
-        <translation>Använd 2 enskilda masternoder för att mixa medel upp till 1000 MXT</translation>
+        <source>Use 2 separate masternodes to mix funds up to 1000 martex</source>
+        <translation>Använd 2 enskilda masternoder för att mixa medel upp till 1000 martex</translation>
     </message>
     <message>
-        <source>Use 8 separate masternodes to mix funds up to 1000 MXT</source>
-        <translation>Använd 8 enskilda masternoder för att mixa medel upp till 1000 MXT.</translation>
+        <source>Use 8 separate masternodes to mix funds up to 1000 martex</source>
+        <translation>Använd 8 enskilda masternoder för att mixa medel upp till 1000 martex.</translation>
     </message>
     <message>
         <source>Use 16 separate masternodes</source>
         <translation>Använd 16 enskilda masternoder</translation>
     </message>
     <message>
-        <source>This option is the quickest and will cost about ~0.025 MXT to anonymize 1000 MXT</source>
-        <translation>Detta alternativ är det snabbaste och kommer att kosta omkring ~0,025 MXT för att anonymisera 1000 MXT</translation>
+        <source>This option is the quickest and will cost about ~0.025 martex to anonymize 1000 martex</source>
+        <translation>Detta alternativ är det snabbaste och kommer att kosta omkring ~0,025 martex för att anonymisera 1000 martex</translation>
     </message>
     <message>
-        <source>This option is moderately fast and will cost about 0.05 MXT to anonymize 1000 MXT</source>
-        <translation>Detta alternativ är relativt snabbt och kommer att kosta omkring 0,05 MXT för att anonymisera 1000 MXT</translation>
+        <source>This option is moderately fast and will cost about 0.05 martex to anonymize 1000 martex</source>
+        <translation>Detta alternativ är relativt snabbt och kommer att kosta omkring 0,05 martex för att anonymisera 1000 martex</translation>
     </message>
     <message>
-        <source>0.1 MXT per 1000 MXT you anonymize.</source>
-        <translation>0,1 MXT per 1000 MXT du anonymiserar.</translation>
+        <source>0.1 martex per 1000 martex you anonymize.</source>
+        <translation>0,1 martex per 1000 martex du anonymiserar.</translation>
     </message>
     <message>
         <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
@@ -790,16 +790,16 @@ Adress: %4
         <translation>Anonsend-konfiguration</translation>
     </message>
     <message>
-        <source>Anonsend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>Anonsend ställdes framgångsrikt om till grundläggande (%1 och 2 omgångar). Du kan ändra detta när som helst genom att öppna MarteX:s konfigurationsskärm.</translation>
+        <source>Anonsend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>Anonsend ställdes framgångsrikt om till grundläggande (%1 och 2 omgångar). Du kan ändra detta när som helst genom att öppna martex:s konfigurationsskärm.</translation>
     </message>
     <message>
-        <source>Anonsend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>Anonsend ställdes framgångsrikt in på hög (%1 och 8 omgångar). Du kan ändra detta när som helst genom att öppna MarteX:s konfigurationsskärm.</translation>
+        <source>Anonsend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>Anonsend ställdes framgångsrikt in på hög (%1 och 8 omgångar). Du kan ändra detta när som helst genom att öppna martex:s konfigurationsskärm.</translation>
     </message>
     <message>
-        <source>Anonsend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>Anonsend ställdes framgångsrikt in på maximal (%1 och 16 omgångar). Du kan ändra detta när som helst genom att öppna MarteX:s konfigurationsskärm</translation>
+        <source>Anonsend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>Anonsend ställdes framgångsrikt in på maximal (%1 och 16 omgångar). Du kan ändra detta när som helst genom att öppna martex:s konfigurationsskärm</translation>
     </message>
 </context>
 <context>
@@ -841,8 +841,8 @@ Adress: %4
         <translation>Redigera avsändaradress</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid MarteX address.</source>
-        <translation>Den angivna adressen "%1" är inte en giltig MarteX-adress.</translation>
+        <source>The entered address "%1" is not a valid martex address.</source>
+        <translation>Den angivna adressen "%1" är inte en giltig martex-adress.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -883,8 +883,8 @@ Adress: %4
 <context>
     <name>HelpMessageDialog</name>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core
+        <source>martex Core</source>
+        <translation>martex Core
 </translation>
     </message>
     <message>
@@ -931,16 +931,16 @@ Adress: %4
         <translation>Välkommen</translation>
     </message>
     <message>
-        <source>Welcome to MarteX Core.</source>
-        <translation>Välkommen till MarteX Core.</translation>
+        <source>Welcome to martex Core.</source>
+        <translation>Välkommen till martex Core.</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where MarteX Core will store its data.</source>
-        <translation>Då detta är första gången programmet startas kan du välja var MarteX Core ska lagra sin data.</translation>
+        <source>As this is the first time the program is launched, you can choose where martex Core will store its data.</source>
+        <translation>Då detta är första gången programmet startas kan du välja var martex Core ska lagra sin data.</translation>
     </message>
     <message>
-        <source>MarteX Core will download and store a copy of the MarteX block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>MarteX Core kommer att laddas ned och lagra en kopia av MarteX:s blockkedja. Minst %1 GB data kommer att lagras i denna katalog och den kommer att växa med tiden. Plånboken kommer också att lagras i denna katalog.</translation>
+        <source>martex Core will download and store a copy of the martex block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>martex Core kommer att laddas ned och lagra en kopia av martex:s blockkedja. Minst %1 GB data kommer att lagras i denna katalog och den kommer att växa med tiden. Plånboken kommer också att lagras i denna katalog.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -989,12 +989,12 @@ Adress: %4
         <translation>&amp;Huvud</translation>
     </message>
     <message>
-        <source>Automatically start MarteX after logging in to the system.</source>
-        <translation>Starta MarteX automatiskt efter systeminloggning.</translation>
+        <source>Automatically start martex after logging in to the system.</source>
+        <translation>Starta martex automatiskt efter systeminloggning.</translation>
     </message>
     <message>
-        <source>&amp;Start MarteX on system login</source>
-        <translation>&amp;Starta MarteX vid systeminloggning</translation>
+        <source>&amp;Start martex on system login</source>
+        <translation>&amp;Starta martex vid systeminloggning</translation>
     </message>
     <message>
         <source>Size of &amp;database cache</source>
@@ -1021,8 +1021,8 @@ Adress: %4
         <translation>Denna mängd fungerar som en tröskel att stänga av Anonsend då det har uppnåtts.</translation>
     </message>
     <message>
-        <source>Amount of MarteX to keep anonymized</source>
-        <translation>Mängd MarteX att bibehålla anonymiserade</translation>
+        <source>Amount of martex to keep anonymized</source>
+        <translation>Mängd martex att bibehålla anonymiserade</translation>
     </message>
     <message>
         <source>W&amp;allet</source>
@@ -1049,8 +1049,8 @@ Adress: %4
         <translation>&amp;Nätverk</translation>
     </message>
     <message>
-        <source>Automatically open the MarteX client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Öppna MarteX:s klientport automatiskt på routern. Detta fungerar bara om din router stöder UPnP och är aktiverad.</translation>
+        <source>Automatically open the martex client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Öppna martex:s klientport automatiskt på routern. Detta fungerar bara om din router stöder UPnP och är aktiverad.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1101,8 +1101,8 @@ Adress: %4
         <translation>Användargränssnitt&amp;språk: </translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting MarteX.</source>
-        <translation>Användargränssnittspråket kan ställas in här. Denna inställning träder i kraft efter att MarteX startats om.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting martex.</source>
+        <translation>Användargränssnittspråket kan ställas in här. Denna inställning träder i kraft efter att martex startats om.</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
@@ -1119,7 +1119,7 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Välj standardindelningenheten som ska visas i gränssnittet och när mynt skickas.</translation>
     </message>
     <message>
-        <source>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</source>
+        <source>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items. %s in the URL is replmartex by transaction hash. Multiple URLs are separated by vertical bar |.</source>
         <translation>Tredjeparts-URL:er (t.ex. en blockutforskare) som finns i transaktionstabben som ett menyval i sammanhanget. %s i URL:en ersätts med transaktionshashen. Flera URL:er är avskilda med det vertikala strecket: |.</translation>
     </message>
     <message>
@@ -1182,8 +1182,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Formulär</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the MarteX network after a connection is established, but this process has not completed yet.</source>
-        <translation>Den visade informationen kan vara utdaterad. Din plånbok synkroniseras automatiskt med MarteX-nätverket efter att en anslutning har etablerats men denna process har ännu inte slutförts.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the martex network after a connection is established, but this process has not completed yet.</source>
+        <translation>Den visade informationen kan vara utdaterad. Din plånbok synkroniseras automatiskt med martex-nätverket efter att en anslutning har etablerats men denna process har ännu inte slutförts.</translation>
     </message>
     <message>
         <source>Available:</source>
@@ -1238,8 +1238,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Mängd och omgångar:</translation>
     </message>
     <message>
-        <source>0 MXT / 0 Rounds</source>
-        <translation>0 MXT/0 omgångar</translation>
+        <source>0 martex / 0 Rounds</source>
+        <translation>0 martex/0 omgångar</translation>
     </message>
     <message>
         <source>Submitted Denom:</source>
@@ -1435,8 +1435,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Antal anslutningar</translation>
     </message>
     <message>
-        <source>Open the MarteX debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Öppna MarteXs avsökningsloggfil från den nuvarande datakatalogen. Detta kan ta ett par sekunder för stora loggfiler.</translation>
+        <source>Open the martex debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Öppna martexs avsökningsloggfil från den nuvarande datakatalogen. Detta kan ta ett par sekunder för stora loggfiler.</translation>
     </message>
     <message>
         <source>&amp;Open</source>
@@ -1507,8 +1507,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Ut:</translation>
     </message>
     <message>
-        <source>Welcome to the MarteX RPC console.</source>
-        <translation>Välkommen till MarteXs RPC-konsol.</translation>
+        <source>Welcome to the martex RPC console.</source>
+        <translation>Välkommen till martexs RPC-konsol.</translation>
     </message>
     <message>
         <source>Use up and down arrows to navigate history, and &lt;b&gt;Ctrl-L&lt;/b&gt; to clear screen.</source>
@@ -1542,8 +1542,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Åt&amp;eranvänd en befintlig mottagaradress (rekommenderas inte)</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the MarteX network.</source>
-        <translation>Ett valfritt meddelande att bifoga betalningsbegärandet vilket kommer att visas när begärandet öppnas. Observera: Meddelandet kommer inte att skickas med betalningen över MarteX-nätverket.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the martex network.</source>
+        <translation>Ett valfritt meddelande att bifoga betalningsbegärandet vilket kommer att visas när begärandet öppnas. Observera: Meddelandet kommer inte att skickas med betalningen över martex-nätverket.</translation>
     </message>
     <message>
         <source>&amp;Message:</source>
@@ -1795,8 +1795,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Anonsend</translation>
     </message>
     <message>
-        <source>FastSend</source>
-        <translation>FastSend</translation>
+        <source>FastsenD</source>
+        <translation>FastsenD</translation>
     </message>
     <message>
         <source>Balance:</source>
@@ -1847,8 +1847,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>vilka tillgängliga medel som helst (rekommenderas inte)</translation>
     </message>
     <message>
-        <source>and FastSend</source>
-        <translation>och FastSend</translation>
+        <source>and FastsenD</source>
+        <translation>och FastsenD</translation>
     </message>
     <message>
         <source>%1 to %2</source>
@@ -1899,8 +1899,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Fel: Plånboken låstes upp enbart för att anonymisera mynt.</translation>
     </message>
     <message>
-        <source>Warning: Invalid MarteX address</source>
-        <translation>Varning: Ogiltig MarteX-adress</translation>
+        <source>Warning: Invalid martex address</source>
+        <translation>Varning: Ogiltig martex-adress</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -1958,8 +1958,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Meddelande:</translation>
     </message>
     <message>
-        <source>A message that was attached to the martex: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the MarteX network.</source>
-        <translation>Ett meddelande som bifogades till MarteX: URI vilket kommer att lagras med transaktionen så att du vet. Observera: Meddelandet kommer inte att skickas över MarteX-nätverket.</translation>
+        <source>A message that was attached to the martex: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the martex network.</source>
+        <translation>Ett meddelande som bifogades till martex: URI vilket kommer att lagras med transaktionen så att du vet. Observera: Meddelandet kommer inte att skickas över martex-nätverket.</translation>
     </message>
     <message>
         <source>This is an unverified payment request.</source>
@@ -1985,8 +1985,8 @@ https://www.transifex.com/projects/p/martex/</translation>
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>MarteX Core is shutting down...</source>
-        <translation>MarteX Core stängs ned...</translation>
+        <source>martex Core is shutting down...</source>
+        <translation>martex Core stängs ned...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -2036,8 +2036,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Kopiera den nuvarande valda signaturen till systemurklippet</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this MarteX address</source>
-        <translation>Signera meddelandet för att bevisa att du äger denna MarteX-adress</translation>
+        <source>Sign the message to prove you own this martex address</source>
+        <translation>Signera meddelandet för att bevisa att du äger denna martex-adress</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -2060,8 +2060,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Skriv in signeringsadressen, meddelandet, (försäkra dig om att du kopierar linjeavbrott, mellanslag, flikar med mera) och signera nedtill för att verifiera meddelandet. Var försiktig med att inte läsa in mer i signaturen än vad som finns i det signerade meddelandet för att undvika att bli lurad av en mellanhandattack.</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified MarteX address</source>
-        <translation>Bekräfta meddelandet för att försäkra dig om att den signerades med den angivna MarteX-adressen</translation>
+        <source>Verify the message to ensure it was signed with the specified martex address</source>
+        <translation>Bekräfta meddelandet för att försäkra dig om att den signerades med den angivna martex-adressen</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -2127,8 +2127,8 @@ https://www.transifex.com/projects/p/martex/</translation>
 <context>
     <name>SplashScreen</name>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core
+        <source>martex Core</source>
+        <translation>martex Core
 </translation>
     </message>
     <message>
@@ -2140,8 +2140,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Bitcoin Core-utvecklarna</translation>
     </message>
     <message>
-        <source>The MarteX Core developers</source>
-        <translation>MarteX Core-utvecklarna</translation>
+        <source>The martex Core developers</source>
+        <translation>martex Core-utvecklarna</translation>
     </message>
     <message>
         <source>[testnet]</source>
@@ -2190,24 +2190,24 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>%1 bekräftelser</translation>
     </message>
     <message>
-        <source>%1/offline (FastSend verification in progress - %2 of %3 signatures)</source>
-        <translation>%1/offline (FastSend-bekräftelse under behandling - %2 av %3 signaturer)</translation>
+        <source>%1/offline (FastsenD verification in progress - %2 of %3 signatures)</source>
+        <translation>%1/offline (FastsenD-bekräftelse under behandling - %2 av %3 signaturer)</translation>
     </message>
     <message>
-        <source>%1/confirmed (FastSend verification in progress - %2 of %3 signatures )</source>
-        <translation>%1/bekräftad (FastSend-bekräftelse under behandling - %2 av %3 signaturer)</translation>
+        <source>%1/confirmed (FastsenD verification in progress - %2 of %3 signatures )</source>
+        <translation>%1/bekräftad (FastsenD-bekräftelse under behandling - %2 av %3 signaturer)</translation>
     </message>
     <message>
-        <source>%1 confirmations (FastSend verification in progress - %2 of %3 signatures)</source>
-        <translation>%1 bekräftelser (FastSend-bekräftelse under behandling - %2 av %3 signaturer)</translation>
+        <source>%1 confirmations (FastsenD verification in progress - %2 of %3 signatures)</source>
+        <translation>%1 bekräftelser (FastsenD-bekräftelse under behandling - %2 av %3 signaturer)</translation>
     </message>
     <message>
-        <source>%1/offline (FastSend verification failed)</source>
-        <translation>%1/offline (FastSend-bekräftelse misslyckades)</translation>
+        <source>%1/offline (FastsenD verification failed)</source>
+        <translation>%1/offline (FastsenD-bekräftelse misslyckades)</translation>
     </message>
     <message>
-        <source>%1/confirmed (FastSend verification failed)</source>
-        <translation>%1/bekräftad (FastSend-bekräftelse misslyckades)</translation>
+        <source>%1/confirmed (FastsenD verification failed)</source>
+        <translation>%1/bekräftad (FastsenD-bekräftelse misslyckades)</translation>
     </message>
     <message>
         <source>Status</source>
@@ -2662,8 +2662,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Sammanbind till fastställd adress och avlyssna alltid den. Använd [host]:port-notation för IPv6</translation>
     </message>
     <message>
-        <source>Cannot obtain a lock on data directory %s. MarteX Core is probably already running.</source>
-        <translation>Kan inte erhålla ett lås på datakatalog %s. MarteX Core körs förmodligen redan.</translation>
+        <source>Cannot obtain a lock on data directory %s. martex Core is probably already running.</source>
+        <translation>Kan inte erhålla ett lås på datakatalog %s. martex Core körs förmodligen redan.</translation>
     </message>
     <message>
         <source>Anonsend uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
@@ -2678,15 +2678,15 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Fel: Lyssnande på inkommande anslutningar misslyckades (avlyssna återkommande fel %s)</translation>
     </message>
     <message>
-        <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)</source>
+        <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replmartex by message)</source>
         <translation>Exekvera kommandot när ett viktigt larm mottas eller vi ser en jättelång förgrening (%s i cmd ersätts av ett meddelande)</translation>
     </message>
     <message>
-        <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
+        <source>Execute command when a wallet transaction changes (%s in cmd is replmartex by TxID)</source>
         <translation>Exekvera kommandot när en plånbokstransaktion ändras (%s i cmd ersätts av TxID) </translation>
     </message>
     <message>
-        <source>Execute command when the best block changes (%s in cmd is replaced by block hash)</source>
+        <source>Execute command when the best block changes (%s in cmd is replmartex by block hash)</source>
         <translation>Exekvera kommandot när det bästa blocket ändras (%s i cmd ersätts av blockhash)</translation>
     </message>
     <message>
@@ -2694,8 +2694,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>I detta läge kontrollerar -genproclimit hur många block som genereras omedelbart.</translation>
     </message>
     <message>
-        <source>FastSend requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</source>
-        <translation>FastSend kräver indatan med åtminstone 6 bekräftelser. Du kanske måste vänta ett par minuter och försöka igen.</translation>
+        <source>FastsenD requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</source>
+        <translation>FastsenD kräver indatan med åtminstone 6 bekräftelser. Du kanske måste vänta ett par minuter och försöka igen.</translation>
     </message>
     <message>
         <source>Name to construct url for KeePass entry that stores the wallet passphrase</source>
@@ -2718,16 +2718,16 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Detta är en förhandsutgiven testkompilering - använd på egen risk - använd inte för utvinning eller handlarapplikationer.</translation>
     </message>
     <message>
-        <source>Unable to bind to %s on this computer. MarteX Core is probably already running.</source>
-        <translation>Det går inte att binda till %s till denna dator. MarteX Core körs förmodligen redan.</translation>
+        <source>Unable to bind to %s on this computer. martex Core is probably already running.</source>
+        <translation>Det går inte att binda till %s till denna dator. martex Core körs förmodligen redan.</translation>
     </message>
     <message>
         <source>Unable to locate enough Anonsend denominated funds for this transaction.</source>
         <translation>Kunde inte hitta tillräckliga Anonsend-denominationsmedel för denna transaktion.</translation>
     </message>
     <message>
-        <source>Unable to locate enough Anonsend non-denominated funds for this transaction that are not equal 1000 MXT.</source>
-        <translation>Kunde inte hitta tillräckliga Anonsend-icke-denominationsmedel för denna transaktion som inte är likvärdiga 1000 MXT.</translation>
+        <source>Unable to locate enough Anonsend non-denominated funds for this transaction that are not equal 1000 martex.</source>
+        <translation>Kunde inte hitta tillräckliga Anonsend-icke-denominationsmedel för denna transaktion som inte är likvärdiga 1000 martex.</translation>
     </message>
     <message>
         <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
@@ -2942,16 +2942,16 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Information</translation>
     </message>
     <message>
-        <source>Initialization sanity check failed. MarteX Core is shutting down.</source>
-        <translation>Initialiseringstillståndkontroll misslyckades. MarteX Core stängs ned.</translation>
+        <source>Initialization sanity check failed. martex Core is shutting down.</source>
+        <translation>Initialiseringstillståndkontroll misslyckades. martex Core stängs ned.</translation>
     </message>
     <message>
         <source>Input is not valid.</source>
         <translation>Indata är inte giltig.</translation>
     </message>
     <message>
-        <source>FastSend options:</source>
-        <translation>FastSend-alternativ:</translation>
+        <source>FastsenD options:</source>
+        <translation>FastsenD-alternativ:</translation>
     </message>
     <message>
         <source>Insufficient funds.</source>

@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2017 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -271,15 +271,6 @@ public:
     void UpdateLocalValidity();
 
     void UpdateSentinelVariables();
-
-    void PrepareDeletion(int64_t nDeletionTime_)
-    {
-        fCachedDelete = true;
-        if (nDeletionTime == 0) {
-            nDeletionTime = nDeletionTime_;
-        }
-    }
-
 
     CAmount GetMinCollateralFee() const;
 

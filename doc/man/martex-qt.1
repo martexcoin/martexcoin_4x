@@ -42,7 +42,7 @@ testnet:
 .HP
 \fB\-conf=\fR<file>
 .IP
-Specify configuration file (default: MarteX.conf)
+Specify configuration file (default: martex.conf)
 .HP
 \fB\-datadir=\fR<dir>
 .IP
@@ -227,7 +227,7 @@ Support filtering of blocks and transaction with bloom filters (default:
 .HP
 \fB\-port=\fR<port>
 .IP
-Listen for connections on <port> (default: 9999 or testnet: 19999)
+Listen for connections on <port> (default: 24126 or testnet: 24130)
 .HP
 \fB\-proxy=\fR<ip:port>
 .IP
@@ -299,17 +299,17 @@ Set key pool size to <n> (default: 1000)
 .HP
 \fB\-fallbackfee=\fR<amt>
 .IP
-A fee rate (in MXT/kB) that will be used when fee estimation has
+A fee rate (in MARTEX/kB) that will be used when fee estimation has
 insufficient data (default: 0.00001)
 .HP
 \fB\-mintxfee=\fR<amt>
 .IP
-Fees (in MXT/kB) smaller than this are considered zero fee for
+Fees (in MARTEX/kB) smaller than this are considered zero fee for
 transaction creation (default: 0.00001)
 .HP
 \fB\-paytxfee=\fR<amt>
 .IP
-Fee (in MXT/kB) to add to transactions you send (default: 0.00)
+Fee (in MARTEX/kB) to add to transactions you send (default: 0.00)
 .HP
 \fB\-rescan\fR
 .IP
@@ -462,12 +462,12 @@ Prepend debug output with timestamp (default: 1)
 .HP
 \fB\-minrelaytxfee=\fR<amt>
 .IP
-Fees (in MXT/kB) smaller than this are considered zero fee for
+Fees (in MARTEX/kB) smaller than this are considered zero fee for
 relaying, mining and transaction creation (default: 0.00001)
 .HP
 \fB\-maxtxfee=\fR<amt>
 .IP
-Maximum total fees (in MXT) to use in a single wallet transaction or
+Maximum total fees (in MARTEX) to use in a single wallet transaction or
 raw transaction; setting this too low may abort large
 transactions (default: 0.20)
 .HP
@@ -540,7 +540,7 @@ Use N separate masternodes for each denominated input to mix funds
 .HP
 \fB\-anonsendamount=\fR<n>
 .IP
-Keep N MXT anonymized (2\-21000000, default: 1000)
+Keep N MARTEX anonymized (2\-21000000, default: 1000)
 .HP
 \fB\-liquidityprovider=\fR<n>
 .IP
@@ -597,7 +597,7 @@ Set maximum size of high\-priority/low\-fee transactions in bytes
 .HP
 \fB\-blockmintxfee=\fR<amt>
 .IP
-Set lowest fee rate (in MXT/kB) for transactions to be included in
+Set lowest fee rate (in MARTEX/kB) for transactions to be included in
 block creation. (default: 0.00001)
 .PP
 RPC server options:
@@ -639,8 +639,8 @@ option can be specified multiple times
 .HP
 \fB\-rpcport=\fR<port>
 .IP
-Listen for JSON\-RPC connections on <port> (default: 9998 or testnet:
-19998)
+Listen for JSON\-RPC connections on <port> (default: 24127 or testnet:
+24131)
 .HP
 \fB\-rpcallowip=\fR<ip>
 .IP
@@ -679,12 +679,12 @@ Show splash screen on startup (default: 1)
 .IP
 Reset all settings changed in the GUI
 .SH COPYRIGHT
-Copyright (C) 2014-2019 The MarteX Core developers
+Copyright (C) 2014-2017 The MarteX Core developers
 Copyright (C) 2009-2017 The Bitcoin Core developers
 
-Please contribute if you find MarteX Core useful. Visit <https://martexcoin.org> for
+Please contribute if you find MarteX Core useful. Visit <https://martexpay.org> for
 further information about the software.
-The source code is available from <https://github.com/martexcoin/martexcoin>.
+The source code is available from <https://github.com/martexpay/martex>.
 
 This is experimental software.
 Distributed under the MIT software license, see the accompanying file COPYING

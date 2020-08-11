@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2017 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -22,7 +22,7 @@ QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
     unitlist.append(MXT);
     unitlist.append(mMXT);
     unitlist.append(uMXT);
-    unitlist.append(valverde);
+    unitlist.append(valverdes);
     return unitlist;
 }
 
@@ -33,7 +33,7 @@ bool BitcoinUnits::valid(int unit)
     case MXT:
     case mMXT:
     case uMXT:
-    case valverde:
+    case valverdes:
         return true;
     default:
         return false;
@@ -49,7 +49,7 @@ QString BitcoinUnits::name(int unit)
             case MXT: return QString("MXT");
             case mMXT: return QString("mMXT");
             case uMXT: return QString::fromUtf8("μMXT");
-            case valverde: return QString("valverde");
+            case valverdes: return QString("valverdes");
             default: return QString("???");
         }
     }
@@ -60,7 +60,7 @@ QString BitcoinUnits::name(int unit)
             case MXT: return QString("tMXT");
             case mMXT: return QString("mtMXT");
             case uMXT: return QString::fromUtf8("μtMXT");
-            case valverde: return QString("tvalverde");
+            case valverdes: return QString("tvalverdes");
             default: return QString("???");
         }
     }
@@ -72,10 +72,10 @@ QString BitcoinUnits::description(int unit)
     {
         switch(unit)
         {
-            case MXT: return QString("MarteX");
-            case mMXT: return QString("Milli-MarteX (1 / 1" THIN_SP_UTF8 "000)");
-            case uMXT: return QString("Micro-MarteX (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-            case valverde: return QString("Ten Nano-MarteX (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+            case MXT: return QString("MXT");
+            case mMXT: return QString("Milli-MXT (1 / 1" THIN_SP_UTF8 "000)");
+            case uMXT: return QString("Micro-MXT (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+            case valverdes: return QString("Ten Nano-MXT (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
             default: return QString("???");
         }
     }
@@ -83,10 +83,10 @@ QString BitcoinUnits::description(int unit)
     {
         switch(unit)
         {
-            case MXT: return QString("TestMarteXs");
-            case mMXT: return QString("Milli-TestMarteX (1 / 1" THIN_SP_UTF8 "000)");
-            case uMXT: return QString("Micro-TestMarteX (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-            case valverde: return QString("Ten Nano-TestMarteX (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+            case MXT: return QString("TestMXTs");
+            case mMXT: return QString("Milli-TestMXT (1 / 1" THIN_SP_UTF8 "000)");
+            case uMXT: return QString("Micro-TestMXT (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+            case valverdes: return QString("Ten Nano-TestMXT (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
             default: return QString("???");
         }
     }
@@ -99,7 +99,7 @@ qint64 BitcoinUnits::factor(int unit)
     case MXT:  return 100000000;
     case mMXT: return 100000;
     case uMXT: return 100;
-    case valverde: return 1;
+    case valverdes: return 1;
     default:   return 100000000;
     }
 }
@@ -111,7 +111,7 @@ int BitcoinUnits::decimals(int unit)
     case MXT: return 8;
     case mMXT: return 5;
     case uMXT: return 2;
-    case valverde: return 0;
+    case valverdes: return 0;
     default: return 0;
     }
 }

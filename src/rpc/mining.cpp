@@ -1,6 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2017 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,7 +13,7 @@
 #include "consensus/validation.h"
 #include "core_io.h"
 #include "init.h"
-#include "kernel.h"
+#include "validation.h"
 #include "miner.h"
 #include "net.h"
 #include "pow.h"
@@ -22,9 +22,7 @@
 #include "txmempool.h"
 #include "util.h"
 #include "utilstrencodings.h"
-#include "validation.h"
 #include "validationinterface.h"
-#include "wallet/wallet.h"
 
 #include "governance-classes.h"
 #include "masternode-payments.h"
@@ -37,11 +35,6 @@
 #include <boost/shared_ptr.hpp>
 
 #include <univalue.h>
-
-#ifdef ENABLE_WALLET
-extern CWallet* pwalletMain;
-#endif // ENABLE_WALLET
-extern int64_t nLastCoinStakeSearchInterval;
 
 /**
  * Return average network hashes per second based on the last 'lookup' blocks,
@@ -122,9 +115,9 @@ UniValue generateBlocks(boost::shared_ptr<CReserveScript> coinbaseScript, int nG
     }
     unsigned int nExtraNonce = 0;
     UniValue blockHashes(UniValue::VARR);
-    while (nHeight < nHeightEnd && masternodeSync.IsSynced())
+    while (nHeight < nHeightEnd)
     {
-        std::unique_ptr<CBlockTemplate> pblocktemplate(BlockAssembler(Params()).CreateNewBlock(coinbaseScript->reserveScript));
+        std::unique_ptr<CBlockTemplate> pblocktemplate(BlockAssembler(Params()).CreateNewBlock(nullptr, Params(), coinbaseScript->reserveScript, false));
         if (!pblocktemplate.get())
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Couldn't create new block");
         CBlock *pblock = &pblocktemplate->block;
@@ -226,42 +219,6 @@ UniValue generatetoaddress(const JSONRPCRequest& request)
     return generateBlocks(coinbaseScript, nGenerate, nMaxTries, false);
 }
 
-
-double GetPoSKernelPS()
-{
-    int nPoSInterval = 72;
-    double dStakeKernelsTriedAvg = 0;
-    int nStakesHandled = 0, nStakesTime = 0;
-
-    CBlockIndex* pindex = chainActive.Tip();
-    CBlockIndex* pindexPrevStake = NULL;
-
-    while (pindex && nStakesHandled < nPoSInterval)
-    {
-        if (pindex->IsProofOfStake())
-        {
-            if (pindexPrevStake)
-            {
-                dStakeKernelsTriedAvg += GetDifficulty(pindexPrevStake) * 4294967296.0;
-                nStakesTime += pindexPrevStake->nTime - pindex->nTime;
-                nStakesHandled++;
-            }
-            pindexPrevStake = pindex;
-        }
-
-        pindex = pindex->pprev;
-    }
-
-    double result = 0;
-
-    if (nStakesTime)
-        result = dStakeKernelsTriedAvg / nStakesTime;
-
-    result *= STAKE_TIMESTAMP_MASK + 1;
-
-    return result;
-}
-
 UniValue getmininginfo(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
@@ -287,80 +244,15 @@ UniValue getmininginfo(const JSONRPCRequest& request)
 
     LOCK(cs_main);
 
-    uint64_t nWeight = 0;
-    if (pwalletMain)
-      nWeight = pwalletMain->GetStakeWeight();
-
-    // Define block rewards
-    int64_t nRewardPoW = (uint64_t)GetBlockSubsidy(0,chainActive.Height(),Params().GetConsensus(),false,false);
-    int64_t nRewardPoS = (uint64_t)GetProofOfStakeReward(chainActive.Tip(), 0, 0);
-
-    UniValue diff(UniValue::VOBJ);
-
     UniValue obj(UniValue::VOBJ);
-    obj.push_back(Pair("blocks", (int)chainActive.Height()));
+    obj.push_back(Pair("blocks",           (int)chainActive.Height()));
     obj.push_back(Pair("currentblocksize", (uint64_t)nLastBlockSize));
-    obj.push_back(Pair("currentblocktx", (uint64_t)nLastBlockTx));
-
-    diff.push_back(Pair("proof-of-work", GetDifficulty()));
-    diff.push_back(Pair("proof-of-stake", GetDifficulty(GetLastBlockIndex(chainActive.Tip(), true))));
-    diff.push_back(Pair("search-interval", (int)nLastCoinStakeSearchInterval));
-    obj.push_back(Pair("difficulty", diff));
-
-    obj.push_back(Pair("blockvalue-PoS", nRewardPoS));
-    obj.push_back(Pair("blockvalue-PoW", nRewardPoW));
-
-    obj.push_back(Pair("errors", GetWarnings("statusbar")));
-    obj.push_back(Pair("networkhashps", getnetworkhashps(request)));
-    obj.push_back(Pair("netstakeweight", GetPoSKernelPS()));
-    obj.push_back(Pair("pooledtx", (uint64_t)mempool.size()));
-
-    UniValue weight(UniValue::VOBJ);
-    weight.push_back(Pair("minimum", (uint64_t)nWeight));
-    weight.push_back(Pair("maximum", (uint64_t)0));
-    weight.push_back(Pair("combined", (uint64_t)nWeight));
-    obj.push_back(Pair("stakeweight", weight));
-
-    obj.push_back(Pair("chain", Params().NetworkIDString()));
-    return obj;
-}
-
-UniValue getstakinginfo(const JSONRPCRequest& request)
-{
-    if (request.fHelp || request.params.size() != 0)
-      throw std::runtime_error(
-            "getstakinginfo\n"
-            "Returns an object containing staking-related information.");
-
-    uint64_t nWeight = 0;
-    uint64_t nExpectedTime = 0;
-
-    if (pwalletMain)
-        nWeight = pwalletMain->GetStakeWeight();
-
-    uint64_t nNetworkWeight = GetPoSKernelPS();
-    bool staking = nWeight;
-    bool enabled = GetBoolArg("-staking", true);
-    nExpectedTime = staking ? (GetTargetSpacing * nNetworkWeight / nWeight) : 0;
-
-    UniValue obj(UniValue::VOBJ);
-
-    obj.push_back(Pair("enabled", enabled));
-    obj.push_back(Pair("staking", staking && enabled));
-    obj.push_back(Pair("errors", GetWarnings("statusbar")));
-
-    obj.push_back(Pair("currentblocksize", (uint64_t)nLastBlockSize));
-    obj.push_back(Pair("currentblocktx", (uint64_t)nLastBlockTx));
-    obj.push_back(Pair("pooledtx", (uint64_t)mempool.size()));
-
-    obj.push_back(Pair("difficulty", GetDifficulty(GetLastBlockIndex(chainActive.Tip(), true))));
-    obj.push_back(Pair("search-interval", (int)nLastCoinStakeSearchInterval));
-
-    obj.push_back(Pair("weight", (uint64_t)nWeight));
-    obj.push_back(Pair("netstakeweight", (uint64_t)nNetworkWeight));
-
-    obj.push_back(Pair("expectedtime", nExpectedTime));
-
+    obj.push_back(Pair("currentblocktx",   (uint64_t)nLastBlockTx));
+    obj.push_back(Pair("difficulty",       (double)GetDifficulty()));
+    obj.push_back(Pair("errors",           GetWarnings("statusbar")));
+    obj.push_back(Pair("networkhashps",    getnetworkhashps(request)));
+    obj.push_back(Pair("pooledtx",         (uint64_t)mempool.size()));
+    obj.push_back(Pair("chain",            Params().NetworkIDString()));
     return obj;
 }
 
@@ -376,8 +268,8 @@ UniValue prioritisetransaction(const JSONRPCRequest& request)
             "1. \"txid\"       (string, required) The transaction id.\n"
             "2. priority_delta (numeric, required) The priority to add or subtract.\n"
             "                  The transaction selection algorithm considers the tx as it would have a higher priority.\n"
-            "                  (priority of a transaction is calculated: coinage * value_in_valverde / txsize) \n"
-            "3. fee_delta      (numeric, required) The fee value (in valverde) to add (or subtract, if negative).\n"
+            "                  (priority of a transaction is calculated: coinage * value_in_valverdes / txsize) \n"
+            "3. fee_delta      (numeric, required) The fee value (in valverdes) to add (or subtract, if negative).\n"
             "                  The fee is not actually paid, only the algorithm for selecting transactions into a block\n"
             "                  considers the transaction as it would have paid a higher (or lower) fee.\n"
             "\nResult:\n"
@@ -471,7 +363,7 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
             "             n                          (numeric) transactions before this one (by 1-based index in 'transactions' list) that must be present in the final block if this one is\n"
             "             ,...\n"
             "         ],\n"
-            "         \"fee\": n,                    (numeric) difference in value between transaction inputs and outputs (in valverde); for coinbase transactions, this is a negative Number of the total collected block fees (ie, not including the block subsidy); if key is not present, fee is unknown and clients MUST NOT assume there isn't one\n"
+            "         \"fee\": n,                    (numeric) difference in value between transaction inputs and outputs (in valverdes); for coinbase transactions, this is a negative Number of the total collected block fees (ie, not including the block subsidy); if key is not present, fee is unknown and clients MUST NOT assume there isn't one\n"
             "         \"sigops\" : n,                (numeric) total number of SigOps, as counted for purposes of block limits; if key is not present, sigop count is unknown and clients MUST NOT assume there aren't any\n"
             "         \"required\" : true|false      (boolean) if provided and true, this transaction must be in the final block\n"
             "      }\n"
@@ -480,7 +372,7 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
             "  \"coinbaseaux\" : {                 (json object) data that should be included in the coinbase's scriptSig content\n"
             "      \"flags\" : \"xx\"                  (string) key name is to be ignored, and value included in scriptSig\n"
             "  },\n"
-            "  \"coinbasevalue\" : n,              (numeric) maximum allowable input to coinbase transaction, including the generation award and transaction fees (in valverde)\n"
+            "  \"coinbasevalue\" : n,              (numeric) maximum allowable input to coinbase transaction, including the generation award and transaction fees (in valverdes)\n"
             "  \"coinbasetxn\" : { ... },          (json object) information for coinbase transaction\n"
             "  \"target\" : \"xxxx\",                (string) The hash target\n"
             "  \"mintime\" : xxx,                  (numeric) The minimum timestamp appropriate for next block time in seconds since epoch (Jan 1 1970 GMT)\n"
@@ -593,18 +485,20 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
         if (g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0)
             throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "MarteX Core is not connected!");
 
-        if (IsInitialBlockDownload())
-            throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "MarteX Core is downloading blocks...");
+        // if (IsInitialBlockDownload())
+        //    throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "MarteX Core is downloading blocks...");
     }
 
     // when enforcement is on we need information about a masternode payee or otherwise our block is going to be orphaned by the network
     CScript payee;
-    if (!masternodeSync.IsWinnersListSynced()
+    if (sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)
+        && !masternodeSync.IsWinnersListSynced()
         && !mnpayments.GetBlockPayee(chainActive.Height() + 1, payee))
             throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "MarteX Core is downloading masternode winners...");
 
     // next bock is a superblock and we need governance info to correctly construct it
-    if (!masternodeSync.IsSynced()
+    if (sporkManager.IsSporkActive(SPORK_9_SUPERBLOCKS_ENABLED)
+        && !masternodeSync.IsSynced()
         && CSuperblock::IsValidBlockHeight(chainActive.Height() + 1))
             throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "MarteX Core is syncing with network...");
 
@@ -671,20 +565,9 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
         CBlockIndex* pindexPrevNew = chainActive.Tip();
         nStart = GetTime();
 
-        boost::shared_ptr<CReserveScript> coinbaseScript;
-        GetMainSignals().ScriptForMining(coinbaseScript);
-
-        // If the keypool is exhausted, no script is returned at all.  Catch this.
-        if (!coinbaseScript)
-            throw JSONRPCError(RPC_WALLET_KEYPOOL_RAN_OUT, "Error: Keypool ran out, please call keypoolrefill first");
-
-        //throw an error if no script was provided
-        if (coinbaseScript->reserveScript.empty())
-            throw JSONRPCError(RPC_INTERNAL_ERROR, "No coinbase script available (mining requires a wallet)");
-
         // Create new block
-        //CScript scriptDummy = CScript() << OP_TRUE;
-        pblocktemplate = BlockAssembler(Params()).CreateNewBlock(coinbaseScript->reserveScript);
+        CScript scriptDummy = CScript() << OP_TRUE;
+        pblocktemplate = BlockAssembler(Params()).CreateNewBlock(nullptr, Params(), scriptDummy, false);
         if (!pblocktemplate)
             throw JSONRPCError(RPC_OUT_OF_MEMORY, "Out of memory");
 
@@ -1072,7 +955,6 @@ static const CRPCCommand commands[] =
   //  --------------------- ------------------------  -----------------------  ----------
     { "mining",             "getnetworkhashps",       &getnetworkhashps,       true,  {"nblocks","height"} },
     { "mining",             "getmininginfo",          &getmininginfo,          true,  {} },
-    { "mining",             "getstakinginfo",         &getstakinginfo,         true,  {} },
     { "mining",             "prioritisetransaction",  &prioritisetransaction,  true,  {"txid","priority_delta","fee_delta"} },
     { "mining",             "getblocktemplate",       &getblocktemplate,       true,  {"template_request"} },
     { "mining",             "submitblock",            &submitblock,            true,  {"hexdata","parameters"} },

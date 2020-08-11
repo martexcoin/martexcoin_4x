@@ -1,8 +1,8 @@
 /* src/config/martex-config.h.in.  Generated from configure.ac by autoheader.  */
 
-#ifndef MARTEX_CONFIG_H
+#ifndef MarteX_CONFIG_H
 
-#define MARTEX_CONFIG_H
+#define MarteX_CONFIG_H
 
 /* Define if building universal (internal helper macro) */
 #undef AC_APPLE_UNIVERSAL_BUILD
@@ -384,4 +384,4 @@
 /* Define for large files, on AIX-style hosts. */
 #undef _LARGE_FILES
 
-#endif //MARTEX_CONFIG_H
+#endif //MarteX_CONFIG_H

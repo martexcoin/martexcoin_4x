@@ -1,4 +1,4 @@
-<TS language="pl" version="2.1">
+<TS language="pl" version="2.0">
 <context>
     <name>AddressBookPage</name>
     <message>
@@ -62,12 +62,12 @@
         <translation>Adres odbiorczy</translation>
     </message>
     <message>
-        <source>These are your MarteX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>To są twoje adresy MarteX, na które wysyłasz płatności. Zanim wyślesz środki, zawsze upewnij się, że kwota i adres są prawidłowe.</translation>
+        <source>These are your martex addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>To są twoje adresy martex, na które wysyłasz płatności. Zanim wyślesz środki, zawsze upewnij się, że kwota i adres są prawidłowe.</translation>
     </message>
     <message>
-        <source>These are your MarteX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>To są twoje adresy do otrzymywania MarteXów. Zaleca się tworzyć nowy adres dla każdej transakcji.</translation>
+        <source>These are your martex addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>To są twoje adresy do otrzymywania martexów. Zaleca się tworzyć nowy adres dla każdej transakcji.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -132,6 +132,14 @@
         <translation>Powtórz nowe hasło</translation>
     </message>
     <message>
+        <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
+        <translation>Służy do zablokowania funkcji wysyłania środków, gdy konto użytkownika systemu operacyjnego zostało przejęte przez osobę trzecią. Nie gwarantuje prawdziwego bezpieczeństwa.</translation>
+    </message>
+    <message>
+        <source>Only for mixing via AnonSend</source>
+        <translation>Tylko do mieszania przez AnonSend</translation>
+    </message>
+    <message>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
         <translation>Wprowadź nowe hasło dla twojego portfela.&lt;br/&gt;Proszę używać hasła o długości co najmniej &lt;b&gt;dziesięciu losowych znaków&lt;/b&gt; lub &lt;b&gt;co najmniej 8 słów&lt;/b&gt;.</translation>
     </message>
@@ -142,10 +150,6 @@
     <message>
         <source>This operation needs your wallet passphrase to unlock the wallet.</source>
         <translation>Ta operacja wymaga hasła do odblokowania portfela.</translation>
-    </message>
-    <message>
-        <source>Unlock wallet for mixing only</source>
-        <translation>Odblokuj portfel tylko dla miksowania monet</translation>
     </message>
     <message>
         <source>Unlock wallet</source>
@@ -172,7 +176,7 @@
         <translation>Potwierdź zaszyfrowanie portfela</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR MXT&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR martex&lt;/b&gt;!</source>
         <translation>Ostrzeżenie: Jeśli zaszyfrujesz swój portfel i zgubisz hasło, &lt;b&gt;STRACISZ WSZYSTKIE ŚRODKI&lt;/b&gt;</translation>
     </message>
     <message>
@@ -184,15 +188,11 @@
         <translation>Portfel zaszyfrowany</translation>
     </message>
     <message>
-        <source>%1 will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your funds from being stolen by malware infecting your computer.</source>
-        <translation>%1 zostanie teraz zamknięty aby zakończyć proces szyfrowania. Pamiętaj, że zaszyfrowanie portfela nie gwarantuje pełnej ochrony przed kradzieżą twoich monet przez złośliwe oprogramowanie.</translation>
+        <source>martex Core will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your martexs from being stolen by malware infecting your computer.</source>
+        <translation>martex Core zostanie zamknięty, aby ukończyć szyfrowanie. Pamiętaj, szyfrowanie portfela nie chroni przed kradzieżą martexów, jeśli twój komputer jest zainfekowany przez malware.</translation>
     </message>
     <message>
-        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. Previous backups of the unencrypted wallet file contain the same HD seed and still have full access to all your funds just like the new, encrypted wallet.</source>
-        <translation>WAŻNE: Wszystkie wykonane wcześniej kopie pliku portfela powinny być zamienione na nowe, zaszyfrowany plik portfela. Poprzednie kopie zapasowe niezaszyfrowanego porfela dalej mają dostęp do frazy HD oraz twoich funduszy tak samo jak nowy, zaszyfrowany portfel.</translation>
-    </message>
-    <message>
-        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
+        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replmartex with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
         <translation>WAŻNE: Wszystkie wykonane wcześniej kopie zapasowe portfela należy zamienić na nowe, szyfrowane pliki. Z powodów bezpieczeństwa, poprzednie niezaszyfrowane kopie portfela staną się bezużyteczne, gdy tylko zaczniesz korzystać z nowego, zaszyfrowanego portfela.</translation>
     </message>
     <message>
@@ -242,12 +242,12 @@
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <source>A fatal error occurred. MarteX Core can no longer continue safely and will quit.</source>
-        <translation>Wystąpił błąd krytyczny. MarteX Core nie może bezpiecznie kontynuować i zostanie zamknięty.</translation>
+        <source>A fatal error occurred. martex Core can no longer continue safely and will quit.</source>
+        <translation>Wystąpił błąd krytyczny. martex Core nie może bezpiecznie kontynuować i zostanie zamknięty.</translation>
     </message>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core</translation>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -270,8 +270,8 @@
         <translation>Wyślij</translation>
     </message>
     <message>
-        <source>Send coins to a MarteX address</source>
-        <translation>Wyślij monety na adres MarteX</translation>
+        <source>Send coins to a martex address</source>
+        <translation>Wyślij monety na adres martex</translation>
     </message>
     <message>
         <source>&amp;Receive</source>
@@ -306,8 +306,12 @@
         <translation>Zamknij program</translation>
     </message>
     <message>
-        <source>Show information about MarteX Core</source>
-        <translation>Pokaż informacje o MarteX Core</translation>
+        <source>&amp;About martex Core</source>
+        <translation>&amp;O martex Core</translation>
+    </message>
+    <message>
+        <source>Show information about martex Core</source>
+        <translation>Pokaż informacje o martex Core</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
@@ -322,12 +326,8 @@
         <translation>&amp;Opcje...</translation>
     </message>
     <message>
-        <source>&amp;About %1</source>
-        <translation>&amp;O %1</translation>
-    </message>
-    <message>
-        <source>Modify configuration options for %1</source>
-        <translation>Zmień opcje konfiguracji dla %1</translation>
+        <source>Modify configuration options for martex Core</source>
+        <translation>Zmień opcje konfiguracji martex Core</translation>
     </message>
     <message>
         <source>&amp;Show / Hide</source>
@@ -378,16 +378,16 @@
         <translation>Podpisz wiado&amp;mość...</translation>
     </message>
     <message>
-        <source>Sign messages with your MarteX addresses to prove you own them</source>
-        <translation>Podpisz wiadomości swoim adresem MarteX, aby udowodnić, że jesteś ich właścicielem. </translation>
+        <source>Sign messages with your martex addresses to prove you own them</source>
+        <translation>Podpisz wiadomości swoim adresem martex, aby udowodnić, że jesteś ich właścicielem. </translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
         <translation>&amp;Zweryfikuj wiadomość...</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified MarteX addresses</source>
-        <translation>Zweryfikuj wiadomości, aby upewnić się, że zostały one podpisane wybranym adresem MarteX</translation>
+        <source>Verify messages to ensure they were signed with specified martex addresses</source>
+        <translation>Zweryfikuj wiadomości, aby upewnić się, że zostały one podpisane wybranym adresem martex</translation>
     </message>
     <message>
         <source>&amp;Information</source>
@@ -482,12 +482,8 @@
         <translation>&amp;Opcje konsoli</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible MarteX command-line options</source>
-        <translation>Pokaż pomoc %1 aby zobaczyć listę wszystkich opcji lnii poleceń.</translation>
-    </message>
-    <message>
-        <source>%1 client</source>
-        <translation>%1 klient</translation>
+        <source>Show the martex Core help message to get a list with possible martex Core command-line options</source>
+        <translation>Pokaż wiadomość pomocy martex Core, aby otrzymać listę z dostępnymi opcjami wiersza poleceń.</translation>
     </message>
     <message>
         <source>&amp;AnonSend information</source>
@@ -517,9 +513,13 @@
         <source>Tabs toolbar</source>
         <translation>Pasek zakładek</translation>
     </message>
+    <message>
+        <source>martex Core client</source>
+        <translation>Klient martex Core</translation>
+    </message>
     <message numerus="yes">
-        <source>%n active connection(s) to MarteX network</source>
-        <translation><numerusform>%n aktywne połączenie z siecią MarteX</numerusform><numerusform>%n aktywne połączenia z siecią MarteX</numerusform><numerusform>%n aktywnych połączeń z siecią MarteX</numerusform><numerusform>%n aktywne połączenia z siecią MarteX</numerusform></translation>
+        <source>%n active connection(s) to martex network</source>
+        <translation><numerusform>%n aktywne połączenie z siecią martex</numerusform><numerusform>%n aktywne połączenia z siecią martex</numerusform><numerusform>%n aktywnych połączeń z siecią martex</numerusform><numerusform>%n aktywne połączenia z siecią martex</numerusform></translation>
     </message>
     <message>
         <source>Network activity disabled</source>
@@ -652,7 +652,7 @@
     <name>ClientModel</name>
     <message>
         <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
-        <translation>Razem: %1 (zgodne z FS: %2 / włączone: %3)</translation>
+        <translation>Razem: %1 (zgodne z PS: %2 / włączone: %3)</translation>
     </message>
     <message>
         <source>Network Alert</source>
@@ -726,8 +726,8 @@
         <translation>Otrzymano z adresem</translation>
     </message>
     <message>
-        <source>FS Rounds</source>
-        <translation>Rundy FS</translation>
+        <source>PS Rounds</source>
+        <translation>Rundy PS</translation>
     </message>
     <message>
         <source>Date</source>
@@ -857,28 +857,28 @@
         <translation>Proszę wybrać poziom prywatności.</translation>
     </message>
     <message>
-        <source>Use 2 separate masternodes to mix funds up to 1000 MXT</source>
-        <translation>Użyj 2 oddzielnych masternodów, aby wymieszać środki max. do 1000 MXT</translation>
+        <source>Use 2 separate masternodes to mix funds up to 1000 martex</source>
+        <translation>Użyj 2 oddzielnych masternodów, aby wymieszać środki max. do 1000 martex</translation>
     </message>
     <message>
-        <source>Use 8 separate masternodes to mix funds up to 1000 MXT</source>
-        <translation>Użyj 8 oddzielnych masternodów, aby wymieszać środki max. do 1000 MXT</translation>
+        <source>Use 8 separate masternodes to mix funds up to 1000 martex</source>
+        <translation>Użyj 8 oddzielnych masternodów, aby wymieszać środki max. do 1000 martex</translation>
     </message>
     <message>
         <source>Use 16 separate masternodes</source>
         <translation>Użyj 16 oddzielnych masternodów</translation>
     </message>
     <message>
-        <source>This option is the quickest and will cost about ~0.025 MXT to anonymize 1000 MXT</source>
-        <translation>Ta opcja jest najszybsza i kosztuje około 0.025 MXT za zanonimizowanie 1000 MXT</translation>
+        <source>This option is the quickest and will cost about ~0.025 martex to anonymize 1000 martex</source>
+        <translation>Ta opcja jest najszybsza i kosztuje około 0.025 martex za zanonimizowanie 1000 martex</translation>
     </message>
     <message>
-        <source>This option is moderately fast and will cost about 0.05 MXT to anonymize 1000 MXT</source>
-        <translation>Ta opcja jest w miarę szybka i kosztuje około 0.05 MXT za zanonimizowanie 1000 MXT</translation>
+        <source>This option is moderately fast and will cost about 0.05 martex to anonymize 1000 martex</source>
+        <translation>Ta opcja jest w miarę szybka i kosztuje około 0.05 martex za zanonimizowanie 1000 martex</translation>
     </message>
     <message>
-        <source>0.1 MXT per 1000 MXT you anonymize.</source>
-        <translation>0.1 MXT za każde 1000 MXT, które zanonimizujesz.</translation>
+        <source>0.1 martex per 1000 martex you anonymize.</source>
+        <translation>0.1 martex za każde 1000 martex, które zanonimizujesz.</translation>
     </message>
     <message>
         <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
@@ -889,16 +889,16 @@
         <translation>Konfiguracja AnonSend</translation>
     </message>
     <message>
-        <source>AnonSend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>AnonSend pomyślnie ustawiono na poziom podstawowy (%1 oraz 2 rundy). Możesz to zmienić w każdej chwili, otwierając ekran konfiguracji MarteX.</translation>
+        <source>AnonSend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>AnonSend pomyślnie ustawiono na poziom podstawowy (%1 oraz 2 rundy). Możesz to zmienić w każdej chwili, otwierając ekran konfiguracji martex.</translation>
     </message>
     <message>
-        <source>AnonSend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>AnonSend pomyślnie ustawiono na poziom wysoki (%1 oraz 8 rund). Możesz to zmienić w każdej chwili, otwierając ekran konfiguracji MarteX.</translation>
+        <source>AnonSend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>AnonSend pomyślnie ustawiono na poziom wysoki (%1 oraz 8 rund). Możesz to zmienić w każdej chwili, otwierając ekran konfiguracji martex.</translation>
     </message>
     <message>
-        <source>AnonSend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>AnonSend pomyślnie ustawiono na poziom najwyższy (%1 oraz 16 rund). Możesz to zmienić w każdej chwili, otwierając ekran konfiguracji MarteX.</translation>
+        <source>AnonSend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>AnonSend pomyślnie ustawiono na poziom najwyższy (%1 oraz 16 rund). Możesz to zmienić w każdej chwili, otwierając ekran konfiguracji martex.</translation>
     </message>
 </context>
 <context>
@@ -940,8 +940,8 @@
         <translation>Zmień adres wysyłania</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid MarteX address.</source>
-        <translation>Wprowadzony adres "%1" nie jest właściwym adresem MarteX.</translation>
+        <source>The entered address "%1" is not a valid martex address.</source>
+        <translation>Wprowadzony adres "%1" nie jest właściwym adresem martex.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -982,6 +982,10 @@
 <context>
     <name>HelpMessageDialog</name>
     <message>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
+    </message>
+    <message>
         <source>version</source>
         <translation>wersja</translation>
     </message>
@@ -990,8 +994,8 @@
         <translation>(%1-bit)</translation>
     </message>
     <message>
-        <source>About %1</source>
-        <translation>Informacje o %1</translation>
+        <source>About martex Core</source>
+        <translation>Informacje o martex Core</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -1038,8 +1042,8 @@
         <translation>Informacje o AnonSend</translation>
     </message>
     <message>
-        <source>&lt;h3&gt;AnonSend Basics&lt;/h3&gt; AnonSend gives you true financial privacy by obscuring the origins of your funds. All the MarteX in your wallet is comprised of different "inputs" which you can think of as separate, discrete coins.&lt;br&gt; AnonSend uses an innovative process to mix your inputs with the inputs of two other people, without having your coins ever leave your wallet. You retain control of your money at all times.&lt;hr&gt; &lt;b&gt;The AnonSend process works like this:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;AnonSend begins by breaking your transaction inputs down into standard denominations. These denominations are 0.01 MXT, 0.1 MXT, 1 MXT and 10 MXT -- sort of like the paper money you use every day.&lt;/li&gt; &lt;li&gt;Your wallet then sends requests to specially configured software nodes on the network, called "masternodes." These masternodes are informed then that you are interested in mixing a certain denomination. No identifiable information is sent to the masternodes, so they never know "who" you are.&lt;/li&gt; &lt;li&gt;When two other people send similar messages, indicating that they wish to mix the same denomination, a mixing session begins. The masternode mixes up the inputs and instructs all three users' wallets to pay the now-transformed input back to themselves. Your wallet pays that denomination directly to itself, but in a different address (called a change address).&lt;/li&gt; &lt;li&gt;In order to fully obscure your funds, your wallet must repeat this process a number of times with each denomination. Each time the process is completed, it's called a "round." Each round of AnonSend makes it exponentially more difficult to determine where your funds originated.&lt;/li&gt; &lt;li&gt;This mixing process happens in the background without any intervention on your part. When you wish to make a transaction, your funds will already be anonymized. No additional waiting is required.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;IMPORTANT:&lt;/b&gt; Your wallet only contains 1000 of these "change addresses." Every time a mixing event happens, up to 9 of your addresses are used up. This means those 1000 addresses last for about 100 mixing events. When 900 of them are used, your wallet must create more addresses. It can only do this, however, if you have automatic backups enabled.&lt;br&gt; Consequently, users who have backups disabled will also have AnonSend disabled. &lt;hr&gt;For more info see &lt;a href="https://martexcoin.org/wiki/display/DOC/AnonSend"&gt;https://martexcoin.org/wiki/display/DOC/AnonSend&lt;/a&gt;         </source>
-        <translation>&lt;h3&gt;Podstawy AnonSend&lt;/h3&gt; AnonSend zapewnia prawdziwą prywatność poprzez ukrycie pochodzenia środków. Wszystkie martexe w twoim portfelu składają się z różnych "kwot wejściowych", które można traktować jako oddzielne, indywidualne monety.&lt;br&gt; AnonSend wykorzystuje rewolucyjny proces mieszania twoich "kwot wejściowych" z "kwotami wejściowymi" dwóch innych  użytkowników, przy czym twoje środki nigdy nie opuszczają twojego portfela. W każdej chwili zachowujesz nad nimi pełną kontrolę.&lt;hr&gt; &lt;b&gt;Proces AnonSend przebiega w następujący sposób:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;Najpierw AnonSend dzieli twoje kwoty wejściowe twoich transakcji na standardowe nominały. Są kwoty 0.01 MXT, 0.1 MXT, 1 MXT oraz 10 MXT – mniej  więcej jak banknoty, których codziennie używasz.&lt;/li&gt; &lt;li&gt;Następnie twój portfel wysyła żądania do specjalnie skonfigurowanych węzłów sieci, zwanych "masternodami." Masternody otrzymują komunikat, że jesteś zainteresowany wymieszaniem określonego nominału. Masternody nie otrzymują żadnych informacji pozwalających na identyfikację, w związku z tym nigdy nie wiedzą "kim" jesteś.&lt;/li&gt; &lt;li&gt;Kiedy dwaj inni użytkownicy wyślą podobne komunikaty, z żądanie wymieszanie takiego samego nominału, rozpocznie się sesja mieszania. Masternod wymiesza kwoty wejściowe i nakaże portfelom takich trzech użytkowników wypłacić sobie samemu przetworzone kwoty wejściowe. Twój portfel wpłaci dany nominał do siebie samego, jednak na inny adres (tzw. adres reszty).&lt;/li&gt; &lt;li&gt;W celu pełnego zaciemnienia pochodzenia środków, twój portfel musi powtórzyć te czynności dla każdego nominału określoną ilość razy.  Każde wykonanie tego procesu określamy mianem "rundy." Każda runda procesu AnonSend wykładniczo zwiększa trudność ustalenia pochodzenia twoich środków.&lt;/li&gt; &lt;li&gt;Proces mieszania odbywa się w tle, bez dodatkowego zaangażowania z twojej strony. Kiedy zechcesz wykonać transakcję, twoje środki będą już zanonimizowane. Nie będzie konieczne dodatkowe oczekiwanie.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;UWAGA:&lt;/b&gt; Portfel zawiera tylko 1000 "adresów reszty." Każde mieszanie zużywa do 9 adresów. Oznacza to, że po 100 mieszaniach zużyjesz ok. 1000 adresów. Po wykorzystaniu 900 adresów, portfel musi wygenerować nowe adresy. Może not nastąpić jedynie, jeżeli włączone jest automatyczne tworzenie kopii zapasowych.&lt;br&gt; Dlatego też, AnonSend jest wyłączone, jeżeli użytkownik wyłączył automatyczne tworzenie kopii zapasowych. &lt;hr&gt;Więcej informacji znajdziesz na stronie &lt;a href="https://martexcoin.org/wiki/display/DOC/AnonSend"&gt;https://martexcoin.org/wiki/display/DOC/AnonSend&lt;/a&gt;         </translation>
+        <source>&lt;h3&gt;AnonSend Basics&lt;/h3&gt; AnonSend gives you true financial privacy by obscuring the origins of your funds. All the martex in your wallet is comprised of different "inputs" which you can think of as separate, discrete coins.&lt;br&gt; AnonSend uses an innovative process to mix your inputs with the inputs of two other people, without having your coins ever leave your wallet. You retain control of your money at all times..&lt;hr&gt; &lt;b&gt;The AnonSend process works like this:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;AnonSend begins by breaking your transaction inputs down into standard denominations. These denominations are 0.01 martex, 0.1 martex, 1 martex and 10 martex -- sort of like the paper money you use every day.&lt;/li&gt; &lt;li&gt;Your wallet then sends requests to specially configured software nodes on the network, called "masternodes." These masternodes are informed then that you are interested in mixing a certain denomination. No identifiable information is sent to the masternodes, so they never know "who" you are.&lt;/li&gt; &lt;li&gt;When two other people send similar messages, indicating that they wish to mix the same denomination, a mixing session begins. The masternode mixes up the inputs and instructs all three users' wallets to pay the now-transformed input back to themselves. Your wallet pays that denomination directly to itself, but in a different address (called a change address).&lt;/li&gt; &lt;li&gt;In order to fully obscure your funds, your wallet must repeat this process a number of times with each denomination. Each time the process is completed, it's called a "round." Each round of AnonSend makes it exponentially more difficult to determine where your funds originated.&lt;/li&gt; &lt;li&gt;This mixing process happens in the background without any intervention on your part. When you wish to make a transaction, your funds will already be anonymized. No additional waiting is required.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;IMPORTANT:&lt;/b&gt; Your wallet only contains 1000 of these "change addresses." Every time a mixing event happens, up to 9 of your addresses are used up. This means those 1000 addresses last for about 100 mixing events. When 900 of them are used, your wallet must create more addresses. It can only do this, however, if you have automatic backups enabled.&lt;br&gt; Consequently, users who have backups disabled will also have AnonSend disabled. &lt;hr&gt;For more info see &lt;a href="https://martexcoin.atlassian.net/wiki/display/DOC/AnonSend"&gt;https://martexcoin.atlassian.net/wiki/display/DOC/AnonSend&lt;/a&gt;         </source>
+        <translation>&lt;h3&gt;Podstawy AnonSend&lt;/h3&gt; AnonSend zapewnia prawdziwą prywatność poprzez ukrycie pochodzenia środków. Wszystkie martexe w twoim portfelu składają się z różnych "kwot wejściowych", które można traktować jako oddzielne, indywidualne monety.&lt;br&gt; AnonSend wykorzystuje rewolucyjny proces mieszania twoich "kwot wejściowych" z "kwotami wejściowymi" dwóch innych  użytkowników, przy czym twoje środki nigdy nie opuszczają twojego portfela. W każdej chwili zachowujesz nad nimi pełną kontrolę.&lt;hr&gt; &lt;b&gt;Proces AnonSend przebiega w następujący sposób:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;Najpierw AnonSend dzieli twoje kwoty wejściowe twoich transakcji na standardowe nominały. Są kwoty 0.01 martex, 0.1 martex, 1 martex oraz 10 martex – mniej  więcej jak banknoty, których codziennie używasz.&lt;/li&gt; &lt;li&gt;Następnie twój portfel wysyła żądania do specjalnie skonfigurowanych węzłów sieci, zwanych "masternodami." Masternody otrzymują komunikat, że jesteś zainteresowany wymieszaniem określonego nominału. Masternody nie otrzymują żadnych informacji pozwalających na identyfikację, w związku z tym nigdy nie wiedzą "kim" jesteś.&lt;/li&gt; &lt;li&gt;Kiedy dwaj inni użytkownicy wyślą podobne komunikaty, z żądanie wymieszanie takiego samego nominału, rozpocznie się sesja mieszania. Masternod wymiesza kwoty wejściowe i nakaże portfelom takich trzech użytkowników wypłacić sobie samemu przetworzone kwoty wejściowe. Twój portfel wpłaci dany nominał do siebie samego, jednak na inny adres (tzw. adres reszty).&lt;/li&gt; &lt;li&gt;W celu pełnego zaciemnienia pochodzenia środków, twój portfel musi powtórzyć te czynności dla każdego nominału określoną ilość razy.  Każde wykonanie tego procesu określamy mianem "rundy." Każda runda procesu AnonSend wykładniczo zwiększa trudność ustalenia pochodzenia twoich środków.&lt;/li&gt; &lt;li&gt;Proces mieszania odbywa się w tle, bez dodatkowego zaangażowania z twojej strony. Kiedy zechcesz wykonać transakcję, twoje środki będą już zanonimizowane. Nie będzie konieczne dodatkowe oczekiwanie.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;UWAGA:&lt;/b&gt; Portfel zawiera tylko 1000 "adresów reszty." Każde mieszanie zużywa do 9 adresów. Oznacza to, że po 100 mieszaniach zużyjesz ok. 1000 adresów. Po wykorzystaniu 900 adresów, portfel musi wygenerować nowe adresy. Może not nastąpić jedynie, jeżeli włączone jest automatyczne tworzenie kopii zapasowych.&lt;br&gt; Dlatego też, AnonSend jest wyłączone, jeżeli użytkownik wyłączył automatyczne tworzenie kopii zapasowych. &lt;hr&gt;Więcej informacji znajdziesz na stronie &lt;a href="https://martexcoin.atlassian.net/wiki/display/DOC/AnonSend"&gt;https://martexcoin.atlassian.net/wiki/display/DOC/AnonSend&lt;/a&gt;         </translation>
     </message>
 </context>
 <context>
@@ -1049,16 +1053,16 @@
         <translation>Witaj</translation>
     </message>
     <message>
-        <source>Welcome to %1.</source>
-        <translation>Witaj w %1.</translation>
+        <source>Welcome to martex Core.</source>
+        <translation>Witaj w martex Core</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where %1 will store its data.</source>
-        <translation>Ponieważ jest to pierwsze uruchomienie programu, możesz wybrać gdzie %1 będzie przechowywał swoje dane.</translation>
+        <source>As this is the first time the program is launched, you can choose where martex Core will store its data.</source>
+        <translation>Ponieważ uruchomiłeś ten program po raz pierwszy, możesz wybrać gdzie martex Core będzie przechowywał dane.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the MarteX block chain. At least %2GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>%1 ściągnie i zapisze kopię łańcucha bloków-blockchain na twoim dysku. Co najmniej %2GB danych zostanie zapisanych w tym katalogu, a z upływem czasu blockchain będzie stopniowo wymagał coraz więcej miejsca. Twój portfel również zostanie zapisany w tym katalogu.</translation>
+        <source>martex Core will download and store a copy of the martex block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>martex Core ściągnie i zapisze kopię łańcucha bloków-blockchain na twoim dysku. Co najmniej %1GB danych zostanie zapisanych w tym katalogu, a z upływem czasu blockchain będzie stopniowo wymagał coraz więcej miejsca. Twój portfel również zostanie zapisany w tym katalogu.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1067,6 +1071,10 @@
     <message>
         <source>Use a custom data directory:</source>
         <translation>Użyj wybranego folderu dla danych</translation>
+    </message>
+    <message>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -1128,10 +1136,6 @@
         <translation>Odbiorca</translation>
     </message>
     <message>
-        <source>S&amp;tart alias</source>
-        <translation>U&amp;ruchom alias</translation>
-    </message>
-    <message>
         <source>Start &amp;all</source>
         <translation>Uruchom &amp;wszystkie</translation>
     </message>
@@ -1142,14 +1146,6 @@
     <message>
         <source>&amp;Update status</source>
         <translation>&amp;Aktualizuj status</translation>
-    </message>
-    <message>
-        <source>Show additional Masternode information</source>
-        <translation>Pokaż dodatkowe informacje na temat Masternode</translation>
-    </message>
-    <message>
-        <source>Show &amp;Info...</source>
-        <translation>Pokaż &amp;informacje...</translation>
     </message>
     <message>
         <source>Status will be updated automatically in (sec):</source>
@@ -1211,38 +1207,6 @@
         <source>Are you sure you want to start MISSING masternodes?</source>
         <translation>Czy na pewno chcesz wystartować BRAKUJĄCE masternody?</translation>
     </message>
-    <message>
-        <source>Additional information for Masternode %1</source>
-        <translation>Dodatkowe nformacje na temat Masternode %1</translation>
-    </message>
-    <message>
-        <source>Masternode Private Key</source>
-        <translation>Klucz Prywatny Masternoda</translation>
-    </message>
-    <message>
-        <source>Private Key</source>
-        <translation>Klucz Prywatny</translation>
-    </message>
-    <message>
-        <source>Collateral</source>
-        <translation>Zastaw</translation>
-    </message>
-    <message>
-        <source>IP</source>
-        <translation>IP</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation>Wersja</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation>Nieznany</translation>
-    </message>
-    <message>
-        <source>Sentinel</source>
-        <translation>Sentinel</translation>
-    </message>
 </context>
 <context>
     <name>ModalOverlay</name>
@@ -1251,12 +1215,12 @@
         <translation>Forma</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the MarteX network, as detailed below.</source>
-        <translation>Ostatnie transakcje mogą jeszcze być niewidoczne i dlatego saldo portfela może być niepoprawne. Poprawne informacje pojawią się po zakończeniu synchronizacji z siecią MarteX. Stan synchronizacji widzisz poniżej.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the martex network, as detailed below.</source>
+        <translation>Ostatnie mogą jeszcze nie być widoczne i dlatego saldo portfela może być niepoprawne. Poprawne informacje pojawią się po zakończeniu synchronizacji z siecią martex, tak jak przedstawiono to poniżej.</translation>
     </message>
     <message>
-        <source>Attempting to spend MarteX that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>Próba wydania środków z transakcji wykonanych, ale jeszcze niewidocznych, nie zostanie zaakceptowana przez sieć.</translation>
+        <source>Attempting to spend martex that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>Próba wydania środków, z transakcji wykonanych, ale jeszcze niewidocznych, nie zostanie zaakceptowana przez sieć.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1273,6 +1237,10 @@
     <message>
         <source>Progress</source>
         <translation>Postęp</translation>
+    </message>
+    <message>
+        <source>~</source>
+        <translation>~</translation>
     </message>
     <message>
         <source>Progress increase per hour</source>
@@ -1345,12 +1313,20 @@
         <translation>(0=auto, &lt;0 = zostaw tyle wolnych rdzeni)</translation>
     </message>
     <message>
-        <source>Amount of MarteX to keep anonymized</source>
-        <translation>Ilość MarteXów, które mają pozostać anonimowe.</translation>
+        <source>Amount of martex to keep anonymized</source>
+        <translation>Ilość martexów, które mają pozostać anonimowe.</translation>
     </message>
     <message>
         <source>W&amp;allet</source>
         <translation>Portfel</translation>
+    </message>
+    <message>
+        <source>Automatically start martex Core after logging in to the system.</source>
+        <translation>Automatycznie uruchom martex Core po zalogowaniu do systemu.</translation>
+    </message>
+    <message>
+        <source>&amp;Start martex Core on system login</source>
+        <translation>&amp;Uruchom martex Core przy zalogowaniu do systemu</translation>
     </message>
     <message>
         <source>Show additional tab listing all your masternodes in first sub-tab&lt;br/&gt;and all masternodes on the network in second sub-tab.</source>
@@ -1377,10 +1353,6 @@
         <translation>Ostrzegaj, jeżeli wyczerpują się klucze AnonSend</translation>
     </message>
     <message>
-        <source>Whether to use experimental AnonSend mode with multiple mixing sessions per block.&lt;br/&gt;Note: You must use this feature carefully.&lt;br/&gt;Make sure you always have recent wallet (auto)backup in a safe place!</source>
-        <translation>Czy użyć eksperymentalnego trybu AnonSend z wielokrotnymi sesjami miksowania na blok?&lt;br/&gt;Uwaga: Korzystaj z tego trybu rozważnie.&lt;br/&gt;Zawsze sprawdź czy masz w bezpiecznym miejscu najnowszą (automatyczną) kopię zapasową!</translation>
-    </message>
-    <message>
         <source>Enable AnonSend &amp;multi-session</source>
         <translation>Włącz multi-sesję dla AnonSend</translation>
     </message>
@@ -1397,8 +1369,8 @@
         <translation>Ta kwota działa jako próg po którego przekroczeniu AnonSend zostaje wyłączony.</translation>
     </message>
     <message>
-        <source>Automatically open the MarteX Core client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Automatycznie otwórz port klienta MarteX Core na ruterze. Opcja działa jedynie, jeżeli router obsługuje UPnP i funkcja UPnP jest włączona.</translation>
+        <source>Automatically open the martex Core client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Automatycznie otwórz port klienta martex Core na ruterze. Opcja działa jedynie, jeżeli router obsługuje UPnP i funkcja UPnP jest włączona.</translation>
     </message>
     <message>
         <source>Accept connections from outside</source>
@@ -1409,8 +1381,8 @@
         <translation>Zezwól na przychodzące połączenia</translation>
     </message>
     <message>
-        <source>Connect to the MarteX network through a SOCKS5 proxy.</source>
-        <translation>Połącz się z siecią MarteX przez proxy SOCKS5.</translation>
+        <source>Connect to the martex network through a SOCKS5 proxy.</source>
+        <translation>Połącz się z siecią martex przez proxy SOCKS5.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1421,8 +1393,8 @@
         <translation>Minimalizuje zamiast zakończyć działanie programu przy zamknięciu okna. Kiedy ta opcja jest włączona, program zakończy działanie po wybraniu Zamknij w menu.</translation>
     </message>
     <message>
-        <source>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items.&lt;br/&gt;%s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</source>
-        <translation>URL do zewnętrznych seriwsó(np. eksplorator bloków), które pojawiają się w zakładce transakcji jako pozycje w menu kontekstowym.&lt;br/&gt; %s w URL jest zastąpione przez hash transakcji. Wielokrotne URL są oddzielane przez pionową poprzeczkę |.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting martex Core.</source>
+        <translation>Tutaj można ustawić język interfejsu użytkownika. Ustawienie to zostanie uaktywnione po ponownym uruchomieniu martex Core.</translation>
     </message>
     <message>
         <source>Expert</source>
@@ -1435,14 +1407,6 @@
     <message>
         <source>Whether to show coin control features or not.</source>
         <translation>Czy pokazać funkcje kontroli monet czy nie.</translation>
-    </message>
-    <message>
-        <source>Automatically start %1 after logging in to the system.</source>
-        <translation>Automatycznie uruchom %1 po zalogowaniu do systemu.</translation>
-    </message>
-    <message>
-        <source>&amp;Start %1 on system login</source>
-        <translation>Uruchamiaj %1 wraz z zalogowaniem do &amp;systemu</translation>
     </message>
     <message>
         <source>Enable coin &amp;control features</source>
@@ -1481,10 +1445,6 @@
         <translation>Używane do połączenia z peerami przez: </translation>
     </message>
     <message>
-        <source>Shows, if the supplied default SOCKS5 proxy is used to reach peers via this network type.</source>
-        <translation>Pokazuje czy podane domyślnie SOCKS5 proxy jest używane do połączenia z peerami przez ten rodzaj sieci.</translation>
-    </message>
-    <message>
         <source>IPv4</source>
         <translation>IPv4</translation>
     </message>
@@ -1497,8 +1457,8 @@
         <translation>Tor</translation>
     </message>
     <message>
-        <source>Connect to the MarteX network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>Połącz się z siecią MarteX przez oddzielne proxy SOCKS5 dla ukrytych usług Tor.</translation>
+        <source>Connect to the martex network through a separate SOCKS5 proxy for Tor hidden services.</source>
+        <translation>Połącz się z siecią martex przez oddzielne proxy SOCKS5 dla ukrytych usług Tor.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services:</source>
@@ -1537,13 +1497,9 @@
         <translation>Język &amp;Użytkownika:</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting %1.</source>
-        <translation>Można tu ustawić język interfejsu uzytkownika. Ustawienie przyniesie skutek po ponownym uruchomieniu %1.</translation>
-    </message>
-    <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
 https://www.transifex.com/projects/p/martex/</source>
-        <translation>MarteX Core nie został przetłumaczony na twój język? Tłumaczenie jest niepełne lub niepoprawne? Możesz pomóc nam tłumaczyć tutaj:
+        <translation>martex Core nie został przetłumaczony na twój język? Tłumaczenie jest niepełne lub niepoprawne? Możesz pomóc nam tłumaczyć tutaj:
 https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
@@ -1622,8 +1578,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Formularz</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the MarteX network after a connection is established, but this process has not completed yet.</source>
-        <translation>Wyświetlona informacja może być przedawniona. Twój portfel automatycznie zsynchronizuje się z siecią MarteX, gdy tylko zostanie ustanowione połączenie, jednak proces ten jeszcze się nie zakończył.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the martex network after a connection is established, but this process has not completed yet.</source>
+        <translation>Wyświetlona informacja może być przedawniona. Twój portfel automatycznie zsynchronizuje się z siecią martex, gdy tylko zostanie ustanowione połączenie, jednak proces ten jeszcze się nie zakończył.</translation>
     </message>
     <message>
         <source>Available:</source>
@@ -1722,8 +1678,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Ilość oraz Rundy:</translation>
     </message>
     <message>
-        <source>0 MXT / 0 Rounds</source>
-        <translation>0 MXT / 0 Rund</translation>
+        <source>0 martex / 0 Rounds</source>
+        <translation>0 martex / 0 Rund</translation>
     </message>
     <message>
         <source>Submitted Denom:</source>
@@ -1830,7 +1786,7 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Utworzymy nową automatyczną kopię zapasową, jednak&lt;span style='color:red;'&gt; zawsze musisz zapisywać swoje kopie zapasowe w bezpiecznym miejscu &lt;/span&gt;!</translation>
     </message>
     <message>
-        <source>Note: You can turn this message off in options.</source>
+        <source>Note: You turn this message off in options.</source>
         <translation>Uwaga: Ten komunikat możesz wyłączyć w Opcjach.</translation>
     </message>
     <message>
@@ -1907,8 +1863,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Nieprawidłowy adres płatności %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid MarteX address or malformed URI parameters.</source>
-        <translation>URI nie może zostać przeanalizowany! Mogło to być spowodowane przez niewłaściwy adres MarteX lub niewłaściwe parametry URI</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid martex address or malformed URI parameters.</source>
+        <translation>URI nie może zostać przeanalizowany! Mogło to być spowodowane przez niewłaściwy adres martex lub niewłaściwe parametry URI</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -1997,24 +1953,36 @@ https://www.transifex.com/projects/p/martex/</translation>
 <context>
     <name>QObject</name>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core</translation>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
     </message>
     <message>
-        <source>%1 didn't yet exit safely...</source>
-        <translation>%1 jeszcze się bezpiecznie nie zamknął...</translation>
+        <source>Error: Specified data directory "%1" does not exist.</source>
+        <translation>Błąd: Podany folder danych "%1" nie istnieje.</translation>
+    </message>
+    <message>
+        <source>Error: Cannot parse configuration file: %1. Only use key=value syntax.</source>
+        <translation>Błąd: Nie można przetworzyć pliku konfiguracyjnego: %1. Używaj jedynie składni: klucz=wartość.</translation>
+    </message>
+    <message>
+        <source>Error: %1</source>
+        <translation>Błąd: %1</translation>
     </message>
     <message>
         <source>Error reading masternode configuration file: %1</source>
         <translation>Błąd wczytywania pliku konfiguracji masternoda: %1</translation>
     </message>
     <message>
+        <source>martex Core didn't yet exit safely...</source>
+        <translation>martex Core jeszcze nie został poprawnie zamknięty...</translation>
+    </message>
+    <message>
         <source>Amount</source>
         <translation>Kwota</translation>
     </message>
     <message>
-        <source>Enter a MarteX address (e.g. %1)</source>
-        <translation>Wpisz adres MarteX (np. %1)</translation>
+        <source>Enter a martex address (e.g. %1)</source>
+        <translation>Wpisz adres martex (np. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2078,59 +2046,6 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
 </context>
 <context>
-    <name>QObject::QObject</name>
-    <message>
-        <source>Error: Specified data directory "%1" does not exist.</source>
-        <translation>Błąd: Określony folder danych "%1" nie istnieje.</translation>
-    </message>
-    <message>
-        <source>Error: Cannot parse configuration file: %1. Only use key=value syntax.</source>
-        <translation>Błąd: Nie można przetworzyć pliku konfiguracyjnego: %1. Używaj tylko składni klucz=wartość.</translation>
-    </message>
-    <message>
-        <source>Error: %1</source>
-        <translation>Błąd: %1</translation>
-    </message>
-</context>
-<context>
-    <name>QRDialog</name>
-    <message>
-        <source>QR-Code Title</source>
-        <translation>Tytuł Kodu QR</translation>
-    </message>
-    <message>
-        <source>QR Code</source>
-        <translation>Kod QR</translation>
-    </message>
-    <message>
-        <source>&amp;Save Image...</source>
-        <translation>&amp;Zapisz obraz...</translation>
-    </message>
-    <message>
-        <source>Error creating QR Code.</source>
-        <translation>Błąd kreowania kodu QR.</translation>
-    </message>
-</context>
-<context>
-    <name>QRGeneralImageWidget</name>
-    <message>
-        <source>&amp;Save Image...</source>
-        <translation>&amp;Zapisz obraz...</translation>
-    </message>
-    <message>
-        <source>&amp;Copy Image</source>
-        <translation>&amp;Kopiuj obraz</translation>
-    </message>
-    <message>
-        <source>Save QR Code</source>
-        <translation>Zapisz Kod QR</translation>
-    </message>
-    <message>
-        <source>PNG Image (*.png)</source>
-        <translation>Obraz PNG (*.png)</translation>
-    </message>
-</context>
-<context>
     <name>QRImageWidget</name>
     <message>
         <source>&amp;Save Image...</source>
@@ -2166,6 +2081,10 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Name</source>
         <translation>Nazwa</translation>
+    </message>
+    <message>
+        <source>Client name</source>
+        <translation>Nazwa klienta</translation>
     </message>
     <message>
         <source>N/A</source>
@@ -2226,6 +2145,10 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Memory usage</source>
         <translation>Użycie pamięci</translation>
+    </message>
+    <message>
+        <source>Open the martex Core debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Otwórz plik dziennika debugowania martex Core w bieżącym folderze danych. W przypadku dużych plików może to chwilę potrwać.</translation>
     </message>
     <message>
         <source>&amp;Console</source>
@@ -2302,10 +2225,6 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Datadir</source>
         <translation>Datadir</translation>
-    </message>
-    <message>
-        <source>Open the %1 debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Otwórz plik dziennika debugowania %1 z obecnego katalogu z danymi. Może to potrwać kilka sekund przy większych plikach.</translation>
     </message>
     <message>
         <source>Decrease font size</source>
@@ -2444,8 +2363,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>&amp;Miejski</translation>
     </message>
     <message>
-        <source>Welcome to the %1 RPC console.</source>
-        <translation>Witaj w konsoli %1 RPC.</translation>
+        <source>Welcome to the martex Core RPC console.</source>
+        <translation>Witaj w konsoli RPC martex Core</translation>
     </message>
     <message>
         <source>Use up and down arrows to navigate history, and &lt;b&gt;Ctrl-L&lt;/b&gt; to clear screen.</source>
@@ -2454,10 +2373,6 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Type &lt;b&gt;help&lt;/b&gt; for an overview of available commands.</source>
         <translation>Wpisz &lt;b&gt;help&lt;/b&gt; aby uzyskać listę dostępnych komend</translation>
-    </message>
-    <message>
-        <source>WARNING: Scammers have been active, telling users to type commands here, stealing their wallet contents. Do not use this console without fully understanding the ramification of a command.</source>
-        <translation>UWAGA: Oszuści często mówią użytkownikom aby wpisywali tutaj komendy, co umożliwia im kradzież monet. Nie używaj tej konsoli jeśli w pełni nie rozumiesz funkcji komend których używasz. </translation>
     </message>
     <message>
         <source>In:</source>
@@ -2531,8 +2446,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Użyj istniejącego adresu odbiorczego (nie zalecane)</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the MarteX network.</source>
-        <translation>Opcjonalna wiadomość do żądania płatności. Wiadomość wyświetli się po otwarciu żądania. Pamiętaj: Wiadomość nie zostanie wysłana razem z płatnością poprzez sieć MarteX.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the martex network.</source>
+        <translation>Opcjonalna wiadomość do żądania płatności. Wiadomość wyświetli się po otwarciu żądania. Pamiętaj: Wiadomość nie zostanie wysłana razem z płatnością poprzez sieć martex.</translation>
     </message>
     <message>
         <source>&amp;Message:</source>
@@ -2543,8 +2458,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Opcjonalna etykieta do skojarzenia z nowym adresem odbiorczym.</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the MarteX network.</source>
-        <translation>Opcjonalna wiadomość do żądania płatności. Wiadomość wyświetli się po otwarciu żądania.&lt;br&gt; Pamiętaj: Wiadomość nie zostanie wysłana razem z płatnością poprzez sieć MarteX.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the martex network.</source>
+        <translation>Opcjonalna wiadomość do żądania płatności. Wiadomość wyświetli się po otwarciu żądania.&lt;br&gt; Pamiętaj: Wiadomość nie zostanie wysłana razem z płatnością poprzez sieć martex.</translation>
     </message>
     <message>
         <source>Use this form to request payments. All fields are &lt;b&gt;optional&lt;/b&gt;.</source>
@@ -2576,7 +2491,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Request FastSend</source>
-        <translation>Zażądaj FastSend</translation>
+        <translation>Zarządaj FastSend</translation>
     </message>
     <message>
         <source>Requested payments history</source>
@@ -2705,12 +2620,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>(brak wiadomości)</translation>
     </message>
     <message>
-        <source>(no amount requested)</source>
+        <source>(no amount)</source>
         <translation>(brak kwoty)</translation>
     </message>
     <message>
-        <source>Requested</source>
-        <translation>Zażądano</translation>
+        <source>Amount</source>
+        <translation>Kwota</translation>
     </message>
 </context>
 <context>
@@ -2780,20 +2695,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Wybierz...</translation>
     </message>
     <message>
-        <source>Using the fallbackfee can result in sending a transaction that will take several hours or days (or never) to confirm. Consider choosing your fee manually or wait until your have validated the complete chain.</source>
-        <translation>Używając opcji fallbackfee może sprawić, że transakcja nie zostanie potwierdzona przez kilka godzin, dni, lub nigdy. Pomyśl nad ręcznym wybraniem wysokości opłaty, lub poczekaj pełną walidację łańcucha.</translation>
-    </message>
-    <message>
-        <source>Warning: Fee estimation is currently not possible.</source>
-        <translation>Uwaga: Oszacowanie opłaty za transakcje jest aktualnie niemożliwe.</translation>
-    </message>
-    <message>
         <source>collapse fee-settings</source>
         <translation>zamknij ustawienia opłat</translation>
-    </message>
-    <message>
-        <source>Confirmation time target:</source>
-        <translation>Docelowy czas potwierdzenia:</translation>
     </message>
     <message>
         <source>AnonSend</source>
@@ -2804,12 +2707,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>FastSend</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 valverde and the transaction is only 250 bytes, then "per kilobyte" only pays 250 valverde in fee,&lt;br /&gt;while "at least" pays 1000 valverde. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>Jeśli ręcznie ustalona opłata wynosi 1000 valverdeów, a sama transakcja ma tylko 250 bajtów, to opłata "za kilobajt" wynosi tylko 250 valverdeów. &lt;br/&gt;Dzieje się tak dla każdej transakcji poniżej 1000 valverdeów. W przypadku transakcji większych niż jeden kilobajt opłata jest naliczana od kilobajta. </translation>
+        <source>If the custom fee is set to 1000 valverdes and the transaction is only 250 bytes, then "per kilobyte" only pays 250 valverdes in fee,&lt;br /&gt;while "at least" pays 1000 valverdes. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>Jeśli ręcznie ustalona opłata wynosi 1000 Valverdeów, a sama transakcja ma tylko 250 bajtów, to opłata "za kilobajt" wynosi tylko 250 valverdeów. &lt;br/&gt;Dzieje się tak dla każdej transakcji poniżej 1000 valverdeów. W przypadku transakcji większych niż jedrn kilobajt opłata jest naliczana od kilobajta. </translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 valverde and the transaction is only 250 bytes, then "per kilobyte" only pays 250 valverde in fee,&lt;br /&gt;while "total at least" pays 1000 valverde. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>Jeśli ręcznie ustalona opłata wynosi 1000 valverdeów, a sama transakcja ma tylko 250 bitów, to opłata "za kilobajt" wynosi tylko 250 valverdeów.&lt;br/&gt; Dzieje się tak dla każdej transakcji poniżej 1000 valverdeów. W przypadku transakcji większych niż jeden kilobajt opłata jest naliczana od kilobajta.</translation>
+        <source>If the custom fee is set to 1000 valverdes and the transaction is only 250 bytes, then "per kilobyte" only pays 250 valverdes in fee,&lt;br /&gt;while "total at least" pays 1000 valverdes. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>Jeśli ręcznie ustalona opłata wynosi 1000 Valverdeów, a sama transakcja ma tylko 250 bitów, to opłata "za kilobajt" wynosi tylko 250 valverdeów.&lt;br/&gt; Dzieje się tak dla każdej transakcji poniżej 1000 valverdeów. W przypadku transakcji większych niż jeden kilobajt opłata jest naliczana od kilobajta.</translation>
     </message>
     <message>
         <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for martex transactions than the network can process.</source>
@@ -2829,7 +2732,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>(read the tooltip)</source>
-        <translation>(przeczytaj podpowiedź w chmurce)</translation>
+        <translation>(przeczytaj powpowiedź w chmurce)</translation>
     </message>
     <message>
         <source>Recommended:</source>
@@ -2844,12 +2747,24 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>(Opłata smart nie została jeszcze zainicjonowana. Zazwyczaj zajmuje to kilka bloków...)</translation>
     </message>
     <message>
+        <source>Confirmation time:</source>
+        <translation>Czas potwierdzenia:</translation>
+    </message>
+    <message>
         <source>normal</source>
         <translation>normalny</translation>
     </message>
     <message>
         <source>fast</source>
         <translation>szybki</translation>
+    </message>
+    <message>
+        <source>Send as zero-fee transaction if possible</source>
+        <translation>Wyślij transakcję bez uiszczania opłat, jeśli jest to możliwe.</translation>
+    </message>
+    <message>
+        <source>(confirmation may take longer)</source>
+        <translation>(potwierdzenie może zająć trochę więcej czasu)</translation>
     </message>
     <message>
         <source>Confirm the send action</source>
@@ -2976,8 +2891,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Utworzenie transakcji nie powiodło się!</translation>
     </message>
     <message>
-        <source>The transaction was rejected with the following reason: %1</source>
-        <translation>Transakcja została odrzucona z następującym powodem: %1</translation>
+        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation>Transakcja została odrzucona! Może się to zdarzyć, jeśli część monet z portfela została już wydana przy użyciu kopii pliku wallet.dat i nie zostało to tutaj uwzględnione.</translation>
     </message>
     <message>
         <source>A fee higher than %1 is considered an absurdly high fee.</source>
@@ -2986,10 +2901,6 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Payment request expired.</source>
         <translation>Żądanie płatności wygasło.</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n block(s)</source>
-        <translation><numerusform>%n blok</numerusform><numerusform>%n bloki</numerusform><numerusform>%n bloków</numerusform><numerusform>%n bloków</numerusform></translation>
     </message>
     <message>
         <source>Pay only the required fee of %1</source>
@@ -3000,20 +2911,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation><numerusform>Potwierdzenia zaczną się za około %n blok</numerusform><numerusform>Potwierdzenia zaczną się za około %n bloki</numerusform><numerusform>Potwierdzenia zaczną się za około %n bloków</numerusform><numerusform>Potwierdzenia zaczną się za około %n bloków</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid MarteX address</source>
-        <translation>Ostrzeżenie: adres MarteX jest nieprawidlowy </translation>
+        <source>Warning: Invalid martex address</source>
+        <translation>Ostrzeżenie: adres martex jest nieprawidlowy </translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
         <translation>Ostrzeżenie: Nieznany adres reszty</translation>
-    </message>
-    <message>
-        <source>Confirm custom change address</source>
-        <translation>Potwierdź zmianę adresu własnego</translation>
-    </message>
-    <message>
-        <source>The address you selected for change is not part of this wallet. Any or all funds in your wallet may be sent to this address. Are you sure?</source>
-        <translation>Adres który wybrałeś dla reszty nie znajduje się w tym porfelu. Część lub wszystkie twoje monety mogą zostać wysłane na ten adres. Jesteś pewien? </translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -3031,8 +2934,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Zapłać &amp;dla:</translation>
     </message>
     <message>
-        <source>The MarteX address to send the payment to</source>
-        <translation>Adres MarteX na który wysłać fundusze</translation>
+        <source>The martex address to send the payment to</source>
+        <translation>Adres martex na który wysłać fundusze</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -3067,7 +2970,7 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Su&amp;ma:</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive a lower amount of MarteX than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive a lower amount of martex than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
         <translation>Opłata zostanie odliczona od wysyłanej kwoty. Odbiorca otrzyma mniej, niż wprowadziłeś w polu kwoty. W razie wielu odbiorców, opłata zostanie równo podzielona.</translation>
     </message>
     <message>
@@ -3079,8 +2982,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Wiadomość:</translation>
     </message>
     <message>
-        <source>A message that was attached to the martex: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the MarteX network.</source>
-        <translation>Wiadomość, która została dołączona do martex: Link, który zostanie zapisany wraz z transakcją do wglądu w przyszłości. Zauważ, że sama wiadomość nie zostanie wysłana przez sieć MarteX.</translation>
+        <source>A message that was attached to the martex: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the martex network.</source>
+        <translation>Wiadomość, która została dołączona do martex: Link, który zostanie zapisany wraz z transakcją do wglądu w przyszłości. Zauważ, że sama wiadomość nie zostanie wysłana przez sieć martex.</translation>
     </message>
     <message>
         <source>This is an unauthenticated payment request.</source>
@@ -3104,17 +3007,10 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
 </context>
 <context>
-    <name>SendConfirmationDialog</name>
-    <message>
-        <source>Yes</source>
-        <translation>Tak</translation>
-    </message>
-</context>
-<context>
     <name>ShutdownWindow</name>
     <message>
-        <source>%1 is shutting down...</source>
-        <translation>%1 się zamyka...</translation>
+        <source>martex Core is shutting down...</source>
+        <translation>Trwa zamykanie martex Core</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -3132,12 +3028,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Podpi&amp;sz Wiadomość</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive MarteX sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <source>You can sign messages/agreements with your addresses to prove you can receive martex sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
         <translation>Możesz podpisywać wiadomości swoimi adresami aby udowodnić, że jesteś ich właścicielem. Uważaj, aby nie podpisywać niczego co wzbudza Twoje podejrzenia, ponieważ ktoś może stosować phishing próbując nakłonić Cię do ich podpisania. Akceptuj i podpisuj tylko w pełni zrozumiałe komunikaty i wiadomości.</translation>
     </message>
     <message>
-        <source>The MarteX address to sign the message with</source>
-        <translation>Adres MarteX do podpisu wiadomości</translation>
+        <source>The martex address to sign the message with</source>
+        <translation>Adres martex do podpisu wiadomości</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -3168,8 +3064,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Kopiuje aktualny podpis do schowka systemowego</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this MarteX address</source>
-        <translation>Podpisz wiadomość, aby udowodnić, że jesteś właścicielem adresu MarteX.</translation>
+        <source>Sign the message to prove you own this martex address</source>
+        <translation>Podpisz wiadomość, aby udowodnić, że jesteś właścicielem adresu martex.</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -3192,12 +3088,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Wpisz adres odbiorcy, podaj wiadomość (upewnij się, że dokładnie skopiujesz wszystkie zakończenia linii, spacje, tabulacje itp.) oraz podpis poniżej by sprawdzić wiadomość. Uważaj by nie dodać więcej do podpisu niż do samej podpisywanej wiadomości by uniknąć ataku man-in-the-middle (człowiek pośrodku)</translation>
     </message>
     <message>
-        <source>The MarteX address the message was signed with</source>
-        <translation>Adres MarteX, którym wiadomość została podpisana</translation>
+        <source>The martex address the message was signed with</source>
+        <translation>Adres martex, którym wiadomość została podpisana</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified MarteX address</source>
-        <translation>Zweryfikuj wiadomość, aby upewnić się, że została zapisana przez konkretny adres MarteX</translation>
+        <source>Verify the message to ensure it was signed with the specified martex address</source>
+        <translation>Zweryfikuj wiadomość, aby upewnić się, że została zapisana przez konkretny adres martex</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -3267,8 +3163,20 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>[testnet]</translation>
     </message>
     <message>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
+    </message>
+    <message>
         <source>Version %1</source>
         <translation>Wersja %1</translation>
+    </message>
+    <message>
+        <source>The Bitcoin Core developers</source>
+        <translation>Deweloperzy Bitcoin Core</translation>
+    </message>
+    <message>
+        <source>The martex Core developers</source>
+        <translation>Deweloperzy martex Core</translation>
     </message>
 </context>
 <context>
@@ -3425,10 +3333,6 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>ID transakcji</translation>
     </message>
     <message>
-        <source>Output index</source>
-        <translation>Indeks wyjściowy</translation>
-    </message>
-    <message>
         <source>Transaction total size</source>
         <translation>Całkowity rozmiar transakcji</translation>
     </message>
@@ -3468,12 +3372,12 @@ https://www.transifex.com/projects/p/martex/</translation>
 <context>
     <name>TransactionDescDialog</name>
     <message>
-        <source>This pane shows a detailed description of the transaction</source>
-        <translation>Ten panel pokazuje szczegółowy opis transakcji</translation>
+        <source>Transaction details</source>
+        <translation>Szczegóły transakcji</translation>
     </message>
     <message>
-        <source>Details for %1</source>
-        <translation>Szczegóły %1</translation>
+        <source>This pane shows a detailed description of the transaction</source>
+        <translation>Ten panel pokazuje szczegółowy opis transakcji</translation>
     </message>
 </context>
 <context>
@@ -3815,8 +3719,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Wyślij płatność</translation>
     </message>
     <message>
-        <source>FastSend doesn't support sending values that high yet. Transactions are currently limited to %1 MXT.</source>
-        <translation>FastSend nie obsługuje jeszcze tak wielkich kwot. Transakcje są obecnie ograniczone do %1 MXT</translation>
+        <source>FastSend doesn't support sending values that high yet. Transactions are currently limited to %1 martex.</source>
+        <translation>FastSend nie obsługuje jeszcze tak wielkich kwot. Transakcje są obecnie ograniczone do %1 martex</translation>
     </message>
     <message>
         <source>Used way too many inputs (&gt;%1) for this FastSend transaction, fees could be huge.</source>
@@ -3869,24 +3773,32 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Związany z danym adresem oraz zawsze prowadzący na nim nasłuch.  Użyj [host]:oznaczenie dla IPv6</translation>
     </message>
     <message>
+        <source>Cannot obtain a lock on data directory %s. martex Core is probably already running.</source>
+        <translation>Nie można zablokować katalogu danych %s. Prawdopodobnie martex jest już uruchomiony. </translation>
+    </message>
+    <message>
         <source>Error: Listening for incoming connections failed (listen returned error %s)</source>
         <translation>Błąd: Nie powiodło się nasłuchiwanie połączeń przychodzących (nasłuch zwrócił błąd %s)</translation>
     </message>
     <message>
-        <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)</source>
+        <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replmartex by message)</source>
         <translation>Wykonaj komendę po otrzymaniu odpowiedniego zawiadomienia lub po obserwacji bardzo długiego rozszczepienia (%s w konsoli jest zastąpiony przez wiadomość)</translation>
     </message>
     <message>
-        <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
+        <source>Execute command when a wallet transaction changes (%s in cmd is replmartex by TxID)</source>
         <translation>Wykonaj komendę kiedy zmienia się transakcja portfela (%s w konsoli jest zastąpione przez TxID)</translation>
     </message>
     <message>
-        <source>Execute command when the best block changes (%s in cmd is replaced by block hash)</source>
+        <source>Execute command when the best block changes (%s in cmd is replmartex by block hash)</source>
         <translation>Wykonaj komendę przy zmianie najlepszego bloku (%s w konsoli jest zastąpione przez hasz bloku)</translation>
     </message>
     <message>
         <source>Name to construct url for KeePass entry that stores the wallet passphrase</source>
         <translation>Nazwa służąca do stworzenia linka do KeePass w którym trzymane jest hasło portfela</translation>
+    </message>
+    <message>
+        <source>Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect)</source>
+        <translation>Jeśli pula adresów jest niska, pytaj o adresy peer przez podgląd DNS (domyślnie: 1 chyba że -connect)</translation>
     </message>
     <message>
         <source>Set maximum size of high-priority/low-fee transactions in bytes (default: %d)</source>
@@ -3901,6 +3813,10 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Ta wersja nie jest jeszcze gotowa na oficjalne wydanie - używaj jej na własne ryzyko - nie używaj tej wersji do kopania monet lub do świadczenia usług komercyjnych.</translation>
     </message>
     <message>
+        <source>Unable to bind to %s on this computer. martex Core is probably already running.</source>
+        <translation>Niezdolny do związania z %s na tym komputerze. Prawdopodobnie martex jest już uruchomiony. </translation>
+    </message>
+    <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
         <translation>Uwaga: Wygląda na to, że istnieją pewne rozbieżności w sieci! Możliwe, że niektórzy kopacze doświadczają problemów technicznych. </translation>
     </message>
@@ -3909,12 +3825,20 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>dadf</translation>
     </message>
     <message>
+        <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
+        <translation>Uwaga: plik wallet.dat jest uszkodzony, ale dane zostały odzyskane! Oryginalny plik wallet.dat został zapisany jako wallet.{timestamp}.bak w %s; jeżeli twoje saldo lub transakcje są nieprawidłowe powinieneś przwyrócić ten plik z kopi zapasowej.</translation>
+    </message>
+    <message>
         <source>You must specify a masternodeprivkey in the configuration. Please see documentation for help.</source>
         <translation>Musisz sprecyzować masternodeprivkey w konfiguracji. Proszę przeglądnij dokumentacje w celu pomocy.</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>
         <translation>Zaakceptuj linie poleceń oraz polecenia JSON-RPC </translation>
+    </message>
+    <message>
+        <source>Accept connections from outside (default: 1 if no -proxy or -connect)</source>
+        <translation>Pozwól na połączenia z zewnątrz (domyślnie: 1 jeśli nie -proxy lub -connect)</translation>
     </message>
     <message>
         <source>Add a node to connect to and attempt to keep the connection open</source>
@@ -3937,12 +3861,24 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Nie można obniżyć wersji portfela</translation>
     </message>
     <message>
+        <source>Cannot resolve -bind address: '%s'</source>
+        <translation>Nie można rozwiązać -bind dla adresu adresu: '%s'</translation>
+    </message>
+    <message>
+        <source>Cannot resolve -externalip address: '%s'</source>
+        <translation>Nie można rozwiązać -externalip dla adresu: '%s'</translation>
+    </message>
+    <message>
         <source>Cannot write default address</source>
         <translation>Nie można zapisać domyślnych adresów</translation>
     </message>
     <message>
         <source>Collateral not valid.</source>
         <translation>Transakcja pod zastaw jest nie niewłaściwa.</translation>
+    </message>
+    <message>
+        <source>Connect only to the specified node(s)</source>
+        <translation>Podłącz tylko do wyszczególnionych węzła(ów)</translation>
     </message>
     <message>
         <source>Connect to a node to retrieve peer addresses, and disconnect</source>
@@ -3989,6 +3925,14 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Błąd wczytywania bloku bazy danych</translation>
     </message>
     <message>
+        <source>Error loading wallet.dat</source>
+        <translation>Błąd wczytywania wallet.dat</translation>
+    </message>
+    <message>
+        <source>Error loading wallet.dat: Wallet corrupted</source>
+        <translation>Błąd wczytywania wallet.dat: Portfel uszkodzony</translation>
+    </message>
+    <message>
         <source>Error opening block database</source>
         <translation>Błąd otwarcia bloku bazy danych</translation>
     </message>
@@ -4013,8 +3957,16 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>(1 = zaochwaj metadane np. informacje właściciela konta oraz żądania zapłat, 2 = pozbądź się matadanych tx)</translation>
     </message>
     <message>
+        <source>-fallbackfee is set very high! This is the transaction fee you may pay when fee estimates are not available.</source>
+        <translation>-fallbackfee jest bardzo wysoka! Ta opłata może być uiszczona jeśli nie ma innych szacunków wysokości opłaty.</translation>
+    </message>
+    <message>
         <source>-maxtxfee is set very high! Fees this large could be paid on a single transaction.</source>
         <translation>-maxtxfee jest bardzo wysoka! Tak duże opłaty mogą być uiszczone przy wysłaniu jednej transakcji.</translation>
+    </message>
+    <message>
+        <source>-paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
+        <translation>-paytxfee jest bardzo wysoka! To jest opłata którą będziesz musiał uiścić jeśli dokonasz transakcji.</translation>
     </message>
     <message>
         <source>A fee rate (in %s/kB) that will be used when fee estimation has insufficient data (default: %s)</source>
@@ -4043,6 +3995,10 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Delete all wallet transactions and only recover those parts of the blockchain through -rescan on startup</source>
         <translation>Usuń wszystkie transakcje portfela i odzyskaj tylko te części blockchainu - zeskanuj powonie na starcie.</translation>
+    </message>
+    <message>
+        <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
+        <translation>Rozpowszechniane na licencji MIT. Jeśli chcesz się dowiedzieć więcej otwórz towarzyszący plik o nzwie COPYING lub odwiedź &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</translation>
     </message>
     <message>
         <source>Error loading %s: You can't enable HD on a already existing non-HD wallet</source>
@@ -4089,6 +4045,26 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Informacje na temat debugowania danych wyjściowych (domyślnie: %u, podanie &lt;category&gt; jest opcjonalne)</translation>
     </message>
     <message>
+        <source>Set the number of threads for coin generation if enabled (-1 = all cores, default: %d)</source>
+        <translation>Ustaw liczbę wątków do generowania monet, jeśli jest ono włączone (-1 = wszystkie rdzenie. domyślnie: %d)</translation>
+    </message>
+    <message>
+        <source>Show N confirmations for a successfully locked transaction (0-9999, default: %u)</source>
+        <translation>Pokaż N potwierdzeń dla skutecznie zamkniętej transakcji (0-9999, domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit &lt;https://www.openssl.org/&gt; and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.</source>
+        <translation>Produkt ten zawiera oprogramowanie stworzone przez OpenSSL Project do użytku w OpenSSL Toolkit &lt;https://www.openssl.org/&gt;, oprogramowanie krptograficzne napisane przez Eric Young oraz oprogramowanie UPnP napisane przez Thomas Bernard.</translation>
+    </message>
+    <message>
+        <source>Unable to locate enough funds for this transaction that are not equal 1000 martex.</source>
+        <translation>Niemożliwe jest zlokalizowanie wystarczającej ilości środków dla tej transakcji, które nie są równe 1000 martex.</translation>
+    </message>
+    <message>
+        <source>Use hierarchical deterministic key generation (HD) after bip39/bip44. Only has effect during wallet creation/first start</source>
+        <translation>Użyj hierarchinie deterministyczny proces generacji kluczy (HD) po bip39/44 Tyczy się jedynie kiedy towrzysz nowy portfel.</translation>
+    </message>
+    <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
         <translation>Użyj osobnego proxy SOCK5 aby połączyć się z peerami przez sieć Tor (domyślnie: %s)</translation>
     </message>
@@ -4099,6 +4075,14 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>User defined seed for HD wallet (should be in hex). Only has effect during wallet creation/first start (default: randomly generated)</source>
         <translation>Lista słów dla porfela HD stworzona przez użytkownika (powinna być w formie hex). Tyczy się jedynie kiedy tworzysz nowy porfel. (domyślnie: tworzone losowo)</translation>
+    </message>
+    <message>
+        <source>Warning: incorrect parameter -walletbackupsdir, path must exist! Using default path.</source>
+        <translation>Uwaga: błędne parametry - walletbackupdir, ścieżka musi być poprawna! Używając domyślnie ścieżki.</translation>
+    </message>
+    <message>
+        <source>Whitelist peers connecting from the given netmask or IP address. Can be specified multiple times.</source>
+        <translation>Peery z białej listy łączące się z danej maski sieci lub adresu IP. Może byc ustawiane wielokrotnie.</translation>
     </message>
     <message>
         <source>Whitelisted peers cannot be DoS banned and their transactions are always relayed, even if they are already in the mempool, useful e.g. for a gateway</source>
@@ -4125,6 +4109,10 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Mieszanie jest niemożliwe: nie znaleziono odpowiednich wartości wejściowych.</translation>
     </message>
     <message>
+        <source>Cannot resolve -whitebind address: '%s'</source>
+        <translation>Nie można rozwiązać -bind dla adresu adresu: '%s'</translation>
+    </message>
+    <message>
         <source>Chain selection options:</source>
         <translation>Opcje wyboru łańcucha:</translation>
     </message>
@@ -4137,6 +4125,14 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Podłącz do KeePassHttp na porcie &lt;port&gt; (domyślny: %u)</translation>
     </message>
     <message>
+        <source>Copyright (C) 2009-%i The Bitcoin Core Developers</source>
+        <translation>Prawo autorskie (c) 2009-%i deweloperzy Bitcoin</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2014-%i The martex Core Developers</source>
+        <translation>Prawa autorskie (C) 2014-%i deweloperzy martex</translation>
+    </message>
+    <message>
         <source>Enable the client to act as a masternode (0-1, default: %u)</source>
         <translation>Upoważnia klienta aby działał jako masternode (0-1, domyślnie: %u)</translation>
     </message>
@@ -4145,8 +4141,16 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Przekracza maksymalny rozmiar.</translation>
     </message>
     <message>
+        <source>Error connecting to Masternode.</source>
+        <translation>Błąd w połączeniu z Masternodem.</translation>
+    </message>
+    <message>
         <source>Error loading %s: You can't disable HD on a already existing HD wallet</source>
         <translation>Błąd podczas wczytywania %s: Niemożliwe jest zmienienie porfela HD w standarodowy porfel.</translation>
+    </message>
+    <message>
+        <source>Error loading wallet.dat: Wallet requires newer version of martex Core</source>
+        <translation>Błą wczytywania wallet.dat: Portfel wymaga nowszej wersji martex</translation>
     </message>
     <message>
         <source>Failed to load fulfilled requests cache from</source>
@@ -4171,6 +4175,10 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Found enough users, signing ...</source>
         <translation>Znaleziono wystarczającą ilość użytkowników, zapisuje ...</translation>
+    </message>
+    <message>
+        <source>Generate coins (default: %u)</source>
+        <translation>Generuj monety (domyślny: %u)</translation>
     </message>
     <message>
         <source>How many blocks to check at startup (default: %u, 0 = all)</source>
@@ -4201,6 +4209,10 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Informacja</translation>
     </message>
     <message>
+        <source>Initialization sanity check failed. martex Core is shutting down.</source>
+        <translation>Inicjalizacja kontroli poprawności nie powiodła się. Trwa zamykanie martex Core</translation>
+    </message>
+    <message>
         <source>Input is not valid.</source>
         <translation>Transakcja wejściowa jest niewłaściwa.</translation>
     </message>
@@ -4217,8 +4229,24 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Nieprawidłowy adres -proxy: '%s'</translation>
     </message>
     <message>
+        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Nieprawidłowa kwota dla -maxtxfee=&lt;amount&gt;: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Nieprawidłowa kwota dla -minrelaytxfee=&lt;kwota&gt;: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -mintxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Nieprawidłowa kwota dla -mintxfee=&lt;kwota&gt;: '%s'</translation>
+    </message>
+    <message>
         <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
         <translation>Nieprawidłowa kwota dla -paytxfee=&lt;amount&gt;: '%s' (musi wynosić co najmniej %s)</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Nieprawidłowa kwota dla -paytxfee=&lt;kwota&gt;: '%s'</translation>
     </message>
     <message>
         <source>Keypool ran out, please call keypoolrefill first</source>
@@ -4321,6 +4349,10 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Ustaw ilość kluczy w key pool na &lt;n&gt; (domyślny: %u)</translation>
     </message>
     <message>
+        <source>Set minimum block size in bytes (default: %u)</source>
+        <translation>Ustaw minimalny rozmiar bloku w bajtach (domyślny: %u)</translation>
+    </message>
+    <message>
         <source>Set the number of threads to service RPC calls (default: %d)</source>
         <translation>Ustaw liczbę wątków dla usługi połączen RPC (domyślny: %d)</translation>
     </message>
@@ -4385,28 +4417,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Zbyt wiele %f nominałów, usuwam.</translation>
     </message>
     <message>
-        <source>Tor control port password (default: empty)</source>
-        <translation>Hasło do kontroli portu Tor (domyślnie: puste)</translation>
-    </message>
-    <message>
-        <source>Tor control port to use if onion listening enabled (default: %s)</source>
-        <translation>Używany port kontrolny Tora  jeśli włączony jest nasłuch onion (domyślnie %s)</translation>
-    </message>
-    <message>
         <source>Unable to start HTTP server. See debug log for details.</source>
         <translation>Uruchomienie serwera HTTP nieudane. Szczegóły znajdziesz w dzienniku debugowania.</translation>
     </message>
     <message>
         <source>Unknown response.</source>
         <translation>Nieznana odpowiedź.</translation>
-    </message>
-    <message>
-        <source>Unsupported argument -benchmark ignored, use -debug=bench.</source>
-        <translation>Nieobsługiwany argument - benchmark został zignorowany, użyj -debug=bench.</translation>
-    </message>
-    <message>
-        <source>Unsupported argument -debugnet ignored, use -debug=net.</source>
-        <translation>Znaleziono nieobsługiwany argument -debugnet zignorowano, użyj -debug=net.</translation>
     </message>
     <message>
         <source>Unsupported argument -tor found, use -onion.</source>
@@ -4429,8 +4445,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Użyj łańcucha testowego</translation>
     </message>
     <message>
-        <source>User Agent comment (%s) contains unsafe characters.</source>
-        <translation>Komentarz agenta użytkownika (%s) zawiera znaki które nie są bezpieczne.</translation>
+        <source>Wallet needed to be rewritten: restart martex Core to complete</source>
+        <translation>Portfel potrzebuje być przepisany: uruchom ponownie martex Core aby zakończyć.</translation>
     </message>
     <message>
         <source>Will retry...</source>
@@ -4473,16 +4489,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Klucz KeePassHttp dla zaszyfrowanego metodą AES połączenia z KeePass</translation>
     </message>
     <message>
+        <source>Keep N martex anonymized (default: %u)</source>
+        <translation>Utrzymuj N zanonimizowanych martex (domyślnie: %u)</translation>
+    </message>
+    <message>
         <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>
         <translation>Utrzymuj najwyżej &lt;n&gt; niepodłączalnych transakcji w pamięci (domyślny: %u)</translation>
-    </message>
-    <message>
-        <source>Disable all MarteX specific functionality (Masternodes, AnonSend, FastSend, Governance) (0-1, default: %u)</source>
-        <translation>Wyłącz wszystkie funkcjonalności charakterystyczne dla MarteX (Masternody, AnonSend, FastSend, Governance) (0-1, domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Discover own IP addresses (default: 1 when listening and no -externalip or -proxy)</source>
-        <translation>Wykryj własny adres IP (domyślnie: 1 kiedy nasłuchuje, bez stosowania -externalip lub -proxy)</translation>
     </message>
     <message>
         <source>Do not keep transactions in the mempool longer than &lt;n&gt; hours (default: %u)</source>
@@ -4493,15 +4505,7 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Włącz FastSend, pokazuj potwierdzenia zamkniętych  transakcji (0-1, domyślnie: %u)</translation>
     </message>
     <message>
-        <source>Enable multiple AnonSend mixing sessions per block, experimental (0-1, default: %u)</source>
-        <translation>Włącz wielokrotne sesje mieszające AnonSend na blok, funkcja eksperymentalna (0-1, domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Enable use of automated AnonSend for funds stored in this wallet (0-1, default: %u)</source>
-        <translation>Włącz automatyczne stosowanie AnonSend dla środków zgromadzonych w tym portfelu (0-1, domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Execute command when a wallet FastSend transaction is successfully locked (%s in cmd is replaced by TxID)</source>
+        <source>Execute command when a wallet FastSend transaction is successfully locked (%s in cmd is replmartex by TxID)</source>
         <translation>Wykonaj komendę, kiedy się transakcja FastSend  portfela zostanie pomyślnie zamknięta (%s w konsoli jest zastąpione przez TxID)</translation>
     </message>
     <message>
@@ -4509,116 +4513,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Tworzenie kopii zapasowej nieudane, plik już istnieje! Taka sytuacja może wystąpić, jeżeli minęło mniej niż 60 od ostatniego zamknięcia portfela. Jeżeli Ci to nie przeszkadza, możesz kontynuować.</translation>
     </message>
     <message>
-        <source>Fees (in %s/kB) smaller than this are considered zero fee for relaying, mining and transaction creation (default: %s)</source>
-        <translation>Opłaty (%s/kB)  niższe niż ta są równoznaczne z brakiem opłaty za przekazanie, wykopanie i utworzenie transakcji (domyślnie: %s)</translation>
+        <source>Please check that your computer's date and time are correct! If your clock is wrong martex Core will not work properly.</source>
+        <translation>Sprawdź, czy data i godzina na Twoim komputerze są poprawne! Jeżeli zegar wskazuje niewłaściwy czas, martex Core nie będzie działać poprawnie.</translation>
     </message>
     <message>
-        <source>Fees (in %s/kB) smaller than this are considered zero fee for transaction creation (default: %s)</source>
-        <translation>Opłaty (%s/kB) niższe niż ta uważane są za równoznaczne z brakiem opłaty za utworzenie transakcji (domyślnie: %s)</translation>
-    </message>
-    <message>
-        <source>If &lt;category&gt; is not supplied or if &lt;category&gt; = 1, output all debugging information.</source>
-        <translation>Jeżeli nie podano &lt;category&gt; lub jeżeli  &lt;category&gt; = 1, pokaż informacje o debugowaniu.</translation>
-    </message>
-    <message>
-        <source>FastSend doesn't support sending values that high yet. Transactions are currently limited to %1 MXT.</source>
-        <translation>FastSend nie obsługuje jeszcze tak wielkich kwot. Transakcje są obecnie ograniczone do %1 MXT</translation>
-    </message>
-    <message>
-        <source>FastSend requires inputs with at least %d confirmations, you might need to wait a few minutes and try again.</source>
-        <translation>FastSend potrzebuje aby transakcja wejściowa miała co najmniej %d potwierdzeń. Poczekaj kilka minut i spróbuj ponownie.</translation>
-    </message>
-    <message>
-        <source>Maintain a full address index, used to query for the balance, txids and unspent outputs for addresses (default: %u)</source>
-        <translation>Utrzymuj pełny index adresów, używany do wyszukiwania sald, identyfikatorów transakcji i niewykorzystanych danych wyjściowych dla danych adresów (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Maintain a full spent index, used to query the spending txid and input index for an outpoint (default: %u)</source>
-        <translation>Utrzymuj pełny indeks wydatków, używany do wyszukiwania identyfikatorów transakcji wyjściowych oraz indeks danych wejściowych dla punktu wyjścia (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Maintain a timestamp index for block hashes, used to query blocks hashes by a range of timestamps (default: %u)</source>
-        <translation>Utrzymuj indeks znaczników czasu dla haszy bloku, funkcja wykorzystywana do wyszukiwania haszy bloku według zakresu znaczników czasu (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Maintain at most &lt;n&gt; connections to peers (temporary service connections excluded) (default: %u)</source>
-        <translation>Utrzymuj nie więcej niż &lt;n&gt; połączeń z peerami (tymczasowe połączenia serwisowe nie są liczone) (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>AnonSend uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
-        <translation>AnonSend do przesyłania środków używa kwot o konkretnych nominałach, możliwe że musisz zanonimizować trochę więcej monet.</translation>
-    </message>
-    <message>
-        <source>Prune configured below the minimum of %d MiB.  Please use a higher number.</source>
-        <translation>Czyszczenie starych danych ustawiono poniżej minimum %d MiB.  Ustaw wyższą wartość.</translation>
-    </message>
-    <message>
-        <source>Prune: last wallet synchronisation goes beyond pruned data. You need to -reindex (download the whole blockchain again in case of pruned node)</source>
-        <translation>Oczyszczanie: ostatnia synchronizacja portfela sięga poza skasowane dane. Użyj -reindex (w razie oczyszczenia węzła, ponownie pobierz cały łańcuch bloków).</translation>
-    </message>
-    <message>
-        <source>Randomize credentials for every proxy connection. This enables Tor stream isolation (default: %u)</source>
-        <translation>Dla każdego połączenia proxy wybierz losowe dane uwierzytalniające. Pozwala to na izolacje Tor stream (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Rescans are not possible in pruned mode. You will need to use -reindex which will download the whole blockchain again.</source>
-        <translation>Ponownie skanowanie jest niemożliwe w trybie oczyszczania. Użyj -reindex, co spowoduje ponowne pobranie całego łańcucha bloków.</translation>
-    </message>
-    <message>
-        <source>Specify full path to directory for automatic wallet backups (must exist)</source>
-        <translation>Podaj pełną ścieżkę do (istniejącego) katalogu na automatyczne kopie zapasowe portfela</translation>
-    </message>
-    <message>
-        <source>Support filtering of blocks and transaction with bloom filters (default: %u)</source>
-        <translation>Pozwalaj na filtrowanie bloków i transakcji za pomocą filtrów bloom (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>The block database contains a block which appears to be from the future. This may be due to your computer's date and time being set incorrectly. Only rebuild the block database if you are sure that your computer's date and time are correct</source>
-        <translation>Baza danych bloków zawiera blok, który zdaje się pochodzić z przyszłości. Taka sytuacja może się zdarzyć, jeżeli zegar Twojego komputera pokazuje niepoprawną datę i godzinę. Przebuduj bazę danych bloków wyłącznie, jeżeli masz pewność, że zegar Twojego komputera pokazuje poprawną datę i godzinę. </translation>
-    </message>
-    <message>
-        <source>The transaction amount is too small to send after the fee has been deducted</source>
-        <translation>Po odliczeniu opłaty, transakcja jest zbyt niska aby móc ją wysłać.</translation>
-    </message>
-    <message>
-        <source>Total length of network version string (%i) exceeds maximum length (%i). Reduce the number or size of uacomments.</source>
-        <translation>Całkowita długość sieciowej wersji struny (%i) przekracza maksymalną długość (%i). Zredukuj liczbę lub rozmiar uacomments.</translation>
-    </message>
-    <message>
-        <source>Tries to keep outbound traffic under the given target (in MiB per 24h), 0 = no limit (default: %d)</source>
-        <translation>Próbuje utrzymać wychodzący ruch sieciowy poniżej podanej wartości (MiB/24 h), 0 = bez ograniczeń (domyślnie: %d)</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough AnonSend denominated funds for this transaction.</source>
-        <translation>Nie znaleziono wystarczających środków AnonSend o nominałach koniecznych do wykonania tej transakcji.</translation>
-    </message>
-    <message>
-        <source>Unsupported argument -socks found. Setting SOCKS version isn't possible anymore, only SOCKS5 proxies are supported.</source>
-        <translation>Błąd: niewspierany argument, znaleziono -socks. Ustawienie wersji SOCKS nie jest już możliwa, wspierane są tylko bramki  proxy SOCKS5.</translation>
-    </message>
-    <message>
-        <source>Unsupported argument -whitelistalwaysrelay ignored, use -whitelistrelay and/or -whitelistforcerelay.</source>
-        <translation>niewspierany argument -whitelistalwaysrelay jest ignorowany, używaj -whitelistrelay oraz/lub -whitelistforcerelay.</translation>
-    </message>
-    <message>
-        <source>Use UPnP to map the listening port (default: 1 when listening and no -proxy)</source>
-        <translation>Użyj UPnP aby zmapować porty nasłuchujące (domyślnie: 1 kiedy słucha i nie ma proxy)</translation>
-    </message>
-    <message>
-        <source>WARNING! Failed to replenish keypool, please unlock your wallet to do so.</source>
-        <translation>OSTRZEŻENIE! Nie udało się uzupełnić puli kluczy. W tym celu musisz odblokować portfel.</translation>
-    </message>
-    <message>
-        <source>Wallet is locked, can't replenish keypool! Automatic backups and mixing are disabled, please unlock your wallet to replenish keypool.</source>
-        <translation>Portfel jest zamknięty , nie można uzupełnić pul* kluczy! Automatyczne tworzenie kopi zapasowych oraz miksowanie są wyłączone. Otwórz porfel aby uzupełnić pul* kluczy.</translation>
-    </message>
-    <message>
-        <source>Warning: Unknown block versions being mined! It's possible unknown rules are in effect</source>
-        <translation>Uwaga: Wykopywane są bloki o nieznanej wersji! Możliwe, że zostały aktywowane inne zasady na których opiera się sieć.</translation>
-    </message>
-    <message>
-        <source>You need to rebuild the database using -reindex to go back to unpruned mode.  This will redownload the entire blockchain</source>
-        <translation>Aby wrócić do trybu bez bez obcinki, musisz odtworzyć bazę danych za pomocą komendy -reindex. Cały blockchain zostanie ponownie ściągnięty.</translation>
+        <source>%s - %d confirmations</source>
+        <translation>%s - %d potwierdzeń</translation>
     </message>
     <message>
         <source>(%d could be used only on mainnet)</source>
@@ -4639,10 +4539,6 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>&lt;category&gt; can be:</source>
         <translation>&lt;category&gt;może być:</translation>
-    </message>
-    <message>
-        <source>Append comment to the user agent string</source>
-        <translation>Dodaj komentarz do linijek agenta użytkwnika.</translation>
     </message>
     <message>
         <source>Automatic backups disabled</source>
@@ -4673,100 +4569,24 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Pozwól na publikację surowego bloku w &lt;address&gt;</translation>
     </message>
     <message>
-        <source>Enable publish raw transaction (locked via FastSend) in &lt;address&gt;</source>
-        <translation>Włącz publikację surowych danych transakcji (wyłączone przez FastSend) w &lt;address&gt;</translation>
-    </message>
-    <message>
-        <source>Enable publish raw transaction in &lt;address&gt;</source>
-        <translation>Pozwól na publikację czystych danych transakcji w &lt;address&gt;</translation>
-    </message>
-    <message>
-        <source>Enable transaction replacement in the memory pool (default: %u)</source>
-        <translation>Włącz zastępowanie transakcji w memory pool (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Error: A fatal internal error occurred, see debug.log for details</source>
-        <translation>Błąd: Wystąpił wewnętrzny błąd krytyczny, szczegóły znajdziesz w pliku debug.log</translation>
-    </message>
-    <message>
-        <source>Failed to create backup %s!</source>
-        <translation>Nie powiodło się tworzenie kopii zapasowej %s!</translation>
-    </message>
-    <message>
-        <source>Failed to create backup, error: %s</source>
-        <translation>Tworzenie kopii zapasowej nie powiodło się, błąd: %s</translation>
-    </message>
-    <message>
-        <source>Failed to delete backup, error: %s</source>
-        <translation>Skasowanie kopii zapasowej nie powiodło się, błąd: %s</translation>
-    </message>
-    <message>
-        <source>Failed to parse host:port string</source>
-        <translation>Nieudane analizowanie hosta:port string</translation>
-    </message>
-    <message>
-        <source>Fee (in %s/kB) to add to transactions you send (default: %s)</source>
-        <translation>Dodanie opłaty (w %s/kB) do twojej transakcji (domyślnie: %s)</translation>
-    </message>
-    <message>
-        <source>Imports blocks from external blk000??.dat file on startup</source>
-        <translation>Importuje bloki z zewnętrznego pliku blk000??.dat na starcie</translation>
-    </message>
-    <message>
-        <source>FastSend options:</source>
-        <translation>Opcje FastSend:</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -fallbackfee=&lt;amount&gt;: '%s'</source>
-        <translation>Błędna ilość -fallbackfee=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Keep the transaction memory pool below &lt;n&gt; megabytes (default: %u)</source>
-        <translation>Utrzymuj rozmiar memory pool poniżej &lt;n&gt; megabajtów (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Last AnonSend was too recent.</source>
-        <translation>Za mało czasu upłynęło od ostatniej transakcji AnonSend.</translation>
-    </message>
-    <message>
-        <source>Last successful AnonSend action was too recent.</source>
-        <translation>Zbyt mało czasu upłynęło od ostatniej udanej transakcji AnonSend. </translation>
-    </message>
-    <message>
         <source>Line: %d</source>
         <translation>Linia: %d</translation>
     </message>
     <message>
         <source>Loading addresses...</source>
-        <translation>Wczytuję adresy...</translation>
+        <translation>Wczytuje adresy...</translation>
     </message>
     <message>
         <source>Loading block index...</source>
-        <translation>Wczytuję indeks bloków</translation>
-    </message>
-    <message>
-        <source>Loading governance cache...</source>
-        <translation>Wczytuję bufor governance</translation>
+        <translation>Wczytuje indeks bloków</translation>
     </message>
     <message>
         <source>Loading wallet... (%3.2f %%)</source>
-        <translation>Ładuję portfel... (%3.2f %%)</translation>
+        <translation>Ładuje portfel... (%3.2f %%)</translation>
     </message>
     <message>
         <source>Loading wallet...</source>
-        <translation>Ładuję portfel...</translation>
-    </message>
-    <message>
-        <source>Location of the auth cookie (default: data dir)</source>
-        <translation>Miejsce w którym znajduje się ciasteczko auth (domyślnie: data dir)</translation>
-    </message>
-    <message>
-        <source>Make the wallet broadcast transactions</source>
-        <translation>Zmuś portfel do wysłania transakcji.</translation>
-    </message>
-    <message>
-        <source>Masternode cache is empty, skipping payments and governance cache...</source>
-        <translation>Cache masternodów jest pusty, pomijam cache płatności i zarządzania...</translation>
+        <translation>Ładuje portfel...</translation>
     </message>
     <message>
         <source>Masternode options:</source>
@@ -4779,10 +4599,6 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Masternode:</source>
         <translation>Masternod:</translation>
-    </message>
-    <message>
-        <source>Minimum bytes per sigop in transactions we relay and mine (default: %u)</source>
-        <translation>Minimalna liczba bajtów na każdą operację podpisu w transakcjach które są przez nas przekazywane i włączne do bloku (domyślnie: %u)</translation>
     </message>
     <message>
         <source>Missing input transaction information.</source>
@@ -4813,24 +4629,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Dostępny niewystarczający opis pliku.</translation>
     </message>
     <message>
-        <source>Not enough funds to anonymize.</source>
-        <translation>Zbyt mała ilość finduszy aby móc je zanonimizować.</translation>
-    </message>
-    <message>
-        <source>Number of automatic wallet backups (default: %u)</source>
-        <translation>Ilość automatycznych kopi bezpieczeństwa (domyślnie: %u)</translation>
-    </message>
-    <message>
         <source>Options:</source>
         <translation>Opcje:</translation>
     </message>
     <message>
         <source>Password for JSON-RPC connections</source>
         <translation>Hasło dla połączeń JSON-RPC</translation>
-    </message>
-    <message>
-        <source>Print version and exit</source>
-        <translation>Wydrukuj wersję i zamknij.</translation>
     </message>
     <message>
         <source>AnonSend is idle.</source>
@@ -4841,328 +4645,20 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Opcje AnonSend:</translation>
     </message>
     <message>
-        <source>AnonSend request complete:</source>
-        <translation>Żądanie AnonSend jest ukończone:</translation>
-    </message>
-    <message>
-        <source>AnonSend request incomplete:</source>
-        <translation>Żądanie AnonSend nie powiodło się.</translation>
-    </message>
-    <message>
-        <source>Prune cannot be configured with a negative value.</source>
-        <translation>Obcinanie nie może zostać skonfigurowane z ujemnymi wartościami.</translation>
-    </message>
-    <message>
-        <source>Prune mode is incompatible with -txindex.</source>
-        <translation>Tryb obcinania jest niekompatybilny z -txindex.</translation>
-    </message>
-    <message>
-        <source>Pruning blockstore...</source>
-        <translation>Kasuję stare bloki ...</translation>
-    </message>
-    <message>
-        <source>Rescan the block chain for missing wallet transactions on startup</source>
-        <translation>Przeskanuj blockchain ponownie aby zlokalizować zagubione transakcje podczas startu.</translation>
-    </message>
-    <message>
-        <source>The wallet will avoid paying less than the minimum relay fee.</source>
-        <translation>Portfel będzie unikał płacenia mniejszej niż przekazana opłaty.</translation>
-    </message>
-    <message>
-        <source>This is the minimum transaction fee you pay on every transaction.</source>
-        <translation>Minimalna opłata transakcyjna którą płacisz przy każdej transakcji.</translation>
-    </message>
-    <message>
-        <source>This is the transaction fee you will pay if you send a transaction.</source>
-        <translation>To jest opłata transakcyjna którą zapłacisz jeśli wyślesz transakcję. </translation>
-    </message>
-    <message>
-        <source>Transaction amounts must not be negative</source>
-        <translation>Kwota transakcji musi być dodatnia</translation>
-    </message>
-    <message>
-        <source>Transaction has too long of a mempool chain</source>
-        <translation>Transakcja posiada zbyt długi łańcuch pamięci</translation>
-    </message>
-    <message>
-        <source>Transaction must have at least one recipient</source>
-        <translation>Transakcja wymaga co najmniej jednego odbiorcy</translation>
-    </message>
-    <message>
-        <source>Trying to connect...</source>
-        <translation>Staram się połączyć</translation>
-    </message>
-    <message>
-        <source>Unable to bind to %s on this computer. %s is probably already running.</source>
-        <translation>Nie można przywiązać do %s na tym komputerze. %s prawdopodobnie jest już uruchomiony.</translation>
-    </message>
-    <message>
-        <source>Upgrading UTXO database</source>
-        <translation>Aktualizowanie bazy danych UTXO</translation>
-    </message>
-    <message>
-        <source>Use devnet chain with provided name</source>
-        <translation>Użyj łańcucha devnet z doranym imieniem.</translation>
-    </message>
-    <message>
-        <source>Wallet debugging/testing options:</source>
-        <translation>Opcje debugowania/testowania portfela:</translation>
-    </message>
-    <message>
-        <source>Wallet needed to be rewritten: restart %s to complete</source>
-        <translation>Portfel wymaga przepisania: zrestartuj %s aby ukończyć</translation>
-    </message>
-    <message>
-        <source>Warning: unknown new rules activated (versionbit %i)</source>
-        <translation>Uwaga: aktywowane zostały nowe zasady (versionbit %i)</translation>
-    </message>
-    <message>
         <source>Wasn't able to create wallet backup folder %s!</source>
         <translation>Nie udało się utworzyć folderu %s na kopie zapasowe portfela!</translation>
-    </message>
-    <message>
-        <source>Whether to operate in a blocks only mode (default: %u)</source>
-        <translation>Czy operować jedynie w trybie bloków (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>ZeroMQ notification options:</source>
-        <translation>ZeroMQ opcje powiadomień:</translation>
     </message>
     <message>
         <source>no mixing available.</source>
         <translation>Mieszanie niedostępne.</translation>
     </message>
     <message>
-        <source>see debug.log for details.</source>
-        <translation>Otwórz debug.log jeśli chcesz poznać detale.</translation>
-    </message>
-    <message>
         <source>RPC server options:</source>
         <translation>Opcje serwera RPC:</translation>
     </message>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core</translation>
-    </message>
-    <message>
-        <source>The %s developers</source>
-        <translation>Deweloperzy %s</translation>
-    </message>
-    <message>
-        <source>Accept connections from outside (default: 1 if no -proxy or -connect/-noconnect)</source>
-        <translation>Akceptuj połącznia z zewnątrz (domyślnie: 1 jeśli nie ma proxy lub -connect/noconnect)</translation>
-    </message>
-    <message>
-        <source>Cannot obtain a lock on data directory %s. %s is probably already running.</source>
-        <translation>Nie można uzyskać blokady na katalogu z danymi %s. %s najprawdopodobniej jest już uruchomiony.</translation>
-    </message>
-    <message>
-        <source>Connect only to the specified node(s); -noconnect or -connect=0 alone to disable automatic connections</source>
-        <translation>Łącz się tylko z wybranym węzłem(węzłami); -noconnect lb -connect=0 aby wyłączyć automatyczne połączenia</translation>
-    </message>
-    <message>
-        <source>Distributed under the MIT software license, see the accompanying file %s or %s</source>
-        <translation>Rozprowadzane na licencji MIT, zobacz dołączony plik %s lub %s</translation>
-    </message>
-    <message>
-        <source>Error reading %s! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
-        <translation>Błąd odczytu %s! Wszystkie klucze zostały odczytane poprawnie, ale może brakować  danych transakcji lub wpisów w książce adresowej, lub mogą one być nieprawidłowe.</translation>
-    </message>
-    <message>
-        <source>Force relay of transactions from whitelisted peers even if they violate local relay policy (default: %d)</source>
-        <translation>Wymuś przekazywanie transakcji od peerów z białej listy,  nawet jeśli jest to w sprzeczności z lokalnymi ustawieniami (domyślnie: %d)</translation>
-    </message>
-    <message>
-        <source>Incorrect or no devnet genesis block found. Wrong datadir for devnet specified?</source>
-        <translation>Znaleziono błędny lub nie istniejący pierwszy blog devnet. Wybrano zły datadir dla devnet? </translation>
-    </message>
-    <message>
-        <source>Maximum allowed median peer time offset adjustment. Local perspective of time may be influenced by peers forward or backward by this amount. (default: %u seconds)</source>
-        <translation>Dopasowanie maksymalnego przeciętnego czasu peer. Lokalna perspektywa czasu może ulec zmianie przez peery któe znajdują się powyżej lub poniżej tej wartści. (domyślnie: %u sekund)</translation>
-    </message>
-    <message>
-        <source>Maximum total fees (in %s) to use in a single wallet transaction or raw transaction; setting this too low may abort large transactions (default: %s)</source>
-        <translation>Maksymalna wysokość opłat (w %s) dla jednej transakcji; ustawienie tej wartości za nisko może zatrzymać duże transakcje (domyślnie: %s)</translation>
-    </message>
-    <message>
-        <source>Override spork address. Only useful for regtest and devnet. Using this on mainnet or testnet will ban you.</source>
-        <translation>Nadpisz adres spork. Przydatne tylko na regtest oraz devnecie. Użycie tego na normalnje sieci lub testnecie zaskutkuje banem. </translation>
-    </message>
-    <message>
-        <source>Please check that your computer's date and time are correct! If your clock is wrong, %s will not work properly.</source>
-        <translation>Proszę sprawdzić czy data i czas na Twoim komputerze są poprawne! Jeżeli ustawienia zegara będą złe, %s nie będzie działał prawidłowo.</translation>
-    </message>
-    <message>
-        <source>Please contribute if you find %s useful. Visit %s for further information about the software.</source>
-        <translation>Jeśli %s przydatne dla ciebie, wesprzyj nas. Odwiedź %s po więcej informacj na temat tego programu. </translation>
-    </message>
-    <message>
-        <source>Provide liquidity to AnonSend by infrequently mixing coins on a continual basis (%u-%u, default: %u, 1=very frequent, high fees, %u=very infrequent, low fees)</source>
-        <translation>Dostarczaj AnonSend płynności przez rzadkie, ale ciągłe mieszanie monet (%u-%u, domyślnie: %u, 1=bardzo często, wysokie opłaty, %u=bardzo rzadko, niskie opłaty)</translation>
-    </message>
-    <message>
-        <source>Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect/-noconnect)</source>
-        <translation>Jeśli pula adresów jest niska, pytaj o adresy peer przez podgląd DNS (domyślnie: 1 chyba że -connect)</translation>
-    </message>
-    <message>
-        <source>Reduce storage requirements by enabling pruning (deleting) of old blocks. This allows the pruneblockchain RPC to be called to delete specific blocks, and enables automatic pruning of old blocks if a target size in MiB is provided. This mode is incompatible with -txindex and -rescan. Warning: Reverting this setting requires re-downloading the entire blockchain. (default: 0 = disable pruning blocks, 1 = allow manual pruning via RPC, &gt;%u = automatically prune block files to stay under the specified target size in MiB)</source>
-        <translation>Zmniejsz ilość wymaganego miejsca poprzez czyszczenie (kasowanie) starych bloków.  TPozwala to pruneblockchain RPC na kasowanie wybranych bloków oraz na automatyczne czyszczenie starych bloków jeśli jest ustawiony limit miejsca w MiB. Tryb ten jest niezgodny z -txindex oraz -rescan. Uwaga: Cofnięcie tego ustawienia wymaga ponownego pobrania całego łańcucha bloków. (domyślnie: 0 = kasowanie starych bloków wyłączone, 1 = pozwól na ręczne czyszczenie przez RPC, &gt;%u = automatycznie kasuj bloki aby ilość zabranego miejsca nie przekraczała wybranego limitu w MiB)</translation>
-    </message>
-    <message>
-        <source>Set lowest fee rate (in %s/kB) for transactions to be included in block creation. (default: %s)</source>
-        <translation>Ustaw najnższą opłatę (in %s/kB) za transakcje aby została ona włączona do bloku. (domyślnie: %s)</translation>
-    </message>
-    <message>
-        <source>Show N confirmations for a successfully locked transaction (%u-%u, default: %u)</source>
-        <translation>Pokaż N potwierdzeń dla skutecznie zamkniętej transakcji (%u-%u, domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>This is the transaction fee you may pay when fee estimates are not available.</source>
-        <translation>To jest prawdopodobny koszt transakcj jeśli szacunki opłat są niedostępne. </translation>
-    </message>
-    <message>
-        <source>This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit %s and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.</source>
-        <translation>Produkt zawiera oprogramowanie stworzone przez OpenSSL Project do użycia w OpensSSL Toolkit %s, oprogramowanie kryptograficzne napisane przez Eric Young oraz oprogramowanie UPnP napisane przez Thomas Bernard.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough AnonSend non-denominated funds for this transaction.</source>
-        <translation>Nie znaleziono wystarczających środków AnonSend o nominałach koniecznych do wykonania tej transakcji.</translation>
-    </message>
-    <message>
-        <source>Use N separate masternodes for each denominated input to mix funds (%u-%u, default: %u)</source>
-        <translation>Użyj N osobnych masternodów dla każdej denominowanej wartości wejściowej aby zmiksować fundusze (%u-%u, domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Use hierarchical deterministic key generation (HD) after BIP39/BIP44. Only has effect during wallet creation/first start</source>
-        <translation>Użyj hierarchinie deterministycznego procesu generacji kluczy (HD) po BIP39/BIP44. Tyczy się jedynie kiedy towrzysz nowy portfel.</translation>
-    </message>
-    <message>
-        <source>User defined mnemonic passphrase for HD wallet (BIP39). Only has effect during wallet creation/first start (default: empty string)</source>
-        <translation>Fraza przypominająca dla portfela HD (bip39) zdefiniowana przez użytkownika. Działa jedynie przy tworzeniu nowego portfela/przy pierwszym uruchomieniu (domyślnie: pusty ciąg)</translation>
-    </message>
-    <message>
-        <source>Username and hashed password for JSON-RPC connections. The field &lt;userpw&gt; comes in the format: &lt;USERNAME&gt;:&lt;SALT&gt;$&lt;HASH&gt;. A canonical python script is included in share/rpcuser. The client then connects normally using the rpcuser=&lt;USERNAME&gt;/rpcpassword=&lt;PASSWORD&gt; pair of arguments. This option can be specified multiple times</source>
-        <translation>Nazwa użytkownika oraz zhaszowane hasło do połączenia JSON-RPC. Pole &lt;userpw&gt; jest w formacie: &lt;USERNAME&gt;:&lt;SALT&gt;$&lt;HASH&gt;. Kanoniczny skrypt python jest zawarty w share/rpcuser. Klient łączy się normalnie używając rpcuser=&lt;USERNAME&gt;/rpcpassword=&lt;PASSWORD&gt;pary argumentów. Opcja ta może zostać wielokrotnie sprecyzowana.</translation>
-    </message>
-    <message>
-        <source>Wallet will not create transactions that violate mempool chain limits (default: %u)</source>
-        <translation>Portfel nie stworzy transakcji które są sprzeczne z limitami puli pamięci. (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Warning: At least %d of %d masternodes are running on a newer software version. Please check latest releases, you might need to update too.</source>
-        <translation>Uwaga: Przynajmniej %d z %d masterndów jest na nowszej wersji. Sprawdź najnowsze wydania oprogramowania, możliwe że musisz również dokonać aktualizacji.  </translation>
-    </message>
-    <message>
-        <source>Warning: Every masternode (out of %d known ones) is running on a newer software version. Please check latest releases, it's very likely that you missed a major/critical update.</source>
-        <translation>Uwaga: Każdy masternde ( z %d znanych) jest na nowszej wersji. Sprawdź najnowsze wydania oprogramowania, możliwe że przeoczyłeś ważną/krytyczną aktualizację.</translation>
-    </message>
-    <message>
-        <source>Warning: Wallet file corrupt, data salvaged! Original %s saved as %s in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>Ostrzeżenie: Odtworzono dane z uszkodzonego pliku portfela! Oryginalny %s został zapisany jako %s w %s; jeśli twoje saldo lub transakcje są niepoprawne powinieneś odtworzyć kopię zapasową.</translation>
-    </message>
-    <message>
-        <source>Whitelist peers connecting from the given IP address (e.g. 1.2.3.4) or CIDR notated network (e.g. 1.2.3.0/24). Can be specified multiple times.</source>
-        <translation>Peery z białej listy łączące się z danejgo adresu IP (np. 1.2.3.4) lub CIDR notowanej sieci (np. 1.2.3.0/24). Może byc ustawiane wielokrotnie.</translation>
-    </message>
-    <message>
-        <source>%s corrupt, salvage failed</source>
-        <translation>%s uszkodzony, odtworzenie się nie powiodło</translation>
-    </message>
-    <message>
-        <source>%s is not a valid backup folder!</source>
-        <translation>%s nie jest ważnym folderem kopi zapasowych!</translation>
-    </message>
-    <message>
-        <source>%s is set very high!</source>
-        <translation>%s jest ustawione bardzo wysoko!</translation>
-    </message>
-    <message>
-        <source>(press q to shutdown and continue later)</source>
-        <translation>(naciśnij q aby zamknąć i kontynuować później)</translation>
-    </message>
-    <message>
-        <source>-devnet can only be specified once</source>
-        <translation>-devnet może zostać ustawiony tylko jeden raz</translation>
-    </message>
-    <message>
-        <source>-port must be specified when -devnet and -listen are specified</source>
-        <translation>kiedy -devnet oraz -listen są ustawione -port też musi być ustawiony</translation>
-    </message>
-    <message>
-        <source>-rpcport must be specified when -devnet and -server are specified</source>
-        <translation>kiedy -devnet oraz -server są ustawione -rpcport też musi być ustawiony</translation>
-    </message>
-    <message>
-        <source>Allow RFC1918 addresses to be relayed and connected to (default: %u)</source>
-        <translation>Pozwól RFC1918 adresom na bycie przekierowanym oraz połączonym do (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Attempt to recover private keys from a corrupt wallet on startup</source>
-        <translation>Próbuj odzyskać klucze prywatne z uszkodzonego portfela podczas uruchamiania.</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -%s address: '%s'</source>
-        <translation>Nie można rozpoznać -%s adresu: '%s'</translation>
-    </message>
-    <message>
-        <source>Change index out of range</source>
-        <translation>Index zmian poza zasięgiem.</translation>
-    </message>
-    <message>
-        <source>Copyright (C)</source>
-        <translation>Prawo autorskie (C)</translation>
-    </message>
-    <message>
-        <source>Error loading %s</source>
-        <translation>Błąd ładowania %s</translation>
-    </message>
-    <message>
-        <source>Error loading %s: Wallet corrupted</source>
-        <translation>Błąd ładowania %s: Uszkodzony portfel</translation>
-    </message>
-    <message>
-        <source>Error loading %s: Wallet requires newer version of %s</source>
-        <translation>Błąd ładowania %s: Portfel wymaga nowszej wersji %s</translation>
-    </message>
-    <message>
-        <source>Error upgrading chainstate database</source>
-        <translation>Błąd ładowania bazy bloków</translation>
-    </message>
-    <message>
-        <source>Failed to find mixing queue to join</source>
-        <translation>Znalezienie kolejki do mieszania monet zakończyło się niepowodzeniem</translation>
-    </message>
-    <message>
-        <source>Failed to start a new mixing queue</source>
-        <translation>Próba stworzenia kolejki do mieszania monet zakończyła się niepowodzeniem</translation>
-    </message>
-    <message>
-        <source>Initialization sanity check failed. %s is shutting down.</source>
-        <translation>Wstępna kontrola poprawności nie powiodła się. %s wyłącza się.</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -%s=&lt;amount&gt;: '%s'</source>
-        <translation>Nieprawidłowa kwota dla -%s=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid spork address specified with -sporkaddr</source>
-        <translation>Nieważny adres spork ustawiony z -sporkaddr</translation>
-    </message>
-    <message>
-        <source>Keep N MXT anonymized (%u-%u, default: %u)</source>
-        <translation>Trzymaj N MXT zanonimizowane (%u-%u, domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Print this help message and exit</source>
-        <translation>Wyświetl ten tekst pomocy i wyjdź</translation>
-    </message>
-    <message>
         <source>Receive and display P2P network alerts (default: %u)</source>
         <translation>Odbiera i wyświetla P2P alarmy sieci (standardowo: %u)</translation>
-    </message>
-    <message>
-        <source>Reducing -maxconnections from %d to %d, because of system limitations.</source>
-        <translation>Zmniejsz -maxconnections z %d do %d, z powodu ograniczeń systemowych.</translation>
     </message>
     <message>
         <source>Relay and mine data carrier transactions (default: %u)</source>
@@ -5179,10 +4675,6 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Run in the background as a daemon and accept commands</source>
         <translation>Działaj w tle jako daemon i akceptuj polecenia</translation>
-    </message>
-    <message>
-        <source>Send trace/debug info to console instead of debug.log file</source>
-        <translation>Wyślij informacje na temat błędów do konsoli zamiast do debug.log file</translation>
     </message>
     <message>
         <source>Session not complete!</source>
@@ -5229,10 +4721,6 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Sprecyzuj swój adres publiczny</translation>
     </message>
     <message>
-        <source>Starting network threads...</source>
-        <translation>Uruchamianie wątków sieciowych...</translation>
-    </message>
-    <message>
         <source>Synchronization pending...</source>
         <translation>Oczekiwanie na synchronizację...</translation>
     </message>
@@ -5245,12 +4733,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Synchronizacja płatności masternodów...</translation>
     </message>
     <message>
-        <source>The source code is available from %s.</source>
-        <translation>Kod źródłowy dostępny jest z %s.</translation>
-    </message>
-    <message>
         <source>The transaction amount is too small to pay the fee</source>
         <translation>Kwota transakcji jest za niska by pokryć opłatę</translation>
+    </message>
+    <message>
+        <source>This help message</source>
+        <translation>Ten komunikat pomocny</translation>
     </message>
     <message>
         <source>This is experimental software.</source>
@@ -5259,6 +4747,10 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Transaction amount too small</source>
         <translation>Zbyt mała kwota</translation>
+    </message>
+    <message>
+        <source>Transaction amounts must be positive</source>
+        <translation>Kwota musi być dodatnia</translation>
     </message>
     <message>
         <source>Transaction created successfully.</source>
@@ -5275,6 +4767,10 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Transaction too large for fee policy</source>
         <translation>Transakcja nie mieści się w ramach wyznaczających wielkość opłaty za transakcję</translation>
+    </message>
+    <message>
+        <source>Transaction too large</source>
+        <translation>Za duża transakcja</translation>
     </message>
     <message>
         <source>Unable to bind to %s on this computer (bind returned error %s)</source>
@@ -5339,6 +4835,10 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Zapping all transactions from wallet...</source>
         <translation>Zappowanie wszystkich transakcji z portfela</translation>
+    </message>
+    <message>
+        <source>wallet.dat corrupt, salvage failed</source>
+        <translation>Plik wallet.dat zepsuty, odzyskiwanie nie powiodło się</translation>
     </message>
 </context>
 </TS>

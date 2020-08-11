@@ -114,7 +114,7 @@ namespace GUIUtil
     // Open debug.log
     void openDebugLogfile();
 	
-    // Open MarteX.conf
+    // Open martex.conf
     void openConfigfile();	
 
     // Open masternode.conf

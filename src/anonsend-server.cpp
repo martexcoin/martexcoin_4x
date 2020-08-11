@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2017 The MarteX Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include "anonsend-server.h"
@@ -151,7 +151,7 @@ void CAnonSendServer::ProcessMessage(CNode* pfrom, const std::string& strCommand
             return;
         }
 
-        CDarkSendEntry entry;
+        CAnonSendEntry entry;
         vRecv >> entry;
 
         LogPrint("anonsend", "DSVIN -- txCollateral %s", entry.txCollateral->ToString());
@@ -577,7 +577,7 @@ bool CAnonSendServer::IsInputScriptSigValid(const CTxIn& txin)
 //
 // Add a clients transaction to the pool
 //
-bool CAnonSendServer::AddEntry(const CDarkSendEntry& entryNew, PoolMessage& nMessageIDRet)
+bool CAnonSendServer::AddEntry(const CAnonSendEntry& entryNew, PoolMessage& nMessageIDRet)
 {
     if(!fMasternodeMode) return false;
 
@@ -728,7 +728,7 @@ bool CAnonSendServer::CreateNewSession(const CAnonsendAccept& dsa, PoolMessage& 
 
     // start new session
     nMessageIDRet = MSG_NOERR;
-    nSessionID = GetRandInt(999999)+1;
+    nSessionID = GetRandInt(2412699)+1;
     nSessionDenom = dsa.nDenom;
     // nInputCount is not covered by legacy signature, require SPORK_6_NEW_SIGS to activate to use new algo
     // (to make sure nInputCount wasn't modified by some intermediary node)

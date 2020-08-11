@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2017 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -44,6 +44,10 @@ QString TransactionDesc::FormatTxStatus(const CWalletTx& wtx)
 
         if (fOffline) {
             strTxStatus = tr("%1/offline").arg(nDepth);
+//	} else if (wtx.tx->IsCoinStake() && !wtx.InMempool() && !wtx.isAbandoned()) {
+	//one sec
+//	wallet->AbandonTransaction(wtx.GetHash());
+	//auto abandon failed coin-stakes
         } else if (nDepth == 0) {
             strTxStatus = tr("0/unconfirmed, %1").arg((wtx.InMempool() ? tr("in memory pool") : tr("not in memory pool"))) + (wtx.isAbandoned() ? ", "+tr("abandoned") : "");
         } else if (nDepth < 6) {
@@ -83,7 +87,10 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx, TransactionReco
     CAmount nCredit = wtx.GetCredit(ISMINE_ALL);
     CAmount nDebit = wtx.GetDebit(ISMINE_ALL);
     CAmount nNet = nCredit - nDebit;
-
+     if (wtx.tx->IsCoinStake() && !wtx.InMempool() && !wtx.isAbandoned()) {
+        //one sec
+      wallet->AbandonTransaction(wtx.GetHash());
+	}
     strHTML += "<b>" + tr("Status") + ":</b> " + FormatTxStatus(wtx);
     int nRequests = wtx.GetRequestCount();
     if (nRequests != -1)
@@ -100,7 +107,7 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx, TransactionReco
     //
     // From
     //
-    if (wtx.IsCoinBase() || wtx.IsCoinStake())
+    if (wtx.IsCoinBase())
     {
         strHTML += "<b>" + tr("Source") + ":</b> " + tr("Generated") + "<br>";
     }
@@ -288,10 +295,12 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx, TransactionReco
         }
     }
 
-    if (wtx.IsCoinBase() || wtx.IsCoinStake())
+    if (wtx.IsCoinBase())
     {
-        int nCbMaturity = (GetTime() <= (!(Params().NetworkIDString() == CBaseChainParams::TESTNET) ? NEW_MATURITY_SWITCH_TIME : NEW_MATURITY_SWITCH_TIME_TESTNET) ? nCoinbaseMaturity : nCoinbaseMaturity_NEW);
-        quint32 numBlocksToMaturity = nCbMaturity;
+	int nCbMaturity = (GetTime() <= (!(Params().NetworkIDString() == CBaseChainParams::TESTNET) ? NEW_MATURITY_SWITCH_TIME : NEW_MATURITY_SWITCH_TIME_TESTNET) ? COINBASE_MATURITY : COINBASE_MATURITY_NEW);
+	if((Params().NetworkIDString() == CBaseChainParams::TESTNET))
+        	nCbMaturity = COINBASE_MATURITY_TESTNET;
+	quint32 numBlocksToMaturity = nCbMaturity + 1;
         strHTML += "<br>" + tr("Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to \"not accepted\" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.").arg(QString::number(numBlocksToMaturity)) + "<br>";
     }
 

@@ -371,6 +371,10 @@ QString TransactionTableModel::formatTxType(const TransactionRecord *wtx) const
     {
     case TransactionRecord::RecvWithAddress:
         return tr("Received with");
+    case TransactionRecord::MNReward:
+        return tr("Masternode Reward");
+    case TransactionRecord::StakeMint:
+        return tr("Minted");
     case TransactionRecord::RecvFromOther:
         return tr("Received from");
     case TransactionRecord::RecvWithAnonSend:
@@ -382,8 +386,6 @@ QString TransactionTableModel::formatTxType(const TransactionRecord *wtx) const
         return tr("Payment to yourself");
     case TransactionRecord::Generated:
         return tr("Mined");
-    case TransactionRecord::StakeMint:
-        return tr("Stake");
 
     case TransactionRecord::AnonSendDenominate:
         return tr("AnonSend Denominate");
@@ -407,7 +409,6 @@ QVariant TransactionTableModel::txAddressDecoration(const TransactionRecord *wtx
     switch(wtx->type)
     {
     case TransactionRecord::Generated:
-    case TransactionRecord::StakeMint:
         return QIcon(":/icons/" + theme + "/tx_mined");
     case TransactionRecord::RecvWithAnonSend:
     case TransactionRecord::RecvWithAddress:
@@ -435,9 +436,10 @@ QString TransactionTableModel::formatTxToAddress(const TransactionRecord *wtx, b
         return QString::fromStdString(wtx->address) + watchAddress;
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::RecvWithAnonSend:
+    case TransactionRecord::MNReward:
+    case TransactionRecord::StakeMint:
     case TransactionRecord::SendToAddress:
     case TransactionRecord::Generated:
-    case TransactionRecord::StakeMint:
     case TransactionRecord::AnonSend:
         return lookupAddress(wtx->address, tooltip) + watchAddress;
     case TransactionRecord::SendToOther:
@@ -454,9 +456,10 @@ QVariant TransactionTableModel::addressColor(const TransactionRecord *wtx) const
     switch(wtx->type)
     {
     case TransactionRecord::RecvWithAddress:
+    case TransactionRecord::MNReward:
+    case TransactionRecord::StakeMint:
     case TransactionRecord::SendToAddress:
     case TransactionRecord::Generated:
-    case TransactionRecord::StakeMint:
     case TransactionRecord::AnonSend:
     case TransactionRecord::RecvWithAnonSend:
         {

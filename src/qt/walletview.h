@@ -7,11 +7,13 @@
 
 #include "amount.h"
 #include "masternodelist.h"
+#include "governancelist.h"
 
 #include <QStackedWidget>
 
 class BitcoinGUI;
 class ClientModel;
+class GovernancePage;
 class OverviewPage;
 class PlatformStyle;
 class ReceiveCoinsDialog;
@@ -67,6 +69,7 @@ private:
     AddressBookPage *usedSendingAddressesPage;
     AddressBookPage *usedReceivingAddressesPage;
     MasternodeList *masternodeListPage;
+    GovernanceList *governanceListPage;
 
     TransactionView *transactionView;
 
@@ -81,6 +84,8 @@ public Q_SLOTS:
     void gotoHistoryPage();
     /** Switch to masternode page */
     void gotoMasternodePage();
+    /** Switch to governance page */
+    void gotoGovernancePage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */

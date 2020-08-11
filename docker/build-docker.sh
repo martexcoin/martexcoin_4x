@@ -3,7 +3,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR/..
 
-DOCKER_IMAGE=${DOCKER_IMAGE:-martexcoin/martex-develop}
+DOCKER_IMAGE=${DOCKER_IMAGE:-martexpay/martexd-develop}
 DOCKER_TAG=${DOCKER_TAG:-latest}
 
 BUILD_DIR=${BUILD_DIR:-.}

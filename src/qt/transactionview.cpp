@@ -88,21 +88,15 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     }
 
     typeWidget->addItem(tr("All"), TransactionFilterProxy::ALL_TYPES);
-    typeWidget->addItem(tr("Most Common"), TransactionFilterProxy::COMMON_TYPES);
     typeWidget->addItem(tr("Received with"), TransactionFilterProxy::TYPE(TransactionRecord::RecvWithAddress) |
-                                        TransactionFilterProxy::TYPE(TransactionRecord::RecvFromOther));
+                                             TransactionFilterProxy::TYPE(TransactionRecord::RecvFromOther));
     typeWidget->addItem(tr("Sent to"), TransactionFilterProxy::TYPE(TransactionRecord::SendToAddress) |
-                                  TransactionFilterProxy::TYPE(TransactionRecord::SendToOther));
-    typeWidget->addItem(tr("AnonSend"), TransactionFilterProxy::TYPE(TransactionRecord::AnonSend));
-    typeWidget->addItem(tr("AnonSend Make Collateral Inputs"), TransactionFilterProxy::TYPE(TransactionRecord::AnonSendMakeCollaterals));
-    typeWidget->addItem(tr("AnonSend Create Denominations"), TransactionFilterProxy::TYPE(TransactionRecord::AnonSendCreateDenominations));
-    typeWidget->addItem(tr("AnonSend Denominate"), TransactionFilterProxy::TYPE(TransactionRecord::AnonSendDenominate));
-    typeWidget->addItem(tr("AnonSend Collateral Payment"), TransactionFilterProxy::TYPE(TransactionRecord::AnonSendCollateralPayment));
+                                       TransactionFilterProxy::TYPE(TransactionRecord::SendToOther));
     typeWidget->addItem(tr("To yourself"), TransactionFilterProxy::TYPE(TransactionRecord::SendToSelf));
     typeWidget->addItem(tr("Mined"), TransactionFilterProxy::TYPE(TransactionRecord::Generated));
-    typeWidget->addItem(tr("Stake"), TransactionFilterProxy::TYPE(TransactionRecord::StakeMint));
+    typeWidget->addItem(tr("Minted"), TransactionFilterProxy::TYPE(TransactionRecord::StakeMint));
+    typeWidget->addItem(tr("Masternode Reward"), TransactionFilterProxy::TYPE(TransactionRecord::MNReward));
     typeWidget->addItem(tr("Other"), TransactionFilterProxy::TYPE(TransactionRecord::Other));
-    typeWidget->setCurrentIndex(settings.value("transactionType").toInt());
 
     hlayout->addWidget(typeWidget);
 
@@ -344,7 +338,7 @@ void TransactionView::changedPrefix(const QString &prefix)
 {
     if(!transactionProxyModel)
         return;
-    transactionProxyModel->setAddressPrefix(prefix);
+    transactionProxyModel->setSearchString(prefix);
 }
 
 void TransactionView::changedAmount(const QString &amount)

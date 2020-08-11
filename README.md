@@ -1,11 +1,15 @@
-MarteX Core
-===========
-[![logo](https://img.shields.io/badge/Martexcoin-Cryptocurrency-blue.svg)](https://www.martexcoin.org)
-[![issues](https://img.shields.io/github/issues/martexcoin/martexcoin.svg)](https://github.com/martexcoin/martexcoin/issues)
-[![forks](https://img.shields.io/github/forks/martexcoin/martexcoin.svg)](https://github.com/martexcoin/martexcoin/network/members)
-[![stars](https://img.shields.io/github/stars/martexcoin/martexcoin.svg)](https://github.com/martexcoin/martexcoin/stargazers)
-[![license](https://img.shields.io/github/license/martexcoin/martexcoin.svg)](https://github.com/martexcoin/martexcoin/blob/master/COPYING)
-![downloads](https://img.shields.io/github/downloads/martexcoin/martexcoin/total.svg)
+![MarteX](https://github.com/martexcoin/martexcoin/raw/master/src/qt/res/icons/bitcoin.png "MarteX")
+
+MarteX Core integration/staging tree
+=====================================
+[![Build Status](https://travis-ci.org/martexcoin/martexcoin.svg?branch=master)](https://travis-ci.org/martexcoin/martexcoin)
+
+
+http://www.martexcoin.org
+
+- Copyright (c) 2009-2015 Bitcoin Developers
+- Copyright (c) 2014-2017 Dash Developers
+- Copyright (c) 2017-2018 MarteX Developers
 
 What is MarteX?
 ----------------
@@ -15,6 +19,9 @@ payments to anyone, anywhere in the world. MarteX uses peer-to-peer technology
 to operate with no central authority: managing transactions and issuing money
 are carried out collectively by the network. MarteX Core is the name of the open
 source software which enables the use of this currency.
+
+For more information, as well as an immediately useable, binary version of
+the MarteX Core software, see https://www.martexcoin.org/Find-martex/.
 
 
 License
@@ -60,8 +67,16 @@ code. This is especially important for large or high-risk changes. It is useful
 to add a test plan to the pull request description if testing the changes is
 not straightforward.
 
-# Documentations
+Translations
+------------
 
-[Development documents.](./doc)
+Changes to translations as well as new translations can be submitted to
+[MarteX Core's Transifex page](https://www.transifex.com/projects/p/martex/).
 
-[User documents.](./mxt-docs)
+Translations are periodically pulled from Transifex and merged into the git repository. See the
+[translation process](doc/translation_process.md) for details on how this works.
+
+**Important**: We do not accept translation changes as GitHub pull requests because the next
+pull from Transifex would automatically overwrite them again.
+
+Translators should also follow the [forum](https://www.martexcoin.org/forum/topic/martex-worldwide-collaboration.88/).

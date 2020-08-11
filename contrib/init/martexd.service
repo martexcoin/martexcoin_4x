@@ -9,7 +9,7 @@ Group=martexcore
 Type=forking
 PIDFile=/var/lib/martexd/martexd.pid
 ExecStart=/usr/bin/martexd -daemon -pid=/var/lib/martexd/martexd.pid \
--conf=/etc/martexcore/MarteX.conf -datadir=/var/lib/martexd -disablewallet
+-conf=/etc/martexcore/martex.conf -datadir=/var/lib/martexd -disablewallet
 
 Restart=always
 PrivateTmp=true

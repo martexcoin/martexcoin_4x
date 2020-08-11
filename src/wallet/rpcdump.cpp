@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2017 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -78,6 +78,11 @@ UniValue importprivkey(const JSONRPCRequest& request)
 {
     if (!EnsureWalletIsAvailable(request.fHelp))
         return NullUniValue;
+    if (fWalletUnlockStakingOnly)
+    {
+        std::string strError = _("Error: Wallet unlocked for staking only, unable to create transaction.");
+        throw JSONRPCError(RPC_WALLET_ERROR, strError);
+    }
     
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 3)
         throw std::runtime_error(
@@ -655,7 +660,7 @@ UniValue dumpprivkey(const JSONRPCRequest& request)
             "\nReveals the private key corresponding to 'address'.\n"
             "Then the importprivkey can be used with this output\n"
             "\nArguments:\n"
-            "1. \"address\"   (string, required) The MarteX address for the private key\n"
+            "1. \"address\"   (string, required) The martex address for the private key\n"
             "\nResult:\n"
             "\"key\"                (string) The private key\n"
             "\nExamples:\n"
@@ -726,6 +731,11 @@ UniValue dumphdinfo(const JSONRPCRequest& request)
 
 UniValue dumpwallet(const JSONRPCRequest& request)
 {
+    if (fWalletUnlockStakingOnly)
+    {
+        std::string strError = _("Error: Wallet unlocked for staking only, unable to create transaction.");
+        throw JSONRPCError(RPC_WALLET_ERROR, strError);
+    }
     if (!EnsureWalletIsAvailable(request.fHelp))
         return NullUniValue;
     
@@ -1302,73 +1312,4 @@ UniValue importmulti(const JSONRPCRequest& mainRequest)
     }
 
     return response;
-}
-
-/* Wallet integrity check */
-UniValue checkwallet(const JSONRPCRequest& request) {
-
-    if (!EnsureWalletIsAvailable(request.fHelp))
-        return NullUniValue;
-
-    if (request.fHelp || request.params.size() > 0)
-        throw std::runtime_error(
-            "checkwallet\n"
-            "\nWallet integrity check.\n"
-            "\nExamples:\n"
-            + HelpExampleCli("checkwallet", "\"\"")
-            + HelpExampleCli("checkwallet", "\"\"")
-            + HelpExampleRpc("checkwallet", "\"\"")
-        );
-
-    int nMismatchSpent;
-    int nOrphansFound;
-    int64_t nBalanceInQuestion;
-    pwalletMain->FixSpentCoins(nMismatchSpent, nBalanceInQuestion, nOrphansFound, true);
-
-    UniValue result(UniValue::VOBJ);
-    if(nMismatchSpent == 0 && nOrphansFound == 0)
-        result.push_back(Pair("wallet check passed", true));
-    else
-    {
-        result.push_back(Pair("mismatched spent coins", nMismatchSpent));
-        result.push_back(Pair("amount in question", ValueFromAmount(nBalanceInQuestion)));
-        result.push_back(Pair("orphans found", nOrphansFound));
-    }
-
-    return(result);
-}
-
-
-/* Wallet repair (removal of failed and orphaned transactions) */
-UniValue repairwallet(const JSONRPCRequest& request) {
-
-    if (!EnsureWalletIsAvailable(request.fHelp))
-        return NullUniValue;
-
-    if (request.fHelp || request.params.size() > 0)
-        throw std::runtime_error(
-            "repairwallet\n"
-            "\nWallet repair if any mismatches found.\n"
-            "\nExamples:\n"
-            + HelpExampleCli("repairwallet", "\"\"")
-            + HelpExampleCli("repairwallet", "\"\"")
-            + HelpExampleRpc("repairwallet", "\"\"")
-        );
-
-    int nMismatchSpent;
-    int nOrphansFound;
-    int64_t nBalanceInQuestion;
-    pwalletMain->FixSpentCoins(nMismatchSpent, nBalanceInQuestion, nOrphansFound, false);
-
-    UniValue result(UniValue::VOBJ);
-    if(nMismatchSpent == 0 && nOrphansFound == 0)
-        result.push_back(Pair("wallet check passed", true));
-    else
-    {
-        result.push_back(Pair("mismatched spent coins", nMismatchSpent));
-        result.push_back(Pair("amount affected by repair", ValueFromAmount(nBalanceInQuestion)));
-        result.push_back(Pair("orphans removed", nOrphansFound));
-    }
-
-    return(result);
 }

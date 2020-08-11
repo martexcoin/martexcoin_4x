@@ -62,12 +62,12 @@
         <translation>Endereços para recepção</translation>
     </message>
     <message>
-        <source>These are your MarteX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Estes são os endereços MarteX para envio de pagamentos. Confirme sempre a quantia e o endereço antes de enviar as moedas.</translation>
+        <source>These are your martex addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Estes são os endereços martex para envio de pagamentos. Confirme sempre a quantia e o endereço antes de enviar as moedas.</translation>
     </message>
     <message>
-        <source>These are your MarteX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Estes são os seus endereços MarteX para receber pagamentos. É recomendado que seja usado um novo endereço para cada transacção.</translation>
+        <source>These are your martex addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Estes são os seus endereços martex para receber pagamentos. É recomendado que seja usado um novo endereço para cada transacção.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -176,8 +176,8 @@
         <translation>Confirme cifra da carteira</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR MXT&lt;/b&gt;!</source>
-        <translation>Atenção: Se cifrar a carteira e perder a palavra-passe, irá &lt;b&gt;PERDER TODAS AS SUAS MOEDAS MXT&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR martex&lt;/b&gt;!</source>
+        <translation>Atenção: Se cifrar a carteira e perder a palavra-passe, irá &lt;b&gt;PERDER TODAS AS SUAS MOEDAS martex&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -188,11 +188,11 @@
         <translation>Carteira cifrada</translation>
     </message>
     <message>
-        <source>MarteX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your martexs from being stolen by malware infecting your computer.</source>
-        <translation>O cliente MarteX irá fechar para finalizar o processo de cifra. Lembre-se que cifrar a sua carteira não consegue proteger totalmente as suas martexs contra roubos feitos por malware presente no seu computador.</translation>
+        <source>martex will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your martexs from being stolen by malware infecting your computer.</source>
+        <translation>O cliente martex irá fechar para finalizar o processo de cifra. Lembre-se que cifrar a sua carteira não consegue proteger totalmente as suas martexs contra roubos feitos por malware presente no seu computador.</translation>
     </message>
     <message>
-        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
+        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replmartex with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
         <translation>IMPORTANTE: Quaisquer copias de segurança feitas anteriormente à sua carteira, devem ser substituídas pelo novo ficheiro cifrado. Por razões de segurança, as copias de segurança anteriores não cifradas ficarão obsoletas assim que comece a usar a nova carteira cifrada,</translation>
     </message>
     <message>
@@ -231,8 +231,8 @@
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core</translation>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -255,8 +255,8 @@
         <translation>&amp;Enviar</translation>
     </message>
     <message>
-        <source>Send coins to a MarteX address</source>
-        <translation>Enviar moedas para um endereço MarteX</translation>
+        <source>Send coins to a martex address</source>
+        <translation>Enviar moedas para um endereço martex</translation>
     </message>
     <message>
         <source>&amp;Receive</source>
@@ -283,12 +283,12 @@
         <translation>Sair da aplicação</translation>
     </message>
     <message>
-        <source>&amp;About MarteX Core</source>
-        <translation>&amp;Acerca do MarteX Core</translation>
+        <source>&amp;About martex Core</source>
+        <translation>&amp;Acerca do martex Core</translation>
     </message>
     <message>
-        <source>Show information about MarteX Core</source>
-        <translation>Mostra informação acerca do MarteX Core</translation>
+        <source>Show information about martex Core</source>
+        <translation>Mostra informação acerca do martex Core</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
@@ -303,8 +303,8 @@
         <translation>&amp;Opções...</translation>
     </message>
     <message>
-        <source>Modify configuration options for MarteX</source>
-        <translation>Modificar opções de configuração do MarteX</translation>
+        <source>Modify configuration options for martex</source>
+        <translation>Modificar opções de configuração do martex</translation>
     </message>
     <message>
         <source>&amp;Show / Hide</source>
@@ -355,16 +355,16 @@
         <translation>&amp;Assinar Mensagem</translation>
     </message>
     <message>
-        <source>Sign messages with your MarteX addresses to prove you own them</source>
-        <translation>Assine mensagens com os seus endereços MarteX para provar que são seus</translation>
+        <source>Sign messages with your martex addresses to prove you own them</source>
+        <translation>Assine mensagens com os seus endereços martex para provar que são seus</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
         <translation>&amp;Verificar Mensagem</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified MarteX addresses</source>
-        <translation>Verifica mensagens para garantir que foram assinadas com um endereço MarteX específico</translation>
+        <source>Verify messages to ensure they were signed with specified martex addresses</source>
+        <translation>Verifica mensagens para garantir que foram assinadas com um endereço martex específico</translation>
     </message>
     <message>
         <source>&amp;Information</source>
@@ -376,11 +376,11 @@
     </message>
     <message>
         <source>&amp;Debug console</source>
-        <translation>Consola de &amp;Depuração</translation>
+        <translation>Console de &amp;Depuração</translation>
     </message>
     <message>
         <source>Open debugging console</source>
-        <translation>Abrir consola de depuração</translation>
+        <translation>Abrir console de depuração</translation>
     </message>
     <message>
         <source>&amp;Network Monitor</source>
@@ -451,16 +451,16 @@
         <translation>Opções de linha de &amp;comandos</translation>
     </message>
     <message>
-        <source>MarteX Core client</source>
-        <translation>Cliente MarteX Core</translation>
+        <source>martex Core client</source>
+        <translation>Cliente martex Core</translation>
     </message>
     <message numerus="yes">
         <source>Processed %n blocks of transaction history.</source>
-        <translation><numerusform>%n bloco do histórico de transacções processado.</numerusform><numerusform>%n blocos do histórico de transacções processados.</numerusform></translation>
+        <translation><numerusform>%n bloco do histórico de transações processado.</numerusform><numerusform>%n blocos do histórico de transações processados.</numerusform></translation>
     </message>
     <message>
-        <source>Show the MarteX Core help message to get a list with possible MarteX command-line options</source>
-        <translation>Mostra a mensagem de ajuda do MarteX Core para obter a lista com as possíveis opções de linha de comandos</translation>
+        <source>Show the martex Core help message to get a list with possible martex command-line options</source>
+        <translation>Mostra a mensagem de ajuda do martex Core para obter a lista com as possíveis opções de linha de comandos</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -483,8 +483,8 @@
         <translation>Barra de ferramentas</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to MarteX network</source>
-        <translation><numerusform>%n ligação activa à rede MarteX</numerusform><numerusform>%n ligações activas à rede MarteX</numerusform></translation>
+        <source>%n active connection(s) to martex network</source>
+        <translation><numerusform>%n ligação activa à rede martex</numerusform><numerusform>%n ligações activas à rede martex</numerusform></translation>
     </message>
     <message>
         <source>Synchronizing with network...</source>
@@ -540,7 +540,7 @@
     </message>
     <message>
         <source>Transactions after this will not yet be visible.</source>
-        <translation>Transacções posteriores ainda não serão visíveis.</translation>
+        <translation>Transações posteriores ainda não serão visíveis.</translation>
     </message>
     <message>
         <source>Error</source>
@@ -556,11 +556,11 @@
     </message>
     <message>
         <source>Sent transaction</source>
-        <translation>Transacção enviada</translation>
+        <translation>Transação enviada</translation>
     </message>
     <message>
         <source>Incoming transaction</source>
-        <translation>Transacção recebida</translation>
+        <translation>Transação recebida</translation>
     </message>
     <message>
         <source>Date: %1
@@ -590,8 +590,8 @@ Endereço: %4
 <context>
     <name>ClientModel</name>
     <message>
-        <source>Total: %1 (DS compatible: %2 / Enabled: %3)</source>
-        <translation>Total: %1 (Compatível DS: %2 / Ligados: %3)</translation>
+        <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
+        <translation>Total: %1 (Compatível FS: %2 / Ligados: %3)</translation>
     </message>
     <message>
         <source>Network Alert</source>
@@ -665,8 +665,8 @@ Endereço: %4
         <translation>Recebido com endereço</translation>
     </message>
     <message>
-        <source>DS Rounds</source>
-        <translation>Rondas DS</translation>
+        <source>FS Rounds</source>
+        <translation>Rondas FS</translation>
     </message>
     <message>
         <source>Date</source>
@@ -698,7 +698,7 @@ Endereço: %4
     </message>
     <message>
         <source>Copy transaction ID</source>
-        <translation>Copiar ID de transacção</translation>
+        <translation>Copiar ID de transação</translation>
     </message>
     <message>
         <source>Lock unspent</source>
@@ -802,7 +802,7 @@ Endereço: %4
     </message>
     <message>
         <source>This label turns red, if the transaction size is greater than 1000 bytes.</source>
-        <translation>Este rótulo fica vermelho se o tamanho da transacção exceder 1000 bytes.</translation>
+        <translation>Este rótulo fica vermelho se o tamanho da transação exceder 1000 bytes.</translation>
     </message>
     <message>
         <source>This means a fee of at least %1 per kB is required.</source>
@@ -814,7 +814,7 @@ Endereço: %4
     </message>
     <message>
         <source>Transactions with higher priority are more likely to get included into a block.</source>
-        <translation>Transacções com prioridade mais alta tem uma maior probabilidade de ser incluídas num bloco.</translation>
+        <translation>Transações com prioridade mais alta tem uma maior probabilidade de ser incluídas num bloco.</translation>
     </message>
     <message>
         <source>This label turns red, if the priority is smaller than "medium".</source>
@@ -860,28 +860,28 @@ Endereço: %4
         <translation>Por favor seleccione um nível de privacidade.</translation>
     </message>
     <message>
-        <source>Use 2 separate masternodes to mix funds up to 1000 MXT</source>
-        <translation>Usar 2 masternodes distintos para misturar os fundos até 1000 MXT</translation>
+        <source>Use 2 separate masternodes to mix funds up to 1000 martex</source>
+        <translation>Usar 2 masternodes distintos para misturar os fundos até 5000MXT</translation>
     </message>
     <message>
-        <source>Use 8 separate masternodes to mix funds up to 1000 MXT</source>
-        <translation>Usar 8 masternodes distintos para misturar os fundos até 1000 MXT</translation>
+        <source>Use 8 separate masternodes to mix funds up to 1000 martex</source>
+        <translation>Usar 8 masternodes distintos para misturar os fundos até 5000MXT</translation>
     </message>
     <message>
         <source>Use 16 separate masternodes</source>
         <translation>Usar 16 masternodes</translation>
     </message>
     <message>
-        <source>This option is the quickest and will cost about ~0.025 MXT to anonymize 1000 MXT</source>
-        <translation>Esta opção é a mais rápida e irá custar cerca de ~0.025 MXT para anonimizar 1000 MXT</translation>
+        <source>This option is the quickest and will cost about ~0.025 martex to anonymize 1000 martex</source>
+        <translation>Esta opção é a mais rápida e irá custar cerca de ~0.025 martex para anonimizar 1000 martex</translation>
     </message>
     <message>
-        <source>This option is moderately fast and will cost about 0.05 MXT to anonymize 1000 MXT</source>
-        <translation>Esta opção é relativamente rápida e irá custar cerca de ~0.05 MXT para anonimizar 1000 MXT</translation>
+        <source>This option is moderately fast and will cost about 0.05 martex to anonymize 1000 martex</source>
+        <translation>Esta opção é relativamente rápida e irá custar cerca de ~0.05 martex para anonimizar 1000 martex</translation>
     </message>
     <message>
-        <source>0.1 MXT per 1000 MXT you anonymize.</source>
-        <translation>0.1 MXT por cada 1000 MXT a anonimizar.</translation>
+        <source>0.1 martex per 1000 martex you anonymize.</source>
+        <translation>0.1 martex por cada 1000 martex a anonimizar.</translation>
     </message>
     <message>
         <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
@@ -892,16 +892,16 @@ Endereço: %4
         <translation>Configuração Anonsend</translation>
     </message>
     <message>
-        <source>Anonsend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>Anonsend foi colocado com sucesso no modo básico (%1 e 2 voltas). Pode mudar esta definição em qualquer altura abrindo o ecrã de configuração MarteX.</translation>
+        <source>Anonsend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>Anonsend foi colocado com sucesso no modo básico (%1 e 2 voltas). Pode mudar esta definição em qualquer altura abrindo o ecrã de configuração martex.</translation>
     </message>
     <message>
-        <source>Anonsend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>Anonsend foi colocado com sucesso no modo alto (%1 e 8 voltas). Pode mudar esta definição em qualquer altura abrindo o ecrã de configuração MarteX.</translation>
+        <source>Anonsend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>Anonsend foi colocado com sucesso no modo alto (%1 e 8 voltas). Pode mudar esta definição em qualquer altura abrindo o ecrã de configuração martex.</translation>
     </message>
     <message>
-        <source>Anonsend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>Anonsend foi colocado com sucesso no modo máximo (%1 e 16 voltas). Pode mudar esta definição em qualquer altura abrindo o ecrã de configuração MarteX.</translation>
+        <source>Anonsend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>Anonsend foi colocado com sucesso no modo máximo (%1 e 16 voltas). Pode mudar esta definição em qualquer altura abrindo o ecrã de configuração martex.</translation>
     </message>
 </context>
 <context>
@@ -943,8 +943,8 @@ Endereço: %4
         <translation>Editar endereço de envio</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid MarteX address.</source>
-        <translation>O endereço introduzido "%1" não é um endereço MarteX válido.</translation>
+        <source>The entered address "%1" is not a valid martex address.</source>
+        <translation>O endereço introduzido "%1" não é um endereço martex válido.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -985,8 +985,8 @@ Endereço: %4
 <context>
     <name>HelpMessageDialog</name>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core</translation>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
     </message>
     <message>
         <source>version</source>
@@ -997,8 +997,8 @@ Endereço: %4
         <translation>(%1-bit)</translation>
     </message>
     <message>
-        <source>About MarteX Core</source>
-        <translation>Acerca do MarteX Core</translation>
+        <source>About martex Core</source>
+        <translation>Acerca do martex Core</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -1044,16 +1044,16 @@ Endereço: %4
         <translation>Bem-vindo</translation>
     </message>
     <message>
-        <source>Welcome to MarteX Core.</source>
-        <translation>Bem-vindo ao MarteX Core.</translation>
+        <source>Welcome to martex Core.</source>
+        <translation>Bem-vindo ao martex Core.</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where MarteX Core will store its data.</source>
-        <translation>Como esta é a primeira vez que o programa é executado, pode escolher onde o cliente MarteX Core irá guardar os seus dados.</translation>
+        <source>As this is the first time the program is launched, you can choose where martex Core will store its data.</source>
+        <translation>Como esta é a primeira vez que o programa é executado, pode escolher onde o cliente martex Core irá guardar os seus dados.</translation>
     </message>
     <message>
-        <source>MarteX Core will download and store a copy of the MarteX block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>O cliente MarteX Core irá descarregar e guardar uma copia da cadeia de blocos MarteX. Pelo menos %1GB de dados serão guardados nesta pasta e irá aumentar com o tempo. A carteira também ficará guardada nesta pasta.</translation>
+        <source>martex Core will download and store a copy of the martex block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>O cliente martex Core irá descarregar e guardar uma copia da cadeia de blocos martex. Pelo menos %1GB de dados serão guardados nesta pasta e irá aumentar com o tempo. A carteira também ficará guardada nesta pasta.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1064,8 +1064,8 @@ Endereço: %4
         <translation>Usar uma pasta de dados personalizada</translation>
     </message>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core</translation>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -1118,12 +1118,12 @@ Endereço: %4
         <translation>&amp;Geral</translation>
     </message>
     <message>
-        <source>Automatically start MarteX after logging in to the system.</source>
-        <translation>Executar automaticamente o cliente MarteX quando entrar no sistema.</translation>
+        <source>Automatically start martex after logging in to the system.</source>
+        <translation>Executar automaticamente o cliente martex quando entrar no sistema.</translation>
     </message>
     <message>
-        <source>&amp;Start MarteX on system login</source>
-        <translation>&amp;Iniciar o cliente MarteX ao entrar no sistema</translation>
+        <source>&amp;Start martex on system login</source>
+        <translation>&amp;Iniciar o cliente martex ao entrar no sistema</translation>
     </message>
     <message>
         <source>Size of &amp;database cache</source>
@@ -1150,8 +1150,8 @@ Endereço: %4
         <translation>Esta quantia actua como um limite, a partir do qual o Anonsend é desligado.</translation>
     </message>
     <message>
-        <source>Amount of MarteX to keep anonymized</source>
-        <translation>Quantia de MarteX a manter anonimizada</translation>
+        <source>Amount of martex to keep anonymized</source>
+        <translation>Quantia de martex a manter anonimizada</translation>
     </message>
     <message>
         <source>W&amp;allet</source>
@@ -1159,7 +1159,7 @@ Endereço: %4
     </message>
     <message>
         <source>If you disable the spending of unconfirmed change, the change from a transaction&lt;br/&gt;cannot be used until that transaction has at least one confirmation.&lt;br/&gt;This also affects how your balance is computed.</source>
-        <translation>Se desabilitar a funcionalidade de gastar o troco não confirmado, este troco &lt;br/&gt; não poderá ser usado até que a transacção tenha pelo menos uma confirmação. &lt;br/&gt; Isto também afecta a maneira como o seu saldo é calculado.</translation>
+        <translation>Se desabilitar a funcionalidade de gastar o troco não confirmado, este troco &lt;br/&gt; não poderá ser usado até que a transação tenha pelo menos uma confirmação. &lt;br/&gt; Isto também afecta a maneira como o seu saldo é calculado.</translation>
     </message>
     <message>
         <source>Accept connections from outside</source>
@@ -1170,8 +1170,8 @@ Endereço: %4
         <translation>Aceitar ligações de entrada</translation>
     </message>
     <message>
-        <source>Connect to the MarteX network through a SOCKS5 proxy.</source>
-        <translation>Efectuar a ligação à rede MarteX através de um proxy SOCKS5.</translation>
+        <source>Connect to the martex network through a SOCKS5 proxy.</source>
+        <translation>Efectuar a ligação à rede martex através de um proxy SOCKS5.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1202,8 +1202,8 @@ Endereço: %4
         <translation>&amp;Rede</translation>
     </message>
     <message>
-        <source>Automatically open the MarteX client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Abrir automaticamente a porta do cliente MarteX no router. Isto só funciona quando o seu router suporta UPnP e este está activo.</translation>
+        <source>Automatically open the martex client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Abrir automaticamente a porta do cliente martex no router. Isto só funciona quando o seu router suporta UPnP e este está activo.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1254,7 +1254,7 @@ Endereço: %4
         <translation>&amp;Linguagem do interface:</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting MarteX.</source>
+        <source>The user interface language can be set here. This setting will take effect after restarting martex.</source>
         <translation>A linguagem do interface pode ser definida aqui. Esta definição terá efeito depois de reiniciar a aplicação.</translation>
     </message>
     <message>
@@ -1280,12 +1280,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Dígitos decimais</translation>
     </message>
     <message>
-        <source>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</source>
-        <translation>URLs de terceiros (ex. explorador de blocos) que aparecem no separador de transacções como itens do menu de contexto. %s no URL é substituído pelo hash da transacção. URLs múltiplos são separados pela barra vertical |.</translation>
+        <source>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items. %s in the URL is replmartex by transaction hash. Multiple URLs are separated by vertical bar |.</source>
+        <translation>URLs de terceiros (ex. explorador de blocos) que aparecem no separador de transações como itens do menu de contexto. %s no URL é substituído pelo hash da transação. URLs múltiplos são separados pela barra vertical |.</translation>
     </message>
     <message>
         <source>Third party transaction URLs</source>
-        <translation>URLs de transacções de terceiros</translation>
+        <translation>URLs de transações de terceiros</translation>
     </message>
     <message>
         <source>Active command-line options that override above options:</source>
@@ -1343,8 +1343,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>De</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the MarteX network after a connection is established, but this process has not completed yet.</source>
-        <translation>A informação mostrada pode estar desactualizada. A sua carteira sincroniza automaticamente com a rede MarteX assim que for estabelecida uma ligação, mas este processo ainda não terminou.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the martex network after a connection is established, but this process has not completed yet.</source>
+        <translation>A informação mostrada pode estar desactualizada. A sua carteira sincroniza automaticamente com a rede martex assim que for estabelecida uma ligação, mas este processo ainda não terminou.</translation>
     </message>
     <message>
         <source>Available:</source>
@@ -1360,7 +1360,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the spendable balance</source>
-        <translation>Total de transacções que ainda não foram confirmadas e não contam para o saldo disponível</translation>
+        <translation>Total de transações que ainda não foram confirmadas e não contam para o saldo disponível</translation>
     </message>
     <message>
         <source>Immature:</source>
@@ -1427,8 +1427,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Quantia e Voltas:</translation>
     </message>
     <message>
-        <source>0 MXT / 0 Rounds</source>
-        <translation>0 MXT / 0 Voltas</translation>
+        <source>0 martex / 0 Rounds</source>
+        <translation>0 martex / 0 Voltas</translation>
     </message>
     <message>
         <source>Submitted Denom:</source>
@@ -1444,7 +1444,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Recent transactions</source>
-        <translation>Transacções recentes</translation>
+        <translation>Transações recentes</translation>
     </message>
     <message>
         <source>Start/Stop Mixing</source>
@@ -1546,7 +1546,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>If you don't want to see internal Anonsend fees/transactions select "Most Common" as Type on the "Transactions" tab.</source>
-        <translation>Se não deseja visualizar as taxas/transacções internas Anonsend seleccione "Mais Comuns" como Tipo no separador "Transacções"</translation>
+        <translation>Se não deseja visualizar as taxas/transações internas Anonsend seleccione "Mais Comuns" como Tipo no separador "Transações"</translation>
     </message>
     <message>
         <source>Anonsend requires at least %1 to use.</source>
@@ -1584,8 +1584,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Endereço de pagamento inválido %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid MarteX address or malformed URI parameters.</source>
-        <translation>O URI não pode ser carregado! Isto pode ser causado por um endereço MarteX inválido ou parâmetros do URI incorrectos.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid martex address or malformed URI parameters.</source>
+        <translation>O URI não pode ser carregado! Isto pode ser causado por um endereço martex inválido ou parâmetros do URI incorrectos.</translation>
     </message>
     <message>
         <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
@@ -1670,8 +1670,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Quantia</translation>
     </message>
     <message>
-        <source>Enter a MarteX address (e.g. %1)</source>
-        <translation>Insira um endereço MarteX (ex. %1)</translation>
+        <source>Enter a martex address (e.g. %1)</source>
+        <translation>Insira um endereço martex (ex. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -1760,8 +1760,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Número de ligações</translation>
     </message>
     <message>
-        <source>Open the MarteX debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Abrir o ficheiro de registo de depuração MarteX a partir da pasta de dados actual. Para grandes ficheiros de registo pode demorar alguns segundos.</translation>
+        <source>Open the martex debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Abrir o ficheiro de registo de depuração martex a partir da pasta de dados actual. Para grandes ficheiros de registo pode demorar alguns segundos.</translation>
     </message>
     <message>
         <source>&amp;Open</source>
@@ -1813,11 +1813,11 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>&amp;Console</source>
-        <translation>&amp;Consola</translation>
+        <translation>&amp;Console</translation>
     </message>
     <message>
         <source>Clear console</source>
-        <translation>Limpar consola</translation>
+        <translation>Limpar console</translation>
     </message>
     <message>
         <source>&amp;Network Traffic</source>
@@ -1913,11 +1913,11 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Recover transactions 1</source>
-        <translation>Recuperar transacções 1</translation>
+        <translation>Recuperar transações 1</translation>
     </message>
     <message>
         <source>Recover transactions 2</source>
-        <translation>Recuperar transacções 2</translation>
+        <translation>Recuperar transações 2</translation>
     </message>
     <message>
         <source>Upgrade wallet format</source>
@@ -1925,7 +1925,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>The buttons below will restart the wallet with command-line options to repair the wallet, fix issues with corrupt blockhain files or missing/obsolete transactions.</source>
-        <translation>Os botões abaixo irão reiniciar a carteira passando parâmetros da linha de comandos para reparar a carteira, corrigir problemas com a cadeia de blocos ou com transacções em falta ou obsoletas.</translation>
+        <translation>Os botões abaixo irão reiniciar a carteira passando parâmetros da linha de comandos para reparar a carteira, corrigir problemas com a cadeia de blocos ou com transações em falta ou obsoletas.</translation>
     </message>
     <message>
         <source>-salvagewallet: Attempt to recover private keys from a corrupt wallet.dat.</source>
@@ -1933,15 +1933,15 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>-rescan: Rescan the block chain for missing wallet transactions.</source>
-        <translation>-rescan: Examina novamente a cadeia de blocos para encontrar transacções inexistentes na carteira</translation>
+        <translation>-rescan: Examina novamente a cadeia de blocos para encontrar transações inexistentes na carteira</translation>
     </message>
     <message>
         <source>-zapwallettxes=1: Recover transactions from blockchain (keep meta-data, e.g. account owner).</source>
-        <translation>-zapwallettxes=1: Recupera transacções da cadeia de blocos (mantendo os meta-dados, ex. dono da conta)</translation>
+        <translation>-zapwallettxes=1: Recupera transações da cadeia de blocos (mantendo os meta-dados, ex. dono da conta)</translation>
     </message>
     <message>
         <source>-zapwallettxes=2: Recover transactions from blockchain (drop meta-data).</source>
-        <translation>-zapwallettxes=2: Recupera transacções da cadeia de blocos (apagando os meta-dados)</translation>
+        <translation>-zapwallettxes=2: Recupera transações da cadeia de blocos (apagando os meta-dados)</translation>
     </message>
     <message>
         <source>-upgradewallet: Upgrade wallet to latest format on startup. (Note: this is NOT an update of the wallet itself!)</source>
@@ -1968,8 +1968,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Saída:</translation>
     </message>
     <message>
-        <source>Welcome to the MarteX RPC console.</source>
-        <translation>Bem-vindo à consola RPC MarteX</translation>
+        <source>Welcome to the martex RPC console.</source>
+        <translation>Bem-vindo à console RPC martex</translation>
     </message>
     <message>
         <source>Use up and down arrows to navigate history, and &lt;b&gt;Ctrl-L&lt;/b&gt; to clear screen.</source>
@@ -2031,8 +2031,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>R&amp;eutilizar um endereço de recebimento existente (não recomendado)</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the MarteX network.</source>
-        <translation>Mensagem opcional para anexar à solicitação de pagamento, que será mostrada quando a solicitação for aberta. Nota: A mensagem não será enviada com o pagamento através da rede MarteX.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the martex network.</source>
+        <translation>Mensagem opcional para anexar à solicitação de pagamento, que será mostrada quando a solicitação for aberta. Nota: A mensagem não será enviada com o pagamento através da rede martex.</translation>
     </message>
     <message>
         <source>&amp;Message:</source>
@@ -2043,8 +2043,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Rótulo opcional para associar com o novo endereço de recebimento.</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the MarteX network.</source>
-        <translation>Mensagem opcional para anexar à solicitação de pagamento, que será mostrada quando a solicitação for aberta. &lt;br&gt;Nota: A mensagem não será enviada com o pagamento através da rede MarteX.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the martex network.</source>
+        <translation>Mensagem opcional para anexar à solicitação de pagamento, que será mostrada quando a solicitação for aberta. &lt;br&gt;Nota: A mensagem não será enviada com o pagamento através da rede martex.</translation>
     </message>
     <message>
         <source>Use this form to request payments. All fields are &lt;b&gt;optional&lt;/b&gt;.</source>
@@ -2265,7 +2265,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Transaction Fee:</source>
-        <translation>Taxa de Transacção:</translation>
+        <translation>Taxa de Transação:</translation>
     </message>
     <message>
         <source>Choose...</source>
@@ -2352,8 +2352,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Anonsend</translation>
     </message>
     <message>
-        <source>FastSend</source>
-        <translation>FastSend</translation>
+        <source>FastsenD</source>
+        <translation>FastsenD</translation>
     </message>
     <message>
         <source>Balance:</source>
@@ -2408,8 +2408,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>quaisquer fundos disponíveis (não recomendado)</translation>
     </message>
     <message>
-        <source>and FastSend</source>
-        <translation>e FastSend</translation>
+        <source>and FastsenD</source>
+        <translation>e FastsenD</translation>
     </message>
     <message>
         <source>%1 to %2</source>
@@ -2421,7 +2421,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>are added as transaction fee</source>
-        <translation>são adicionadas como taxa de transacção</translation>
+        <translation>são adicionadas como taxa de transação</translation>
     </message>
     <message>
         <source>Total Amount = &lt;b&gt;%1&lt;/b&gt;&lt;br /&gt;= %2</source>
@@ -2457,7 +2457,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation>O total excede o seu saldo quando é incluído o valor %1 relativo a taxas de transacção.</translation>
+        <translation>O total excede o seu saldo quando é incluído o valor %1 relativo a taxas de transação.</translation>
     </message>
     <message>
         <source>Duplicate address found, can only send to each address once per send operation.</source>
@@ -2465,11 +2465,11 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Transaction creation failed!</source>
-        <translation>Falha ao criar transacção!</translation>
+        <translation>Falha ao criar transação!</translation>
     </message>
     <message>
         <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>A transacção foi rejeitada! Isto pode acontecer se algumas das moedas da sua carteira tiverem sido gastas, tal como se usou uma copia do ficheiro wallet.dat e moedas tiverem sido gastas nessa cópia mas não aqui.</translation>
+        <translation>A transação foi rejeitada! Isto pode acontecer se algumas das moedas da sua carteira tiverem sido gastas, tal como se usou uma copia do ficheiro wallet.dat e moedas tiverem sido gastas nessa cópia mas não aqui.</translation>
     </message>
     <message>
         <source>Error: The wallet was unlocked only to anonymize coins.</source>
@@ -2480,8 +2480,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Pagar somente a taxa mínima de %1</translation>
     </message>
     <message>
-        <source>Warning: Invalid MarteX address</source>
-        <translation>Aviso: Endereço MarteX inválido</translation>
+        <source>Warning: Invalid martex address</source>
+        <translation>Aviso: Endereço martex inválido</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2503,8 +2503,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>&amp;Pagar a:</translation>
     </message>
     <message>
-        <source>The MarteX address to send the payment to</source>
-        <translation>O endereço MarteX para onde enviar o pagamento</translation>
+        <source>The martex address to send the payment to</source>
+        <translation>O endereço martex para onde enviar o pagamento</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2543,8 +2543,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Mensagem:</translation>
     </message>
     <message>
-        <source>A message that was attached to the martex: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the MarteX network.</source>
-        <translation>Mensagem que foi anexada ao martex: URI e que será guardada com a transacção para sua referência. Nota: Esta mensagem não será enviada para a rede MarteX.</translation>
+        <source>A message that was attached to the martex: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the martex network.</source>
+        <translation>Mensagem que foi anexada ao martex: URI e que será guardada com a transação para sua referência. Nota: Esta mensagem não será enviada para a rede martex.</translation>
     </message>
     <message>
         <source>This is an unverified payment request.</source>
@@ -2570,8 +2570,8 @@ https://www.transifex.com/projects/p/martex/</translation>
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>MarteX Core is shutting down...</source>
-        <translation>O MarteX Core está a desligar...</translation>
+        <source>martex Core is shutting down...</source>
+        <translation>O martex Core está a desligar...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -2593,8 +2593,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Pode assinar mensagens com os seus endereços para provar que são seus. Tenha atenção para não assinar mensagens vagas, já que, ataques de phishing podem levá-lo a assinar a sua própria identidade para os atacantes. Apenas assine declarações detalhadas com as quais concorde.</translation>
     </message>
     <message>
-        <source>The MarteX address to sign the message with</source>
-        <translation>Endereço MarteX com o qual deseja assinar a mensagem</translation>
+        <source>The martex address to sign the message with</source>
+        <translation>Endereço martex com o qual deseja assinar a mensagem</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2625,8 +2625,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Copiar a assinatura actual para a área de transferência</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this MarteX address</source>
-        <translation>Assinar a mensagem para provar que é o proprietário deste endereço MarteX</translation>
+        <source>Sign the message to prove you own this martex address</source>
+        <translation>Assinar a mensagem para provar que é o proprietário deste endereço martex</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -2649,12 +2649,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Introduza o endereço de assinatura, mensagem (assegure-se que copia exactamente as quebras de linha, espaços, tabulações, etc) e assinatura abaixo para verificar a mensagem. Tenha atenção para não ler mais na assinatura do que o que estiver na mensagem assinada, para evitar ser enganado por um atacante que se encontre entre si e quem assinou a mensagem.</translation>
     </message>
     <message>
-        <source>The MarteX address the message was signed with</source>
-        <translation>Endereço MarteX com o qual a mensagem foi assinada</translation>
+        <source>The martex address the message was signed with</source>
+        <translation>Endereço martex com o qual a mensagem foi assinada</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified MarteX address</source>
-        <translation>Verificar a mensagem de forma a garantir que foi assinada com o endereço MarteX especificado</translation>
+        <source>Verify the message to ensure it was signed with the specified martex address</source>
+        <translation>Verificar a mensagem de forma a garantir que foi assinada com o endereço martex especificado</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -2720,8 +2720,8 @@ https://www.transifex.com/projects/p/martex/</translation>
 <context>
     <name>SplashScreen</name>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core</translation>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
     </message>
     <message>
         <source>Version %1</source>
@@ -2732,8 +2732,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Os programadores Bitcoin Core</translation>
     </message>
     <message>
-        <source>The MarteX Core developers</source>
-        <translation>Os programadores MarteX Core</translation>
+        <source>The martex Core developers</source>
+        <translation>Os programadores martex Core</translation>
     </message>
     <message>
         <source>[testnet]</source>
@@ -2786,24 +2786,24 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>%1 confirmações</translation>
     </message>
     <message>
-        <source>%1/offline (FastSend verification in progress - %2 of %3 signatures)</source>
-        <translation>%1/desligado (verificação FastSend em progresso - %2 de %3 assinaturas)</translation>
+        <source>%1/offline (FastsenD verification in progress - %2 of %3 signatures)</source>
+        <translation>%1/desligado (verificação FastsenD em progresso - %2 de %3 assinaturas)</translation>
     </message>
     <message>
-        <source>%1/confirmed (FastSend verification in progress - %2 of %3 signatures )</source>
-        <translation>%1/confirmada (verificação FastSend em progresso - %2 de %3 assinaturas)</translation>
+        <source>%1/confirmed (FastsenD verification in progress - %2 of %3 signatures )</source>
+        <translation>%1/confirmada (verificação FastsenD em progresso - %2 de %3 assinaturas)</translation>
     </message>
     <message>
-        <source>%1 confirmations (FastSend verification in progress - %2 of %3 signatures)</source>
-        <translation>%1 confirmações (verificação FastSend em progresso - %2 de %3 assinaturas)</translation>
+        <source>%1 confirmations (FastsenD verification in progress - %2 of %3 signatures)</source>
+        <translation>%1 confirmações (verificação FastsenD em progresso - %2 de %3 assinaturas)</translation>
     </message>
     <message>
-        <source>%1/offline (FastSend verification failed)</source>
-        <translation>%1/desligado (a verificação FastSend falhou)</translation>
+        <source>%1/offline (FastsenD verification failed)</source>
+        <translation>%1/desligado (a verificação FastsenD falhou)</translation>
     </message>
     <message>
-        <source>%1/confirmed (FastSend verification failed)</source>
-        <translation>%1/confirmada (a verificação FastSend falhou)</translation>
+        <source>%1/confirmed (FastsenD verification failed)</source>
+        <translation>%1/confirmada (a verificação FastsenD falhou)</translation>
     </message>
     <message>
         <source>Status</source>
@@ -2879,7 +2879,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Transaction fee</source>
-        <translation>Taxa de transacção</translation>
+        <translation>Taxa de transação</translation>
     </message>
     <message>
         <source>Net amount</source>
@@ -2895,7 +2895,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Transaction ID</source>
-        <translation>ID de transacção</translation>
+        <translation>ID de transação</translation>
     </message>
     <message>
         <source>Merchant</source>
@@ -2911,7 +2911,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Transaction</source>
-        <translation>Transacção</translation>
+        <translation>Transação</translation>
     </message>
     <message>
         <source>Inputs</source>
@@ -3260,8 +3260,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Enviar Moedas</translation>
     </message>
     <message>
-        <source>FastSend doesn't support sending values that high yet. Transactions are currently limited to %1 MXT.</source>
-        <translation>O FastSend não suporta valores tão elevados neste momento. As transacções estão limitadas a %1 MXT.</translation>
+        <source>FastsenD doesn't support sending values that high yet. Transactions are currently limited to %1 martex.</source>
+        <translation>O FastsenD não suporta valores tão elevados neste momento. As transacções estão limitadas a %1 martex.</translation>
     </message>
 </context>
 <context>
@@ -3310,8 +3310,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Vincular a um determinado endereço e ouvir sempre aí. Use a notação [endereço]:porta para IPv6</translation>
     </message>
     <message>
-        <source>Cannot obtain a lock on data directory %s. MarteX Core is probably already running.</source>
-        <translation>Não foi possível obter acesso exclusivo à pasta de dados %s. Possivelmente o MarteX Core já se encontra em execução.</translation>
+        <source>Cannot obtain a lock on data directory %s. martex Core is probably already running.</source>
+        <translation>Não foi possível obter acesso exclusivo à pasta de dados %s. Possivelmente o martex Core já se encontra em execução.</translation>
     </message>
     <message>
         <source>Anonsend uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
@@ -3326,15 +3326,15 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Erro: A escuta por ligações de entrada falhou (a escuta devolveu o erro %s)</translation>
     </message>
     <message>
-        <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)</source>
+        <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replmartex by message)</source>
         <translation>Executar comando quando é recebido um alerta ou vemos uma longa bifurcação na cadeia de blocos (%s no comando é substituído pela mensagem)</translation>
     </message>
     <message>
-        <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
+        <source>Execute command when a wallet transaction changes (%s in cmd is replmartex by TxID)</source>
         <translation>Executar comando quando muda uma transacção na carteira (%s no comando é substituído pelo TxID)</translation>
     </message>
     <message>
-        <source>Execute command when the best block changes (%s in cmd is replaced by block hash)</source>
+        <source>Execute command when the best block changes (%s in cmd is replmartex by block hash)</source>
         <translation>Executar comando quando o melhor bloco muda (%s no comando é substituído pela hash do bloco)</translation>
     </message>
     <message>
@@ -3342,8 +3342,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Neste modo o -genproclimit controla quantos blocos são gerados imediatamente.</translation>
     </message>
     <message>
-        <source>FastSend requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</source>
-        <translation>O FastSend necessita de entradas com pelo menos 6 confirmações, pode ser necessário aguardar mais uns minutos e tentar de novo.</translation>
+        <source>FastsenD requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</source>
+        <translation>O FastsenD necessita de entradas com pelo menos 6 confirmações, pode ser necessário aguardar mais uns minutos e tentar de novo.</translation>
     </message>
     <message>
         <source>Name to construct url for KeePass entry that stores the wallet passphrase</source>
@@ -3366,16 +3366,16 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Esta é uma compilação prévia de teste - use por sua conta e risco - não use para minar nem em aplicações comerciais</translation>
     </message>
     <message>
-        <source>Unable to bind to %s on this computer. MarteX Core is probably already running.</source>
-        <translation>Não foi possível vincular a %s neste computador. Provavelmente o MarteX Core já está a ser executado.</translation>
+        <source>Unable to bind to %s on this computer. martex Core is probably already running.</source>
+        <translation>Não foi possível vincular a %s neste computador. Provavelmente o martex Core já está a ser executado.</translation>
     </message>
     <message>
         <source>Unable to locate enough Anonsend denominated funds for this transaction.</source>
         <translation>Não foi possível localizar fundos Anonsend denominados suficientes para esta transacção.</translation>
     </message>
     <message>
-        <source>Unable to locate enough Anonsend non-denominated funds for this transaction that are not equal 1000 MXT.</source>
-        <translation>Não foi possível localizar fundos Anonsend não denominados suficientes para esta transacção que não sejam igual a 1000 MXT.</translation>
+        <source>Unable to locate enough Anonsend non-denominated funds for this transaction that are not equal 1000 martex.</source>
+        <translation>Não foi possível localizar fundos Anonsend não denominados suficientes para esta transacção que não sejam igual a 5000MXT.</translation>
     </message>
     <message>
         <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
@@ -3590,8 +3590,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Activar o uso de anonsend automatizado para os fundos guardados nesta carteira (0-1, default: %u)</translation>
     </message>
     <message>
-        <source>Fees (in MXT/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
-        <translation>Taxas (em MXT/Kb) inferiores a esta serão consideradas zero para retransmissão (default: %s)</translation>
+        <source>Fees (in martex/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
+        <translation>Taxas (em martex/Kb) inferiores a esta serão consideradas zero para retransmissão (default: %s)</translation>
     </message>
     <message>
         <source>Flush database activity from memory pool to disk log every &lt;n&gt; megabytes (default: %u)</source>
@@ -3623,7 +3623,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Send trace/debug info to console instead of debug.log file (default: %u)</source>
-        <translation>Enviar informação de execução/depuração para a consola em vez de enviar para o ficheiro debug.log (omissão: %u)</translation>
+        <translation>Enviar informação de execução/depuração para a console em vez de enviar para o ficheiro debug.log (omissão: %u)</translation>
     </message>
     <message>
         <source>Set the number of threads for coin generation if enabled (-1 = all cores, default: %d)</source>
@@ -3638,8 +3638,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Este produto inclui software desenvolvido pelo Projecto OpenSSL para uso no OpenSSL Toolkit &lt;https://www.openssl.org/&gt;, software criptográfico escrito por Eric Young e software UPnP escrito por Thomas Bernard.</translation>
     </message>
     <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 5000 MXT.</source>
-        <translation>Não foi possível localizar fundos suficientes para esta transacção que não sejam igual a 5000 MXT.</translation>
+        <source>Unable to locate enough funds for this transaction that are not equal 1000 martex.</source>
+        <translation>Não foi possível localizar fundos suficientes para esta transacção que não sejam igual a 5000MXT.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
@@ -3650,12 +3650,12 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Aviso: -maxtxfee é demasiado alta! Taxas deste tamanho podem ser pagas em apenas uma transacção.</translation>
     </message>
     <message>
-        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong MarteX Core will not work properly.</source>
-        <translation>Aviso: Por favor verifique que a data e a hora do computador está correcta! Se o relógio estiver errado o MarteX Core não vai funcionar correctamente.</translation>
+        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong martex Core will not work properly.</source>
+        <translation>Aviso: Por favor verifique que a data e a hora do computador está correcta! Se o relógio estiver errado o martex Core não vai funcionar correctamente.</translation>
     </message>
     <message>
-        <source>(51315 could be used only on mainnet)</source>
-        <translation>(51315 apenas pode ser usado para mainnet)</translation>
+        <source>(9999 could be used only on mainnet)</source>
+        <translation>(9999 apenas pode ser usado para mainnet)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -3696,8 +3696,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Copyright (C) 2009-%i The Bitcoin Core Developers</translation>
     </message>
     <message>
-        <source>Copyright (C) 2014-%i The MarteX Core Developers</source>
-        <translation>Copyright (C) 2014-%i MarteX Core Developers</translation>
+        <source>Copyright (C) 2014-%i The martex Core Developers</source>
+        <translation>Copyright (C) 2014-%i martex Core Developers</translation>
     </message>
     <message>
         <source>Could not parse -rpcbind value %s as network address</source>
@@ -3728,8 +3728,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Erro conectando ao Masternode</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of MarteX Core</source>
-        <translation>Erro carregando wallet.dat Carteira precisa de nova versão do MarteX Core</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of martex Core</source>
+        <translation>Erro carregando wallet.dat Carteira precisa de nova versão do martex Core</translation>
     </message>
     <message>
         <source>Error: A fatal internal error occured, see debug.log for details</source>
@@ -3744,8 +3744,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Erro: Argument não suportado -tor encontrado, utilize -onion</translation>
     </message>
     <message>
-        <source>Fee (in MXT/kB) to add to transactions you send (default: %s)</source>
-        <translation>Taxas (em MXT/Kb) a adicionar às transacções que envia (omissão: %s)</translation>
+        <source>Fee (in martex/kB) to add to transactions you send (default: %s)</source>
+        <translation>Taxas (em martex/Kb) a adicionar às transacções que envia (omissão: %s)</translation>
     </message>
     <message>
         <source>Finalizing transaction.</source>
@@ -3800,16 +3800,16 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Informação</translation>
     </message>
     <message>
-        <source>Initialization sanity check failed. MarteX Core is shutting down.</source>
-        <translation>A verificação de consistência no arranque falhou. O MarteX Core está a encerrar.</translation>
+        <source>Initialization sanity check failed. martex Core is shutting down.</source>
+        <translation>A verificação de consistência no arranque falhou. O martex Core está a encerrar.</translation>
     </message>
     <message>
         <source>Input is not valid.</source>
         <translation>A entrada não é válida.</translation>
     </message>
     <message>
-        <source>FastSend options:</source>
-        <translation>Opções FastSend</translation>
+        <source>FastsenD options:</source>
+        <translation>Opções FastsenD</translation>
     </message>
     <message>
         <source>Insufficient funds.</source>
@@ -4044,8 +4044,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Utilize UPNP para mapear porta de escuta (default: %u)</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart MarteX Core to complete</source>
-        <translation>Carteira necessita de ser re-escrita: reinicie MarteX Core para completar</translation>
+        <source>Wallet needed to be rewritten: restart martex Core to complete</source>
+        <translation>Carteira necessita de ser re-escrita: reinicie martex Core para completar</translation>
     </message>
     <message>
         <source>Warning: Unsupported argument -benchmark ignored, use -debug=bench.</source>
@@ -4064,8 +4064,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>masternodeprivkey inválida. Por favor reveja a documentação.</translation>
     </message>
     <message>
-        <source>(must be 51315 for mainnet)</source>
-        <translation>(deve ser 51315 para mainnet)</translation>
+        <source>(must be 9999 for mainnet)</source>
+        <translation>(deve ser 9999 para mainnet)</translation>
     </message>
     <message>
         <source>Can't find random Masternode.</source>
@@ -4104,8 +4104,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Chave KeePassHttp para usar na comunicação cifrada AES com o KeePass</translation>
     </message>
     <message>
-        <source>Keep N MXT anonymized (default: %u)</source>
-        <translation>Manter N MXT anonimizados (default: %u)</translation>
+        <source>Keep N martex anonymized (default: %u)</source>
+        <translation>Manter N martex anonimizados (default: %u)</translation>
     </message>
     <message>
         <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>
@@ -4185,7 +4185,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>RPC SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
-        <translation>Opções RPC SSL: (para instruções de configuração SSL dirija-se à MarteX Wiki)</translation>
+        <translation>Opções RPC SSL: (para instruções de configuração SSL dirija-se à martex Wiki)</translation>
     </message>
     <message>
         <source>RPC server options:</source>

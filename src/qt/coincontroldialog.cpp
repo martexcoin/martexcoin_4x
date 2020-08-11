@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
+// Copyright (c) 2014-2017 The MarteX Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -435,13 +435,9 @@ void CoinControlDialog::viewItemChanged(QTreeWidgetItem* item, int column)
             coinControl->Select(outpt);
             int nRounds = pwalletMain->GetOutpointAnonSendRounds(outpt);
             if (coinControl->fUseAnonSend && nRounds < anonSendClient.nAnonSendRounds) {
-                QMessageBox::warning(this, windowTitle(),
-                    tr("Non-anonymized input selected. <b>AnonSend will be disabled.</b><br><br>If you still want to use AnonSend, please deselect all non-nonymized inputs first and then check AnonSend checkbox again."),
-                    QMessageBox::Ok, QMessageBox::Ok);
                 coinControl->fUseAnonSend = false;
             }
         }
-
         // selection changed -> update labels
         if (ui->treeWidget->isEnabled()) // do not update on every click for (un)select all
             CoinControlDialog::updateLabels(model, this);
@@ -665,7 +661,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
     else {
         dFeeVary = (double)std::max(CWallet::GetRequiredFee(1000), mempool.estimateSmartFee(nTxConfirmTarget).GetFeePerK()) / 1000;
     }
-    QString toolTip4 = tr("Can vary +/- %1 valverde(s) per input.").arg(dFeeVary);
+    QString toolTip4 = tr("Can vary +/- %1 politoshi(s) per input.").arg(dFeeVary);
 
     l3->setToolTip(toolTip4);
     l4->setToolTip(toolTip4);
@@ -746,7 +742,7 @@ void CoinControlDialog::updateView()
             {
                 sAddress = QString::fromStdString(CBitcoinAddress(outputAddress).ToString());
 
-                // if listMode or change => show MarteX address. In tree mode, address is not shown again for direct wallet address outputs
+                // if listMode or change => show martex address. In tree mode, address is not shown again for direct wallet address outputs
                 if (!treeMode || (!(sAddress == sWalletAddress)))
                     itemOutput->setText(COLUMN_ADDRESS, sAddress);
 
@@ -777,21 +773,6 @@ void CoinControlDialog::updateView()
             itemOutput->setText(COLUMN_DATE, GUIUtil::dateTimeStr(out.tx->GetTxTime()));
             itemOutput->setToolTip(COLUMN_DATE, GUIUtil::dateTimeStr(out.tx->GetTxTime()));
             itemOutput->setData(COLUMN_DATE, Qt::UserRole, QVariant((qlonglong)out.tx->GetTxTime()));
-
-            // immature PoS reward
-            if (out.tx->IsCoinStake() && out.tx->GetBlocksToMaturity() > 0 && out.tx->GetDepthInMainChain() > 0) {
-              itemOutput->setBackground(COLUMN_CONFIRMATIONS, Qt::red);
-              itemOutput->setDisabled(true);
-            }
-
-
-            // AnonSend rounds
-            COutPoint outpoint = COutPoint(out.tx->tx->GetHash(), out.i);
-            int nRounds = pwalletMain->GetOutpointAnonSendRounds(outpoint);
-
-            if (nRounds >= 0 || fDebug) itemOutput->setText(COLUMN_ANONSEND_ROUNDS, QString::number(nRounds));
-            else itemOutput->setText(COLUMN_ANONSEND_ROUNDS, tr("n/a"));
-            itemOutput->setData(COLUMN_ANONSEND_ROUNDS, Qt::UserRole, QVariant((qlonglong)nRounds));
 
 
             // confirmations

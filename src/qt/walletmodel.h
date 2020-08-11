@@ -48,7 +48,7 @@ public:
     // the addresses, e.g. address-A<br />address-B<br />address-C.
     // Info: As we don't need to process addresses in here when using
     // payment requests, we can abuse it for displaying an address list.
-    // Todo: This is a hack, should be replaced with a cleaner solution!
+    // Todo: This is a hack, should be replmartex with a cleaner solution!
     QString address;
     QString label;
 #ifdef ENABLE_WALLET
@@ -114,6 +114,7 @@ public:
     {
         OK,
         InvalidAmount,
+        InvalidUnlock,
         InvalidAddress,
         AmountExceedsBalance,
         AmountWithFeeExceedsBalance,
@@ -138,9 +139,10 @@ public:
     RecentRequestsTableModel *getRecentRequestsTableModel();
 
     CAmount getBalance(const CCoinControl *coinControl = NULL) const;
-    CAmount getStake() const;
     CAmount getUnconfirmedBalance() const;
     CAmount getImmatureBalance() const;
+    CAmount getStakeBalance() const;
+    int getStakeInputs() const;
     CAmount getAnonymizedBalance() const;
     bool haveWatchOnly() const;
     CAmount getWatchBalance() const;
@@ -240,13 +242,14 @@ private:
 
     // Cache some values to be able to detect changes
     CAmount cachedBalance;
-    CAmount cachedStake;
     CAmount cachedUnconfirmedBalance;
     CAmount cachedImmatureBalance;
     CAmount cachedAnonymizedBalance;
     CAmount cachedWatchOnlyBalance;
     CAmount cachedWatchUnconfBalance;
     CAmount cachedWatchImmatureBalance;
+    CAmount cachedStakeBalance;
+    CAmount cachedStakeInputs;
     EncryptionStatus cachedEncryptionStatus;
     int cachedNumBlocks;
     int cachedTxLocks;
@@ -260,8 +263,8 @@ private:
 
 Q_SIGNALS:
     // Signal that balance in wallet changed
-    void balanceChanged(const CAmount& balance, const CAmount& stake, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, const CAmount& anonymizedBalance,
-                        const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
+    void balanceChanged(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, const CAmount& anonymizedBalance,
+                        const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance, const CAmount stakeBalance, const int stakeInputs);
 
     // Encryption status of wallet changed
     void encryptionStatusChanged(int status);

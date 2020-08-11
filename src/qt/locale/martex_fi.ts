@@ -1,4 +1,4 @@
-<TS language="fi" version="2.1">
+<TS language="fi" version="2.0">
 <context>
     <name>AddressBookPage</name>
     <message>
@@ -62,12 +62,12 @@
         <translation>Vastaanottava osoite</translation>
     </message>
     <message>
-        <source>These are your MarteX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Nämä ovat MarteX osoitteesi maksujen lähetykseen. Tarkista aina lähetettävä määrä ja vastaanottajan osoite ennen kuin lähetät varoja.</translation>
+        <source>These are your martex addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Nämä ovat martex osoitteesi maksujen lähetykseen. Tarkista aina lähetettävä määrä ja vastaanottajan osoite ennen kuin lähetät varoja.</translation>
     </message>
     <message>
-        <source>These are your MarteX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Nämä ovat MarteX osoitteesi suoritusten vastaanottamiseen. Suositellaan että käytät uutta osoitetta kullekin siirtotapahtumalle.</translation>
+        <source>These are your martex addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Nämä ovat martex osoitteesi suoritusten vastaanottamiseen. Suositellaan että käytät uutta osoitetta kullekin siirtotapahtumalle.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -132,6 +132,14 @@
         <translation>Uusi salasana uudelleen</translation>
     </message>
     <message>
+        <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
+        <translation>Poistaa käytöstä rahojen lähetyksen kun käyttöjärjestelmän käyttäjätili on vaarantunut. Ei tarjoa oikeaa turvallisuutta.</translation>
+    </message>
+    <message>
+        <source>Only for mixing via AnonSend</source>
+        <translation>Vain AnonSend sekoitukseen</translation>
+    </message>
+    <message>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
         <translation>Anna lompakolle uusi salasana.&lt;br/&gt;Käytä salasanaa jossa on ainakin  &lt;b&gt;10 satunnaista mekkiä&lt;/b&gt; tai &lt;b&gt;kahdeksan sanaa&lt;/b&gt;.</translation>
     </message>
@@ -141,15 +149,11 @@
     </message>
     <message>
         <source>This operation needs your wallet passphrase to unlock the wallet.</source>
-        <translation>Tätä toimintoa varten sinun täytyy antaa lompakon salasana sen lukituksen avaamiseksi.</translation>
-    </message>
-    <message>
-        <source>Unlock wallet for mixing only</source>
-        <translation>Avaa lompakon lukitus vain sekoitusta varten</translation>
+        <translation>Tätä toimintoa varten sinun täytyy antaa lompakon salasana sen avaamiseksi.</translation>
     </message>
     <message>
         <source>Unlock wallet</source>
-        <translation>Avaa lompakon lukitus</translation>
+        <translation>Avaa lompakko</translation>
     </message>
     <message>
         <source>This operation needs your wallet passphrase to decrypt the wallet.</source>
@@ -172,8 +176,8 @@
         <translation>Vahvista lompakon salaus</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR MXT&lt;/b&gt;!</source>
-        <translation>Varoitus: Jos salaat lompakon ja unohdat salasanan, &lt;b&gt;MENETÄT KAIKKI MXTisi&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR martex&lt;/b&gt;!</source>
+        <translation>Varoitus: Jos salaat lompakon ja unohdat salasanan, &lt;b&gt;MENETÄT KAIKKI martexisi&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -184,15 +188,11 @@
         <translation>Lompakko salattu</translation>
     </message>
     <message>
-        <source>%1 will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your funds from being stolen by malware infecting your computer.</source>
-        <translation>%1 sulkeutuu nyt salauksen viimeistelyä varten. Muista että salaus pelkästään ei voi estää MarteXiesi varastamista jos koneesi saastuu haittaohjelmilla tai viruksilla.</translation>
+        <source>martex Core will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your martexs from being stolen by malware infecting your computer.</source>
+        <translation>martex Core sulkeutuu nyt salauksen viimeistelyä varten. Muista että salaus pelkästään ei voi estää martexiesi varastamista jos koneesi saastuu haittaohjelmilla tai viruksilla.</translation>
     </message>
     <message>
-        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. Previous backups of the unencrypted wallet file contain the same HD seed and still have full access to all your funds just like the new, encrypted wallet.</source>
-        <translation>TÄRKEÄÄ: Kaikki vanhat lompakon varmuuskopiot pitäisi korvata uusilla salatuilla varmuuskopioilla. Edelliset salaamattomat varmuuskopiot sisältävät saman HD siemenen ja niihin on täysi pääsy varoihisi niin kuin uuteen salattuunkin lompakkoon.</translation>
-    </message>
-    <message>
-        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
+        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replmartex with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
         <translation>TÄRKEÄÄ: Kaikki vanhat lompakon varmuuskopiot pitäisi korvata uusilla salatuilla varmuuskopioilla. Turvallisuussyistä edelliset salaamattomat varmuuskopiot muuttuvat turhiksi kun aloitat uuden salatun lompakon käytön.</translation>
     </message>
     <message>
@@ -209,7 +209,7 @@
     </message>
     <message>
         <source>Wallet unlock failed</source>
-        <translation>Lompakon lukituksen avaus epäonnistui.</translation>
+        <translation>Lompakon lukituksen avaaminen epäonnistui.</translation>
     </message>
     <message>
         <source>The passphrase entered for the wallet decryption was incorrect.</source>
@@ -242,12 +242,12 @@
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <source>A fatal error occurred. MarteX Core can no longer continue safely and will quit.</source>
-        <translation>Vakava virhe tapahtunut. MarteX Core ei voi enää toimia turvallisesti ja sulkeutuu.</translation>
+        <source>A fatal error occurred. martex Core can no longer continue safely and will quit.</source>
+        <translation>Vakava virhe tapahtunut. martex Core ei voi enää toimia turvallisesti ja sulkeutuu.</translation>
     </message>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core</translation>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -270,8 +270,8 @@
         <translation>L&amp;ähetä</translation>
     </message>
     <message>
-        <source>Send coins to a MarteX address</source>
-        <translation>Lähetä varoja MarteX osoitteeseen</translation>
+        <source>Send coins to a martex address</source>
+        <translation>Lähetä varoja martex osoitteeseen</translation>
     </message>
     <message>
         <source>&amp;Receive</source>
@@ -279,7 +279,7 @@
     </message>
     <message>
         <source>Request payments (generates QR codes and martex: URIs)</source>
-        <translation>Pyydä maksuja (Luo QR koodit ja MarteX: URIt)</translation>
+        <translation>Pyydä maksuja (Luo QR koodit ja martex: URIt)</translation>
     </message>
     <message>
         <source>&amp;Transactions</source>
@@ -306,8 +306,12 @@
         <translation>Sulje ohjelma</translation>
     </message>
     <message>
-        <source>Show information about MarteX Core</source>
-        <translation>Näytä tietoja MarteX Core:sta</translation>
+        <source>&amp;About martex Core</source>
+        <translation>Tietoja &amp;martex Core:sta</translation>
+    </message>
+    <message>
+        <source>Show information about martex Core</source>
+        <translation>Näytä tietoja martex Core:sta</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
@@ -322,12 +326,8 @@
         <translation>&amp;Asetukset...</translation>
     </message>
     <message>
-        <source>&amp;About %1</source>
-        <translation>&amp;Tietoja %1</translation>
-    </message>
-    <message>
-        <source>Modify configuration options for %1</source>
-        <translation>Muuta %1 asetuksia</translation>
+        <source>Modify configuration options for martex Core</source>
+        <translation>Muuta martex Core asetuksia</translation>
     </message>
     <message>
         <source>&amp;Show / Hide</source>
@@ -335,7 +335,7 @@
     </message>
     <message>
         <source>Show or hide the main Window</source>
-        <translation>Näytä tai piilota pääikkuna</translation>
+        <translation>Näytä tai piilota martex pääikkuna</translation>
     </message>
     <message>
         <source>&amp;Encrypt Wallet...</source>
@@ -351,7 +351,7 @@
     </message>
     <message>
         <source>Backup wallet to another location</source>
-        <translation>Varmuuskopioi lompakko toiseen paikkaan</translation>
+        <translation>Varmuuskopioi lompakko toiseen sijaintiin</translation>
     </message>
     <message>
         <source>&amp;Change Passphrase...</source>
@@ -363,11 +363,11 @@
     </message>
     <message>
         <source>&amp;Unlock Wallet...</source>
-        <translation>&amp;Avaa Lukitus...</translation>
+        <translation>&amp;Avaa Lompakko...</translation>
     </message>
     <message>
         <source>Unlock wallet</source>
-        <translation>Avaa lompakon lukitus</translation>
+        <translation>Avaa lompakko</translation>
     </message>
     <message>
         <source>&amp;Lock Wallet</source>
@@ -378,16 +378,16 @@
         <translation>&amp;Allekirjoita Viesti...</translation>
     </message>
     <message>
-        <source>Sign messages with your MarteX addresses to prove you own them</source>
-        <translation>Allekirjoita viestit MarteX osoitteillasi todistaaksesi että omistat ne</translation>
+        <source>Sign messages with your martex addresses to prove you own them</source>
+        <translation>Allekirjoita viestit martex osoitteillasi todistaaksesi että omistat ne</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
         <translation>&amp;Tarkista Viesti...</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified MarteX addresses</source>
-        <translation>Tarkista viestit ollaksesi varma että ne on allekirjoitettu määritetyillä MarteX osoitteilla</translation>
+        <source>Verify messages to ensure they were signed with specified martex addresses</source>
+        <translation>Tarkista viestit ollaksesi varma että ne on allekirjoitettu määritetyillä martex osoitteilla</translation>
     </message>
     <message>
         <source>&amp;Information</source>
@@ -475,19 +475,15 @@
     </message>
     <message>
         <source>Open a martex: URI or payment request</source>
-        <translation>Avaa MarteX: URI tai maksupyyntö</translation>
+        <translation>Avaa martex: URI tai maksupyyntö</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
         <translation>&amp;Komentorivin valinnat</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible MarteX command-line options</source>
-        <translation>Näytä %1 ohjelista komentorivin valinnoista</translation>
-    </message>
-    <message>
-        <source>%1 client</source>
-        <translation>%1 asiakasohjelma</translation>
+        <source>Show the martex Core help message to get a list with possible martex Core command-line options</source>
+        <translation>Näytä martex Core ohjelista komentorivin valinnoista</translation>
     </message>
     <message>
         <source>&amp;AnonSend information</source>
@@ -517,9 +513,13 @@
         <source>Tabs toolbar</source>
         <translation>Välilehtipalkki</translation>
     </message>
+    <message>
+        <source>martex Core client</source>
+        <translation>martex Core asiakasohjelma</translation>
+    </message>
     <message numerus="yes">
-        <source>%n active connection(s) to MarteX network</source>
-        <translation><numerusform>%n aktiivinen yhteys MarteX verkkoon</numerusform><numerusform>%n aktiivista yhteyttä MarteX verkkoon</numerusform></translation>
+        <source>%n active connection(s) to martex network</source>
+        <translation><numerusform>%n aktiivinen yhteys martex verkkoon</numerusform><numerusform>%n aktiivista yhteyttä martex verkkoon</numerusform></translation>
     </message>
     <message>
         <source>Network activity disabled</source>
@@ -641,7 +641,7 @@
     </message>
     <message>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt; for mixing only</source>
-        <translation>Lompakko on &lt;b&gt;salattu&lt;/b&gt; ja tällä hetkellä &lt;b&gt;lukitsematta&lt;/b&gt; vain sekoitusta varten</translation>
+        <translation>Lompakko on &lt;b&gt;salattu&lt;/b&gt; ja tällä hetkellä &lt;b&gt;lukitsematta&lt;/b&gt; vain anonymisointia varten</translation>
     </message>
     <message>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
@@ -652,7 +652,7 @@
     <name>ClientModel</name>
     <message>
         <source>Total: %1 (FS compatible: %2 / Enabled: %3)</source>
-        <translation>Yhteensä: %1 (FS yht.sopivia: %2 / Käytössä: %3)</translation>
+        <translation>Yhteensä: %1 (PS yht.sopivia: %2 / Käytössä: %3)</translation>
     </message>
     <message>
         <source>Network Alert</source>
@@ -726,8 +726,8 @@
         <translation>Vastaanotettu osoitteeseen</translation>
     </message>
     <message>
-        <source>FS Rounds</source>
-        <translation>FS Kierrokset</translation>
+        <source>PS Rounds</source>
+        <translation>PS Kierrokset</translation>
     </message>
     <message>
         <source>Date</source>
@@ -763,7 +763,7 @@
     </message>
     <message>
         <source>Unlock unspent</source>
-        <translation>Avaa lukitus käyttämättömistä</translation>
+        <translation>Avaa käyttämättömät</translation>
     </message>
     <message>
         <source>Copy quantity</source>
@@ -815,7 +815,7 @@
     </message>
     <message>
         <source>Can vary +/- %1 valverde(s) per input.</source>
-        <translation>Voi vaihdella +/- %1 valverde per syöte.</translation>
+        <translation>Voi vaihdella +/- %1 valverdes per syöte.</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -857,11 +857,11 @@
         <translation>Valitse yksityisyyden taso.</translation>
     </message>
     <message>
-        <source>Use 2 separate masternodes to mix funds up to 1000 MXT</source>
+        <source>Use 2 separate masternodes to mix funds up to 1000 martex</source>
         <translation>Käytä 2 erillistä masternodea sekoittaaksesi varoja</translation>
     </message>
     <message>
-        <source>Use 8 separate masternodes to mix funds up to 1000 MXT</source>
+        <source>Use 8 separate masternodes to mix funds up to 1000 martex</source>
         <translation>Käytä 8 erillistä masternodea sekoittaaksesi varoja</translation>
     </message>
     <message>
@@ -869,16 +869,16 @@
         <translation>Käytä 16 erillistä masternodea</translation>
     </message>
     <message>
-        <source>This option is the quickest and will cost about ~0.025 MXT to anonymize 1000 MXT</source>
-        <translation>Tämä vaihtoehto on nopein ja maksaa noin ~0.025 MXT kun anonymisoidaan 1000 MXT</translation>
+        <source>This option is the quickest and will cost about ~0.025 martex to anonymize 1000 martex</source>
+        <translation>Tämä vaihtoehto on nopein ja maksaa noin ~0.025 martex kun anonymisoidaan 1000 martex</translation>
     </message>
     <message>
-        <source>This option is moderately fast and will cost about 0.05 MXT to anonymize 1000 MXT</source>
-        <translation>Tämä vaihtoehto on keskinopea ja maksaa noin ~0.05 MXT kun anonymisoidaan 1000 MXT</translation>
+        <source>This option is moderately fast and will cost about 0.05 martex to anonymize 1000 martex</source>
+        <translation>Tämä vaihtoehto on keskinopea ja maksaa noin ~0.05 martex kun anonymisoidaan 1000 martex</translation>
     </message>
     <message>
-        <source>0.1 MXT per 1000 MXT you anonymize.</source>
-        <translation>0.1 MXT maksu per 1000 MXT jonka anonymisoit.</translation>
+        <source>0.1 martex per 1000 martex you anonymize.</source>
+        <translation>0.1 martex maksu per 1000 martex jonka anonymisoit.</translation>
     </message>
     <message>
         <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
@@ -889,16 +889,16 @@
         <translation>AnonSend Asetukset</translation>
     </message>
     <message>
-        <source>AnonSend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>AnonSend on asetettu perusasetuksiin (%1 and 2 kierrosta). Voit muuttaa asetuksia milloin vain MarteX asetuksista.</translation>
+        <source>AnonSend was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>AnonSend on asetettu perusasetuksiin (%1 and 2 kierrosta). Voit muuttaa asetuksia milloin vain martex asetuksista.</translation>
     </message>
     <message>
-        <source>AnonSend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>AnonSend on asetettu korkean tason asetuksiin (%1 and 8 kierrosta). Voit muuttaa asetuksia milloin vain MarteX asetuksista.</translation>
+        <source>AnonSend was successfully set to high (%1 and 8 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>AnonSend on asetettu korkean tason asetuksiin (%1 and 8 kierrosta). Voit muuttaa asetuksia milloin vain martex asetuksista.</translation>
     </message>
     <message>
-        <source>AnonSend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening MarteX's configuration screen.</source>
-        <translation>AnonSend on asetettu maksimitason asetuksiin (%1 and 16 kierrosta). Voit muuttaa asetuksia milloin vain MarteX asetuksista.</translation>
+        <source>AnonSend was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening martex's configuration screen.</source>
+        <translation>AnonSend on asetettu maksimitason asetuksiin (%1 and 16 kierrosta). Voit muuttaa asetuksia milloin vain martex asetuksista.</translation>
     </message>
 </context>
 <context>
@@ -940,8 +940,8 @@
         <translation>Muokkaa lähettävää osoitetta</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid MarteX address.</source>
-        <translation>Annettu osoite "%1" ei ole pätevä MarteX osoite.</translation>
+        <source>The entered address "%1" is not a valid martex address.</source>
+        <translation>Annettu osoite "%1" ei ole pätevä martex osoite.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -949,7 +949,7 @@
     </message>
     <message>
         <source>Could not unlock wallet.</source>
-        <translation>Lompakon lukitusta ei voitu avata.</translation>
+        <translation>Lompakkoa ei voitu avata.</translation>
     </message>
     <message>
         <source>New key generation failed.</source>
@@ -982,6 +982,10 @@
 <context>
     <name>HelpMessageDialog</name>
     <message>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
+    </message>
+    <message>
         <source>version</source>
         <translation>versio</translation>
     </message>
@@ -990,8 +994,8 @@
         <translation>(%1-bittinen)</translation>
     </message>
     <message>
-        <source>About %1</source>
-        <translation>Tietoja %1</translation>
+        <source>About martex Core</source>
+        <translation>Tietoja martex Core:sta</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -1038,8 +1042,8 @@
         <translation>AnonSend tietoja</translation>
     </message>
     <message>
-        <source>&lt;h3&gt;AnonSend Basics&lt;/h3&gt; AnonSend gives you true financial privacy by obscuring the origins of your funds. All the MarteX in your wallet is comprised of different "inputs" which you can think of as separate, discrete coins.&lt;br&gt; AnonSend uses an innovative process to mix your inputs with the inputs of two other people, without having your coins ever leave your wallet. You retain control of your money at all times.&lt;hr&gt; &lt;b&gt;The AnonSend process works like this:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;AnonSend begins by breaking your transaction inputs down into standard denominations. These denominations are 0.01 MXT, 0.1 MXT, 1 MXT and 10 MXT -- sort of like the paper money you use every day.&lt;/li&gt; &lt;li&gt;Your wallet then sends requests to specially configured software nodes on the network, called "masternodes." These masternodes are informed then that you are interested in mixing a certain denomination. No identifiable information is sent to the masternodes, so they never know "who" you are.&lt;/li&gt; &lt;li&gt;When two other people send similar messages, indicating that they wish to mix the same denomination, a mixing session begins. The masternode mixes up the inputs and instructs all three users' wallets to pay the now-transformed input back to themselves. Your wallet pays that denomination directly to itself, but in a different address (called a change address).&lt;/li&gt; &lt;li&gt;In order to fully obscure your funds, your wallet must repeat this process a number of times with each denomination. Each time the process is completed, it's called a "round." Each round of AnonSend makes it exponentially more difficult to determine where your funds originated.&lt;/li&gt; &lt;li&gt;This mixing process happens in the background without any intervention on your part. When you wish to make a transaction, your funds will already be anonymized. No additional waiting is required.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;IMPORTANT:&lt;/b&gt; Your wallet only contains 1000 of these "change addresses." Every time a mixing event happens, up to 9 of your addresses are used up. This means those 1000 addresses last for about 100 mixing events. When 900 of them are used, your wallet must create more addresses. It can only do this, however, if you have automatic backups enabled.&lt;br&gt; Consequently, users who have backups disabled will also have AnonSend disabled. &lt;hr&gt;For more info see &lt;a href="https://martexcoin.org/wiki/display/DOC/AnonSend"&gt;https://martexcoin.org/wiki/display/DOC/AnonSend&lt;/a&gt;         </source>
-        <translation>&lt;h3&gt;AnonSend perusteet&lt;/h3&gt; AnonSend tarjoaa yksityisyyden hämärtämällä varojesi alkuperäisen osoitteen. Kaikki MarteX:it lompakossasi muodostuvat erillisistä "syötteistä", joita voit ajatella erillisinä kolikkoina.&lt;br&gt; AnonSend käyttää innovatiivista prosessia sekoittaakseen lompakkosi syötteet kahden muun ihmisen syötteisiin, siirtämättä varoja pois lompakostasi. Varojesi kontrolli pysyy aina sinulla.&lt;hr&gt; &lt;b&gt; AnonSend prosessi toimii seuraavasti:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;AnonSend aloittaa pilkkomalla siirtotapahtumiesi syötteet pienemmiksi standardi arvoiksi. Nämä arvot ovat 0.01 MXT, 0.1 MXT, 1 MXT ja 10 MXT.&lt;/li&gt; &lt;li&gt;Sitten lompakkosi lähettää pyynnön verkon palvelimille, joita kutsutaan "masternode:iksi". Masternodet saavat tiedon että haluat sekoittaa pilkottuja standardi arvoja. Mitään tunnistetietoja ei lähetetä masternode:ille, ne eivät koskaan tiedä "kuka" olet.&lt;/li&gt; &lt;li&gt;Kun 2 muuta käyttäjää ilmoittaa että he haluavat myös sekoittaa varoja, alkaa sekoitus-sessio. Masternodet sekoittavat standardi arvot ja ilmoittavat kaikille 3:lle käyttäjän lompakoille että maksavat sekoitetut arvot takaisin itselleen. Lompakkosi maksaa nuo sekoitetut arvot suoraan itselleen, mutta eri osoitteeseen (vaihto-osoite).&lt;/li&gt; &lt;li&gt;Jotta varojesi alkuperäinen lähde hämärretään, lompakkosi suorittaa tämän prosessin useita kertoja kaikilla standardi arvoilla. Aina kun prosessi on valmis, sitä kutsutaan "kierrokseksi". Jokainen AnonSend kierros tekee eksponentiaalisesti vaikeammaksi löytää varojesi alkuperäisen osoitteen.&lt;/li&gt; &lt;li&gt;Tämä sekoitusprosessi tapahtuu taustalla ilman käyttäjän toimenpiteitä. Kun haluat myöhemmin tehdä anonyymin varojen siirron, on varasi valmiiksi sekoitettu (anonymisoitu). Erillistä sekoitusta/odotusta ei tarvita.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;TÄRKEÄÄ:&lt;/b&gt; Lompakkosi sisältää vain 1000 "vaihto-osoitetta". Aina kun sekoitustapahtuma tehdään, max 9 osoitetta käytetään. Tämä tarkoittaa sitä että nuo 1000 osoitetta kestää noin 100 sekoitustapahtumaa. Kun 900 osoitetta on käytetty, lompakkosi täytyy tehdä lisää osoitteita. Se voi tehdä niitä vain jos automaattinen varmistus on käytössä.&lt;br&gt; Tästä seuraa että jos varmistus ei ole käytössä, myös AnonSend on pois käytöstä. &lt;hr&gt;Lisätietoja &lt;a href="https://martexcoin.org/wiki/display/DOC/AnonSend"&gt;https://martexcoin.org/wiki/display/DOC/AnonSend&lt;/a&gt; </translation>
+        <source>&lt;h3&gt;AnonSend Basics&lt;/h3&gt; AnonSend gives you true financial privacy by obscuring the origins of your funds. All the martex in your wallet is comprised of different "inputs" which you can think of as separate, discrete coins.&lt;br&gt; AnonSend uses an innovative process to mix your inputs with the inputs of two other people, without having your coins ever leave your wallet. You retain control of your money at all times..&lt;hr&gt; &lt;b&gt;The AnonSend process works like this:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;AnonSend begins by breaking your transaction inputs down into standard denominations. These denominations are 0.01 martex, 0.1 martex, 1 martex and 10 martex -- sort of like the paper money you use every day.&lt;/li&gt; &lt;li&gt;Your wallet then sends requests to specially configured software nodes on the network, called "masternodes." These masternodes are informed then that you are interested in mixing a certain denomination. No identifiable information is sent to the masternodes, so they never know "who" you are.&lt;/li&gt; &lt;li&gt;When two other people send similar messages, indicating that they wish to mix the same denomination, a mixing session begins. The masternode mixes up the inputs and instructs all three users' wallets to pay the now-transformed input back to themselves. Your wallet pays that denomination directly to itself, but in a different address (called a change address).&lt;/li&gt; &lt;li&gt;In order to fully obscure your funds, your wallet must repeat this process a number of times with each denomination. Each time the process is completed, it's called a "round." Each round of AnonSend makes it exponentially more difficult to determine where your funds originated.&lt;/li&gt; &lt;li&gt;This mixing process happens in the background without any intervention on your part. When you wish to make a transaction, your funds will already be anonymized. No additional waiting is required.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;IMPORTANT:&lt;/b&gt; Your wallet only contains 1000 of these "change addresses." Every time a mixing event happens, up to 9 of your addresses are used up. This means those 1000 addresses last for about 100 mixing events. When 900 of them are used, your wallet must create more addresses. It can only do this, however, if you have automatic backups enabled.&lt;br&gt; Consequently, users who have backups disabled will also have AnonSend disabled. &lt;hr&gt;For more info see &lt;a href="https://martexcoin.atlassian.net/wiki/display/DOC/AnonSend"&gt;https://martexcoin.atlassian.net/wiki/display/DOC/AnonSend&lt;/a&gt;         </source>
+        <translation>&lt;h3&gt;AnonSend perusteet&lt;/h3&gt; AnonSend tarjoaa yksityisyyden hämärtämällä varojesi alkuperäisen osoitteen. Kaikki martex:it lompakossasi muodostuvat erillisistä "syötteistä", joita voit ajatella erillisinä kolikkoina.&lt;br&gt; AnonSend käyttää innovatiivista prosessia sekoittaakseen lompakkosi syötteet kahden muun ihmisen syötteisiin, siirtämättä varoja pois lompakostasi. Varojesi kontrolli pysyy aina sinulla.&lt;hr&gt; &lt;b&gt; AnonSend prosessi toimii seuraavasti:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;AnonSend aloittaa pilkkomalla siirtotapahtumiesi syötteet pienemmiksi standardi arvoiksi. Nämä arvot ovat 0.01 martex, 0.1 martex, 1 martex ja 10 martex.&lt;/li&gt; &lt;li&gt;Sitten lompakkosi lähettää pyynnön verkon palvelimille, joita kutsutaan "masternode:iksi". Masternodet saavat tiedon että haluat sekoittaa pilkottuja standardi arvoja. Mitään tunnistetietoja ei lähetetä masternode:ille, ne eivät koskaan tiedä "kuka" olet.&lt;/li&gt; &lt;li&gt;Kun 2 muuta käyttäjää ilmoittaa että he haluavat myös sekoittaa varoja, alkaa sekoitus-sessio. Masternodet sekoittavat standardi arvot ja ilmoittavat kaikille 3:lle käyttäjän lompakoille että maksavat sekoitetut arvot takaisin itselleen. Lompakkosi maksaa nuo sekoitetut arvot suoraan itselleen, mutta eri osoitteeseen (vaihto-osoite).&lt;/li&gt; &lt;li&gt;Jotta varojesi alkuperäinen lähde hämärretään, lompakkosi suorittaa tämän prosessin useita kertoja kaikilla standardi arvoilla. Aina kun prosessi on valmis, sitä kutsutaan "kierrokseksi". Jokainen AnonSend kierros tekee eksponentiaalisesti vaikeammaksi löytää varojesi alkuperäisen osoitteen.&lt;/li&gt; &lt;li&gt;Tämä sekoitusprosessi tapahtuu taustalla ilman käyttäjän toimenpiteitä. Kun haluat myöhemmin tehdä anonyymin varojen siirron, on varasi valmiiksi sekoitettu (anonymisoitu). Erillistä sekoitusta/odotusta ei tarvita.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;TÄRKEÄÄ:&lt;/b&gt; Lompakkosi sisältää vain 1000 "vaihto-osoitetta". Aina kun sekoitustapahtuma tehdään, max 9 osoitetta käytetään. Tämä tarkoittaa sitä että nuo 1000 osoitetta kestää noin 100 sekoitustapahtumaa. Kun 900 osoitetta on käytetty, lompakkosi täytyy tehdä lisää osoitteita. Se voi tehdä niitä vain jos automaattinen varmistus on käytössä.&lt;br&gt; Tästä seuraa että jos varmistus ei ole käytössä, myös AnonSend on pois käytöstä. &lt;hr&gt;Lisätietoja &lt;a href="https://martexcoin.atlassian.net/wiki/display/DOC/AnonSend"&gt;https://martexcoin.atlassian.net/wiki/display/DOC/AnonSend&lt;/a&gt; </translation>
     </message>
 </context>
 <context>
@@ -1049,16 +1053,17 @@
         <translation>Tervetuloa</translation>
     </message>
     <message>
-        <source>Welcome to %1.</source>
-        <translation>%1 - Tervetuloa.</translation>
+        <source>Welcome to martex Core.</source>
+        <translation>martex Core - Tervetuloa.</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where %1 will store its data.</source>
-        <translation>Tämä on ensimmäinen kerta, kun %1 on käynnistetty, joten voit valita datahakemiston paikan.</translation>
+        <source>As this is the first time the program is launched, you can choose where martex Core will store its data.</source>
+        <translation>Koska tämä on ensimmäinen kerta kun ohjelma käynnistetään, voit valita minne martex Core tallettaa datansa.
+Varoitus: Jos käytät käyttöjärjestelmää suoraan usb, dvd tai cd levyltä (Live os), ohjaa talletettava data eri levyasemalle turvalliseen paikkaan.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the MarteX block chain. At least %2GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>%1 lataa ja tallentaa kopion lohkoketjusta. Vähintään %2GB dataa tallennetaan tähän hakemistoon, ja se myös kasvaa ajan myötä. Myös lompakko tallennetaan tähän hakemistoon.</translation>
+        <source>martex Core will download and store a copy of the martex block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>martex Core lataa ja tallettaa kopion lohkoketjusta. Vähintään %1GB dataa talletetaan tähän hakemistoon, ja se myös kasvaa ajan myötä. Myös lompakko talletetaan tähän hakemistoon.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1067,6 +1072,10 @@
     <message>
         <source>Use a custom data directory:</source>
         <translation>Määritä oma datahakemisto:</translation>
+    </message>
+    <message>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -1144,14 +1153,6 @@
         <translation>Päivitä &amp;tila</translation>
     </message>
     <message>
-        <source>Show additional Masternode information</source>
-        <translation>Näytä Masternode lisätietoja</translation>
-    </message>
-    <message>
-        <source>Show &amp;Info...</source>
-        <translation>Näytä &amp;Tietoja...</translation>
-    </message>
-    <message>
         <source>Status will be updated automatically in (sec):</source>
         <translation>Tila päivitetään automaattisesti (sek):</translation>
     </message>
@@ -1211,38 +1212,6 @@
         <source>Are you sure you want to start MISSING masternodes?</source>
         <translation>Haluatko varmasti käynnistää PUUTTUVAT masternodet?</translation>
     </message>
-    <message>
-        <source>Additional information for Masternode %1</source>
-        <translation>Masternode lisätietoja %1</translation>
-    </message>
-    <message>
-        <source>Masternode Private Key</source>
-        <translation>Masternoden Yksityisavain</translation>
-    </message>
-    <message>
-        <source>Private Key</source>
-        <translation>Yksityisavain</translation>
-    </message>
-    <message>
-        <source>Collateral</source>
-        <translation>Vakuus</translation>
-    </message>
-    <message>
-        <source>IP</source>
-        <translation>IP</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation>Versio</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation>Tuntematon</translation>
-    </message>
-    <message>
-        <source>Sentinel</source>
-        <translation>Sentinel</translation>
-    </message>
 </context>
 <context>
     <name>ModalOverlay</name>
@@ -1251,12 +1220,12 @@
         <translation>Lomake</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the MarteX network, as detailed below.</source>
-        <translation>Viimeisimmät siirtotapahtumat eivät välttämättä ole vielä näkyvissä, ja siksi lompakon saldo voi olla väärin. Saldo korjaantuu oikeaksi kun lompakon synkronointi MarteX verkkoon on valmis.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the martex network, as detailed below.</source>
+        <translation>Viimeisimmät siirtotapahtumat eivät välttämättä ole vielä näkyvissä, ja siksi lompakon saldo voi olla väärin. Saldo korjaantuu oikeaksi kun lompakon synkronointi martex verkkoon on valmis.</translation>
     </message>
     <message>
-        <source>Attempting to spend MarteX that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>Yritys käyttää MarteX:eja joihin vaikuttaa ei näkyvissä olevat siirtotapahtumat, tulevat hylätyksi MarteX verkossa.</translation>
+        <source>Attempting to spend martex that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>Yritys käyttää martex:eja joihin vaikuttaa ei näkyvissä olevat siirtotapahtumat, tulevat hylätyksi martex verkossa.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1275,6 +1244,10 @@
         <translation>Edistyminen</translation>
     </message>
     <message>
+        <source>~</source>
+        <translation>~</translation>
+    </message>
+    <message>
         <source>Progress increase per hour</source>
         <translation>Edistymisen kasvu per tunti</translation>
     </message>
@@ -1284,7 +1257,7 @@
     </message>
     <message>
         <source>Estimated time left until synced</source>
-        <translation>Synkronoinnin jäljellä oleva aika</translation>
+        <translation>Synkronoinnin jälljellä oleva aika</translation>
     </message>
     <message>
         <source>Hide</source>
@@ -1345,12 +1318,20 @@
         <translation>(0 = auto, &lt;0 = jätä näin monta prosessorin ydintä vapaaksi)</translation>
     </message>
     <message>
-        <source>Amount of MarteX to keep anonymized</source>
-        <translation>MarteX määrä joka pidetään anonymisoituna</translation>
+        <source>Amount of martex to keep anonymized</source>
+        <translation>martex määrä joka pidetään anonymisoituna</translation>
     </message>
     <message>
         <source>W&amp;allet</source>
         <translation>&amp;Lompakko</translation>
+    </message>
+    <message>
+        <source>Automatically start martex Core after logging in to the system.</source>
+        <translation>Käynnistä martex Core automaattisesti kun järjestelmään kirjaudutaan.</translation>
+    </message>
+    <message>
+        <source>&amp;Start martex Core on system login</source>
+        <translation>&amp;Käynnistä martex Core järjestelmään kirjauduttaessa</translation>
     </message>
     <message>
         <source>Show additional tab listing all your masternodes in first sub-tab&lt;br/&gt;and all masternodes on the network in second sub-tab.</source>
@@ -1382,7 +1363,7 @@
     </message>
     <message>
         <source>Enable AnonSend &amp;multi-session</source>
-        <translation>Ota käyttöön AnonSend &amp;multisessio</translation>
+        <translation>Ota käyttöön AnonSend &amp;multi-sessio</translation>
     </message>
     <message>
         <source>If you disable the spending of unconfirmed change, the change from a transaction&lt;br/&gt;cannot be used until that transaction has at least one confirmation.&lt;br/&gt;This also affects how your balance is computed.</source>
@@ -1397,8 +1378,8 @@
         <translation>Tämä määrä toimii rajana sekoituksen keskeytykselle kun AnonSend sen saavuttaa.</translation>
     </message>
     <message>
-        <source>Automatically open the MarteX Core client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Avaa automaattisesti MarteX Core asiakasohjelmalle portti reitittimeen. Tämä toimii vain jos reitittimesi tukee UPnP:tä ja se on käytössä.</translation>
+        <source>Automatically open the martex Core client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Avaa automaattisesti martex Core asiakasohjelmalle portti reitittimeen. Tämä toimii vain jos reitittimesi tukee UPnP:tä ja se on käytössä.</translation>
     </message>
     <message>
         <source>Accept connections from outside</source>
@@ -1409,8 +1390,8 @@
         <translation>Salli sisään tulevat yhteydet</translation>
     </message>
     <message>
-        <source>Connect to the MarteX network through a SOCKS5 proxy.</source>
-        <translation>Kytkeydy MarteX verkkoon käyttäen SOCKS5 proxy:a.</translation>
+        <source>Connect to the martex network through a SOCKS5 proxy.</source>
+        <translation>Kytkeydy martex verkkoon käyttäen SOCKS5 proxy:a.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1421,8 +1402,12 @@
         <translation>Ikkunaa suljettaessa pienennä ohjelman ikkuna lopettamatta itse ohjelmaa. Kun tämä asetus on valittuna, ohjelman voi sulkea vain valitsemalla Lopeta ohjelman valikosta.</translation>
     </message>
     <message>
-        <source>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items.&lt;br/&gt;%s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</source>
-        <translation>Ulkopuoliset URL-osoitteet (esim. lohkoselain) jotka esiintyvät tapahtumat-välilehdellä valikossa.&lt;br/&gt;%s URL osoitteessa korvataan siirtotunnuksella. Useampi URL osoite on eroteltu pystyviivalla |.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting martex Core.</source>
+        <translation>Käyttöliittymän kieli asetetaan tässä, Asetus tulee voimaan kun martex Core asiakasohjelma käynnistetään uudelleen.</translation>
+    </message>
+    <message>
+        <source>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items.&lt;br/&gt;%s in the URL is replmartex by transaction hash. Multiple URLs are separated by vertical bar |.</source>
+        <translation>Ulkopuoliset URL-osoitteet (esim. lohkoselain) jotka esiintyvät tapahtumat-välilehdellä valikossa.&lt;br/&gt;%s URL-osoitteessa korvataan siirtotunnuksella. Useampi URL-osoite on eroteltu pystyviivalla |.</translation>
     </message>
     <message>
         <source>Expert</source>
@@ -1435,14 +1420,6 @@
     <message>
         <source>Whether to show coin control features or not.</source>
         <translation>Näytetäänkö kolikkokontrollin ominaisuuksia vai ei</translation>
-    </message>
-    <message>
-        <source>Automatically start %1 after logging in to the system.</source>
-        <translation>Käynnistä %1 automaattisesti järjestelmään kirjautumisen jälkeen.</translation>
-    </message>
-    <message>
-        <source>&amp;Start %1 on system login</source>
-        <translation>&amp;Käynnistä %1 järjestelmään kirjautuessa</translation>
     </message>
     <message>
         <source>Enable coin &amp;control features</source>
@@ -1497,8 +1474,8 @@
         <translation>Tor</translation>
     </message>
     <message>
-        <source>Connect to the MarteX network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>Kytkeydy MarteX verkkoon käyttäen erillistä SOCKS5 proxy:a Tor piilopalveluihin.</translation>
+        <source>Connect to the martex network through a separate SOCKS5 proxy for Tor hidden services.</source>
+        <translation>Kytkeydy martex verkkoon käyttäen erillistä SOCKS5 proxy:a Tor piilopalveluihin.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services:</source>
@@ -1535,10 +1512,6 @@
     <message>
         <source>User Interface &amp;language:</source>
         <translation>&amp;Käyttöliittymän kieli</translation>
-    </message>
-    <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting %1.</source>
-        <translation>Tässä voit määritellä käyttöliittymän kielen. Muutokset astuvat voimaan seuraavan kerran, kun %1 käynnistetään.</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
@@ -1622,8 +1595,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Lomake</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the MarteX network after a connection is established, but this process has not completed yet.</source>
-        <translation>Näytetyt tiedot eivät välttämättä ole ajan tasalla.&lt;br&gt;Lompakkosi synkronoituu automaattisesti MarteX verkkoon kun&lt;br&gt;yhteys on muodostettu, mutta tämä prosessi ei vielä ole valmis.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the martex network after a connection is established, but this process has not completed yet.</source>
+        <translation>Näytetyt tiedot eivät välttämättä ole ajan tasalla.&lt;br&gt;Lompakkosi synkronoituu automaattisesti martex verkkoon kun&lt;br&gt;yhteys on muodostettu, mutta tämä prosessi ei vielä ole valmis.</translation>
     </message>
     <message>
         <source>Available:</source>
@@ -1722,8 +1695,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Määrä ja Kierrokset:</translation>
     </message>
     <message>
-        <source>0 MXT / 0 Rounds</source>
-        <translation>0 MXT / 0 Kierrosta</translation>
+        <source>0 martex / 0 Rounds</source>
+        <translation>0 martex / 0 Kierrosta</translation>
     </message>
     <message>
         <source>Submitted Denom:</source>
@@ -1830,7 +1803,7 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Olemme tekemässä uutta automaattista varmistusta sinulle, mutta&lt;span style='color:red;'&gt; varmista aina että olet tallettanut varmistuksen turvalliseen paikkaan&lt;/span&gt;!</translation>
     </message>
     <message>
-        <source>Note: You can turn this message off in options.</source>
+        <source>Note: You turn this message off in options.</source>
         <translation>Huom: Voit kytkeä tämän viestin pois asetuksissa.</translation>
     </message>
     <message>
@@ -1855,7 +1828,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>WARNING! Failed to replenish keypool, please unlock your wallet to do so.</source>
-        <translation>VAROITUS! Osoitevarannon täydentäminen epäonnistui, avaa lompakon lukitus.</translation>
+        <translation>VAROITUS! Osoitevaraston täydentäminen epäonnistui, avaa lompakon lukitus.</translation>
     </message>
     <message>
         <source>Last AnonSend message:
@@ -1892,7 +1865,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Cannot start martex: click-to-pay handler</source>
-        <translation>Ei voi käynnistää MarteXia: click-to-pay handler</translation>
+        <translation>Ei voi käynnistää martexia: click-to-pay handler</translation>
     </message>
     <message>
         <source>URI handling</source>
@@ -1907,8 +1880,8 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Virheellinen maksuosoite %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid MarteX address or malformed URI parameters.</source>
-        <translation>URI:a ei voida jäsentää! Tämä voi johtua virheellisestä MarteX osoitteesta tai virheellisestä URI:n muuttujasta. </translation>
+        <source>URI cannot be parsed! This can be caused by an invalid martex address or malformed URI parameters.</source>
+        <translation>URI:a ei voida jäsentää! Tämä voi johtua virheellisestä martex osoitteesta tai virheellisestä URI:n muuttujasta. </translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -1997,24 +1970,36 @@ https://www.transifex.com/projects/p/martex/</translation>
 <context>
     <name>QObject</name>
     <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core</translation>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
     </message>
     <message>
-        <source>%1 didn't yet exit safely...</source>
-        <translation>%1 ei vielä sulkeutunut turvallisesti...</translation>
+        <source>Error: Specified data directory "%1" does not exist.</source>
+        <translation>Virhe: Annettua datahakemistoa "%1" ei ole olemassa.</translation>
+    </message>
+    <message>
+        <source>Error: Cannot parse configuration file: %1. Only use key=value syntax.</source>
+        <translation>Virhe: Ei voida jäsentää asetustiedostoa: %1. Käytä vain avain=arvo syntaksia.</translation>
+    </message>
+    <message>
+        <source>Error: %1</source>
+        <translation>Virhe: %1</translation>
     </message>
     <message>
         <source>Error reading masternode configuration file: %1</source>
         <translation>Virhe luettaessa masternoden asetustiedostoa: %1</translation>
     </message>
     <message>
+        <source>martex Core didn't yet exit safely...</source>
+        <translation>martex Core ei ole vielä sulkeutunut turvallisesti...</translation>
+    </message>
+    <message>
         <source>Amount</source>
         <translation>Määrä</translation>
     </message>
     <message>
-        <source>Enter a MarteX address (e.g. %1)</source>
-        <translation>Syötä MarteX osoite (esim. %1)</translation>
+        <source>Enter a martex address (e.g. %1)</source>
+        <translation>Syötä martex osoite (esim. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2078,59 +2063,6 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
 </context>
 <context>
-    <name>QObject::QObject</name>
-    <message>
-        <source>Error: Specified data directory "%1" does not exist.</source>
-        <translation>Virhe: Annettua datahakemistoa "%1" ei ole olemassa.</translation>
-    </message>
-    <message>
-        <source>Error: Cannot parse configuration file: %1. Only use key=value syntax.</source>
-        <translation>Virhe: asetustiedostoa %1 ei voida jäsentää. Käytä vain avain=arvo merkintätapaa.</translation>
-    </message>
-    <message>
-        <source>Error: %1</source>
-        <translation>Virhe: %1</translation>
-    </message>
-</context>
-<context>
-    <name>QRDialog</name>
-    <message>
-        <source>QR-Code Title</source>
-        <translation>QR Koodi Otsikko</translation>
-    </message>
-    <message>
-        <source>QR Code</source>
-        <translation>QR Koodi</translation>
-    </message>
-    <message>
-        <source>&amp;Save Image...</source>
-        <translation>&amp;Tallenna Kuva</translation>
-    </message>
-    <message>
-        <source>Error creating QR Code.</source>
-        <translation>Virhe QR koodin generoinnissa.</translation>
-    </message>
-</context>
-<context>
-    <name>QRGeneralImageWidget</name>
-    <message>
-        <source>&amp;Save Image...</source>
-        <translation>&amp;Tallenna Kuva</translation>
-    </message>
-    <message>
-        <source>&amp;Copy Image</source>
-        <translation>&amp;Kopioi kuva</translation>
-    </message>
-    <message>
-        <source>Save QR Code</source>
-        <translation>Tallenna QR Koodi</translation>
-    </message>
-    <message>
-        <source>PNG Image (*.png)</source>
-        <translation>PNG kuva (*.png)</translation>
-    </message>
-</context>
-<context>
     <name>QRImageWidget</name>
     <message>
         <source>&amp;Save Image...</source>
@@ -2142,7 +2074,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Save QR Code</source>
-        <translation>Tallenna QR Koodi</translation>
+        <translation>Tallenna QR-koodi</translation>
     </message>
     <message>
         <source>PNG Image (*.png)</source>
@@ -2166,6 +2098,10 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Name</source>
         <translation>Nimi</translation>
+    </message>
+    <message>
+        <source>Client name</source>
+        <translation>Asiakasohjelman nimi</translation>
     </message>
     <message>
         <source>N/A</source>
@@ -2217,7 +2153,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Memory Pool</source>
-        <translation>Muistivaranto</translation>
+        <translation>Muistivarasto</translation>
     </message>
     <message>
         <source>Current number of transactions</source>
@@ -2226,6 +2162,10 @@ https://www.transifex.com/projects/p/martex/</translation>
     <message>
         <source>Memory usage</source>
         <translation>Muistin käyttö</translation>
+    </message>
+    <message>
+        <source>Open the martex Core debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Avaa martex Core debug lokitiedosto nykyisestä datahakemistosta. Tämä saattaa kestää muutaman sekunnin isoilla tiedostoilla.</translation>
     </message>
     <message>
         <source>&amp;Console</source>
@@ -2261,7 +2201,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Banned peers</source>
-        <translation>Estetyt peers:it</translation>
+        <translation>Kielletyt peers:it</translation>
     </message>
     <message>
         <source>Select a peer to view detailed information.</source>
@@ -2304,10 +2244,6 @@ https://www.transifex.com/projects/p/martex/</translation>
         <translation>Datahakemisto</translation>
     </message>
     <message>
-        <source>Open the %1 debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Avaa %1 -debug-loki tämänhetkisestä datahakemistosta. Tämä voi viedä muutaman sekunnin suurille lokitiedostoille.</translation>
-    </message>
-    <message>
         <source>Decrease font size</source>
         <translation>Pienennä fontin kokoa</translation>
     </message>
@@ -2321,7 +2257,7 @@ https://www.transifex.com/projects/p/martex/</translation>
     </message>
     <message>
         <source>Ban Score</source>
-        <translation>Estopisteet</translation>
+        <translation>Kieltopisteet</translation>
     </message>
     <message>
         <source>Connection Time</source>
@@ -2395,12 +2331,12 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <message>
         <source>-zapwallettxes=1: Recover transactions from blockchain (keep meta-data, e.g. account owner).</source>
         <translation>-zapwallettxes=1: Palauta tapahtumat lohkoketjusta
- (pidä metadata, esim. tilin omistaja).</translation>
+ (pidä meta-data, esim. tilin omistaja).</translation>
     </message>
     <message>
         <source>-zapwallettxes=2: Recover transactions from blockchain (drop meta-data).</source>
         <translation>-zapwallettxes=2: Palauta tapahtumat lohkoketjusta
- (poista metadata).</translation>
+ (poista meta-data).</translation>
     </message>
     <message>
         <source>-upgradewallet: Upgrade wallet to latest format on startup. (Note: this is NOT an update of the wallet itself!)</source>
@@ -2425,7 +2361,7 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     </message>
     <message>
         <source>Ban for</source>
-        <translation>Estolistaan</translation>
+        <translation>Kieltolistaan</translation>
     </message>
     <message>
         <source>1 &amp;hour</source>
@@ -2445,11 +2381,11 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     </message>
     <message>
         <source>&amp;Unban</source>
-        <translation>&amp;Poista estolistalta</translation>
+        <translation>&amp;Poista kieltolistalta</translation>
     </message>
     <message>
-        <source>Welcome to the %1 RPC console.</source>
-        <translation>Tervetuloa %1 RPC konsoliin.</translation>
+        <source>Welcome to the martex Core RPC console.</source>
+        <translation>Tervetuloa martex Core RPC konsoliin.</translation>
     </message>
     <message>
         <source>Use up and down arrows to navigate history, and &lt;b&gt;Ctrl-L&lt;/b&gt; to clear screen.</source>
@@ -2458,10 +2394,6 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <message>
         <source>Type &lt;b&gt;help&lt;/b&gt; for an overview of available commands.</source>
         <translation>Kirjoita &lt;b&gt;help&lt;/b&gt; nähdäksesi käytettävissä olevat komennot.</translation>
-    </message>
-    <message>
-        <source>WARNING: Scammers have been active, telling users to type commands here, stealing their wallet contents. Do not use this console without fully understanding the ramification of a command.</source>
-        <translation>VAROITUS: Huijarit ovat olleet aktiivisia, kertoen käyttäjille komentoja tänne varastaen lompakon sisällön. Älä käytä tätä konsolia ymmärtämättä täysin komennon vaikutuksia.</translation>
     </message>
     <message>
         <source>In:</source>
@@ -2528,15 +2460,15 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <name>ReceiveCoinsDialog</name>
     <message>
         <source>Reuse one of the previously used receiving addresses.&lt;br&gt;Reusing addresses has security and privacy issues.&lt;br&gt;Do not use this unless re-generating a payment request made before.</source>
-        <translation>Uudelleen käytä yksi vanhoista vastaanottavista osoitteista.&lt;br&gt;Uudelleen käytössä on turvallisuus ja yksityisyysongelmia.&lt;br&gt;Älä käytä tätä ellet ole uudelleen luomassa aikaisempaa maksupyyntöä.</translation>
+        <translation>Uudelleen käytä yksi vanhoista vastaanottavista osoitteista.&lt;br&gt;Uudelleen käytössä on turvallisuus- ja yksityisyysongelmia.&lt;br&gt;Älä käytä tätä ellet ole uudelleen luomassa aikaisempaa maksupyyntöä.</translation>
     </message>
     <message>
         <source>R&amp;euse an existing receiving address (not recommended)</source>
         <translation>&amp;Uudelleen käytä vastaanottavaa osoitetta (ei suositella)</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the MarteX network.</source>
-        <translation>Valinnainen viesti liitettäväksi maksupyyntöön, joka näytetään kun pyyntö on avattu.&lt;br&gt;Huomio: Viestiä ei lähetetä maksun mukana MarteX verkkoon.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the martex network.</source>
+        <translation>Valinnainen viesti liitettäväksi maksupyyntöön, joka näytetään kun pyyntö on avattu.&lt;br&gt;Huomio: Viestiä ei lähetetä maksun mukana martex verkkoon.</translation>
     </message>
     <message>
         <source>&amp;Message:</source>
@@ -2547,8 +2479,8 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Valinnainen nimi liitetään uuteen vastaanottavaan osoitteeseen.</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the MarteX network.</source>
-        <translation>Valinnainen viesti liitettäväksi maksupyyntöön, joka näytetään kun pyyntö on avattu.&lt;br&gt;Huomio: Viestiä ei lähetetä maksun mukana MarteX verkkoon.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the martex network.</source>
+        <translation>Valinnainen viesti liitettäväksi maksupyyntöön, joka näytetään kun pyyntö on avattu.&lt;br&gt;Huomio: Viestiä ei lähetetä maksun mukana martex verkkoon.</translation>
     </message>
     <message>
         <source>Use this form to request payments. All fields are &lt;b&gt;optional&lt;/b&gt;.</source>
@@ -2623,7 +2555,7 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <name>ReceiveRequestDialog</name>
     <message>
         <source>QR Code</source>
-        <translation>QR Koodi</translation>
+        <translation>QR-koodi</translation>
     </message>
     <message>
         <source>Copy &amp;URI</source>
@@ -2683,7 +2615,7 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     </message>
     <message>
         <source>Error encoding URI into QR Code.</source>
-        <translation>Virhe käännettäessä URI:a QR koodiksi.</translation>
+        <translation>Virhe käännettäessä URI:a QR-koodiksi.</translation>
     </message>
 </context>
 <context>
@@ -2709,12 +2641,12 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>(ei viestiä)</translation>
     </message>
     <message>
-        <source>(no amount requested)</source>
-        <translation>(ei pyydettyä määrää)</translation>
+        <source>(no amount)</source>
+        <translation>(ei määrää)</translation>
     </message>
     <message>
-        <source>Requested</source>
-        <translation>Pyydetty</translation>
+        <source>Amount</source>
+        <translation>Määrä</translation>
     </message>
 </context>
 <context>
@@ -2784,20 +2716,8 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Valitse...</translation>
     </message>
     <message>
-        <source>Using the fallbackfee can result in sending a transaction that will take several hours or days (or never) to confirm. Consider choosing your fee manually or wait until your have validated the complete chain.</source>
-        <translation>Fallbackfee:n käyttö saattaa aiheuttaa että maksutapahtuman vahvistus kestää useita tunteja tai päiviä (tai ei koskaan). Harkitse että valitset siirtomaksun manuaalisesti tai odota että lohkoketju on täysin vahvistettu.</translation>
-    </message>
-    <message>
-        <source>Warning: Fee estimation is currently not possible.</source>
-        <translation>Varoitus: Kulujen arviointi ei ole juuri nyt mahdollista.</translation>
-    </message>
-    <message>
         <source>collapse fee-settings</source>
         <translation>pienennä siirtomaksu asetukset</translation>
-    </message>
-    <message>
-        <source>Confirmation time target:</source>
-        <translation>Vahvistusajan tavoite:</translation>
     </message>
     <message>
         <source>AnonSend</source>
@@ -2808,12 +2728,12 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>FastSend</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 valverde and the transaction is only 250 bytes, then "per kilobyte" only pays 250 valverde in fee,&lt;br /&gt;while "at least" pays 1000 valverde. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>Jos mukautettu siirtomaksu on asetettu 1000 valverde ja siirtotapahtuma on vain 250 tavua,&lt;br /&gt;tällöin "per kilotavu" maksaa vain 250 valverde siirtomaksun, kun taas "vähintään" maksaa 1000 valverde.&lt;br /&gt;Siirtotapahtumat jotka ovat isompia kuin kilotavu, molemmat maksaa "per kilotavu".</translation>
+        <source>If the custom fee is set to 1000 valverdes and the transaction is only 250 bytes, then "per kilobyte" only pays 250 valverdes in fee,&lt;br /&gt;while "at least" pays 1000 valverdes. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>Jos mukautettu siirtomaksu on asetettu 1000 valverde ja siirtotapahtuma on vain 250 tavua,&lt;br /&gt;tällöin "per kilotavu" maksaa vain 250 valverdes siirtomaksun, kun taas "vähintään" maksaa 1000 valverdes.&lt;br /&gt;Siirtotapahtumat jotka ovat isompia kuin kilotavu, molemmat maksaa "per kilotavu".</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 valverde and the transaction is only 250 bytes, then "per kilobyte" only pays 250 valverde in fee,&lt;br /&gt;while "total at least" pays 1000 valverde. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>Jos mukautettu siirtomaksu on asetettu 1000 valverde ja siirtotapahtuma on vain 250 tavua,&lt;br /&gt;tällöin "per kilotavu" maksaa vain 250 valverde siirtomaksun, kun taas "yhteensä vähintään" maksaa 1000 valverde.&lt;br /&gt;Siirtotapahtumat jotka ovat isompia kuin kilotavu, molemmat maksaa "per kilotavu".</translation>
+        <source>If the custom fee is set to 1000 valverdes and the transaction is only 250 bytes, then "per kilobyte" only pays 250 valverdes in fee,&lt;br /&gt;while "total at least" pays 1000 valverdes. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>Jos mukautettu siirtomaksu on asetettu 1000 valverde ja siirtotapahtuma on vain 250 tavua,&lt;br /&gt;tällöin "per kilotavu" maksaa vain 250 valverdes siirtomaksun, kun taas "yhteensä vähintään" maksaa 1000 valverdes.&lt;br /&gt;Siirtotapahtumat jotka ovat isompia kuin kilotavu, molemmat maksaa "per kilotavu".</translation>
     </message>
     <message>
         <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for martex transactions than the network can process.</source>
@@ -2848,12 +2768,24 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>(Älykästä siirtomaksua ei ole alustettu vielä. Tämä kestää yleensä muutaman lohkon...)</translation>
     </message>
     <message>
+        <source>Confirmation time:</source>
+        <translation>Vahvistusaika:</translation>
+    </message>
+    <message>
         <source>normal</source>
         <translation>normaali</translation>
     </message>
     <message>
         <source>fast</source>
         <translation>nopea</translation>
+    </message>
+    <message>
+        <source>Send as zero-fee transaction if possible</source>
+        <translation>Lähetä nolla siirtomaksulla jos mahdollista</translation>
+    </message>
+    <message>
+        <source>(confirmation may take longer)</source>
+        <translation>(vahvistus voi kestää pidempään)</translation>
     </message>
     <message>
         <source>Confirm the send action</source>
@@ -2980,8 +2912,8 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Siirtotapahtuman luonti epäonnistui!</translation>
     </message>
     <message>
-        <source>The transaction was rejected with the following reason: %1</source>
-        <translation>Siirto hylättiin seuraavasta syystä: %1</translation>
+        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation>Siirtotapahtuma hylättiin! Tämä saattaa tapahtua jos lompakossa olevat varat on jo kulutettu, kuten jos käytät kopiota wallet.dat tiedostosta ja varat oli jo käytetty mutta ei merkattu täällä.</translation>
     </message>
     <message>
         <source>A fee higher than %1 is considered an absurdly high fee.</source>
@@ -2990,10 +2922,6 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <message>
         <source>Payment request expired.</source>
         <translation>Maksupyyntö vanhentunut.</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n block(s)</source>
-        <translation><numerusform>%n lohko</numerusform><numerusform>%n lohkot</numerusform></translation>
     </message>
     <message>
         <source>Pay only the required fee of %1</source>
@@ -3004,20 +2932,12 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation><numerusform>Arvioitu vahvistuksen aloitus %n lohkon kuluessa.</numerusform><numerusform>Arvioitu vahvistuksen aloitus %n lohkon kuluessa.</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid MarteX address</source>
-        <translation>Varoitus: Virheellinen MarteX osoite</translation>
+        <source>Warning: Invalid martex address</source>
+        <translation>Varoitus: Virheellinen martex osoite</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
         <translation>Varoitus: Tuntematon vaihtorahan osoite</translation>
-    </message>
-    <message>
-        <source>Confirm custom change address</source>
-        <translation>Vahvista kustomoitu vaihtorahan osoite</translation>
-    </message>
-    <message>
-        <source>The address you selected for change is not part of this wallet. Any or all funds in your wallet may be sent to this address. Are you sure?</source>
-        <translation>Valitsemasi vaihtorahan osoite ei kuulu tähän lompakkoon. Osa tai kaikki varoista lompakossasi voidaan lähettää tähän osoitteeseen. Oletko varma?</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -3035,8 +2955,8 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Maksun &amp;saaja:</translation>
     </message>
     <message>
-        <source>The MarteX address to send the payment to</source>
-        <translation>MarteX osoite johon maksu lähetetään</translation>
+        <source>The martex address to send the payment to</source>
+        <translation>martex osoite johon maksu lähetetään</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -3071,7 +2991,7 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>&amp;Määrä:</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive a lower amount of MarteX than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive a lower amount of martex than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
         <translation>Siirtomaksu vähennetään lähetettävästä summasta. Vastaanottaja saa pienemmän summan kuin mitä laitoit määrä kenttään. Jos useampia vastaanottajia on valittu, siirtomaksu jaetaan tasan.</translation>
     </message>
     <message>
@@ -3083,8 +3003,8 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Viesti:</translation>
     </message>
     <message>
-        <source>A message that was attached to the martex: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the MarteX network.</source>
-        <translation>Viesti joka liitettiin MarteX: URI joka talletetaan siirtotapahtuman kanssa viitteeksi sinulle. Huomio: Tätä viestiä ei lähetetä MarteX verkkoon.</translation>
+        <source>A message that was attached to the martex: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the martex network.</source>
+        <translation>Viesti joka liitettiin martex: URI joka talletetaan siirtotapahtuman kanssa viitteeksi sinulle. Huomio: Tätä viestiä ei lähetetä martex verkkoon.</translation>
     </message>
     <message>
         <source>This is an unauthenticated payment request.</source>
@@ -3108,17 +3028,10 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     </message>
 </context>
 <context>
-    <name>SendConfirmationDialog</name>
-    <message>
-        <source>Yes</source>
-        <translation>Kyllä</translation>
-    </message>
-</context>
-<context>
     <name>ShutdownWindow</name>
     <message>
-        <source>%1 is shutting down...</source>
-        <translation>%1 sulkeutuu...</translation>
+        <source>martex Core is shutting down...</source>
+        <translation>martex Core sulkeutuu...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -3136,12 +3049,12 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>&amp;Allekirjoita viesti</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive MarteX sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Voit allekirjoittaa viestit/sopimukset omilla osoitteillasi todistaaksesi että omistat ne. Ole huolellinen että et allekirjoita mitään epämääräistä, satunnaista, phishing hyökkääjä voi huijata sinua allekirjoittamaan henkilöllisyytesi omasta puolestaan. Allekirjoita vain yksityiskohtaisesti täytetty selvitys johon sitoudut.</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive martex sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>Voit allekirjoittaa viestit/sopimukset omilla osoitteillasi todistaaksesi että omistat ne. Ole huolellinen että et allekirjoita mitään epämääräistä, satunnaista, phishing-hyökkäjä voi huijata sinua allekirjoittamaan henkilöllisyytesi omasta puolestaan. Allekirjoita vain yksityiskohtaisesti täytetty selvitys johon sitoudut.</translation>
     </message>
     <message>
-        <source>The MarteX address to sign the message with</source>
-        <translation>MarteX osoite jolla viesti allekirjoitetaan</translation>
+        <source>The martex address to sign the message with</source>
+        <translation>martex osoite jolla viesti allekirjoitetaan</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -3172,8 +3085,8 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Kopioi tämän hetkinen allekirjoitus leikepöydälle</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this MarteX address</source>
-        <translation>Allekirjoita viesti todistaaksesi että omistat tämän MarteX osoitteen</translation>
+        <source>Sign the message to prove you own this martex address</source>
+        <translation>Allekirjoita viesti todistaaksesi että omistat tämän martex osoitteen</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -3196,12 +3109,12 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Syötä allekirjoittava osoite, viesti (varmista että kopioit rivinvaihdot, välilyönnit, tabulaattorit, jne täsmälleen oikein) ja allekirjoitus alla oleviin kenttiin varmistaaksesi allekirjoituksen aitouden. Varo lukemasta enempää allekirjoitukseen kuin kuin mitä itse viestissä on, välttääksesi man-in-the-middle hyökkäyksen. Huom. tämä todistaa vain että allekirjoittava osapuoli vastaanottaa osoitteella, se ei voi todistaa lähettäjää.</translation>
     </message>
     <message>
-        <source>The MarteX address the message was signed with</source>
-        <translation>MarteX osoite jolla viesti on allekirjoitettu</translation>
+        <source>The martex address the message was signed with</source>
+        <translation>martex osoite jolla viesti on allekirjoitettu</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified MarteX address</source>
-        <translation>Tarkista että viesti on allekirjoitettu määritetyllä MarteX osoitteella</translation>
+        <source>Verify the message to ensure it was signed with the specified martex address</source>
+        <translation>Tarkista että viesti on allekirjoitettu määritetyllä martex osoitteella</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -3229,7 +3142,7 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     </message>
     <message>
         <source>Wallet unlock was cancelled.</source>
-        <translation>Lompakon lukituksen avaus peruttiin.</translation>
+        <translation>Lompakon avaaminen peruttiin.</translation>
     </message>
     <message>
         <source>Private key for the entered address is not available.</source>
@@ -3271,8 +3184,20 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>[testiverkko]</translation>
     </message>
     <message>
+        <source>martex Core</source>
+        <translation>martex Core</translation>
+    </message>
+    <message>
         <source>Version %1</source>
         <translation>Versio %1</translation>
+    </message>
+    <message>
+        <source>The Bitcoin Core developers</source>
+        <translation>Bitcoin Core kehittäjät</translation>
+    </message>
+    <message>
+        <source>The martex Core developers</source>
+        <translation>martex Core kehittäjät</translation>
     </message>
 </context>
 <context>
@@ -3306,11 +3231,11 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     </message>
     <message>
         <source>in memory pool</source>
-        <translation>muistivarannossa</translation>
+        <translation>muistivarastossa</translation>
     </message>
     <message>
         <source>not in memory pool</source>
-        <translation>ei muistivarannossa</translation>
+        <translation>ei muistivarastossa</translation>
     </message>
     <message>
         <source>abandoned</source>
@@ -3429,10 +3354,6 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Siirtotunnus</translation>
     </message>
     <message>
-        <source>Output index</source>
-        <translation>Lähtöjen indeksi</translation>
-    </message>
-    <message>
         <source>Transaction total size</source>
         <translation>Siirtotapahtuman koko yhteensä</translation>
     </message>
@@ -3472,12 +3393,12 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
 <context>
     <name>TransactionDescDialog</name>
     <message>
-        <source>This pane shows a detailed description of the transaction</source>
-        <translation>Tämä ruutu näyttää yksityiskohtaiset tiedot siirtotapahtumasta</translation>
+        <source>Transaction details</source>
+        <translation>Siirtotapahtuman yksityiskohdat</translation>
     </message>
     <message>
-        <source>Details for %1</source>
-        <translation>%1:n yksityiskohdat</translation>
+        <source>This pane shows a detailed description of the transaction</source>
+        <translation>Tämä ruutu näyttää yksityiskohtaiset tiedot siirtotapahtumasta</translation>
     </message>
 </context>
 <context>
@@ -3816,11 +3737,11 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <name>WalletModel</name>
     <message>
         <source>Send Coins</source>
-        <translation>Lähetä MarteXeja</translation>
+        <translation>Lähetä martexeja</translation>
     </message>
     <message>
-        <source>FastSend doesn't support sending values that high yet. Transactions are currently limited to %1 MXT.</source>
-        <translation>FastSend ei tue näin korkeaa lähetysmäärää vielä. Siirtotapahtumat on tällä hetkellä rajoitettu %1 MXT.</translation>
+        <source>FastSend doesn't support sending values that high yet. Transactions are currently limited to %1 martex.</source>
+        <translation>FastSend ei tue näin korkeaa lähetysmäärää vielä. Siirtotapahtumat on tällä hetkellä rajoitettu %1 martex.</translation>
     </message>
     <message>
         <source>Used way too many inputs (&gt;%1) for this FastSend transaction, fees could be huge.</source>
@@ -3873,24 +3794,32 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Kytkeydy annettuun osoitteeseen ja pidä linja aina auki. Käytä [host]:port merkintätapaa IPv6:lle.</translation>
     </message>
     <message>
+        <source>Cannot obtain a lock on data directory %s. martex Core is probably already running.</source>
+        <translation>Ei voida lukita datahakemistoa %s. martex Core on luultavasti jo käynnissä.</translation>
+    </message>
+    <message>
         <source>Error: Listening for incoming connections failed (listen returned error %s)</source>
         <translation>Virhe: Sisääntulevien yhteyksien kuuntelu epäonnistui (kuuntelu palautti virheen %s)</translation>
     </message>
     <message>
-        <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)</source>
+        <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replmartex by message)</source>
         <translation>Aja komento kun olennainen hälytys vastaanotetaan tai nähdään todella pitkä haara (%s cmd korvataan viestillä)</translation>
     </message>
     <message>
-        <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
+        <source>Execute command when a wallet transaction changes (%s in cmd is replmartex by TxID)</source>
         <translation>Suorita käsky kun lompakon siirtotapahtuma muuttuu (%s cmd on vaihdettu TxID kanssa)</translation>
     </message>
     <message>
-        <source>Execute command when the best block changes (%s in cmd is replaced by block hash)</source>
+        <source>Execute command when the best block changes (%s in cmd is replmartex by block hash)</source>
         <translation>Suorita käsky kun paras lohko muuttuu (%s cmd on korvattu lohko tarkisteella)</translation>
     </message>
     <message>
         <source>Name to construct url for KeePass entry that stores the wallet passphrase</source>
         <translation>Rakenne url nimi KeePass merkinnälle joka talentaa lompakon salasanan</translation>
+    </message>
+    <message>
+        <source>Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect)</source>
+        <translation>Tiedustele vertaisverkon osoitteita DNS hakua käyttäen jos osoitteita ei ole riittävästi (oletus: 1 paitsi jos -connect)</translation>
     </message>
     <message>
         <source>Set maximum size of high-priority/low-fee transactions in bytes (default: %d)</source>
@@ -3902,15 +3831,23 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     </message>
     <message>
         <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>
-        <translation>Tämä on esijulkaistu testiversio - Käytä omalla vastuulla - Älä käytä louhimiseen tai kauppasovelluksiin.</translation>
+        <translation>Tämä on esi-julkaistu testiversio - Käytä omalla vastuulla - Älä käytä louhimiseen tai kauppasovelluksiin.</translation>
+    </message>
+    <message>
+        <source>Unable to bind to %s on this computer. martex Core is probably already running.</source>
+        <translation>Ei voida yhdistää %s tässä tietokoneessa. martex Core on luultavasti jo käynnissä.</translation>
     </message>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
-        <translation>Varoitus: MarteX verkossa on ristiriitoja! Louhijat näyttävät kokevan virhetilanteita.</translation>
+        <translation>Varoitus: martex verkossa on ristiriitoja! Louhijat näyttävät kokevan virhetilanteita.</translation>
     </message>
     <message>
         <source>Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.</source>
         <translation>Varoitus: Olemme vertaisverkon kanssa ristiriidassa! Sinun ja/tai solmujen tulee päivitää uusimpaan versioon.</translation>
+    </message>
+    <message>
+        <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
+        <translation>Varoitus: Wallet.dat lompakkotiedosto on vioittunut, tiedot pelastettu. Alkuperäinen wallet.dat lompakkotiedosto on tallennettu wallet.{timestamp}.bak kansioon %s, jos saldosi tai siirtohistoria on virheellinen, sinun tulisi palauttaa lompakkotiedosto varmuuskopiosta.</translation>
     </message>
     <message>
         <source>You must specify a masternodeprivkey in the configuration. Please see documentation for help.</source>
@@ -3919,6 +3856,10 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <message>
         <source>Accept command line and JSON-RPC commands</source>
         <translation>Hyväksy merkkipohjaiset ja JSON-RPC käskyt</translation>
+    </message>
+    <message>
+        <source>Accept connections from outside (default: 1 if no -proxy or -connect)</source>
+        <translation>Hyväksy yhteyksiä ulkopuolelta (oletus: 1 jos -proxy tai -connect ei ole määritelty)</translation>
     </message>
     <message>
         <source>Add a node to connect to and attempt to keep the connection open</source>
@@ -3941,12 +3882,24 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Et voi päivittää lompakkoasi vanhempaan versioon</translation>
     </message>
     <message>
+        <source>Cannot resolve -bind address: '%s'</source>
+        <translation>-bind osoitteen '%s' selvittäminen epäonnistui</translation>
+    </message>
+    <message>
+        <source>Cannot resolve -externalip address: '%s'</source>
+        <translation>-externalip osoitteen '%s' selvittäminen epäonnistui</translation>
+    </message>
+    <message>
         <source>Cannot write default address</source>
         <translation>Oletusosoitetta ei voi kirjoittaa</translation>
     </message>
     <message>
         <source>Collateral not valid.</source>
         <translation>Vakuus ei ole pätevä.</translation>
+    </message>
+    <message>
+        <source>Connect only to the specified node(s)</source>
+        <translation>Yhdistä ainoastaan määriteltyihin solmuihin</translation>
     </message>
     <message>
         <source>Connect to a node to retrieve peer addresses, and disconnect</source>
@@ -3993,6 +3946,14 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Virhe lohkotietokannan latauksessa</translation>
     </message>
     <message>
+        <source>Error loading wallet.dat</source>
+        <translation>Virhe ladattaessa wallet.dat tiedostoa</translation>
+    </message>
+    <message>
+        <source>Error loading wallet.dat: Wallet corrupted</source>
+        <translation>Virhe ladattaessa wallet.dat tiedostoa: Lompakko vioittunut</translation>
+    </message>
+    <message>
         <source>Error opening block database</source>
         <translation>Virhe lohkotietokannan avauksessa</translation>
     </message>
@@ -4017,8 +3978,16 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>(1 = pidä tx meta data esim. tilin omistaja ja maksupyyntö tiedot, 2 = poista tx meta data)</translation>
     </message>
     <message>
+        <source>-fallbackfee is set very high! This is the transaction fee you may pay when fee estimates are not available.</source>
+        <translation>-fallbackfee on asetettu erittäin korkeaksi! Tämä on siirtomaksu jonka saatat maksaa jos siirtomaksun arviota ei ole mahdollista saada.</translation>
+    </message>
+    <message>
         <source>-maxtxfee is set very high! Fees this large could be paid on a single transaction.</source>
         <translation>-maxtxfee on asetettu erittäin korkeaksi! Näin isot siirtomaksut voitaisiin maksaa yhdessä siirtotapahtumassa.</translation>
+    </message>
+    <message>
+        <source>-paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
+        <translation>-paytxfee on asetettu erittäin korkeaksi! Tämä on maksukulu jonka tulet maksamaan jos lähetät siirtotapahtuman.</translation>
     </message>
     <message>
         <source>A fee rate (in %s/kB) that will be used when fee estimation has insufficient data (default: %s)</source>
@@ -4047,6 +4016,10 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <message>
         <source>Delete all wallet transactions and only recover those parts of the blockchain through -rescan on startup</source>
         <translation>Poista kaikki lompakon siirtotapahtumat ja palauta vain nuo osat lohkoketjusta -rescan valinnan avulla käynnistyksessä</translation>
+    </message>
+    <message>
+        <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
+        <translation>Levitetään MIT ohjelmistolisenssin alaisuudessa. Tarkemmat tiedot löytyvät tiedostosta COPYING tai osoitteesta &lt;http://www.opensource.org/licenses/mit-license.php&gt;. </translation>
     </message>
     <message>
         <source>Error loading %s: You can't enable HD on a already existing non-HD wallet</source>
@@ -4093,6 +4066,26 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Tulosta debuggaustieto (oletus: %u, tarjottava &lt;category&gt; on valinnainen)</translation>
     </message>
     <message>
+        <source>Set the number of threads for coin generation if enabled (-1 = all cores, default: %d)</source>
+        <translation>Aseta prosessorin ytimien määrä louhintaan, jos päällä (-1 = kaikki ytimet, oletus: %d)</translation>
+    </message>
+    <message>
+        <source>Show N confirmations for a successfully locked transaction (0-9999, default: %u)</source>
+        <translation>Näytä N vahvistusta onnistuneesti lukitulle siirtotapahtumalle (0-9999, oletus: %u)</translation>
+    </message>
+    <message>
+        <source>This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit &lt;https://www.openssl.org/&gt; and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.</source>
+        <translation>Tämä ohjelma sisältää OpenSSL projektin OpenSSL työkalupakin &lt;https://www.openssl.org/&gt; sekä Eric Youngin kehittämän salausohjelmiston ja Thomas Bernardin kehittämän UPnP ohjelmiston.</translation>
+    </message>
+    <message>
+        <source>Unable to locate enough funds for this transaction that are not equal 1000 martex.</source>
+        <translation>Ei tarpeeksi varoja tälle siirtotapahtumalle, joka ei ole 1000 martex.</translation>
+    </message>
+    <message>
+        <source>Use hierarchical deterministic key generation (HD) after bip39/bip44. Only has effect during wallet creation/first start</source>
+        <translation>Käytä hierarkkista determinististä avain generaatiota (HD) bip39/bip44 jälkeen. Vaikuttaa vain uuden lompakon luomisessa/ensimmäisessä käynnistyksessä</translation>
+    </message>
+    <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
         <translation>Käytä erillistä SOCKS5 proxya tavoittaaksesi peers:it Tor piilotetun palvelun kautta (oletus: %s)</translation>
     </message>
@@ -4103,6 +4096,14 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <message>
         <source>User defined seed for HD wallet (should be in hex). Only has effect during wallet creation/first start (default: randomly generated)</source>
         <translation>Käyttäjän määrittelemä siemen HD lompakolle (pitäisi olla hex muodossa). Vaikuttaa vain uuden lompakon luomisessa/ensimmäisessä käynnistyksessä (oletus: satunnaisesti generoitu)</translation>
+    </message>
+    <message>
+        <source>Warning: incorrect parameter -walletbackupsdir, path must exist! Using default path.</source>
+        <translation>Varoitus: väärä parametri -walletbackupsdir, tiedostopolku on oltava olemassa! Käytetään oletuspolkua.</translation>
+    </message>
+    <message>
+        <source>Whitelist peers connecting from the given netmask or IP address. Can be specified multiple times.</source>
+        <translation>Merkitse solmut luotettaviksi jotka kytkeytyvät annetusta verkkomaskista tai IP osoitteesta. Voidaan määrittää useita kertoja.</translation>
     </message>
     <message>
         <source>Whitelisted peers cannot be DoS banned and their transactions are always relayed, even if they are already in the mempool, useful e.g. for a gateway</source>
@@ -4129,6 +4130,10 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Ei voida sekoittaa: yhteensopivia syötteitä ei löytynyt!</translation>
     </message>
     <message>
+        <source>Cannot resolve -whitebind address: '%s'</source>
+        <translation>Ei voida selvittää -whitebind osoitetta: '%s'</translation>
+    </message>
+    <message>
         <source>Chain selection options:</source>
         <translation>Ketjun valinta-asetukset: </translation>
     </message>
@@ -4141,6 +4146,14 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Yhdistä KeePassHttp porttiin &lt;port&gt; (oletus: %u)</translation>
     </message>
     <message>
+        <source>Copyright (C) 2009-%i The Bitcoin Core Developers</source>
+        <translation>Copyright (C) 2009-%i Bitcoin Core Kehittäjät</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2014-%i The martex Core Developers</source>
+        <translation>Copyright (C) 2014-%i martex Core Kehittäjät</translation>
+    </message>
+    <message>
         <source>Enable the client to act as a masternode (0-1, default: %u)</source>
         <translation>Aktivoi asiakasohjelman käyttö masternode:na (0-1, oletus: %u)</translation>
     </message>
@@ -4149,8 +4162,16 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Merkintä ylittää maksimin.</translation>
     </message>
     <message>
+        <source>Error connecting to Masternode.</source>
+        <translation>Virhe masternode:en kytkeytymisessä.</translation>
+    </message>
+    <message>
         <source>Error loading %s: You can't disable HD on a already existing HD wallet</source>
         <translation>Virhe latauksessa %s: Et voi poistaa käytöstä HD:tä jo olemassa olevassa HD lompakossa</translation>
+    </message>
+    <message>
+        <source>Error loading wallet.dat: Wallet requires newer version of martex Core</source>
+        <translation>Virhe ladattaessa wallet.dat: Lompakko vaatii uudemman version martex Core:sta</translation>
     </message>
     <message>
         <source>Failed to load fulfilled requests cache from</source>
@@ -4175,6 +4196,10 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <message>
         <source>Found enough users, signing ...</source>
         <translation>Löytyi tarpeeksi käyttäjiä, kirjaudutaan ...</translation>
+    </message>
+    <message>
+        <source>Generate coins (default: %u)</source>
+        <translation>Louhi kolikoita (oletus: %u)</translation>
     </message>
     <message>
         <source>How many blocks to check at startup (default: %u, 0 = all)</source>
@@ -4205,6 +4230,10 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Tietoja</translation>
     </message>
     <message>
+        <source>Initialization sanity check failed. martex Core is shutting down.</source>
+        <translation>Ohjelman alkuperäisyyden tarkistus epäonnistui. martex Core sulkeutuu.</translation>
+    </message>
+    <message>
         <source>Input is not valid.</source>
         <translation>Syöte ei ole pätevä.</translation>
     </message>
@@ -4221,12 +4250,28 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Virheellinen proxyn osoite '%s'</translation>
     </message>
     <message>
+        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Virheellinen määrä -maxtxfee=&lt;amount&gt;: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Virheellinen määrä -minrelaytxfee=&lt;amount&gt;: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -mintxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Virheellinen määrä -mintxfee=&lt;amount&gt;: '%s'</translation>
+    </message>
+    <message>
         <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
         <translation>Virheellinen määrä -maxtxfee=&lt;amount&gt;: '%s' (oltava vähintään %s)</translation>
     </message>
     <message>
+        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Virheellinen määrä -paytxfee=&lt;amount&gt;: '%s'</translation>
+    </message>
+    <message>
         <source>Keypool ran out, please call keypoolrefill first</source>
-        <translation>Osoitevaranto on tyhjä, tee ensin uudelleen täyttö komennolla keypoolrefill</translation>
+        <translation>Osoitevarasto on tyhjä, tee ensin uudelleen täyttö komennolla keypoolrefill</translation>
     </message>
     <message>
         <source>Listen for JSON-RPC connections on &lt;port&gt; (default: %u or testnet: %u)</source>
@@ -4238,7 +4283,7 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     </message>
     <message>
         <source>Loading banlist...</source>
-        <translation>Ladataan estolistaa...</translation>
+        <translation>Ladataan kieltolistaa...</translation>
     </message>
     <message>
         <source>Loading fulfilled requests cache...</source>
@@ -4323,6 +4368,10 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <message>
         <source>Set key pool size to &lt;n&gt; (default: %u)</source>
         <translation>Aseta avainvarannon koko &lt;n&gt; (oletus: %u)</translation>
+    </message>
+    <message>
+        <source>Set minimum block size in bytes (default: %u)</source>
+        <translation>Aseta minimi lohkon koko tavuina (oletus: %u)</translation>
     </message>
     <message>
         <source>Set the number of threads to service RPC calls (default: %d)</source>
@@ -4437,6 +4486,10 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Käyttäjä toimijan kommentti (%s) sisältää ei suositeltuja merkkejä.</translation>
     </message>
     <message>
+        <source>Wallet needed to be rewritten: restart martex Core to complete</source>
+        <translation>Lompakko on kirjoitettava uudelleen: käynnistä martex Core uudestaan viimeistelyä varten</translation>
+    </message>
+    <message>
         <source>Will retry...</source>
         <translation>Yritetään uudelleen...</translation>
     </message>
@@ -4477,12 +4530,16 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>KeePassHttp avain AES salattuun viestintään</translation>
     </message>
     <message>
+        <source>Keep N martex anonymized (default: %u)</source>
+        <translation>Pidä N martex anonymisoituna (oletus: %u)</translation>
+    </message>
+    <message>
         <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>
         <translation>Pidä enintään &lt;n&gt; ei yhdistettyä siirtotapahtumaa muistissa (oletus: %u)</translation>
     </message>
     <message>
-        <source>Disable all MarteX specific functionality (Masternodes, AnonSend, FastSend, Governance) (0-1, default: %u)</source>
-        <translation>Kytke pois käytöstä kaikki MarteX:in erityistoiminnot (Masternodet, AnonSend, FastSend, Budjetointi) (0-1, oletus: %u)</translation>
+        <source>Disable all martex specific functionality (Masternodes, AnonSend, FastSend, Governance) (0-1, default: %u)</source>
+        <translation>Kytke pois käytöstä kaikki martex:in erityistoiminnot (Masternodet, AnonSend, FastSend, Budjetointi) (0-1, oletus: %u)</translation>
     </message>
     <message>
         <source>Discover own IP addresses (default: 1 when listening and no -externalip or -proxy)</source>
@@ -4505,7 +4562,11 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Ota käyttöön automaattinen AnonSend rahavaroille tässä lompakossa  (0-1, oletus: %u)</translation>
     </message>
     <message>
-        <source>Execute command when a wallet FastSend transaction is successfully locked (%s in cmd is replaced by TxID)</source>
+        <source>Error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
+        <translation>Virhe luettaessa wallet.dat lompakkotiedostoa! Kaikki avaimet luettiin onnistuneesti, mutta siirtohistoria tai osoitekirja saattavat olla kadonneet tai virheellisiä.</translation>
+    </message>
+    <message>
+        <source>Execute command when a wallet FastSend transaction is successfully locked (%s in cmd is replmartex by TxID)</source>
         <translation>Suorita käsky kun lompakon FastSend siirtotapahtuma on hyväksytysti lukittu (%s cmd on korvattu TxID:llä)</translation>
     </message>
     <message>
@@ -4521,12 +4582,16 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Siirtomaksut (%s/kB) jotka ovat pienempiä kuin tämä, tulkitaan nollamaksuksi siirtotapahtuman luonnissa (oletus: %s)</translation>
     </message>
     <message>
+        <source>Force relay of transactions from whitelisted peers even they violate local relay policy (default: %d)</source>
+        <translation>Pakota siirtopahtumien välitys luotettavilta solmuilta, vaikka ne loukkaisivat paikallista välityskäytäntöä (oletus: %d)</translation>
+    </message>
+    <message>
         <source>If &lt;category&gt; is not supplied or if &lt;category&gt; = 1, output all debugging information.</source>
         <translation>Jos &lt;category&gt; ei ole toimitettu, tai &lt;category&gt; = 1, tulosta kaikki debug tiedot.</translation>
     </message>
     <message>
-        <source>FastSend doesn't support sending values that high yet. Transactions are currently limited to %1 MXT.</source>
-        <translation>FastSend ei tue näin korkeaa lähetysmäärää vielä. Siirtotapahtumat on tällä hetkellä rajoitettu %1 MXT.</translation>
+        <source>FastSend doesn't support sending values that high yet. Transactions are currently limited to %1 martex.</source>
+        <translation>FastSend ei tue näin korkeaa lähetysmäärää vielä. Siirtotapahtumat on tällä hetkellä rajoitettu %1 martex.</translation>
     </message>
     <message>
         <source>FastSend requires inputs with at least %d confirmations, you might need to wait a few minutes and try again.</source>
@@ -4549,8 +4614,20 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
         <translation>Ylläpidä enintään &lt;n&gt; solmu yhteyttä (poislukien väliaikaiset huoltoyhteydet) (oletus: %u)</translation>
     </message>
     <message>
+        <source>Maximum total fees (in %s) to use in a single wallet transaction; setting this too low may abort large transactions (default: %s)</source>
+        <translation>Yksittäisen siirtotapahtuman maksimi siirtomaksu (%s), jos tämä asetetaan liian matalaksi, se voi keskeyttää isot siirtotapahtumat (oletus: %s)</translation>
+    </message>
+    <message>
+        <source>Please check that your computer's date and time are correct! If your clock is wrong martex Core will not work properly.</source>
+        <translation>Tarkista että tietokoneesi kellonaika ja päivämäärä ovat oikein! martex ei toimi oikein väärällä päivämäärällä ja/tai kellonajalla.</translation>
+    </message>
+    <message>
         <source>AnonSend uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
         <translation>AnonSend käyttää tarkalleen denominoituja syötteitä lähettäessään varoja, saatat tarvita anonymisoida lisää kolikoita.</translation>
+    </message>
+    <message>
+        <source>Provide liquidity to AnonSend by infrequently mixing coins on a continual basis (0-100, default: %u, 1=very frequent, high fees, 100=very infrequent, low fees)</source>
+        <translation>Tarjoa AnonSend:ille likviditeettiä jatkuvaa kolikoiden sekoitusta varten (0-100, oletus: %u, 1=usein, isot maksukulut, 100=harvoin, pienet maksukulut)</translation>
     </message>
     <message>
         <source>Prune configured below the minimum of %d MiB.  Please use a higher number.</source>
@@ -4563,6 +4640,10 @@ Näillä toiminnoilla voit korjata korruptoituneen lohkoketjun tai puuttuvat/van
     <message>
         <source>Randomize credentials for every proxy connection. This enables Tor stream isolation (default: %u)</source>
         <translation>Satunnaista käyttäjätiedot jokaiselle proxy yhteydelle. Tämä ottaa käyttöön Tor virran eristämisen (oletus: %u)</translation>
+    </message>
+    <message>
+        <source>Reduce storage requirements by pruning (deleting) old blocks. This mode is incompatible with -txindex and -rescan. Warning: Reverting this setting requires re-downloading the entire blockchain. (default: 0 = disable pruning blocks, &gt;%u = target size in MiB to use for block files)</source>
+        <translation>Pienennä tilan tarvetta karsimalla (poistamalla) vanhoja lohkoja. Tämä tilä on epäyhteensopiva -txindex ja -rescan kanssa. Varoitus: Tämän asetuksen peruminen vaatii koko lohkoketjun uudelleen lataamisen. (oletus: 0 = lohkojen karsinta ei käytössä, &gt;%u = tavoitetila lohkojen tiedostoille MiB)</translation>
     </message>
     <message>
         <source>Rescans are not possible in pruned mode. You will need to use -reindex which will download the whole blockchain again.</source>
@@ -4598,6 +4679,10 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
         <translation>Ei tarpeeksi AnonSend sekoitettuja varoja tälle siirtotapahtumalle.</translation>
     </message>
     <message>
+        <source>Unable to locate enough AnonSend non-denominated funds for this transaction that are not equal 1000 martex.</source>
+        <translation>Ei tarpeeksi AnonSend ei-denominoituja varoja tälle siirtotapahtumalle, joka ei ole 1000 martex.</translation>
+    </message>
+    <message>
         <source>Unsupported argument -socks found. Setting SOCKS version isn't possible anymore, only SOCKS5 proxies are supported.</source>
         <translation>Ei tuettu argumentti -socks löydetty. SOCKS version asettaminen ei ole enää mahdollista, vain SOCKS5 proxyt ovat tuettuja.</translation>
     </message>
@@ -4606,16 +4691,28 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
         <translation>Ei tuettu argumentti -whitelistalwaysrelay sivuutettu, käytä -whitelistrelay ja/tai -whitelistforcerelay.</translation>
     </message>
     <message>
+        <source>Use N separate masternodes for each denominated input to mix funds (2-16, default: %u)</source>
+        <translation>Käytä N erillistä masternodea jokaiseen denominoituun syötteeseen sekoittaaksesi varoja (2-16, oletus: %u)</translation>
+    </message>
+    <message>
         <source>Use UPnP to map the listening port (default: 1 when listening and no -proxy)</source>
         <translation>Käytä UPnP:tä kuunneltavan portin kartoitukseen (oletus: 1 kun kuunellaan ja ei käytetä -proxy)</translation>
     </message>
     <message>
+        <source>User defined mnemonic passphrase for HD wallet (bip39). Only has effect during wallet creation/first start (default: empty string)</source>
+        <translation>Käyttäjän määrittelemä mnemonic salasana HD lompakolle (bip39). Vaikuttaa vain uuden lompakon luomisessa/ensimmäisessä käynnistyksessä (oletus: tyhjä)</translation>
+    </message>
+    <message>
+        <source>Username and hashed password for JSON-RPC connections. The field &lt;userpw&gt; comes in the format: &lt;USERNAME&gt;:&lt;SALT&gt;$&lt;HASH&gt;. A canonical python script is included in share/rpcuser. This option can be specified multiple times</source>
+        <translation>Käyttäjänimi ja salattu salasana JSON-RPC yhteyksille. Kenttä &lt;userpw&gt; tulee olla formaatissa: &lt;USERNAME&gt;:&lt;SALT&gt;$&lt;HASH&gt;. Sääntöjen mukainen python scripti on sisällytetty share/rpcuser:ään. Tämä optio voidaan määritellä useita kertoja</translation>
+    </message>
+    <message>
         <source>WARNING! Failed to replenish keypool, please unlock your wallet to do so.</source>
-        <translation>VAROITUS! Osoitevarannon täydentäminen epäonnistui, avaa lompakon lukitus.</translation>
+        <translation>VAROITUS! Osoitevaraston täydentäminen epäonnistui, avaa lompakon lukitus.</translation>
     </message>
     <message>
         <source>Wallet is locked, can't replenish keypool! Automatic backups and mixing are disabled, please unlock your wallet to replenish keypool.</source>
-        <translation>Lompakko on lukittu, osoitevarannon täydentäminen ei onnistu! Automaattinen varmistus ja sekoitus ei ole käytössä, avaa lompakon lukitus täydentääksesi osoitevarannon.</translation>
+        <translation>Lompakko on lukittu, osoitevaraston täydentäminen ei onnistu! Automaattinen varmistus ja sekoitus ei ole käytössä, avaa lompakon lukitus täydentääksesi osoitevaraston.</translation>
     </message>
     <message>
         <source>Warning: Unknown block versions being mined! It's possible unknown rules are in effect</source>
@@ -4624,6 +4721,14 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
     <message>
         <source>You need to rebuild the database using -reindex to go back to unpruned mode.  This will redownload the entire blockchain</source>
         <translation>Sinun tulee uudelleen rakentaa tietokanta käyttäen -reindex palataksesi takaisin 'ei karsita' tilaan. Tämä aiheuttaa koko lohkoketjun uudelleen lataamisen</translation>
+    </message>
+    <message>
+        <source>masternodeaddr option is deprecated. Please use masternode.conf to manage your remote masternodes.</source>
+        <translation>masternodeaddr valinta on poistunut käytöstä. Käytä masternode.conf hallitaksesi etäohjattuja masternodeja.</translation>
+    </message>
+    <message>
+        <source>%s - %d confirmations</source>
+        <translation>%s - %d vahvistusta</translation>
     </message>
     <message>
         <source>(%d could be used only on mainnet)</source>
@@ -4648,6 +4753,10 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
     <message>
         <source>Append comment to the user agent string</source>
         <translation>Lisää kommentti käyttäjäohjelman merkkijonoon</translation>
+    </message>
+    <message>
+        <source>Attempt to recover private keys from a corrupt wallet.dat on startup</source>
+        <translation>Yritetään palauttaa yksityisiä avaimia käynnistyksessä vioittuneesta wallet.dat lompakkotiedostosta</translation>
     </message>
     <message>
         <source>Automatic backups disabled</source>
@@ -4870,54 +4979,6 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
         <translation>Skannaa lohkoketju uudelleen lompakon puuttuvien siirtotapahtumien vuoksi käynnistyksessä</translation>
     </message>
     <message>
-        <source>The wallet will avoid paying less than the minimum relay fee.</source>
-        <translation>Lompakko välttää maksamasta vähemän kuin vähimmäisvälitysmaksun.</translation>
-    </message>
-    <message>
-        <source>This is the minimum transaction fee you pay on every transaction.</source>
-        <translation>Tämä on jokaisesta siirrosta maksettava vähimmäismaksu.</translation>
-    </message>
-    <message>
-        <source>This is the transaction fee you will pay if you send a transaction.</source>
-        <translation>Tämä on lähetyksestä maksettava maksu jonka maksat</translation>
-    </message>
-    <message>
-        <source>Transaction amounts must not be negative</source>
-        <translation>Lähetyksen siirtosumman tulee olla positiivinen</translation>
-    </message>
-    <message>
-        <source>Transaction has too long of a mempool chain</source>
-        <translation>Maksutapahtumalla on liian pitkä muistivarannon ketju</translation>
-    </message>
-    <message>
-        <source>Transaction must have at least one recipient</source>
-        <translation>Lähetyksessä tulee olla ainakin yksi vastaanottaja</translation>
-    </message>
-    <message>
-        <source>Trying to connect...</source>
-        <translation>Yritetään kytkeytyä...</translation>
-    </message>
-    <message>
-        <source>Unable to bind to %s on this computer. %s is probably already running.</source>
-        <translation>Kytkeytyminen kohteeseen %s ei onnistu tällä tietokoneella. %s on luultavasti jo käynnissä.</translation>
-    </message>
-    <message>
-        <source>Upgrading UTXO database</source>
-        <translation>Päivitetään UTXO tietokantaa</translation>
-    </message>
-    <message>
-        <source>Use devnet chain with provided name</source>
-        <translation>Käytä devnet ketjua tarjotulla nimellä</translation>
-    </message>
-    <message>
-        <source>Wallet debugging/testing options:</source>
-        <translation>Lompakon debug ja testausvalinnat:</translation>
-    </message>
-    <message>
-        <source>Wallet needed to be rewritten: restart %s to complete</source>
-        <translation>Lompakko tarvitsee uudelleenkirjoittaa: käynnistä %s uudelleen</translation>
-    </message>
-    <message>
         <source>Warning: unknown new rules activated (versionbit %i)</source>
         <translation>Varoitus: tuntemattomia uusia sääntöjä aktivoitu (versionbit %i)</translation>
     </message>
@@ -4944,222 +5005,6 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
     <message>
         <source>RPC server options:</source>
         <translation>RPC palvelimen valinnat:</translation>
-    </message>
-    <message>
-        <source>MarteX Core</source>
-        <translation>MarteX Core</translation>
-    </message>
-    <message>
-        <source>The %s developers</source>
-        <translation>%s kehittäjät</translation>
-    </message>
-    <message>
-        <source>Accept connections from outside (default: 1 if no -proxy or -connect/-noconnect)</source>
-        <translation>Hyväksy yhteyksiä ulkopuolelta (oletus: 1 jos ei -proxy tai -connect/-noconnect)</translation>
-    </message>
-    <message>
-        <source>Cannot obtain a lock on data directory %s. %s is probably already running.</source>
-        <translation>Ei voida lukita datahakemistoa %s. %s on luultavasti jo käynnissä.</translation>
-    </message>
-    <message>
-        <source>Connect only to the specified node(s); -noconnect or -connect=0 alone to disable automatic connections</source>
-        <translation>Kytkeydy vain määriteltyyn solmu(un); -noconnect tai connect=0 yksin poistaaksesi automaattiset yhteydet</translation>
-    </message>
-    <message>
-        <source>Distributed under the MIT software license, see the accompanying file %s or %s</source>
-        <translation>Jaettu MIT ohjelmistolisenssin alaisuudessa, katso mukana tuleva %s tiedosto tai %s</translation>
-    </message>
-    <message>
-        <source>Error reading %s! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
-        <translation>Virhe luettaessa %s! Avaimet luetttiin oikein, mutta rahansiirtotiedot tai osoitekirjan sisältö saattavat olla puutteellisia tai vääriä.</translation>
-    </message>
-    <message>
-        <source>Force relay of transactions from whitelisted peers even if they violate local relay policy (default: %d)</source>
-        <translation>Pakota siirtopahtumien välitys luotettavilta solmuilta, vaikka ne loukkaisivat paikallista välityskäytäntöä (oletus: %d)</translation>
-    </message>
-    <message>
-        <source>Incorrect or no devnet genesis block found. Wrong datadir for devnet specified?</source>
-        <translation>Väärä tai ei devnet alkuperäinen lohko löydetty. Väärä data hakemisto devnet verkolle?</translation>
-    </message>
-    <message>
-        <source>Maximum allowed median peer time offset adjustment. Local perspective of time may be influenced by peers forward or backward by this amount. (default: %u seconds)</source>
-        <translation>Suurin sallittu keskimääräinen peer aikaero -korjaus. Tähän aikaan voivat vaikuttaa paikalliset peer näkökulmat eteenpäin tai taaksepäin tämän verran. (oletus: %u sekuntia)</translation>
-    </message>
-    <message>
-        <source>Maximum total fees (in %s) to use in a single wallet transaction or raw transaction; setting this too low may abort large transactions (default: %s)</source>
-        <translation>Yksittäisen tai raw siirtotapahtuman maksimi siirtomaksu (%s), jos tämä asetetaan liian matalaksi, se voi keskeyttää isot siirtotapahtumat (oletus: %s)</translation>
-    </message>
-    <message>
-        <source>Override spork address. Only useful for regtest and devnet. Using this on mainnet or testnet will ban you.</source>
-        <translation>Ohita spork osoite. Käyttökelpoinen vain regtest tai devnet. Jos käytät tätä pääverkossa tai testiverkossa, joudut estolistalle, eli bannataan.</translation>
-    </message>
-    <message>
-        <source>Please check that your computer's date and time are correct! If your clock is wrong, %s will not work properly.</source>
-        <translation>Tarkistathan että tietokoneesi päivämäärä ja kellonaika ovat oikeassa! Jos kellosi on väärässä, %s ei toimi oikein.</translation>
-    </message>
-    <message>
-        <source>Please contribute if you find %s useful. Visit %s for further information about the software.</source>
-        <translation>Ole hyvä ja avusta, jos %s on mielestäsi hyödyllinen. Vieraile %s saadaksesi lisää tietoa ohjelmistosta.</translation>
-    </message>
-    <message>
-        <source>Provide liquidity to AnonSend by infrequently mixing coins on a continual basis (%u-%u, default: %u, 1=very frequent, high fees, %u=very infrequent, low fees)</source>
-        <translation>Tarjoa AnonSend:ille likviditeettiä jatkuvaa kolikoiden sekoitusta varten (%u-%u, oletus: %u, 1=usein, isot maksukulut, %u=harvoin, pienet maksukulut)</translation>
-    </message>
-    <message>
-        <source>Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect/-noconnect)</source>
-        <translation>Tiedustele vertaisverkon osoitteita DNS hakua käyttäen jos osoitteita ei ole riittävästi (oletus: 1 paitsi jos -connect/-noconnect)</translation>
-    </message>
-    <message>
-        <source>Reduce storage requirements by enabling pruning (deleting) of old blocks. This allows the pruneblockchain RPC to be called to delete specific blocks, and enables automatic pruning of old blocks if a target size in MiB is provided. This mode is incompatible with -txindex and -rescan. Warning: Reverting this setting requires re-downloading the entire blockchain. (default: 0 = disable pruning blocks, 1 = allow manual pruning via RPC, &gt;%u = automatically prune block files to stay under the specified target size in MiB)</source>
-        <translation>Pienennä tilan tarvetta karsimalla (poistamalla) vanhoja lohkoja. Tämä mahdollistaa pruneblockchain RPC kutsun joka poistaa tietyt lohkot ja ottaa käyttöön automaattisen vanhojen lohkojen puhdistuksen jos tavoitekoko on annettu yksikkö MiB. Tämä tila on epäyhteensopiva -txindex ja -rescan kanssa. Varoitus: Tämän asetuksen peruminen vaatii koko lohkoketjun uudelleen lataamisen. (oletus: 0 = lohkojen karsinta ei käytössä, 1 =  salli manuaalinen puhdistus RPC:tä käyttäen, &gt;%u = automaattisesti puhdista lohkotiedostot että pysytään alle tavoitetilan MiB)</translation>
-    </message>
-    <message>
-        <source>Set lowest fee rate (in %s/kB) for transactions to be included in block creation. (default: %s)</source>
-        <translation>Aseta lohkon luonnissa lisättävien siirtojen vähimmäispalkkion suhde (%s/kt) (oletus: %s)</translation>
-    </message>
-    <message>
-        <source>Show N confirmations for a successfully locked transaction (%u-%u, default: %u)</source>
-        <translation>Näytä N vahvistusta onnistuneesti lukitulle siirtotapahtumalle (%u-%u, oletus: %u)</translation>
-    </message>
-    <message>
-        <source>This is the transaction fee you may pay when fee estimates are not available.</source>
-        <translation>Tämä on siirtomaksu jonka saatat maksaa jos siirtomaksun arviota ei ole mahdollista saada.</translation>
-    </message>
-    <message>
-        <source>This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit %s and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.</source>
-        <translation>Tämä tuote sisältää OpenSSL projektin kehittämää ohjelmistoa käytettäväksi OpenSSL Toolkit ohjelmistossa %s sekä Eric Youngin kehittämän salausohjelmiston ja Thomas Bernardin kehittämän UPnP ohjelmiston.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough AnonSend non-denominated funds for this transaction.</source>
-        <translation>Ei tarpeeksi AnonSend ei-denominoituja varoja tälle siirtotapahtumalle.</translation>
-    </message>
-    <message>
-        <source>Use N separate masternodes for each denominated input to mix funds (%u-%u, default: %u)</source>
-        <translation>Käytä N erillistä masternodea jokaiseen denominoituun syötteeseen sekoittaaksesi varoja (%u-%u, oletus: %u)</translation>
-    </message>
-    <message>
-        <source>Use hierarchical deterministic key generation (HD) after BIP39/BIP44. Only has effect during wallet creation/first start</source>
-        <translation>Käytä hierarkkista determinististä avain generaatiota (HD) BIP39/BIP44 jälkeen. Vaikuttaa vain uuden lompakon luomisessa/ensimmäisessä käynnistyksessä</translation>
-    </message>
-    <message>
-        <source>User defined mnemonic passphrase for HD wallet (BIP39). Only has effect during wallet creation/first start (default: empty string)</source>
-        <translation>Käyttäjän määrittelemä mnemonic salasana HD lompakolle (BIP39). Vaikuttaa vain uuden lompakon luomisessa/ensimmäisessä käynnistyksessä (oletus: tyhjä)</translation>
-    </message>
-    <message>
-        <source>Username and hashed password for JSON-RPC connections. The field &lt;userpw&gt; comes in the format: &lt;USERNAME&gt;:&lt;SALT&gt;$&lt;HASH&gt;. A canonical python script is included in share/rpcuser. The client then connects normally using the rpcuser=&lt;USERNAME&gt;/rpcpassword=&lt;PASSWORD&gt; pair of arguments. This option can be specified multiple times</source>
-        <translation>Käyttäjänimi ja salattu salasana JSON-RPC yhteyksille. Kenttä &lt;userpw&gt; tulee olla formaatissa: &lt;USERNAME&gt;:&lt;SALT&gt;$&lt;HASH&gt;. Sääntöjen mukainen python scripti on sisällytetty share/rpcuser:ään. Sitten asiakasohjelma kytkeytyy normaalisti kayttäen rpcuser=&lt;USERNAME&gt;/rpcpassword=&lt;PASSWORD&gt; paria perusteena. Tämä optio voidaan määritellä useita kertoja</translation>
-    </message>
-    <message>
-        <source>Wallet will not create transactions that violate mempool chain limits (default: %u)</source>
-        <translation>Lompakko ei luo siirtotapahtumia jotka rikkovat muistivarannon ketjun rajoja (oletus: %u)</translation>
-    </message>
-    <message>
-        <source>Warning: At least %d of %d masternodes are running on a newer software version. Please check latest releases, you might need to update too.</source>
-        <translation>Varoitus: Ainakin %d / %d masternodesta käyttää uudempaa ohjelmaversiota. Tarkista uusimmat päivitetyt ohjelmistot, sinunkin on ehkä päivitettävä ohjelmisto.</translation>
-    </message>
-    <message>
-        <source>Warning: Every masternode (out of %d known ones) is running on a newer software version. Please check latest releases, it's very likely that you missed a major/critical update.</source>
-        <translation>Varoitus: Jokainen masternode (%d tunnetusta) käyttää uudempaa ohjelmistoversiota. Tarkista uusimmat ohjelmistoversiot, on todennäköistä että et ole huomannut isoa/kriittistä päivitystä.</translation>
-    </message>
-    <message>
-        <source>Warning: Wallet file corrupt, data salvaged! Original %s saved as %s in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>Varoitus: Lompakkotiedosto on vioittunut, tiedot pelastettu. Alkuperäinen %s on tallennettu nimellä %s tänne %s, jos saldosi tai siirtohistoria on virheellinen, sinun tulisi palauttaa lompakkotiedosto varmuuskopiosta.</translation>
-    </message>
-    <message>
-        <source>Whitelist peers connecting from the given IP address (e.g. 1.2.3.4) or CIDR notated network (e.g. 1.2.3.0/24). Can be specified multiple times.</source>
-        <translation>Merkitse solmut luotettaviksi jotka kytkeytyvät annetusta verkkomaskista tai IP osoitteesta (esim. 1.2.3.4) tai CIDR merkitty verkosta (esim. 1.2.3.4/24). Voidaan määrittää useita kertoja.</translation>
-    </message>
-    <message>
-        <source>%s corrupt, salvage failed</source>
-        <translation>%s korruptoitunut, korjaaminen epäonnistui</translation>
-    </message>
-    <message>
-        <source>%s is not a valid backup folder!</source>
-        <translation>%s ei ole pätevä varmistus hakemisto!</translation>
-    </message>
-    <message>
-        <source>%s is set very high!</source>
-        <translation>%s on asetettu todella korkeaksi!</translation>
-    </message>
-    <message>
-        <source>(press q to shutdown and continue later)</source>
-        <translation>(paina q sammuttaaksesi ja jatkaaksesi myöhemmin)</translation>
-    </message>
-    <message>
-        <source>-devnet can only be specified once</source>
-        <translation>-devnet voidaan määrittää vain kerran</translation>
-    </message>
-    <message>
-        <source>-port must be specified when -devnet and -listen are specified</source>
-        <translation>-port täytyy määritellä kun -devnet ja -listen on määritelty</translation>
-    </message>
-    <message>
-        <source>-rpcport must be specified when -devnet and -server are specified</source>
-        <translation>-rpcport täytyy määritellä kun -devnet ja -server on määritelty</translation>
-    </message>
-    <message>
-        <source>Allow RFC1918 addresses to be relayed and connected to (default: %u)</source>
-        <translation>Salli RFC1918 osoitteiden tulla välitetyksi ja kytketyksi (oletus: %u)</translation>
-    </message>
-    <message>
-        <source>Attempt to recover private keys from a corrupt wallet on startup</source>
-        <translation>Yritä palauttaa yksityiset avaimet korruptoituneesta lompakosta käynnistyksen yhteydessä</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -%s address: '%s'</source>
-        <translation>-%s -osoitteen '%s' selvittäminen epäonnistui</translation>
-    </message>
-    <message>
-        <source>Change index out of range</source>
-        <translation>Vaihtoindeksi rajarvojen ulkopuolella</translation>
-    </message>
-    <message>
-        <source>Copyright (C)</source>
-        <translation>Tekijänoikeus (C)</translation>
-    </message>
-    <message>
-        <source>Error loading %s</source>
-        <translation>Virhe ladattaessa %s</translation>
-    </message>
-    <message>
-        <source>Error loading %s: Wallet corrupted</source>
-        <translation>Virhe ladattaessa %s: Lompakko vioittunut</translation>
-    </message>
-    <message>
-        <source>Error loading %s: Wallet requires newer version of %s</source>
-        <translation>Virhe ladattaessa %s: Tarvitset uudemman %s version</translation>
-    </message>
-    <message>
-        <source>Error upgrading chainstate database</source>
-        <translation>Virhe ketjutilan tietokannan päivityksessä</translation>
-    </message>
-    <message>
-        <source>Failed to find mixing queue to join</source>
-        <translation>Ei löytynyt sekoitusjonoa johon liittyä</translation>
-    </message>
-    <message>
-        <source>Failed to start a new mixing queue</source>
-        <translation>Uuden sekoitusjonon käynnistys ei onnistunut</translation>
-    </message>
-    <message>
-        <source>Initialization sanity check failed. %s is shutting down.</source>
-        <translation>Alustava järkevyyden tarkistus epäonnistui. %s sulkeutuu.</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -%s=&lt;amount&gt;: '%s'</source>
-        <translation>Virheellinen määrä -%s=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid spork address specified with -sporkaddr</source>
-        <translation>Virheellinen spork osoite määritelty -sporkaddr</translation>
-    </message>
-    <message>
-        <source>Keep N MXT anonymized (%u-%u, default: %u)</source>
-        <translation>Pidä N MXT anonymisoituna (%u-%u, oletus: %u)</translation>
-    </message>
-    <message>
-        <source>Print this help message and exit</source>
-        <translation>Näytä tämä ohjeviesti ja poistu</translation>
     </message>
     <message>
         <source>Receive and display P2P network alerts (default: %u)</source>
@@ -5234,10 +5079,6 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
         <translation>Määritä julkinen osoitteesi</translation>
     </message>
     <message>
-        <source>Starting network threads...</source>
-        <translation>Käynnistetään verkkoa...</translation>
-    </message>
-    <message>
         <source>Synchronization pending...</source>
         <translation>Synkronointi odottaa...</translation>
     </message>
@@ -5250,12 +5091,12 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
         <translation>Synkronoidaan masternode maksuja...</translation>
     </message>
     <message>
-        <source>The source code is available from %s.</source>
-        <translation>Lähdekoodi löytyy %s.</translation>
-    </message>
-    <message>
         <source>The transaction amount is too small to pay the fee</source>
         <translation>Siirtomäärä on liian pieni siirtomaksun maksamiseen</translation>
+    </message>
+    <message>
+        <source>This help message</source>
+        <translation>Tämä ohjeviesti</translation>
     </message>
     <message>
         <source>This is experimental software.</source>
@@ -5264,6 +5105,10 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
     <message>
         <source>Transaction amount too small</source>
         <translation>Siirtosumma on liian pieni</translation>
+    </message>
+    <message>
+        <source>Transaction amounts must be positive</source>
+        <translation>Siirtosumman tulee olla positiivinen</translation>
     </message>
     <message>
         <source>Transaction created successfully.</source>
@@ -5280,6 +5125,10 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
     <message>
         <source>Transaction too large for fee policy</source>
         <translation>Siirtotapahtuma on liian iso suhteessa siirtomaksujen käytäntöön.</translation>
+    </message>
+    <message>
+        <source>Transaction too large</source>
+        <translation>Siirtosumma on liian iso</translation>
     </message>
     <message>
         <source>Unable to bind to %s on this computer (bind returned error %s)</source>
@@ -5344,6 +5193,10 @@ Vähennä uakommenttien määrää tai kokoa.</translation>
     <message>
         <source>Zapping all transactions from wallet...</source>
         <translation>Tyhjennetään kaikki siirtotapahtumat lompakosta....</translation>
+    </message>
+    <message>
+        <source>wallet.dat corrupt, salvage failed</source>
+        <translation>wallet.dat lompakkotiedosto vioittunut, pelastaminen epäonnistui</translation>
     </message>
 </context>
 </TS>

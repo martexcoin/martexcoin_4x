@@ -1,5 +1,5 @@
 ---
-name: "martex-osx-3.0"
+name: "martex-osx-4.1"
 enable_cache: true
 suites:
 - "trusty"

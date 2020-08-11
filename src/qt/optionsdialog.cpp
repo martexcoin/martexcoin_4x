@@ -83,23 +83,17 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
     }
 
     /* Display elements init */
-    
+
     /* Number of displayed decimal digits selector */
     QString digits;
     for(int index = 2; index <=8; index++){
         digits.setNum(index);
         ui->digits->addItem(digits, digits);
     }
-    
+
     /* Theme selector */
-    ui->theme->addItem(QString("MXT-light"), QVariant("light"));
-    ui->theme->addItem(QString("MXT-light-hires"), QVariant("light-hires"));
-    ui->theme->addItem(QString("MXT-light-retro"), QVariant("light-retro"));
-    ui->theme->addItem(QString("MXT-light-hires-retro"), QVariant("light-hires-retro"));
-    ui->theme->addItem(QString("MXT-blue"), QVariant("drkblue"));
-    ui->theme->addItem(QString("MXT-Crownium"), QVariant("crownium"));
-    ui->theme->addItem(QString("MXT-traditional"), QVariant("trad"));
-    
+    ui->theme->addItem(QString("light"), QVariant("light"));
+
     /* Language selector */
     QDir translations(":translations");
 
@@ -181,13 +175,14 @@ void OptionsDialog::setModel(OptionsModel *_model)
         updateDefaultProxyNets();
     }
 
-    /* warn when one of the following settings changes by user action (placed here so init via mapper doesn't trigger them) */
+    /* warn when one of the following settings changes by user action (plmartex here so init via mapper doesn't trigger them) */
 
     /* Main */
     connect(ui->databaseCache, SIGNAL(valueChanged(int)), this, SLOT(showRestartWarning()));
     connect(ui->threadsScriptVerif, SIGNAL(valueChanged(int)), this, SLOT(showRestartWarning()));
     /* Wallet */
     connect(ui->showMasternodesTab, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
+    connect(ui->showGovernanceTab, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
     connect(ui->spendZeroConfChange, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
     /* Network */
     connect(ui->allowIncoming, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
@@ -210,12 +205,8 @@ void OptionsDialog::setMapper()
     /* Wallet */
     mapper->addMapping(ui->coinControlFeatures, OptionsModel::CoinControlFeatures);
     mapper->addMapping(ui->showMasternodesTab, OptionsModel::ShowMasternodesTab);
-    mapper->addMapping(ui->showAdvancedPSUI, OptionsModel::ShowAdvancedPSUI);
-    mapper->addMapping(ui->lowKeysWarning, OptionsModel::LowKeysWarning);
-    mapper->addMapping(ui->anonSendMultiSession, OptionsModel::AnonSendMultiSession);
+    mapper->addMapping(ui->showGovernanceTab, OptionsModel::ShowGovernanceTab);
     mapper->addMapping(ui->spendZeroConfChange, OptionsModel::SpendZeroConfChange);
-    mapper->addMapping(ui->anonSendRounds, OptionsModel::AnonSendRounds);
-    mapper->addMapping(ui->anonSendAmount, OptionsModel::AnonSendAmount);
 
     /* Network */
     mapper->addMapping(ui->mapPortUpnp, OptionsModel::MapPortUPnP);

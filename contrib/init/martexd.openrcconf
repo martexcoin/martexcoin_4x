@@ -1,7 +1,7 @@
 # /etc/conf.d/martexd: config file for /etc/init.d/martexd
 
 # Config file location
-#BITCOIND_CONFIGFILE="/etc/martexcore/MarteX.conf"
+#BITCOIND_CONFIGFILE="/etc/martexcore/martex.conf"
 
 # What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
 #BITCOIND_PIDDIR="/var/run/martexd"

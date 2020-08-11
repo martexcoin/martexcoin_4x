@@ -1,5 +1,5 @@
 ---
-name: "martex-linux-3.0"
+name: "martex-linux-4.1"
 enable_cache: true
 suites:
 - "trusty"
