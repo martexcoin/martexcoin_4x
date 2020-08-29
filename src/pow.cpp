@@ -312,6 +312,10 @@ static unsigned int GetNextTargetRequired_new(const CBlockIndex* pindexLast, boo
     if (pindexLast == NULL)
         return bnTargetLimit.GetCompact(); // genesis block
 
+    //Disable PoW Diff Retarget
+    if(pindexLast->nHeight > 1988267 && !fProofOfStake)
+	return bnTargetLimit.GetCompact(); // reset diff
+
     const CBlockIndex* pindexPrev = GetLastBlockIndex(pindexLast, fProofOfStake);
     if (pindexPrev->pprev == NULL)
         return bnTargetLimit.GetCompact(); // first block
