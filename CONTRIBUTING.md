@@ -94,6 +94,20 @@ At this stage one should expect comments and review from other contributors. You
 can add more commits to your pull request by committing them locally and pushing
 to your fork until you have satisfied all feedback.
 
+### Work in Progress Changes and Requests for Comments
+
+If a pull request is not to be considered for merging (yet), please
+prefix the title with [WIP] or use [Tasks Lists](https://help.github.com/articles/basic-writing-and-formatting-syntax/#task-lists)
+in the body of the pull request to indicate tasks are pending.
+
+### Address Feedback
+
+At this stage, one should expect comments and review from other contributors. You
+can add more commits to your pull request by committing them locally and pushing
+to your fork until you have satisfied all feedback.
+
+Note: Code review is a burdensome but important part of the development process, and as such, certain types of pull requests are rejected. In general, if the **improvements** do not warrant the **review effort** required, the PR has a high chance of being rejected. It is up to the PR author to convince the reviewers that the changes warrant the review effort, and if reviewers are "Concept NACK'ing" the PR, the author may need to present arguments and/or do research backing their suggested changes.
+
 Squashing Commits
 ---------------------------
 If your pull request is accepted for merging, you may be asked by a maintainer
@@ -144,14 +158,22 @@ in the future, they may be removed by the Repository Maintainer.
 Refactoring is a necessary part of any software project's evolution. The
 following guidelines cover refactoring pull requests for the project.
 
-There are three categories of refactoring, code only moves, code style fixes,
-code refactoring. In general refactoring pull requests should not mix these
-three kinds of activity in order to make refactoring pull requests easy to
+There are three categories of refactoring: code-only moves, code style fixes, and
+code refactoring. In general, refactoring pull requests should not mix these
+three kinds of activities in order to make refactoring pull requests easy to
 review and uncontroversial. In all cases, refactoring PRs must not change the
 behaviour of code within the pull request (bugs must be preserved as is).
 
 Project maintainers aim for a quick turnaround on refactoring pull requests, so
 where possible keep them short, uncomplex and easy to verify.
+
+Pull requests that refactor the code should not be made by new contributors. It
+requires a certain level of experience to know where the code belongs to and to
+understand the full ramification (including rebase effort of open pull requests).
+
+Trivial pull requests or pull requests that refactor the code with no clear
+benefits may be immediately closed by the maintainers to reduce unnecessary
+workload on reviewing.
 
 
 "Decision Making" Process
