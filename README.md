@@ -32,7 +32,7 @@ stable release versions of MarteX Core.
 
 The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Participation in the MarteX project is subject to a [Code of Conduct](code_of_conduct.md).
+Participation in the MarteX project is subject to a [Code of Conduct](CODE_OF_CONDUCT.md).
 
 Testing
 -------
