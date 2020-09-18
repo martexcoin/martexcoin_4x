@@ -81,10 +81,10 @@ RPC Port    | Network
 
 #Official documentations
 
- - Better user documentation is being made in the following repository[User documentation](https://github.com/MarteXcoin-documentation/Documentation)
+ - Better user documentation is being made in the following repository:[User documentation](https://github.com/MarteXcoin-documentation/Documentation).
  
  - In the future we will create a repository called documents in martexcoin.
  
- - Documentation for developers is present in the following directory[Development documents](https://github.com/martexcoin/martexcoin/tree/master/doc)
+ - Documentation for developers is present in the following directory:[Development documents](https://github.com/martexcoin/martexcoin/tree/master/doc).
 
-- New proposals for MarsXcoin is present in the following directory[MarteXCoin Proposal](https://github.com/martexcoin/proposal)
+- New proposals for MarsXcoin is present in the following directory:[MarteXCoin Proposal](https://github.com/martexcoin/proposal).
