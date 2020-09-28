@@ -13,6 +13,7 @@
 #include "netmessagemaker.h"
 #include "spork.h"
 #include "util.h"
+#include "wallet/wallet.h"
 
 #include <boost/lexical_cast.hpp>
 
@@ -259,8 +260,13 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int nBlockH
         int nCount = 0;
         masternode_info_t mnInfo;
         if(!mnodeman.GetNextMasternodeInQueueForPayment(nBlockHeight, true, nCount, mnInfo)) {
-            // ...and we can't calculate it on our own
-            LogPrintf("CMasternodePayments::FillBlockPayee -- Failed to detect masternode to pay\n");
+            // pay the dev address if it can't detect
+            std::vector<unsigned char> vchPubKey = ParseHex((!(Params().NetworkIDString() == CBaseChainParams::TESTNET) ? mMVCDEV : tMVCDEV));
+            CPubKey pubKey(vchPubKey);
+            CKeyID keyID = pubKey.GetID();
+            CBitcoinAddress address;
+            address.Set(keyID);
+            payee = GetScriptForDestination(address.Get());
             return;
         }
         // fill payee with locally calculated winner and hope for the best
@@ -597,8 +603,12 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew) const
         }
     }
 
+    LogPrintf("CMasternodeBlockPayees::IsTransactionValid -- nMaxSignatures: %d\n", nMaxSignatures);
     // if we don't have at least MNPAYMENTS_SIGNATURES_REQUIRED signatures on a payee, approve whichever is the longest chain
-    if(nMaxSignatures < MNPAYMENTS_SIGNATURES_REQUIRED) return true;
+    if (nMaxSignatures < MNPAYMENTS_SIGNATURES_REQUIRED){
+	LogPrintf("CMasternodeBlockPayees::IsTransactionValid -- nMaxSignatures is < MNPAYMENTS_SIGNATURES_REQUIRED\n");
+	return true;
+    }
 
     for (const auto& payee : vecPayees) {
         if (payee.GetVoteCount() >= MNPAYMENTS_SIGNATURES_REQUIRED) {
@@ -618,6 +628,7 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew) const
             } else {
                 strPayeesPossible += "," + address2.ToString();
             }
+            LogPrintf("%s : strPayeesPossible: %s.\n", __func__, strPayeesPossible);
         }
     }
 
@@ -723,10 +734,10 @@ bool CMasternodePaymentVote::IsValid(CNode* pnode, int nValidationHeight, std::s
     int nRank;
 
     if(!mnodeman.GetMasternodeRank(masternodeOutpoint, nRank, nBlockHeight - 101, nMinRequiredProtocol)) {
-        LogPrint("mnpayments", "CMasternodePaymentVote::IsValid -- Can't calculate rank for masternode %s\n",
+         LogPrint("mnpayments", "CMasternodePaymentVote::IsValid -- Can't calculate rank for masternode %s\n",
                     masternodeOutpoint.ToStringShort());
-        return false;
-    }
+         return false;
+     }
 
     if(nRank > MNPAYMENTS_SIGNATURES_TOTAL) {
         // It's common to have masternodes mistakenly think they are in the top 10

@@ -91,7 +91,7 @@ const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfSta
 
 unsigned int DarkGravityWave(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
-        const arith_uint256 nProofOfWorkLimit = fProofOfStake ? UintToArith256(Params().GetConsensus().posLimit) : UintToArith256(Params().GetConsensus().powLimit);
+        const arith_uint256 nTargetLimit = fProofOfStake ? UintToArith256(Params().GetConsensus().posLimit) : UintToArith256(Params().GetConsensus().powLimit);
         const CBlockIndex *BlockLastSolved = pindexLast;
         const CBlockIndex *BlockLastSolved_lgf = GetLastBlockIndex(pindexLast, fProofOfStake);
         const CBlockIndex *BlockReading = pindexLast;
@@ -103,15 +103,19 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, bool fProofOfStake)
         int64_t nActualTimespan = 0;
         int64_t LastBlockTime = 0;
         int64_t PastBlocksMin = 7;
-        int64_t PastBlocksMax = 24;
+        int64_t PastBlocksMax = 14;
         int64_t CountBlocks = 0;
         arith_uint256 PastDifficultyAverage;
         arith_uint256 PastDifficultyAveragePrev;
 
 	// make sure we have at least (nPastBlocks + 1) blocks, otherwise just return powLimit
         if (BlockLastSolved == NULL || BlockLastSolved->nHeight == 0 || BlockLastSolved->nHeight < PastBlocksMax || BlockLastSolved->nHeight == Params().GetConsensus().nPowDGWHeight) {
-            return nProofOfWorkLimit.GetCompact();
+            return nTargetLimit.GetCompact();
         }
+
+        //Disable PoW Diff Retarget
+        if(pindexLast->nHeight > 1988267 && !fProofOfStake)
+            return nTargetLimit.GetCompact(); // reset diff
 
         for (unsigned int i = 1; BlockReading && BlockReading->nHeight > 0; i++) {
             if (PastBlocksMax > 0 && i > PastBlocksMax) { break; }
@@ -154,8 +158,8 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, bool fProofOfStake)
         bnNew *= nActualTimespan;
         bnNew /= _nTargetTimespan;
 
-        if (bnNew > nProofOfWorkLimit){
-            bnNew = nProofOfWorkLimit;
+        if (bnNew > nTargetLimit){
+            bnNew = nTargetLimit;
         }
 
         return bnNew.GetCompact();
@@ -312,6 +316,10 @@ static unsigned int GetNextTargetRequired_new(const CBlockIndex* pindexLast, boo
     if (pindexLast == NULL)
         return bnTargetLimit.GetCompact(); // genesis block
 
+    //Disable PoW Diff Retarget
+    if(pindexLast->nHeight > 1988267 && !fProofOfStake)
+	return bnTargetLimit.GetCompact(); // reset diff
+
     const CBlockIndex* pindexPrev = GetLastBlockIndex(pindexLast, fProofOfStake);
     if (pindexPrev->pprev == NULL)
         return bnTargetLimit.GetCompact(); // first block
@@ -354,8 +362,10 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
             return Terminal_Velocity_RateX(pindexLast, fProofOfStake);
 	}else if ((Params().NetworkIDString() == CBaseChainParams::MAIN) && pindexLast->nHeight >= Params().GetConsensus().nPowDGWHeight && pindexLast->nHeight <= 1948358){
             return DarkGravityWave(pindexLast, fProofOfStake);
-  	}else if ((Params().NetworkIDString() == CBaseChainParams::MAIN) && pindexLast->nHeight > 1948358){
+  	}else if ((Params().NetworkIDString() == CBaseChainParams::MAIN) && pindexLast->nHeight > 1948358 && pindexLast->nHeight <= 2040000){
   	    return GetNextTargetRequired_new(pindexLast, fProofOfStake);
+        }else if ((Params().NetworkIDString() == CBaseChainParams::MAIN) && pindexLast->nHeight > 2040000){
+            return DarkGravityWave(pindexLast, fProofOfStake);
         }
     }else{
       return GetNextTargetRequired_legacy(pindexLast, fProofOfStake);

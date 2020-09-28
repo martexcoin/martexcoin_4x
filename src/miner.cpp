@@ -160,9 +160,14 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     if (!fProofOfStake)
     {
       coinbaseTx.vout[0].scriptPubKey = scriptPubKeyIn;
+      CAmount blockReward;
 
-      // NOTE: unlike in bitcoin, we need to pass PREVIOUS block height here
-      CAmount blockReward = nFees + GetBlockSubsidy(pindexPrev->nBits, pindexPrev->nHeight, Params().GetConsensus());
+      //Disable reward PoW after block 1988267
+      if(pindexPrev->nHeight > 1988267){
+          blockReward = nFees + 0 * COIN;
+      }else{
+          blockReward = nFees + GetBlockSubsidy(pindexPrev->nBits, pindexPrev->nHeight, Params().GetConsensus());
+      }
 
       // Compute regular coinbase transaction.
       coinbaseTx.vout[0].nValue = blockReward;
