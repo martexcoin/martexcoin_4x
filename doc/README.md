@@ -1,5 +1,5 @@
-MarteX Core 3.0.0
-=====================
+MarteX Core
+===========
 
 This is the official reference wallet for MarteX digital currency and comprises the backbone of the MarteX peer-to-peer network. You can [download MarteX Core](https://www.martexcoin.org/downloads/) or [build it yourself](#building) using the guides below.
 
@@ -46,7 +46,7 @@ The MarteX Core repo's [root README](/README.md) contains relevant information o
 - [Developer Notes](developer-notes.md)
 - [Release Notes](release-notes.md)
 - [Release Process](release-process.md)
-- Source Code Documentation ***TODO*** in doxygen
+- Source Code Documentation forck the repository and use [codedocs](https://codedocs.xyz/) to generate doxygen documentation. Edit the [configurations](/.codedocs) for personal configurations. Or download [doxygen](https://www.doxygen.nl/index.html) and do it yourself locally.
 - [Translation Process](translation_process.md)
 - [Translation Strings Policy](translation_strings_policy.md)
 - [Travis CI](travis-ci.md)
