@@ -46,7 +46,7 @@ The MarteX Core repo's [root README](/README.md) contains relevant information o
 - [Developer Notes](developer-notes.md)
 - [Release Notes](release-notes.md)
 - [Release Process](release-process.md)
-- Source Code Documentation forck the repository and use [codedocs](https://codedocs.xyz/) to generate doxygen documentation. Edit the [configurations](/.codedocs) for personal configurations.
+- Source Code Documentation forck the repository and use [codedocs](https://codedocs.xyz/) to generate doxygen documentation. Edit the [configurations](/.codedocs) for personal configurations. Or download [doxygen](https://www.doxygen.nl/index.html) and do it yourself locally.
 - [Translation Process](translation_process.md)
 - [Translation Strings Policy](translation_strings_policy.md)
 - [Travis CI](travis-ci.md)
