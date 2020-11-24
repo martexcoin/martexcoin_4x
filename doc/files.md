@@ -1,3 +1,46 @@
+# MarteXcoin Core file system
+
+**Contents**
+
+- [Data directory location](#data-directory-location)
+
+- [Data directory layout](#data-directory-layout)
+
+- [Multi-wallet environment](#multi-wallet-environment)
+
+  - [Berkeley DB database based wallets](#berkeley-db-database-based-wallets)
+
+  - [SQLite database based wallets](#sqlite-database-based-wallets)
+
+- [GUI settings](#gui-settings)
+
+- [Legacy subdirectories and files](#legacy-subdirectories-and-files)
+
+- [Notes](#notes)
+
+## Data directory location
+
+The data directory is the default location where the Bitcoin Core files are stored.
+
+1. The default data directory paths for supported platforms are:
+
+Platform | Data directory path
+---------|--------------------
+Linux    | `$HOME/.MXT/`
+macOS    | `$HOME/Library/Application Support/MXT/`
+Windows  | `%APPDATA%\MXT\` <sup>[\[1\]](#note1)</sup>
+
+2. A custom data directory path can be specified with the `-datadir` option.
+
+3. All content of the data directory, except for `MarteXcoin.conf` file, is chain-specific. This means the actual data directory paths for non-mainnet cases differ:
+
+Chain option                   | Data directory path
+-------------------------------|------------------------------
+`-chain=main` (default)        | *path_to_datadir*`/`
+`-chain=test` or `-testnet`    | *path_to_datadir*`/testnet3/`
+`-chain=signet` or `-signet`   | *path_to_datadir*`/signet/`
+`-chain=regtest` or `-regtest` | *path_to_datadir*`/regtest/`
+
 
 * banlist.dat: stores the IPs/Subnets of banned nodes
 * MarteX.conf: contains configuration settings for martexd or martex-qt
