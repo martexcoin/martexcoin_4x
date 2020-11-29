@@ -28,7 +28,7 @@ static const int SPORK_12_RECONSIDER_BLOCKS                             = 10011;
 static const int SPORK_14_REQUIRE_SENTINEL_FLAG                         = 10013;
 static const int SPORK_20_FORCE_ENABLED_MASTERNODE			= 10020;
 static const int SPORK_START                                            = SPORK_2_FASTSEND_ENABLED;
-static const int SPORK_END                                              = SPORK_14_REQUIRE_SENTINEL_FLAG;
+static const int SPORK_END                                              = SPORK_20_FORCE_ENABLED_MASTERNODE;
 
 extern std::map<int, int64_t> mapSporkDefaults;
 extern std::map<uint256, CSporkMessage> mapSporks;

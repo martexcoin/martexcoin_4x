@@ -171,10 +171,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nThreshold = 3226; // 80% of 4032
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000007bce3dca0169df880"); // 1988267
+        consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000834001850cd852c97"); // 2110000
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x6f66556bee8ed458ba19a63f2cc5e4dc6ad589c83a268432bec7a0178966ca71"); // 1988267
+        consensus.defaultAssumeValid = uint256S("0x1e4c89904d231fbb61c9d35a8730ca1055fa39c872d8913a6e29d5c92b82268d"); // 2110000
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -185,7 +185,7 @@ public:
         pchMessageStart[1] = 0x3f;
         pchMessageStart[2] = 0xa2;
         pchMessageStart[3] = 0xf5;
-        vAlertPubKey = ParseHex("046acdcdecdea7b6b17c217f27e73ca2acbddda8e70570ff355dbe1af30347d280f66067d136a797fce4d01227cc5be988676184d842930765fcce5dc011ad158e");
+        vAlertPubKey = ParseHex("047E86214867FF3AD73D1C2BC52A1643B104245BF8ED54C62C6A65F8F37393A0F17911A301F36A07E672E901F1489B10728582A7FCA273A200C7643C6E29B1CCE5");
         nDefaultPort = 51315;
         nPruneAfterHeight = 51314;
 
@@ -223,7 +223,7 @@ public:
         nPoolMaxTransactions = 3;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
 
-        strSporkAddress = "MHqNjNs6VWkUDXA7fj8HuCzBzECNqhzFkr";
+        strSporkAddress = "MARTEXC5boqkfW1JJWtKLjSKJEfPMgrcJA";
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
@@ -255,13 +255,14 @@ public:
             (1836997, uint256S("0xaca8b0a56715316704bbca364e0d5914a72e26f80d258d11f5ce9666bf901632"))
             (1920869, uint256S("0x00299e02c3418ef5afadf1c1d6b0e529f4d169428d9cf6cbbbb8baaa388963b4"))
             (1988267, uint256S("0x6f66556bee8ed458ba19a63f2cc5e4dc6ad589c83a268432bec7a0178966ca71"))
+            (2110000, uint256S("0x1e4c89904d231fbb61c9d35a8730ca1055fa39c872d8913a6e29d5c92b82268d"))
         };
 
         chainTxData = ChainTxData{
-            1587396559, // * UNIX timestamp of last known number of transactions
-            3013596,    // * total number of transactions between genesis and that timestamp
+            1605382864, // * UNIX timestamp of last known number of transactions
+            3277736,    // * total number of transactions between genesis and that timestamp
                         //   (the tx=... number in the SetBestChain debug.log lines)
-            100         // * estimated number of transactions per second after that timestamp
+            1000        // * estimated number of transactions per second after that timestamp
         };
 
     }
@@ -374,7 +375,7 @@ public:
         nPoolMaxTransactions = 3;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
-        strSporkAddress = "mxQ5BtTWgVSH7kX6A8Vr8nLKSkEVb8u3HW";
+        strSporkAddress = "mvcNScAif4qiBLKyaVZxXnN2C84dxowq6d";
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
