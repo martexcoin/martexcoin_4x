@@ -2388,7 +2388,7 @@ static bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockInd
     // TODO: resync data (both ways?) and try to reprocess this block later.
     CAmount blockReward;
 
-    if(pindex->nHeight > 1988267 && block.IsProofOfWork()){
+    if(pindex->nHeight > 1988267 && block.IsProofOfWork() && pindex->nHeight < 2190000){
         blockReward = nFees + 0 * COIN;
     }else{
         blockReward = nFees + GetBlockSubsidy(pindex->pprev->nBits, pindex->pprev->nHeight, chainparams.GetConsensus(),false, true);
