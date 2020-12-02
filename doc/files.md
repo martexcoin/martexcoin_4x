@@ -41,6 +41,34 @@ Chain option                   | Data directory path
 `-chain=signet` or `-signet`   | *path_to_datadir*`/signet/`
 `-chain=regtest` or `-regtest` | *path_to_datadir*`/regtest/`
 
+### Berkeley DB database based wallets
+
+Subdirectory | File(s)           | Description
+-------------|-------------------|-------------
+`database/`  | BDB logging files | Part of BDB environment; created at start and deleted on shutdown; a user *must keep it as safe* as personal wallet `wallet.dat`
+`./`         | `db.log`          | BDB error file
+`./`         | `wallet.dat`      | Personal wallet (a BDB database) with keys and transactions
+`./`         | `.walletlock`     | BDB wallet lock file
+
+### SQLite database based wallets
+
+Subdirectory | File                 | Description
+-------------|----------------------|-------------
+`./`         | `wallet.dat`         | Personal wallet (a SQLite database) with keys and transactions
+`./`         | `wallet.dat-journal` | SQLite Rollback Journal file for `wallet.dat`. Usually created at start and deleted on shutdown. A user *must keep it as safe* as the `wallet.dat` file.
+
+
+## GUI settings
+
+`martex-qt` uses [`QSettings`](https://doc.qt.io/qt-5/qsettings.html) class; this implies platform-specific [locations where application settings are stored](https://doc.qt.io/qt-5/qsettings.html#locations-where-application-settings-are-stored).
+
+
+## Notes
+
+<a name="note1">1</a>. The `/` (slash, U+002F) is used as the platform-independent path component separator in this document.
+
+<a name="note2">2</a>. `NNNNN` matches `[0-9]{5}` regex.
+
 
 * banlist.dat: stores the IPs/Subnets of banned nodes
 * MarteX.conf: contains configuration settings for martexd or martex-qt
