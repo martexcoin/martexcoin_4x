@@ -24,10 +24,9 @@ Drag MarteX-Qt to your applications folder, and then run MarteX-Qt.
 
 ### Need Help?
 
-* See the [MarteX documentation](https://martexcoin.org/wiki/display/DOC)
+* See the [MarteX documentation](https://github.com/martexcoin/martexcoin/tree/master/mxt-docs)
 for help and more information.
-* Ask for help on [MarteX Nation Discord](http://martexchat.org)
-* Ask for help on the [MarteX Forum](https://martexcoin.org/forum)
+* Ask for help on [MarteXcoin Telegram @martexcoin](https://t.me/martexcoin)
 
 Building
 ---------------------
