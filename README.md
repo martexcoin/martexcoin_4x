@@ -26,7 +26,8 @@ information or see https://opensource.org/licenses/MIT.
 Development Process
 -------------------
 
-The `master` branch is meant to be stable. Development is normally done in separate branches.
+The `master` branch is regularly built (see `doc/build-*.md` for instructions) and tested, but it is not guaranteed to be
+completely stable.
 [Tags](https://github.com/martexcoin/martexcoin/tags) are created to indicate new official,
 stable release versions of MarteX Core.
 
