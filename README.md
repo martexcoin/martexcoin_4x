@@ -17,6 +17,8 @@ are carried out collectively by the network. MarteX Core is the name of the open
 source software which enables the use of this currency.
 
 
+To know more read our [whitepaper](https://github.com/MarteXcoin-documentation/Documentation/tree/master/white_paper).
+
 License
 -------
 
