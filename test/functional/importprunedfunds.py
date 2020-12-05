@@ -2,26 +2,17 @@
 # Copyright (c) 2014-2016 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
+"""Test the importprunedfunds and removeprunedfunds RPCs."""
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import *
 
-
 class ImportPrunedFundsTest(BitcoinTestFramework):
-
-    def __init__(self):
-        super().__init__()
+    def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
 
-    def setup_network(self, split=False):
-        self.nodes = start_nodes(self.num_nodes, self.options.tmpdir)
-        connect_nodes_bi(self.nodes,0,1)
-        self.is_network_split=False
-        self.sync_all()
-
     def run_test(self):
-        print("Mining blocks...")
+        self.log.info("Mining blocks...")
         self.nodes[0].generate(101)
 
         self.sync_all()
@@ -30,7 +21,6 @@ class ImportPrunedFundsTest(BitcoinTestFramework):
         address1 = self.nodes[0].getnewaddress()
         # pubkey
         address2 = self.nodes[0].getnewaddress()
-        address2_pubkey = self.nodes[0].validateaddress(address2)['pubkey']                 # Using pubkey
         # privkey
         address3 = self.nodes[0].getnewaddress()
         address3_privkey = self.nodes[0].dumpprivkey(address3)                              # Using privkey
@@ -76,25 +66,20 @@ class ImportPrunedFundsTest(BitcoinTestFramework):
         self.sync_all()
 
         #Import with no affiliated address
-        try:
-            self.nodes[1].importprunedfunds(rawtxn1, proof1)
-        except JSONRPCException as e:
-            assert('No addresses' in e.error['message'])
-        else:
-            assert(False)
+        assert_raises_rpc_error(-5, "No addresses", self.nodes[1].importprunedfunds, rawtxn1, proof1)
 
         balance1 = self.nodes[1].getbalance("", 0, False, True)
         assert_equal(balance1, Decimal(0))
 
         #Import with affiliated address with no rescan
         self.nodes[1].importaddress(address2, "add2", False)
-        result2 = self.nodes[1].importprunedfunds(rawtxn2, proof2)
+        self.nodes[1].importprunedfunds(rawtxn2, proof2)
         balance2 = self.nodes[1].getbalance("add2", 0, False, True)
         assert_equal(balance2, Decimal('0.05'))
 
         #Import with private key with no rescan
-        self.nodes[1].importprivkey(address3_privkey, "add3", False)
-        result3 = self.nodes[1].importprunedfunds(rawtxn3, proof3)
+        self.nodes[1].importprivkey(privkey=address3_privkey, label="add3", rescan=False)
+        self.nodes[1].importprunedfunds(rawtxn3, proof3)
         balance3 = self.nodes[1].getbalance("add3", 0, False, False)
         assert_equal(balance3, Decimal('0.025'))
         balance3 = self.nodes[1].getbalance("*", 0, False, True)
@@ -112,12 +97,7 @@ class ImportPrunedFundsTest(BitcoinTestFramework):
         assert_equal(address_info['ismine'], True)
 
         #Remove transactions
-        try:
-            self.nodes[1].removeprunedfunds(txnid1)
-        except JSONRPCException as e:
-            assert('does not exist' in e.error['message'])
-        else:
-            assert(False)
+        assert_raises_rpc_error(-8, "Transaction does not exist in wallet.", self.nodes[1].removeprunedfunds, txnid1)
 
         balance1 = self.nodes[1].getbalance("*", 0, False, True)
         assert_equal(balance1, Decimal('0.075'))
