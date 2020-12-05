@@ -1,5 +1,6 @@
-MarteX Core
+MarteX Care
 ===========
+
 [![logo](https://img.shields.io/badge/Martexcoin-Cryptocurrency-blue.svg)](https://www.martexcoin.org)
 [![issues](https://img.shields.io/github/issues/martexcoin/martexcoin.svg)](https://github.com/martexcoin/martexcoin/issues)
 [![forks](https://img.shields.io/github/forks/martexcoin/martexcoin.svg)](https://github.com/martexcoin/martexcoin/network/members)
