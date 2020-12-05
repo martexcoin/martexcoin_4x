@@ -1,4 +1,4 @@
-MarteX Care
+MarteX Core
 ===========
 
 [![logo](https://img.shields.io/badge/Martexcoin-Cryptocurrency-blue.svg)](https://www.martexcoin.org)
