@@ -513,6 +513,11 @@ Wallet
 
 - Make sure that no crashes happen with run-time option `-disablewallet`.
 
+  - *Rationale*: In RPC code that conditionally uses the wallet (such as
+    `validateaddress`) it is easy to forget that global pointer `pwalletMain`
+    can be NULL. See `qa/rpc-tests/disablewallet.py` for functional tests
+    exercising the API with `-disablewallet`
+
 - Include `db_cxx.h` (BerkeleyDB header) only when `ENABLE_WALLET` is set.
 
   - *Rationale*: Otherwise compilation of the disable-wallet build will fail in environments without BerkeleyDB.
@@ -779,15 +784,62 @@ upper cycle etc.
 Threads and synchronization
 ---------------------------
 
+- Prefer `Mutex` type to `RecursiveMutex` one
+
+- Consistently use [Clang Thread Safety Analysis](https://clang.llvm.org/docs/ThreadSafetyAnalysis.html) annotations to
+  get compile-time warnings about potential race conditions in code. Combine annotations in function declarations with
+  run-time asserts in function definitions:
+
+```C++
+// txmempool.h
+class CTxMemPool
+{
+public:
+    ...
+    mutable RecursiveMutex cs;
+    ...
+    void UpdateTransactionsFromBlock(...) EXCLUSIVE_LOCKS_REQUIRED(::cs_main, cs);
+    ...
+}
+
+// txmempool.cpp
+void CTxMemPool::UpdateTransactionsFromBlock(...)
+{
+    AssertLockHeld(::cs_main);
+    AssertLockHeld(cs);
+    ...
+}
+```
+
+```C++
+// validation.h
+class ChainstateManager
+{
+public:
+    ...
+    bool ProcessNewBlock(...) EXCLUSIVE_LOCKS_REQUIRED(!::cs_main);
+    ...
+}
+
+// validation.cpp
+bool ChainstateManager::ProcessNewBlock(...)
+{
+    AssertLockNotHeld(::cs_main);
+    ...
+    LOCK(::cs_main);
+    ...
+}
+```
+
 - Build and run tests with `-DDEBUG_LOCKORDER` to verify that no potential
-  deadlocks are introduced.
+  deadlocks are introduced. As of 0.12, this is defined by default when
+  configuring with `--enable-debug`.
 
 - When using `LOCK`/`TRY_LOCK` be aware that the lock exists in the context of
   the current scope, so surround the statement and the code that needs the lock
-  with braces
+  with braces.
 
   OK:
-
 ```c++
 {
     TRY_LOCK(cs_vNodes, lockNodes);
@@ -796,7 +848,6 @@ Threads and synchronization
 ```
 
   Wrong:
-
 ```c++
 TRY_LOCK(cs_vNodes, lockNodes);
 {
@@ -804,57 +855,136 @@ TRY_LOCK(cs_vNodes, lockNodes);
 }
 ```
 
+Scripts
+--------------------------
+
+### Shebang
+
+- Use `#!/usr/bin/env bash` instead of obsolete `#!/bin/bash`.
+
+  - [*Rationale*](https://github.com/dylanaraps/pure-bash-bible#shebang):
+
+    `#!/bin/bash` assumes it is always installed to /bin/ which can cause issues;
+
+    `#!/usr/bin/env bash` searches the user's PATH to find the bash binary.
+
+  OK:
+```bash
+#!/usr/bin/env bash
+```
+
+  Wrong:
+```bash
+#!/bin/bash
+```
+
 Source code organization
 --------------------------
 
 - Implementation code should go into the `.cpp` file and not the `.h`, unless necessary due to template usage or
-  when performance due to inlining is critical
+  when performance due to inlining is critical.
 
-  - *Rationale*: Shorter and simpler header files are easier to read, and reduce compile time
+  - *Rationale*: Shorter and simpler header files are easier to read and reduce compile time.
+
+- Use only the lowercase alphanumerics (`a-z0-9`), underscore (`_`) and hyphen (`-`) in source code filenames.
+
+  - *Rationale*: `grep`:ing and auto-completing filenames is easier when using a consistent
+    naming pattern. Potential problems when building on case-insensitive filesystems are
+    avoided when using only lowercase characters in source code filenames.
+
+- Every `.cpp` and `.h` file should `#include` every header file it directly uses classes, functions or other
+  definitions from, even if those headers are already included indirectly through other headers.
+
+  - *Rationale*: Excluding headers because they are already indirectly included results in compilation
+    failures when those indirect dependencies change. Furthermore, it obscures what the real code
+    dependencies are.
 
 - Don't import anything into the global namespace (`using namespace ...`). Use
   fully specified types such as `std::string`.
 
-  - *Rationale*: Avoids symbol conflicts
+  - *Rationale*: Avoids symbol conflicts.
+
+- Terminate namespaces with a comment (`// namespace mynamespace`). The comment
+  should be placed on the same line as the brace closing the namespace, e.g.
+
+```c++
+namespace mynamespace {
+...
+} // namespace mynamespace
+
+namespace {
+...
+} // namespace
+```
+
+  - *Rationale*: Avoids confusion about the namespace context.
+
+- Use `#include <primitives/transaction.h>` bracket syntax instead of
+  `#include "primitives/transactions.h"` quote syntax.
+
+  - *Rationale*: Bracket syntax is less ambiguous because the preprocessor
+    searches a fixed list of include directories without taking location of the
+    source file into account. This allows quoted includes to stand out more when
+    the location of the source file actually is relevant.
 
 GUI
 -----
 
-- Do not display or manipulate dialogs in model code (classes `*Model`)
+- Do not display or manipulate dialogs in model code (classes `*Model`).
 
   - *Rationale*: Model classes pass through events and data from the core, they
     should not interact with the user. That's where View classes come in. The converse also
     holds: try to not directly access core data structures from Views.
 
+- Avoid adding slow or blocking code in the GUI thread. In particular, do not
+  add new `interfaces::Node` and `interfaces::Wallet` method calls, even if they
+  may be fast now, in case they are changed to lock or communicate across
+  processes in the future.
+
+  Prefer to offload work from the GUI thread to worker threads (see
+  `RPCExecutor` in console code as an example) or take other steps (see
+  https://doc.qt.io/archives/qq/qq27-responsive-guis.html) to keep the GUI
+  responsive.
+
+  - *Rationale*: Blocking the GUI thread can increase latency, and lead to
+    hangs and deadlocks.
+
 Subtrees
-----------
+--------
 
 Several parts of the repository are subtrees of software maintained elsewhere.
 
 Some of these are maintained by active developers of Bitcoin Core, in which case changes should probably go
-directly upstream without being PRed directly against the project.  They will be merged back in the next
+directly upstream without being PRed directly against the project. They will be merged back in the next
 subtree merge.
 
-Others are external projects without a tight relationship with our project.  Changes to these should also
-be sent upstream but bugfixes may also be prudent to PR against MarteX Core so that they can be integrated
-quickly.  Cosmetic changes should be purely taken upstream.
+Others are external projects without a tight relationship with our project. Changes to these should also
+be sent upstream, but bugfixes may also be prudent to PR against MarteX Core so that they can be integrated
+quickly. Cosmetic changes should be purely taken upstream.
 
-There is a tool in contrib/devtools/git-subtree-check.sh to check a subtree directory for consistency with
+There is a tool in `test/lint/git-subtree-check.sh` ([instructions](../test/lint#git-subtree-checksh)) to check a subtree directory for consistency with
 its upstream repository.
 
 Current subtrees include:
 
 - src/leveldb
-  - Upstream at https://github.com/google/leveldb ; Maintained by Google, but open important PRs to Core to avoid delay
+  - Upstream at https://github.com/google/leveldb ; Maintained by Google, but
+    open important PRs to Core to avoid delay.
+  - **Note**: Follow the instructions in [Upgrading LevelDB](#upgrading-leveldb) when
+    merging upstream changes to the LevelDB subtree.
 
-- src/libsecp256k1
-  - Upstream at https://github.com/bitcoin-core/secp256k1/ ; actively maintaned by Core contributors.
+- src/crc32c
+  - Used by leveldb for hardware acceleration of CRC32C checksums for data integrity.
+  - Upstream at https://github.com/google/crc32c ; Maintained by Google.
+
+- src/secp256k1
+  - Upstream at https://github.com/bitcoin-core/secp256k1/ ; actively maintained by Core contributors.
 
 - src/crypto/ctaes
   - Upstream at https://github.com/bitcoin-core/ctaes ; actively maintained by Core contributors.
 
 - src/univalue
-  - Upstream at https://github.com/jgarzik/univalue ; report important PRs to Core to avoid delay.
+  - Upstream at https://github.com/bitcoin-core/univalue ; actively maintained by Core contributors, deviates from upstream https://github.com/jgarzik/univalue
 
 
 Git and GitHub tips
