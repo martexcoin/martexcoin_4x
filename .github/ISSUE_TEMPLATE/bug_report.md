@@ -7,9 +7,9 @@ assignees: ''
 
 ---
 
-<!-- This issue tracker is only for technical issues related to MarteXcoin Core.
+<!-- This issue tracker is only for technical issues related to MarteX Core.
 
-General martexcoin questions and/or support requests are best directed to the MarteXcoin telegram group at https://t.me/martexcoin.
+General martexcoin questions and/or support requests are best directed to the MarteX telegram group at https://t.me/martexcoin.
 
 For reporting security issues, please e-mail martexcoin@martexcoin.org.
 
@@ -31,7 +31,7 @@ If the node is "stuck" during sync or giving "block checksum mismatch" errors, p
 
 **System information**
 
-<!-- What version of MarteXcoin Core are you using, where did you get it (website, self-compiled, etc)? -->
+<!-- What version of MarteX Core are you using, where did you get it (website, self-compiled, etc)? -->
 
 <!-- What type of machine are you observing the error on (OS/CPU and disk type)? -->
 
