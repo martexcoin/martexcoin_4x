@@ -75,7 +75,7 @@ Linux       | /root/.MXT/ or /home/USER/.MXT/ or ~/.MXT/
 RPC Port    | Network       
 ------------|---------------
 51315       | Mainnet   
-41315(qualquer porta com 4 na frente)      | Testnet        
+41315 (qualquer porta com 4 na frente)     | Testnet        
 31315 (31314) | Regtest
 51314       | RPCCLient
 
