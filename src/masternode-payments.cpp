@@ -537,7 +537,7 @@ bool CMasternodePayments::HasVerifiedPaymentVote(const uint256& hashIn) const
 }
 
 void CMasternodeBlockPayees::AddPayee(const CMasternodePaymentVote& vote)
-{
+	{
     LOCK(cs_vecPayees);
 
     uint256 nVoteHash = vote.GetHash();
@@ -727,6 +727,14 @@ bool CMasternodePaymentVote::IsValid(CNode* pnode, int nValidationHeight, std::s
         return false;
     }
 
+    if(sporkManager.IsSporkActive(SPORK_20_FORCE_ENABLED_MASTERNODE)) {
+        if(CMasternode::StateToString(mnInfo.nActiveState) != "ENABLED") {
+            strError = strprintf("Masternode status is: %d", CMasternode::StateToString(mnInfo.nActiveState));
+            LogPrintf("CMasternodePaymentVote::IsValid - Force masternode requirement to have ENABLED status instead of ACTIVE - %s\n", strError);
+            return false;
+        }
+    }
+
     // Only masternodes should try to check masternode rank for old votes - they need to pick the right winner for future blocks.
     // Regular clients (miners included) need to verify masternode rank for future block votes only.
     if(!fMasternodeMode && nBlockHeight < nValidationHeight) return true;
@@ -734,8 +742,7 @@ bool CMasternodePaymentVote::IsValid(CNode* pnode, int nValidationHeight, std::s
     int nRank;
 
     if(!mnodeman.GetMasternodeRank(masternodeOutpoint, nRank, nBlockHeight - 101, nMinRequiredProtocol)) {
-         LogPrint("mnpayments", "CMasternodePaymentVote::IsValid -- Can't calculate rank for masternode %s\n",
-                    masternodeOutpoint.ToStringShort());
+         LogPrint("mnpayments", "CMasternodePaymentVote::IsValid -- Can't calculate rank for masternode %s\n", masternodeOutpoint.ToStringShort());
          return false;
      }
 
@@ -754,6 +761,7 @@ bool CMasternodePaymentVote::IsValid(CNode* pnode, int nValidationHeight, std::s
         return false;
     }
 
+    if(fDebug) LogPrintf("Masternode %s has status %s\n", masternodeOutpoint.ToStringShort(), CMasternode::StateToString(mnInfo.nActiveState));
     return true;
 }
 

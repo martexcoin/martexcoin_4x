@@ -2386,7 +2386,16 @@ static bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockInd
     // the peer who sent us this block is missing some data and wasn't able
     // to recognize that block is actually invalid.
     // TODO: resync data (both ways?) and try to reprocess this block later.
-    CAmount blockReward = nFees + GetBlockSubsidy(pindex->pprev->nBits, pindex->pprev->nHeight, chainparams.GetConsensus(),false, true);
+    CAmount blockReward;
+
+    if(block.IsProofOfWork() && pindex->nHeight < 2200000){
+        blockReward = nFees + GetBlockSubsidy(pindex->pprev->nBits, pindex->pprev->nHeight, chainparams.GetConsensus(),false, true);
+    }else if(block.IsProofOfStake()){
+	blockReward = nFees + GetBlockSubsidy(pindex->pprev->nBits, pindex->pprev->nHeight, chainparams.GetConsensus(),false, true);
+    }else{
+        blockReward = nFees + 0 * COIN;
+    }
+
     std::string strError = "";
     if (pindex->nHeight > START_REWARD_3_0_M && block.IsProofOfWork() && !IsBlockValueValid(block, pindex->nHeight, blockReward, strError)) {
         return state.DoS(0, error("ConnectBlock(MXT): %s", strError), REJECT_INVALID, "bad-cb-amount");
