@@ -17,7 +17,7 @@ than:
       interface.
 
 For a description of arguments recognized by test scripts, see
-`qa/pull-tester/test_framework/test_framework.py:BitcoinTestFramework.main`.
+`test/functional/test_framework/test_framework.py:BitcoinTestFramework.main`.
 
 """
 
@@ -38,7 +38,7 @@ if os.name == 'posix':
     # terminal via ANSI escape sequences:
     BOLD = ('\033[0m', '\033[1m')
 
-RPC_TESTS_DIR = SRCDIR + '/qa/rpc-tests/'
+RPC_TESTS_DIR = SRCDIR + 'test/functional'
 
 #If imported values are not defined then set to zero (or disabled)
 if 'ENABLE_WALLET' not in vars():
