@@ -54,6 +54,7 @@ The MarteX Core repo's [root README](/README.md) contains relevant information o
 - [BIPS](bips.md)
 - [Dnsseed Policy](dnsseed-policy.md)
 - [Benchmarking](benchmarking.md)
+- [Course of MarteX Core From Command Line](https://github.com/MarteXcoin-documentation/Learning-MarteXcoin-from-the-Command-Line)
 
 ### Resources
 * Discuss on the [MarteX Forum](https://martexcoin.org/forum), in the Development & Technical Discussion board.
