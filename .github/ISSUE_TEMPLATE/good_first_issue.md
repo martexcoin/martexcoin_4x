@@ -15,7 +15,7 @@ assignees: ''
 
 #### Useful skills:
 
-<!-- (For example, “C++11 std::thread”, “Qt5 GUI and async GUI design” or “basic understanding of MarteXcoin mining and the MarteXcoin Core RPC interface”.) -->
+<!-- (For example, “C++11 std::thread”, “Qt5 GUI and async GUI design” or “basic understanding of MarteXcoin mining and the MarteX Core RPC interface”.) -->
 
 #### Want to work on this issue?
 

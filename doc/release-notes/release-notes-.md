@@ -1,7 +1,7 @@
 Release Notes
 =============
 
-MarteXcoin Core version  is now available from:
+MarteX Core version  is now available from:
 
   <>
 
@@ -31,14 +31,14 @@ wallet versions of coin Core are generally supported.
 Compatibility
 ==============
 
-MarteXcoin Core is supported and extensively tested on operating systems
+MarteX Core is supported and extensively tested on operating systems
 using the Linux kernel, macOS 10.12+, and Windows 7 and newer.  Bitcoin
 Core should also work on most other Unix-like systems but is not as
 frequently tested on them.  It is not recommended to use Bitcoin Core on
 unsupported systems.
 
-From MarteXcoin Core 0.20.0 onwards, macOS versions earlier than 10.12 are no
-longer supported. Additionally, MarteXcoin Core does not yet change appearance
+From MarteX Core 0.20.0 onwards, macOS versions earlier than 10.12 are no
+longer supported. Additionally, MarteX Core does not yet change appearance
 when macOS "dark mode" is activated.
 
 Known Bugs
