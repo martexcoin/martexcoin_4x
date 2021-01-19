@@ -29,8 +29,8 @@ import subprocess
 import tempfile
 import re
 
-sys.path.append("qa/pull-tester/")
-from tests_config import *
+sys.path.append("test/functional")
+from config.ini import *
 
 BOLD = ("","")
 if os.name == 'posix':
@@ -56,7 +56,7 @@ if ENABLE_ZMQ:
         import zmq
     except ImportError:
         print("WARNING: \"import zmq\" failed. Setting ENABLE_ZMQ=0. " \
-            "To run zmq tests, see dependency info in /qa/README.md.")
+            "To run zmq tests, see dependency info in /test/README.md.")
         ENABLE_ZMQ=0
 
 ENABLE_COVERAGE=0
@@ -94,7 +94,7 @@ if EXEEXT == ".exe" and "-win" not in opts:
     sys.exit(0)
 
 if not (ENABLE_WALLET == 1 and ENABLE_UTILS == 1 and ENABLE_BITCOIND == 1):
-    print("No rpc tests to run. Wallet, utils, and bitcoind must all be enabled")
+    print("No functional tests to run. Wallet, utils, and bitcoind must all be enabled")
     sys.exit(0)
 
 # python3-zmq may not be installed. Handle this gracefully and with some helpful info
@@ -103,7 +103,7 @@ if ENABLE_ZMQ:
         import zmq
     except ImportError:
         print("ERROR: \"import zmq\" failed. Set ENABLE_ZMQ=0 or "
-              "to run zmq tests, see dependency info in /qa/README.md.")
+              "to run zmq tests, see dependency info in /test/README.md.")
         # ENABLE_ZMQ=0
         raise
 
@@ -222,7 +222,7 @@ def runtests():
         coverage = RPCCoverage()
         print("Initializing coverage directory at %s\n" % coverage.dir)
     flags = ["--srcdir=%s/src" % BUILDDIR] + passon_args
-    flags.append("--cachedir=%s/qa/cache" % BUILDDIR)
+    flags.append("--cachedir=%s/test/cache" % BUILDDIR)
     if coverage:
         flags.append(coverage.flag)
 
@@ -234,7 +234,7 @@ def runtests():
     max_len_name = len(max(test_list, key=len))
     time_sum = 0
     time0 = time.time()
-    job_queue = RPCTestHandler(run_parallel, test_list, flags)
+    job_queue = TestHandler(run_parallel, test_list, flags)
     results = BOLD[1] + "%s | %s | %s\n\n" % ("TEST".ljust(max_len_name), "PASSED", "DURATION") + BOLD[0]
     all_passed = True
     for _ in range(len(test_list)):
@@ -260,7 +260,7 @@ def runtests():
     sys.exit(not all_passed)
 
 
-class RPCTestHandler:
+class TestHandler:
     """
     Trigger the testscrips passed in via the list.
     """
@@ -313,7 +313,7 @@ class RPCTestHandler:
 
 class RPCCoverage(object):
     """
-    Coverage reporting utilities for pull-tester.
+    Coverage reporting utilities for test_runner.
 
     Coverage calculation works by having each test script subprocess write
     coverage files into a particular directory. These files contain the RPC
@@ -323,7 +323,7 @@ class RPCCoverage(object):
     After all tests complete, the commands run are combined and diff'd against
     the complete list to calculate uncovered RPC commands.
 
-    See also: qa/rpc-tests/test_framework/coverage.py
+    See also: test/functional/test_framework/coverage.py
 
     """
     def __init__(self):
@@ -351,7 +351,7 @@ class RPCCoverage(object):
         Return a set of currently untested RPC commands.
 
         """
-        # This is shared from `qa/rpc-tests/test-framework/coverage.py`
+        # This is shared from `test/functional/test-framework/coverage.py`
         REFERENCE_FILENAME = 'rpc_interface.txt'
         COVERAGE_FILE_PREFIX = 'coverage.'
 
