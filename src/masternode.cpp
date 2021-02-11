@@ -764,6 +764,7 @@ bool CMasternodePing::Sign(const CKey& keyMasternode, const CPubKey& pubKeyMaste
     } else {
         std::string strMessage = CTxIn(masternodeOutpoint).ToString() + blockHash.ToString() +
                     boost::lexical_cast<std::string>(sigTime);
+        if (fDebug) LogPrintf("CMasternodePing::Sign : %s \n",strMessage);
 
         if (!CMessageSigner::SignMessage(strMessage, vchSig, keyMasternode)) {
             LogPrintf("CMasternodePing::Sign -- SignMessage() failed\n");
@@ -790,6 +791,7 @@ bool CMasternodePing::CheckSignature(const CPubKey& pubKeyMasternode, int &nDos)
         if (!CHashSigner::VerifyHash(hash, pubKeyMasternode, vchSig, strError)) {
             std::string strMessage = CTxIn(masternodeOutpoint).ToString() + blockHash.ToString() +
                         boost::lexical_cast<std::string>(sigTime);
+            if (fDebug) LogPrintf("CMasternodePing::CheckSignature : %s \n",strMessage);
 
             if (!CMessageSigner::VerifyMessage(pubKeyMasternode, vchSig, strMessage, strError)) {
                 LogPrintf("CMasternodePing::CheckSignature -- Got bad Masternode ping signature, masternode=%s, error: %s\n", masternodeOutpoint.ToStringShort(), strError);
@@ -800,6 +802,7 @@ bool CMasternodePing::CheckSignature(const CPubKey& pubKeyMasternode, int &nDos)
     } else {
         std::string strMessage = CTxIn(masternodeOutpoint).ToString() + blockHash.ToString() +
                     boost::lexical_cast<std::string>(sigTime);
+        if (fDebug) LogPrintf("CMasternodePing::CheckSignature : %s \n",strMessage);
 
         if (!CMessageSigner::VerifyMessage(pubKeyMasternode, vchSig, strMessage, strError)) {
             LogPrintf("CMasternodePing::CheckSignature -- Got bad Masternode ping signature, masternode=%s, error: %s\n", masternodeOutpoint.ToStringShort(), strError);
