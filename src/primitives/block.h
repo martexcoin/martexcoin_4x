@@ -1,12 +1,14 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2015 The Bitcoin Core developers
-// Distributed under the MIT software license, see the accompanying
+// Copyright (c) 2009-2013 The Bitcoin developers
+// Copyright (c) 2015-2019 The PIVX developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_PRIMITIVES_BLOCK_H
 #define BITCOIN_PRIMITIVES_BLOCK_H
 
 #include "primitives/transaction.h"
+#include "keystore.h"
 #include "serialize.h"
 #include "uint256.h"
 
@@ -21,13 +23,14 @@ class CBlockHeader
 {
 public:
     // header
-    static const int CURRENT_VERSION = 7;
+    static const int32_t CURRENT_VERSION = 7;     //!> Version 5 marks MARTEX reverse-hardfork blocks (Adds: PoS v2, Time Proto, CLTV, etc - Removes: Accumulator)
     int32_t nVersion;
     uint256 hashPrevBlock;
     uint256 hashMerkleRoot;
     uint32_t nTime;
     uint32_t nBits;
     uint32_t nNonce;
+    uint256 nAccumulatorCheckpoint;             // only for version 4.
 
     CBlockHeader()
     {
@@ -37,13 +40,18 @@ public:
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action) {
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
         READWRITE(this->nVersion);
+        nVersion = this->nVersion;
         READWRITE(hashPrevBlock);
         READWRITE(hashMerkleRoot);
         READWRITE(nTime);
         READWRITE(nBits);
         READWRITE(nNonce);
+
+        //zerocoin active, header changes to include accumulator checksum
+        if(nVersion > 7)
+            READWRITE(nAccumulatorCheckpoint);
     }
 
     void SetNull()
@@ -54,6 +62,7 @@ public:
         nTime = 0;
         nBits = 0;
         nNonce = 0;
+        nAccumulatorCheckpoint.SetNull();
     }
 
     bool IsNull() const
@@ -75,13 +84,13 @@ class CBlock : public CBlockHeader
 {
 public:
     // network and disk
-    std::vector<CTransactionRef> vtx;
+    std::vector<CTransaction> vtx;
+
     // ppcoin: block signature - signed by one of the coin base txout[N]'s owner
     std::vector<unsigned char> vchBlockSig;
 
     // memory only
-    mutable CTxOut txoutMasternode; // masternode payment
-    mutable std::vector<CTxOut> voutSuperblock; // superblock payment
+    mutable CScript payee;
     mutable bool fChecked;
 
     CBlock()
@@ -98,18 +107,19 @@ public:
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action) {
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
         READWRITE(*(CBlockHeader*)this);
         READWRITE(vtx);
+	//if(vtx.size() > 1 && vtx[1].IsCoinStake())
+	//	READWRITE(vchBlockSig);
     }
 
     void SetNull()
     {
         CBlockHeader::SetNull();
         vtx.clear();
-        txoutMasternode = CTxOut();
-        voutSuperblock.clear();
         fChecked = false;
+        payee = CScript();
         vchBlockSig.clear();
     }
 
@@ -122,18 +132,15 @@ public:
         block.nTime          = nTime;
         block.nBits          = nBits;
         block.nNonce         = nNonce;
+        if(nVersion > 7)
+            block.nAccumulatorCheckpoint = nAccumulatorCheckpoint;
         return block;
     }
 
     // ppcoin: two types of block: proof-of-work or proof-of-stake
     bool IsProofOfStake() const
     {
-        return (vtx.size() > 1 && vtx[1]->IsCoinStake());
-    }
-
-    std::pair<COutPoint, unsigned int> GetProofOfStake() const
-    {
-        return IsProofOfStake() ? std::make_pair(vtx[1]->vin[0].prevout, vtx[1]->nTime) : std::make_pair(COutPoint(), (unsigned int)0);
+        return (vtx.size() > 1 && vtx[1].IsCoinStake());
     }
 
     bool IsProofOfWork() const
@@ -141,7 +148,15 @@ public:
         return !IsProofOfStake();
     }
 
+    bool IsZerocoinStake() const;
+
+    std::pair<COutPoint, unsigned int> GetProofOfStake() const
+    {
+        return IsProofOfStake()? std::make_pair(vtx[1].vin[0].prevout, nTime) : std::make_pair(COutPoint(), (unsigned int)0);
+    }
+
     std::string ToString() const;
+    void print() const;
 };
 
 
@@ -163,9 +178,8 @@ struct CBlockLocator
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action) {
-        int nVersion = s.GetVersion();
-        if (!(s.GetType() & SER_GETHASH))
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
+        if (!(nType & SER_GETHASH))
             READWRITE(nVersion);
         READWRITE(vHave);
     }
@@ -175,7 +189,7 @@ struct CBlockLocator
         vHave.clear();
     }
 
-    bool IsNull() const
+    bool IsNull()
     {
         return vHave.empty();
     }

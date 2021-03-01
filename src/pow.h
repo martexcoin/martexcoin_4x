@@ -1,45 +1,32 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2015 The Bitcoin Core developers
-// Distributed under the MIT software license, see the accompanying
+// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2017-2019 The PIVX developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_POW_H
 #define BITCOIN_POW_H
-
-#include "consensus/params.h"
 
 #include <stdint.h>
 
 class CBlockHeader;
 class CBlockIndex;
 class uint256;
+class arith_uint256;
 
-static const int64_t nlowGravity = 198500; // Correct low gravity issue with DGW implementation.
-/** Block spacing preferred */
-static const int64_t BLOCK_SPACING = 2 * 60;
-/** Block spacing minimum */
-static const int64_t BLOCK_SPACING_MIN = 1.5 * 60;
-/** Block spacing maximum */
-static const int64_t BLOCK_SPACING_MAX = 3.5 * 60;
-/** Block spacing preferred CORRECT */
-static const int64_t BLOCK_SPACING_CORRECT = 0.5 * 60;
-/** Block spacing minimum CORRECT */
-static const int64_t BLOCK_SPACING_MIN_CORRECT = 0.25 * 60;
-/** Block spacing maximum CORRECT */
-static const int64_t BLOCK_SPACING_MAX_CORRECT = 0.5 * 60;
-/** Block spacing preferred CORRECT NEW */
-static const int64_t BLOCK_SPACING_CORRECT_NEW = 1 * 60;
-/** Block spacing minimum CORRECT  NEW */
-static const int64_t BLOCK_SPACING_MIN_CORRECT_NEW = 0.5 * 60;
-/** Block spacing maximum CORRECT  NEW */
-static const int64_t BLOCK_SPACING_MAX_CORRECT_NEW = 1.25 * 60;
+// Define difficulty retarget algorithms
+enum DiffMode {
+    DIFF_DEFAULT = 0, // Default to invalid 0
+    DIFF_BTC = 1,     // Retarget every x blocks (Bitcoin style)
+    DIFF_KGW = 2,     // Retarget using Kimoto Gravity Well
+    DIFF_DGW = 3,     // Retarget using Dark Gravity Wave v3
+};
 
-unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake);
-unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params&);
-unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params&);
-const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfStake);
+unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock, bool fProofOfStake);
 
 /** Check whether a block hash satisfies the proof-of-work requirement specified by nBits */
-bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&);
+bool CheckProofOfWork(uint256 hash, unsigned int nBits);
+uint256 GetBlockProof(const CBlockIndex& block);
 
 #endif // BITCOIN_POW_H

@@ -1,4 +1,5 @@
-// Copyright (c) 2015 The Bitcoin Core developers
+// Copyright (c) 2015-2017 The Bitcoin Core developers
+// Copyright (c) 2017-2019 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,19 +14,12 @@
 #include "sync.h"
 #include "util.h"
 #include "utilstrencodings.h"
-#include "ui_interface.h"
-#include "crypto/hmac_sha256.h"
-#include <stdio.h>
-#include "utilstrencodings.h"
+#include "guiinterface.h"
 
 #include <boost/algorithm/string.hpp> // boost::trim
-#include <boost/foreach.hpp> //BOOST_FOREACH
-
-/** WWW-Authenticate to present with 401 Unauthorized response */
-static const char* WWW_AUTH_HEADER_DATA = "Basic realm=\"jsonrpc\"";
 
 /** Simple one-shot callback timer to be used by the RPC mechanism to e.g.
- * re-lock the wallet.
+ * re-lock the wellet.
  */
 class HTTPRPCTimer : public RPCTimerBase
 {
@@ -45,14 +39,14 @@ private:
 class HTTPRPCTimerInterface : public RPCTimerInterface
 {
 public:
-    HTTPRPCTimerInterface(struct event_base* _base) : base(_base)
+    HTTPRPCTimerInterface(struct event_base* base) : base(base)
     {
     }
-    const char* Name() override
+    const char* Name()
     {
         return "HTTP";
     }
-    RPCTimerBase* NewTimer(boost::function<void(void)>& func, int64_t millis) override
+    RPCTimerBase* NewTimer(boost::function<void(void)>& func, int64_t millis)
     {
         return new HTTPRPCTimer(base, func, millis);
     }
@@ -83,51 +77,7 @@ static void JSONErrorReply(HTTPRequest* req, const UniValue& objError, const Uni
     req->WriteReply(nStatus, strReply);
 }
 
-//This function checks username and password against -rpcauth
-//entries from config file.
-static bool multiUserAuthorized(std::string strUserPass)
-{    
-    if (strUserPass.find(":") == std::string::npos) {
-        return false;
-    }
-    std::string strUser = strUserPass.substr(0, strUserPass.find(":"));
-    std::string strPass = strUserPass.substr(strUserPass.find(":") + 1);
-
-    if (mapMultiArgs.count("-rpcauth") > 0) {
-        //Search for multi-user login/pass "rpcauth" from config
-        BOOST_FOREACH(std::string strRPCAuth, mapMultiArgs.at("-rpcauth"))
-        {
-            std::vector<std::string> vFields;
-            boost::split(vFields, strRPCAuth, boost::is_any_of(":$"));
-            if (vFields.size() != 3) {
-                //Incorrect formatting in config file
-                continue;
-            }
-
-            std::string strName = vFields[0];
-            if (!TimingResistantEqual(strName, strUser)) {
-                continue;
-            }
-
-            std::string strSalt = vFields[1];
-            std::string strHash = vFields[2];
-
-            static const unsigned int KEY_SIZE = 32;
-            unsigned char out[KEY_SIZE];
-
-            CHMAC_SHA256(reinterpret_cast<const unsigned char*>(strSalt.c_str()), strSalt.size()).Write(reinterpret_cast<const unsigned char*>(strPass.c_str()), strPass.size()).Finalize(out);
-            std::vector<unsigned char> hexvec(out, out+KEY_SIZE);
-            std::string strHashFromPass = HexStr(hexvec);
-
-            if (TimingResistantEqual(strHashFromPass, strHash)) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-static bool RPCAuthorized(const std::string& strAuth, std::string& strAuthUsernameOut)
+static bool RPCAuthorized(const std::string& strAuth)
 {
     if (strRPCUserColonPass.empty()) // Belt-and-suspenders measure if InitRPCAuthentication was not called
         return false;
@@ -136,15 +86,7 @@ static bool RPCAuthorized(const std::string& strAuth, std::string& strAuthUserna
     std::string strUserPass64 = strAuth.substr(6);
     boost::trim(strUserPass64);
     std::string strUserPass = DecodeBase64(strUserPass64);
-
-    if (strUserPass.find(":") != std::string::npos)
-        strAuthUsernameOut = strUserPass.substr(0, strUserPass.find(":"));
-
-    //Check if authorized under single-user field
-    if (TimingResistantEqual(strUserPass, strRPCUserColonPass)) {
-        return true;
-    }
-    return multiUserAuthorized(strUserPass);
+    return TimingResistantEqual(strUserPass, strRPCUserColonPass);
 }
 
 static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
@@ -157,13 +99,11 @@ static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
     // Check authorization
     std::pair<bool, std::string> authHeader = req->GetHeader("authorization");
     if (!authHeader.first) {
-        req->WriteHeader("WWW-Authenticate", WWW_AUTH_HEADER_DATA);
         req->WriteReply(HTTP_UNAUTHORIZED);
         return false;
     }
 
-    JSONRPCRequest jreq;
-    if (!RPCAuthorized(authHeader.second, jreq.authUser)) {
+    if (!RPCAuthorized(authHeader.second)) {
         LogPrintf("ThreadRPCServer incorrect password attempt from %s\n", req->GetPeer().ToString());
 
         /* Deter brute-forcing
@@ -171,26 +111,23 @@ static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
            shouldn't have their RPC port exposed. */
         MilliSleep(250);
 
-        req->WriteHeader("WWW-Authenticate", WWW_AUTH_HEADER_DATA);
         req->WriteReply(HTTP_UNAUTHORIZED);
         return false;
     }
 
+    JSONRequest jreq;
     try {
         // Parse request
         UniValue valRequest;
         if (!valRequest.read(req->ReadBody()))
             throw JSONRPCError(RPC_PARSE_ERROR, "Parse error");
 
-        // Set the URI
-        jreq.URI = req->GetURI();
-
         std::string strReply;
         // singleton request
         if (valRequest.isObject()) {
             jreq.parse(valRequest);
 
-            UniValue result = tableRPC.execute(jreq);
+            UniValue result = tableRPC.execute(jreq.strMethod, jreq.params);
 
             // Send reply
             strReply = JSONRPCReply(result, NullUniValue, jreq.id);
@@ -215,7 +152,7 @@ static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
 
 static bool InitRPCAuthentication()
 {
-    if (GetArg("-rpcpassword", "") == "")
+    if (mapArgs["-rpcpassword"] == "")
     {
         LogPrintf("No rpcpassword set - using random cookie authentication\n");
         if (!GenerateAuthCookie(&strRPCUserColonPass)) {
@@ -225,8 +162,7 @@ static bool InitRPCAuthentication()
             return false;
         }
     } else {
-        LogPrintf("Config options rpcuser and rpcpassword will soon be deprecated. Locally-run instances may remove rpcuser to use cookie-based auth, or may be replaced with rpcauth. Please see share/rpcuser for rpcauth auth generation.\n");
-        strRPCUserColonPass = GetArg("-rpcuser", "") + ":" + GetArg("-rpcpassword", "");
+        strRPCUserColonPass = mapArgs["-rpcuser"] + ":" + mapArgs["-rpcpassword"];
     }
     return true;
 }

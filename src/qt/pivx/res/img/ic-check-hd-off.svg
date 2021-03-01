@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 128 128"
+	 style="enable-background:new 0 0 128 128;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0.74;}
+	.st1{fill:#FFFFFF;}
+</style>
+<metadata>Created by potrace 1.15, written by Peter Selinger 2001-2017<sfw  xmlns="&ns_sfw;">
+	<slices></slices>
+	<sliceSourceBounds  bottomLeftOrigin="true" height="92" width="115.8" x="6.1" y="18"></sliceSourceBounds>
+</sfw>
+</metadata>
+<g class="st0">
+	<path class="st1" d="M11.6,110c-1.6,0-3.2-0.7-4.3-2.1c-1.9-2.4-1.5-5.8,0.9-7.7l101.7-81c2.4-1.9,5.8-1.5,7.7,0.9s1.5,5.8-0.9,7.7
+		L15,108.8C14,109.6,12.8,110,11.6,110z"/>
+	<g>
+		<polygon class="st1" points="50,92.3 62.2,92.3 62.2,75.8 50,85.5 		"/>
+		<polygon class="st1" points="25.4,70.4 39.9,70.4 62.2,52.6 62.2,36.2 50,36.2 50,59 25.4,59 25.4,36.2 13.2,36.2 13.2,91.6 
+			25.4,81.9 		"/>
+		<polygon class="st1" points="71.6,36.1 71.6,45.1 83,36.1 		"/>
+		<path class="st1" d="M108,39.3L97.1,48c9,1.4,12.5,8.7,12.7,15.6c0.1,5-1.4,9.4-4.3,12.4c-2.8,2.9-6.7,4.3-11.6,4.3H83.7V58.7
+			l-12.1,9.7v23.9h22.3c8.3,0,15.4-2.7,20.3-7.7c5-5.1,7.9-12.7,7.7-20.8C121.8,54,117.3,44.2,108,39.3z"/>
+	</g>
+</g>
+</svg>

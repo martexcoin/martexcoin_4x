@@ -3,10 +3,10 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "chainparams.h"
-#include "streams.h"
 #include "zmqpublishnotifier.h"
-#include "validation.h"
+#include "main.h"
 #include "util.h"
+#include "crypto/common.h"
 
 static std::multimap<std::string, CZMQAbstractPublishNotifier*> mapPublishNotifiers;
 
@@ -15,7 +15,7 @@ static const char *MSG_HASHTX     = "hashtx";
 static const char *MSG_HASHTXLOCK = "hashtxlock";
 static const char *MSG_RAWBLOCK   = "rawblock";
 static const char *MSG_RAWTX      = "rawtx";
-static const char *MSG_RAWTXLOCK  = "rawtxlock";
+static const char *MSG_RAWTXLOCK = "rawtxlock";
 
 // Internal function to send multipart message
 static int zmq_send_multipart(void *sock, const void* data, size_t size, ...)
@@ -177,12 +177,13 @@ bool CZMQPublishRawBlockNotifier::NotifyBlock(const CBlockIndex *pindex)
 {
     LogPrint("zmq", "zmq: Publish rawblock %s\n", pindex->GetBlockHash().GetHex());
 
-    const Consensus::Params& consensusParams = Params().GetConsensus();
+// XX42    const Consensus::Params& consensusParams = Params().GetConsensus();
     CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
     {
         LOCK(cs_main);
         CBlock block;
-        if(!ReadBlockFromDisk(block, pindex, consensusParams))
+// XX42        if(!ReadBlockFromDisk(block, pindex, consensusParams))
+        if(!ReadBlockFromDisk(block, pindex))
         {
             zmqError("Can't read block from disk");
             return false;

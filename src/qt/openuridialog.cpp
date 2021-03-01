@@ -1,6 +1,5 @@
-// Copyright (c) 2011-2014 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
-// Distributed under the MIT software license, see the accompanying
+// Copyright (c) 2019 The PIVX developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "openuridialog.h"
@@ -8,17 +7,35 @@
 
 #include "guiutil.h"
 #include "walletmodel.h"
+#include "qt/pivx/qtutils.h"
 
 #include <QUrl>
+#include <QFile>
 
-OpenURIDialog::OpenURIDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::OpenURIDialog)
+OpenURIDialog::OpenURIDialog(QWidget* parent) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
+                                                ui(new Ui::OpenURIDialog)
 {
     ui->setupUi(this);
-#if QT_VERSION >= 0x040700
+    this->setStyleSheet(parent->styleSheet());
     ui->uriEdit->setPlaceholderText("martex:");
-#endif
+
+    ui->labelSubtitle->setText("URI");
+    setCssProperty(ui->labelSubtitle, "text-title2-dialog");
+    setCssProperty(ui->frame, "container-dialog");
+    setCssProperty(ui->labelTitle, "text-title-dialog");
+
+    setCssBtnPrimary(ui->pushButtonOK);
+    setCssBtnPrimary(ui->selectFileButton);
+    setCssProperty(ui->pushButtonCancel, "btn-dialog-cancel");
+
+    initCssEditLine(ui->uriEdit, true);
+    connect(ui->pushButtonOK, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(ui->pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
+}
+
+void OpenURIDialog::showEvent(QShowEvent *event)
+{
+    ui->uriEdit->setFocus();
 }
 
 OpenURIDialog::~OpenURIDialog()
@@ -34,20 +51,44 @@ QString OpenURIDialog::getURI()
 void OpenURIDialog::accept()
 {
     SendCoinsRecipient rcp;
-    if(GUIUtil::parseBitcoinURI(getURI(), &rcp))
-    {
+    if (GUIUtil::parseBitcoinURI(getURI(), &rcp)) {
         /* Only accept value URIs */
         QDialog::accept();
     } else {
-        ui->uriEdit->setValid(false);
+        setCssEditLineDialog(ui->uriEdit, false, true);
     }
 }
 
 void OpenURIDialog::on_selectFileButton_clicked()
 {
     QString filename = GUIUtil::getOpenFileName(this, tr("Select payment request file to open"), "", "", NULL);
-    if(filename.isEmpty())
+    if (filename.isEmpty())
         return;
-    QUrl fileUri = QUrl::fromLocalFile(filename);
-    ui->uriEdit->setText("martex:?r=" + QUrl::toPercentEncoding(fileUri.toString()));
+
+    QFile file(filename);
+    if(!file.exists()) {
+        inform(tr("File not found"));
+        return;
+    }
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        QByteArray r = file.readAll();
+        if (r.size() > 200) {
+            inform(tr("Parsed data too large"));
+            return;
+        }
+
+        QString str = QString::fromStdString(std::string(r.constData(), r.length()));
+        if (!str.startsWith("martex")) {
+            inform(tr("Invalid URI, not starting with \"martex\" prefix"));
+        }
+        ui->uriEdit->setText(str);
+    }
+}
+
+void OpenURIDialog::inform(const QString& str) {
+    if (!snackBar) snackBar = new SnackBar(nullptr, this);
+    snackBar->setText(str);
+    snackBar->resize(this->width(), snackBar->height());
+    openDialog(snackBar, this);
 }

@@ -16,8 +16,8 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "MarteX"
-            VALUE "FileDescription",    "martex-tx (CLI MarteX transaction editor utility)"
+            VALUE "CompanyName",        "MARTEX Ecosystem"
+            VALUE "FileDescription",    "martex-tx (CLI MARTEX transaction editor utility)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "martex-tx"
             VALUE "LegalCopyright",     COPYRIGHT_STR

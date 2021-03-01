@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 30 22"
+	 style="enable-background:new 0 0 30 22;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#B088FF;}
+	.st1{fill:none;}
+	.st2{fill:#59c9c9;}
+</style>
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="16" width="16" x="5" y="3"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<g id="Add-purple">
+	<g id="ic-add-purple" transform="translate(5.000000, 3.000000)">
+		<polygon id="Path_18951" class="st0" points="14,7 9,7 9,2 7,2 7,7 2,7 2,9 7,9 7,14 9,14 9,9 14,9 		"/>
+		<polygon id="Rectangle_4603" class="st1" points="0,0 16,0 16,16 0,16 		"/>
+	</g>
+</g>
+<path class="st2" d="M19,10h-5V5c0-0.6-0.4-1-1-1s-1,0.4-1,1v5H7c-0.6,0-1,0.4-1,1s0.4,1,1,1h5v5c0,0.6,0.4,1,1,1s1-0.4,1-1v-5h5
+	c0.6,0,1-0.4,1-1S19.6,10,19,10z"/>
+</svg>

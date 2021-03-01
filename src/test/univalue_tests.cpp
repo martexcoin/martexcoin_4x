@@ -1,6 +1,6 @@
-// Copyright (c) 2014 BitPay Inc.
-// Copyright (c) 2014-2015 The Bitcoin Core developers
-// Distributed under the MIT software license, see the accompanying
+// Copyright 2014 BitPay, Inc.
+// Copyright (c) 2017-2019 The PIVX developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <stdint.h>
@@ -8,9 +8,10 @@
 #include <string>
 #include <map>
 #include <univalue.h>
-#include "test/test_martex.h"
+#include "test/test_pivx.h"
 
 #include <boost/test/unit_test.hpp>
+
 
 BOOST_FIXTURE_TEST_SUITE(univalue_tests, BasicTestingSetup)
 
@@ -82,7 +83,7 @@ BOOST_AUTO_TEST_CASE(univalue_typecheck)
 
     UniValue v4;
     BOOST_CHECK(v4.setNumStr("2147483648"));
-    BOOST_CHECK_EQUAL(v4.get_int64(), 2147483648ULL);
+    BOOST_CHECK_EQUAL(v4.get_int64(), 2147483648);
     BOOST_CHECK_THROW(v4.get_int(), std::runtime_error);
     BOOST_CHECK(v4.setNumStr("1000"));
     BOOST_CHECK_EQUAL(v4.get_int(), 1000);
@@ -285,7 +286,7 @@ BOOST_AUTO_TEST_CASE(univalue_object)
 }
 
 static const char *json1 =
-"[1.10000000,{\"key1\":\"str\\u0000\",\"key2\":800,\"key3\":{\"name\":\"martian http://test.com\"}}]";
+"[1.10000000,{\"key1\":\"str\",\"key2\":800,\"key3\":{\"name\":\"martian\"}}]";
 
 BOOST_AUTO_TEST_CASE(univalue_readwrite)
 {
@@ -305,29 +306,13 @@ BOOST_AUTO_TEST_CASE(univalue_readwrite)
     BOOST_CHECK_EQUAL(obj.size(), 3);
 
     BOOST_CHECK(obj["key1"].isStr());
-    std::string correctValue("str");
-    correctValue.push_back('\0');
-    BOOST_CHECK_EQUAL(obj["key1"].getValStr(), correctValue);
+    BOOST_CHECK_EQUAL(obj["key1"].getValStr(), "str");
     BOOST_CHECK(obj["key2"].isNum());
     BOOST_CHECK_EQUAL(obj["key2"].getValStr(), "800");
     BOOST_CHECK(obj["key3"].isObject());
 
     BOOST_CHECK_EQUAL(strJson1, v.write());
-
-    /* Check for (correctly reporting) a parsing error if the initial
-       JSON construct is followed by more stuff.  Note that whitespace
-       is, of course, exempt.  */
-
-    BOOST_CHECK(v.read("  {}\n  "));
-    BOOST_CHECK(v.isObject());
-    BOOST_CHECK(v.read("  []\n  "));
-    BOOST_CHECK(v.isArray());
-
-    BOOST_CHECK(!v.read("@{}"));
-    BOOST_CHECK(!v.read("{} garbage"));
-    BOOST_CHECK(!v.read("[]{}"));
-    BOOST_CHECK(!v.read("{}[]"));
-    BOOST_CHECK(!v.read("{} 42"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+

@@ -9,27 +9,25 @@ Developer Notes
     - [Coding Style (C++)](#coding-style-c)
     - [Coding Style (Python)](#coding-style-python)
     - [Coding Style (Doxygen-compatible comments)](#coding-style-doxygen-compatible-comments)
-      - [Generating Documentation](#generating-documentation)
     - [Development tips and tricks](#development-tips-and-tricks)
         - [Compiling for debugging](#compiling-for-debugging)
         - [Compiling for gprof profiling](#compiling-for-gprof-profiling)
-        - [`debug.log`](#debuglog)
+        - [debug.log](#debuglog)
         - [Testnet and Regtest modes](#testnet-and-regtest-modes)
         - [DEBUG_LOCKORDER](#debug_lockorder)
         - [Valgrind suppressions file](#valgrind-suppressions-file)
         - [Compiling for test coverage](#compiling-for-test-coverage)
         - [Performance profiling with perf](#performance-profiling-with-perf)
-        - [Sanitizers](#sanitizers)
     - [Locking/mutex usage notes](#lockingmutex-usage-notes)
     - [Threads](#threads)
     - [Ignoring IDE/editor files](#ignoring-ideeditor-files)
 - [Development guidelines](#development-guidelines)
-    - [General MarteXcoin Core](#general-martexcoin-core)
+    - [General PIVX Core](#general-pivx-core)
     - [Wallet](#wallet)
     - [General C++](#general-c)
     - [C++ data structures](#c-data-structures)
     - [Strings and formatting](#strings-and-formatting)
-    - [Shadowing](#shadowing)
+    - [Variable names](#variable-names)
     - [Threads and synchronization](#threads-and-synchronization)
     - [Scripts](#scripts)
         - [Shebang](#shebang)
@@ -37,13 +35,10 @@ Developer Notes
     - [GUI](#gui)
     - [Subtrees](#subtrees)
     - [Upgrading LevelDB](#upgrading-leveldb)
-      - [File Descriptor Counts](#file-descriptor-counts)
-      - [Consensus Compatibility](#consensus-compatibility)
     - [Scripted diffs](#scripted-diffs)
-        - [Suggestions and examples](#suggestions-and-examples)
+    - [Git and GitHub tips](#git-and-github-tips)
     - [Release notes](#release-notes)
     - [RPC interface guidelines](#rpc-interface-guidelines)
-    - [Internal interface guidelines](#internal-interface-guidelines)
 
 <!-- markdown-toc end -->
 
@@ -56,8 +51,6 @@ a single style, which is specified below. When writing patches, favor the new
 style over attempting to mimic the surrounding style, except for move-only
 commits.
 
-Do not submit patches solely to modify the style of existing code.
-
 Coding Style (C++)
 ------------------
 
@@ -69,7 +62,7 @@ tool to clean up patches automatically before submission.
   - Braces on the same line for everything else.
   - 4 space indentation (no tabs) for every block except namespaces.
   - No indentation for `public`/`protected`/`private` or for `namespace`.
-  - No extra spaces inside parenthesis; don't do `( this )`.
+  - No extra spaces inside parenthesis; don't do ( this )
   - No space after function names; one space after `if`, `for` and `while`.
   - If an `if` only has a single-statement `then`-clause, it can appear
     on the same line as the `if`, without braces. In every other case,
@@ -79,12 +72,8 @@ tool to clean up patches automatically before submission.
 - **Symbol naming conventions**. These are preferred in new code, but are not
 required when doing so would need changes to significant pieces of existing
 code.
-  - Variable (including function arguments) and namespace names are all lowercase and may use `_` to
-    separate words (snake_case).
-    - Class member variables have a `m_` prefix.
-    - Global variables have a `g_` prefix.
-  - Compile-time constant names are all uppercase, and use `_` to separate words.
-  - Class names, function names, and method names are UpperCamelCase
+  - Constant names are all uppercase, and use `_` to separate words.
+  - Class names, function names and method names are UpperCamelCase
     (PascalCase). Do not prefix class names with `C`.
   - Test suite naming convention: The Boost test suite in file
     `src/test/foo_tests.cpp` should be named `foo_tests`. Test suite names
@@ -94,6 +83,7 @@ code.
   - `++i` is preferred over `i++`.
   - `nullptr` is preferred over `NULL` or `(void*)0`.
   - `static_assert` is preferred over `assert` where possible. Generally; compile-time checking is preferred over run-time checking.
+  - `enum class` is preferred over `enum` where possible. Scoped enumerations avoid two potential pitfalls/problems with traditional C++ enumerations: implicit conversions to int, and name clashes due to enumerators being exported to the surrounding scope.
 
 Block style example:
 ```c++
@@ -135,32 +125,25 @@ Refer to [/test/functional/README.md#style-guidelines](/test/functional/README.m
 Coding Style (Doxygen-compatible comments)
 ------------------------------------------
 
-Bitcoin Core uses [Doxygen](http://www.doxygen.nl/) to generate its official documentation.
+PIVX Core uses [Doxygen](http://www.doxygen.nl/) to generate its official documentation.
 
 Use Doxygen-compatible comment blocks for functions, methods, and fields.
 
 For example, to describe a function use:
-
 ```c++
 /**
- * ... Description ...
- *
- * @param[in]  arg1 input description...
- * @param[in]  arg2 input description...
- * @param[out] arg3 output description...
- * @return Return cases...
- * @throws Error type and cases...
- * @pre  Pre-condition for function...
- * @post Post-condition for function...
+ * ... text ...
+ * @param[in] arg1    A description
+ * @param[in] arg2    Another argument description
+ * @pre Precondition for function...
  */
-bool function(int arg1, const char *arg2, std::string& arg3)
+bool function(int arg1, const char *arg2)
 ```
-
 A complete list of `@xxx` commands can be found at http://www.doxygen.nl/manual/commands.html.
 As Doxygen recognizes the comments by the delimiters (`/**` and `*/` in this case), you don't
 *need* to provide any commands for a comment to be valid; just a description text is fine.
 
-To describe a class, use the same construct above the class definition:
+To describe a class use the same construct above the class definition:
 ```c++
 /**
  * Alerts are for notifying old versions if they become too obsolete and
@@ -168,73 +151,44 @@ To describe a class, use the same construct above the class definition:
  * @see GetWarnings()
  */
 class CAlert
+{
 ```
 
 To describe a member or variable use:
+```c++
+int var; //!< Detailed description after the member
+```
+
+or
 ```c++
 //! Description before the member
 int var;
 ```
 
-or
-```c++
-int var; //!< Description after the member
-```
-
 Also OK:
 ```c++
 ///
-/// ... Description ...
+/// ... text ...
 ///
 bool function2(int arg1, const char *arg2)
 ```
 
-Not picked up by Doxygen:
+Not OK (used plenty in the current source, but not picked up):
 ```c++
 //
-// ... Description ...
+// ... text ...
 //
-```
-
-Also not picked up by Doxygen:
-```c++
-/*
- * ... Description ...
- */
 ```
 
 A full list of comment syntaxes picked up by Doxygen can be found at http://www.doxygen.nl/manual/docblocks.html,
 but the above styles are favored.
 
-Recommendations:
+Documentation can be generated with `make docs` and cleaned up with `make clean-docs`. The resulting files are located in `doc/doxygen/html`; open `index.html` to view the homepage.
 
-- Avoiding duplicating type and input/output information in function
-  descriptions.
-
-- Use backticks (&#96;&#96;) to refer to `argument` names in function and
-  parameter descriptions.
-
-- Backticks aren't required when referring to functions Doxygen already knows
-  about; it will build hyperlinks for these automatically. See
-  http://www.doxygen.nl/manual/autolink.html for complete info.
-
-- Avoid linking to external documentation; links can break.
-
-- Javadoc and all valid Doxygen comments are stripped from Doxygen source code
-  previews (`STRIP_CODE_COMMENTS = YES` in [Doxyfile.in](doc/Doxyfile.in)). If
-  you want a comment to be preserved, it must instead use `//` or `/* */`.
-
-### Generating Documentation
-
-The documentation can be generated with `make docs` and cleaned up with `make
-clean-docs`. The resulting files are located in `doc/doxygen/html`; open
-`index.html` in that directory to view the homepage.
-
-Before running `make docs`, you'll need to install these dependencies:
-
-Linux: `sudo apt install doxygen graphviz`
-
-MacOS: `brew install doxygen graphviz`
+Before running `make docs`, you will need to install dependencies `doxygen` and `dot`. For example, on MacOS via Homebrew:
+```
+brew install doxygen
+```
 
 Development tips and tricks
 ---------------------------
@@ -248,20 +202,20 @@ produce better debugging builds.
 
 Run configure with the `--enable-gprof` option, then make.
 
-### `debug.log`
+### debug.log
 
-If the code is behaving strangely, take a look in the `debug.log` file in the data directory;
+If the code is behaving strangely, take a look in the debug.log file in the data directory;
 error and debugging messages are written there.
 
 The `-debug=...` command-line option controls debugging; running with just `-debug` or `-debug=1` will turn
-on all categories (and give you a very large `debug.log` file).
+on all categories (and give you a very large debug.log file).
 
-The Qt code routes `qDebug()` output to `debug.log` under category "qt": run with `-debug=qt`
+The Qt code routes `qDebug()` output to debug.log under category "qt": run with `-debug=qt`
 to see it.
 
 ### Testnet and Regtest modes
 
-Run with the `-testnet` option to run with "play bitcoins" on the test network, if you
+Run with the `-testnet` option to run with "play PIVs (tPIV)" on the test network, if you
 are testing multi-machine code that needs to operate across the internet.
 
 If you are testing something that can run on one machine, run with the `-regtest` option.
@@ -270,26 +224,25 @@ that run in `-regtest` mode.
 
 ### DEBUG_LOCKORDER
 
-MarteXcoin Core is a multi-threaded application, and deadlocks or other
+PIVX Core is a multi-threaded application, and deadlocks or other
 multi-threading bugs can be very difficult to track down. The `--enable-debug`
 configure option adds `-DDEBUG_LOCKORDER` to the compiler flags. This inserts
-run-time checks to keep track of which locks are held and adds warnings to the
-`debug.log` file if inconsistencies are detected.
+run-time checks to keep track of which locks are held, and adds warnings to the
+debug.log file if inconsistencies are detected.
 
 ### Valgrind suppressions file
 
 Valgrind is a programming tool for memory debugging, memory leak detection, and
 profiling. The repo contains a Valgrind suppressions file
-([`valgrind.supp`](https://github.com/bitcoin/bitcoin/blob/master/contrib/valgrind.supp))
+([`valgrind.supp`](https://github.com/pivx-project/pivx/blob/master/contrib/valgrind.supp))
 which includes known Valgrind warnings in our dependencies that cannot be fixed
 in-tree. Example use:
 
 ```shell
-$ valgrind --suppressions=contrib/valgrind.supp src/test/test_bitcoin
+$ valgrind --suppressions=contrib/valgrind.supp src/test/test_pivx
 $ valgrind --suppressions=contrib/valgrind.supp --leak-check=full \
-      --show-leak-kinds=all src/test/test_bitcoin --log_level=test_suite
-$ valgrind -v --leak-check=full src/bitcoind -printtoconsole
-$ ./test/functional/test_runner.py --valgrind
+      --show-leak-kinds=all src/test/test_pivx --log_level=test_suite
+$ valgrind -v --leak-check=full src/pivxd -printtoconsole
 ```
 
 ### Compiling for test coverage
@@ -305,119 +258,24 @@ To enable LCOV report generation during test runs:
 make
 make cov
 
-# A coverage report will now be accessible at `./test_bitcoin.coverage/index.html`.
+# A coverage report will now be accessible at `./test_pivx.coverage/index.html`.
 ```
-
-### Performance profiling with perf
-
-Profiling is a good way to get a precise idea of where time is being spent in
-code. One tool for doing profiling on Linux platforms is called
-[`perf`](http://www.brendangregg.com/perf.html), and has been integrated into
-the functional test framework. Perf can observe a running process and sample
-(at some frequency) where its execution is.
-
-Perf installation is contingent on which kernel version you're running; see
-[this thread](https://askubuntu.com/questions/50145/how-to-install-perf-monitoring-tool)
-for specific instructions.
-
-Certain kernel parameters may need to be set for perf to be able to inspect the
-running process's stack.
-
-```sh
-$ sudo sysctl -w kernel.perf_event_paranoid=-1
-$ sudo sysctl -w kernel.kptr_restrict=0
-```
-
-Make sure you [understand the security
-trade-offs](https://lwn.net/Articles/420403/) of setting these kernel
-parameters.
-
-To profile a running bitcoind process for 60 seconds, you could use an
-invocation of `perf record` like this:
-
-```sh
-$ perf record \
-    -g --call-graph dwarf --per-thread -F 140 \
-    -p `pgrep bitcoind` -- sleep 60
-```
-
-You could then analyze the results by running:
-
-```sh
-perf report --stdio | c++filt | less
-```
-
-or using a graphical tool like [Hotspot](https://github.com/KDAB/hotspot).
-
-See the functional test documentation for how to invoke perf within tests.
-
-
-### Sanitizers
-
-Bitcoin Core can be compiled with various "sanitizers" enabled, which add
-instrumentation for issues regarding things like memory safety, thread race
-conditions, or undefined behavior. This is controlled with the
-`--with-sanitizers` configure flag, which should be a comma separated list of
-sanitizers to enable. The sanitizer list should correspond to supported
-`-fsanitize=` options in your compiler. These sanitizers have runtime overhead,
-so they are most useful when testing changes or producing debugging builds.
-
-Some examples:
-
-```bash
-# Enable both the address sanitizer and the undefined behavior sanitizer
-./configure --with-sanitizers=address,undefined
-
-# Enable the thread sanitizer
-./configure --with-sanitizers=thread
-```
-
-If you are compiling with GCC you will typically need to install corresponding
-"san" libraries to actually compile with these flags, e.g. libasan for the
-address sanitizer, libtsan for the thread sanitizer, and libubsan for the
-undefined sanitizer. If you are missing required libraries, the configure script
-will fail with a linker error when testing the sanitizer flags.
-
-The test suite should pass cleanly with the `thread` and `undefined` sanitizers,
-but there are a number of known problems when using the `address` sanitizer. The
-address sanitizer is known to fail in
-[sha256_sse4::Transform](/src/crypto/sha256_sse4.cpp) which makes it unusable
-unless you also use `--disable-asm` when running configure. We would like to fix
-sanitizer issues, so please send pull requests if you can fix any errors found
-by the address sanitizer (or any other sanitizer).
-
-Not all sanitizer options can be enabled at the same time, e.g. trying to build
-with `--with-sanitizers=address,thread` will fail in the configure script as
-these sanitizers are mutually incompatible. Refer to your compiler manual to
-learn more about these options and which sanitizers are supported by your
-compiler.
-
-Additional resources:
-
- * [AddressSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)
- * [LeakSanitizer](https://clang.llvm.org/docs/LeakSanitizer.html)
- * [MemorySanitizer](https://clang.llvm.org/docs/MemorySanitizer.html)
- * [ThreadSanitizer](https://clang.llvm.org/docs/ThreadSanitizer.html)
- * [UndefinedBehaviorSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
- * [GCC Instrumentation Options](https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html)
- * [Google Sanitizers Wiki](https://github.com/google/sanitizers/wiki)
- * [Issue #12691: Enable -fsanitize flags in Travis](https://github.com/bitcoin/bitcoin/issues/12691)
 
 Locking/mutex usage notes
 -------------------------
 
-The code is multi-threaded and uses mutexes and the
+The code is multi-threaded, and uses mutexes and the
 `LOCK` and `TRY_LOCK` macros to protect data structures.
 
 Deadlocks due to inconsistent lock ordering (thread 1 locks `cs_main` and then
 `cs_wallet`, while thread 2 locks them in the opposite order: result, deadlock
 as each waits for the other to release its lock) are a problem. Compile with
 `-DDEBUG_LOCKORDER` (or use `--enable-debug`) to get lock order inconsistencies
-reported in the `debug.log` file.
+reported in the debug.log file.
 
 Re-architecting the core code so there are better-defined interfaces
 between the various components is a goal, with any necessary locking
-done by the components (e.g. see the self-contained `FillableSigningProvider` class
+done by the components (e.g. see the self-contained `CKeyStore` class
 and its `cs_KeyStore` lock for example).
 
 Threads
@@ -433,7 +291,7 @@ Threads
 
 - ThreadMapPort : Universal plug-and-play startup/shutdown
 
-- ThreadSocketHandler : Sends/Receives data from peers on port 9999.
+- ThreadSocketHandler : Sends/Receives data from peers on port 8333.
 
 - ThreadOpenAddedConnections : Opens network connections to added nodes.
 
@@ -445,11 +303,9 @@ Threads
 
 - ThreadFlushWalletDB : Close the wallet.dat file if it hasn't been used in 500ms.
 
-- ThreadRPCServer : Remote procedure call handler, listens on port 9998 for connections and services them.
+- ThreadRPCServer : Remote procedure call handler, listens on port 8332 for connections and services them.
 
-- BitcoinMiner : Generates coins (if wallet is enabled).
-
-- ThreadCheckDarkSendPool : Runs masternode list and sync data update loops
+- BitcoinMiner : Generates PIVs (if wallet is enabled).
 
 - Shutdown : Does an orderly shutdown of everything.
 
@@ -459,7 +315,7 @@ Ignoring IDE/editor files
 In closed-source environments in which everyone uses the same IDE it is common
 to add temporary files it produces to the project-wide `.gitignore` file.
 
-However, in open source software such as MarteX Core, where everyone uses
+However, in open source software such as PIVX Core, where everyone uses
 their own editors/IDE/tools, it is less common. Only you know what files your
 editor produces and this may change from version to version. The canonical way
 to do this is thus to create your local gitignore. Add this to `~/.gitconfig`:
@@ -489,9 +345,9 @@ Development guidelines
 ============================
 
 A few non-style-related recommendations for developers, as well as points to
-pay attention to for reviewers of MarteX Core code.
+pay attention to for reviewers of PIVX Core code.
 
-General MarteX Core
+General PIVX Core
 ----------------------
 
 - New features should be exposed on RPC first, then can be made available in the GUI
@@ -515,7 +371,7 @@ Wallet
 
   - *Rationale*: In RPC code that conditionally uses the wallet (such as
     `validateaddress`) it is easy to forget that global pointer `pwalletMain`
-    can be NULL. See `qa/rpc-tests/disablewallet.py` for functional tests
+    can be nullptr. See `test/functional/disablewallet.py` for functional tests
     exercising the API with `-disablewallet`
 
 - Include `db_cxx.h` (BerkeleyDB header) only when `ENABLE_WALLET` is set
@@ -525,9 +381,17 @@ Wallet
 General C++
 -------------
 
+For general C++ guidelines, you may refer to the [C++ Core
+Guidelines](https://isocpp.github.io/CppCoreGuidelines/).
+
+Common misconceptions are clarified in those sections:
+
+- Passing (non-)fundamental types in the [C++ Core
+  Guideline](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rf-conventional)
+
 - Assertions should not have side-effects
 
-  - *Rationale*: Even though the source code is set to to refuse to compile
+  - *Rationale*: Even though the source code is set to refuse to compile
     with assertions disabled, having side-effects in assertions is unexpected and
     makes the code harder to understand
 
@@ -563,12 +427,27 @@ C++ data structures
 
 - Vector bounds checking is only enabled in debug mode. Do not rely on it
 
-- Make sure that constructors initialize all fields. If this is skipped for a
-  good reason (i.e., optimization on the critical path), add an explicit
-  comment about this
+- Initialize all non-static class members where they are defined.
+  If this is skipped for a good reason (i.e., optimization on the critical
+  path), add an explicit comment about this
 
   - *Rationale*: Ensure determinism by avoiding accidental use of uninitialized
     values. Also, static analyzers balk about this.
+    Initializing the members in the declaration makes it easy to
+    spot uninitialized ones.
+
+```cpp
+class A
+{
+    uint32_t m_count{0};
+}
+```
+
+- By default, declare single-argument constructors `explicit`.
+
+  - *Rationale*: This is a precaution to avoid unintended conversions that might
+    arise when single-argument constructors are used as implicit conversion
+    functions.
 
 - Use explicitly signed or unsigned `char`s, or even better `uint8_t` and
   `int8_t`. Do not use bare `char` unless it is to pass to a third-party API.
@@ -597,19 +476,46 @@ Strings and formatting
 
 - Use `ParseInt32`, `ParseInt64`, `ParseUInt32`, `ParseUInt64`, `ParseDouble` from `utilstrencodings.h` for number parsing
 
-  - *Rationale*: These functions do overflow checking, and avoid pesky locale issues
+  - *Rationale*: These functions do overflow checking, and avoid pesky locale issues.
+
+- Avoid using locale dependent functions if possible. You can use the provided
+  [`lint-locale-dependence.sh`](/test/lint/lint-locale-dependence.sh)
+  to check for accidental use of locale dependent functions.
+
+  - *Rationale*: Unnecessary locale dependence can cause bugs that are very tricky to isolate and fix.
+
+  - These functions are known to be locale dependent:
+    `alphasort`, `asctime`, `asprintf`, `atof`, `atoi`, `atol`, `atoll`, `atoq`,
+    `btowc`, `ctime`, `dprintf`, `fgetwc`, `fgetws`, `fprintf`, `fputwc`,
+    `fputws`, `fscanf`, `fwprintf`, `getdate`, `getwc`, `getwchar`, `isalnum`,
+    `isalpha`, `isblank`, `iscntrl`, `isdigit`, `isgraph`, `islower`, `isprint`,
+    `ispunct`, `isspace`, `isupper`, `iswalnum`, `iswalpha`, `iswblank`,
+    `iswcntrl`, `iswctype`, `iswdigit`, `iswgraph`, `iswlower`, `iswprint`,
+    `iswpunct`, `iswspace`, `iswupper`, `iswxdigit`, `isxdigit`, `mblen`,
+    `mbrlen`, `mbrtowc`, `mbsinit`, `mbsnrtowcs`, `mbsrtowcs`, `mbstowcs`,
+    `mbtowc`, `mktime`, `putwc`, `putwchar`, `scanf`, `snprintf`, `sprintf`,
+    `sscanf`, `stoi`, `stol`, `stoll`, `strcasecmp`, `strcasestr`, `strcoll`,
+    `strfmon`, `strftime`, `strncasecmp`, `strptime`, `strtod`, `strtof`,
+    `strtoimax`, `strtol`, `strtold`, `strtoll`, `strtoq`, `strtoul`,
+    `strtoull`, `strtoumax`, `strtouq`, `strxfrm`, `swprintf`, `tolower`,
+    `toupper`, `towctrans`, `towlower`, `towupper`, `ungetwc`, `vasprintf`,
+    `vdprintf`, `versionsort`, `vfprintf`, `vfscanf`, `vfwprintf`, `vprintf`,
+    `vscanf`, `vsnprintf`, `vsprintf`, `vsscanf`, `vswprintf`, `vwprintf`,
+    `wcrtomb`, `wcscasecmp`, `wcscoll`, `wcsftime`, `wcsncasecmp`, `wcsnrtombs`,
+    `wcsrtombs`, `wcstod`, `wcstof`, `wcstoimax`, `wcstol`, `wcstold`,
+    `wcstoll`, `wcstombs`, `wcstoul`, `wcstoull`, `wcstoumax`, `wcswidth`,
+    `wcsxfrm`, `wctob`, `wctomb`, `wctrans`, `wctype`, `wcwidth`, `wprintf`
 
 - For `strprintf`, `LogPrint`, `LogPrintf` formatting characters don't need size specifiers
 
-  - *Rationale*: MarteX Core uses tinyformat, which is type safe. Leave them out to avoid confusion
+  - *Rationale*: PIVX Core uses tinyformat, which is type safe. Leave them out to avoid confusion
 
 Variable names
 --------------
 
-The shadowing warning (`-Wshadow`) is enabled by default. It prevents issues rising
-from using a different variable with the same name.
-
-Please name variables so that their names do not shadow variables defined in the source code.
+Although the shadowing warning (`-Wshadow`) is not enabled by default (it prevents issues rising
+from using a different variable with the same name),
+please name variables so that their names do not shadow variables defined in the source code.
 
 E.g. in member initializers, prepend `_` to the argument name shadowing the
 member name:
@@ -617,11 +523,11 @@ member name:
 ```c++
 class AddressBookPage
 {
-    Mode mode;
+    Mode m_mode;
 }
 
-AddressBookPage::AddressBookPage(Mode _mode) :
-      mode(_mode)
+AddressBookPage::AddressBookPage(Mode _mode)
+    : m_mode(_mode)
 ...
 ```
 
@@ -633,7 +539,8 @@ Threads and synchronization
 ----------------------------
 
 - Build and run tests with `-DDEBUG_LOCKORDER` to verify that no potential
-  deadlocks are introduced.
+  deadlocks are introduced. This is defined by default when configuring
+  with `--enable-debug`
 
 - When using `LOCK`/`TRY_LOCK` be aware that the lock exists in the context of
   the current scope, so surround the statement and the code that needs the lock
@@ -657,6 +564,31 @@ TRY_LOCK(cs_vNodes, lockNodes);
 }
 ```
 
+Scripts
+--------------------------
+
+### Shebang
+
+- Use `#!/usr/bin/env bash` instead of obsolete `#!/bin/bash`.
+
+  - [*Rationale*](https://github.com/dylanaraps/pure-bash-bible#shebang):
+
+    `#!/bin/bash` assumes it is always installed to /bin/ which can cause issues;
+
+    `#!/usr/bin/env bash` searches the user's PATH to find the bash binary.
+
+  OK:
+
+```bash
+#!/usr/bin/env bash
+```
+
+  Wrong:
+
+```bash
+#!/bin/bash
+```
+
 Source code organization
 --------------------------
 
@@ -665,10 +597,48 @@ Source code organization
 
   - *Rationale*: Shorter and simpler header files are easier to read, and reduce compile time
 
+- Use only the lowercase alphanumerics (`a-z0-9`), underscore (`_`) and hyphen (`-`) in source code filenames.
+
+  - *Rationale*: `grep`:ing and auto-completing filenames is easier when using a consistent
+    naming pattern. Potential problems when building on case-insensitive filesystems are
+    avoided when using only lowercase characters in source code filenames.
+
+- Every `.cpp` and `.h` file should `#include` every header file it directly uses classes, functions or other
+  definitions from, even if those headers are already included indirectly through other headers.
+
+  - *Rationale*: Excluding headers because they are already indirectly included results in compilation
+    failures when those indirect dependencies change. Furthermore, it obscures what the real code
+    dependencies are.
+
 - Don't import anything into the global namespace (`using namespace ...`). Use
   fully specified types such as `std::string`.
 
   - *Rationale*: Avoids symbol conflicts
+
+- Terminate namespaces with a comment (`// namespace mynamespace`). The comment
+  should be placed on the same line as the brace closing the namespace, e.g.
+
+```c++
+namespace mynamespace {
+...
+} // namespace mynamespace
+
+namespace {
+...
+} // namespace
+```
+
+  - *Rationale*: Avoids confusion about the namespace context
+
+- Use include guards to avoid the problem of double inclusion. The header file
+  `foo/bar.h` should use the include guard identifier `BITCOIN_FOO_BAR_H`, e.g.
+
+```c++
+#ifndef BITCOIN_FOO_BAR_H
+#define BITCOIN_FOO_BAR_H
+...
+#endif // BITCOIN_FOO_BAR_H
+```
 
 GUI
 -----
@@ -689,29 +659,104 @@ directly upstream without being PRed directly against the project.  They will be
 subtree merge.
 
 Others are external projects without a tight relationship with our project.  Changes to these should also
-be sent upstream but bugfixes may also be prudent to PR against MarteX Core so that they can be integrated
+be sent upstream but bugfixes may also be prudent to PR against PIVX Core so that they can be integrated
 quickly.  Cosmetic changes should be purely taken upstream.
 
-There is a tool in contrib/devtools/git-subtree-check.sh to check a subtree directory for consistency with
+There is a tool in `test/lint/git-subtree-check.sh` to check a subtree directory for consistency with
 its upstream repository.
 
 Current subtrees include:
 
 - src/leveldb
-  - Upstream at https://github.com/google/leveldb ; Maintained by Google, but open important PRs to Core to avoid delay
+  - Upstream at https://github.com/google/leveldb ; Maintained by Google, but
+    open important PRs to Core to avoid delay.
+  - **Note**: Follow the instructions in [Upgrading LevelDB](#upgrading-leveldb) when
+    merging upstream changes to the LevelDB subtree.
 
 - src/libsecp256k1
-  - Upstream at https://github.com/bitcoin-core/secp256k1/ ; actively maintaned by Core contributors.
-
-- src/crypto/ctaes
-  - Upstream at https://github.com/bitcoin-core/ctaes ; actively maintained by Core contributors.
+  - Upstream at https://github.com/bitcoin-core/secp256k1/ ; actively maintained by Core contributors.
 
 - src/univalue
-  - Upstream at https://github.com/jgarzik/univalue ; report important PRs to Core to avoid delay.
+  - Upstream at https://github.com/bitcoin-core/univalue ; actively maintained by Core contributors, deviates from upstream https://github.com/jgarzik/univalue
 
+Upgrading LevelDB
+---------------------
+
+Extra care must be taken when upgrading LevelDB. This section explains issues
+you must be aware of.
+
+### File Descriptor Counts
+
+In most configurations we use the default LevelDB value for `max_open_files`,
+which is 1000 at the time of this writing. If LevelDB actually uses this many
+file descriptors it will cause problems with PIVX's `select()` loop, because
+it may cause new sockets to be created where the fd value is >= 1024. For this
+reason, on 64-bit Unix systems we rely on an internal LevelDB optimization that
+uses `mmap()` + `close()` to open table files without actually retaining
+references to the table file descriptors. If you are upgrading LevelDB, you must
+sanity check the changes to make sure that this assumption remains valid.
+
+In addition to reviewing the upstream changes in `env_posix.cc`, you can use `lsof` to
+check this. For example, on Linux this command will show open `.ldb` file counts:
+
+```bash
+$ lsof -p $(pidof pivxd) |\
+    awk 'BEGIN { fd=0; mem=0; } /ldb$/ { if ($4 == "mem") mem++; else fd++ } END { printf "mem = %s, fd = %s\n", mem, fd}'
+mem = 119, fd = 0
+```
+
+The `mem` value shows how many files are mmap'ed, and the `fd` value shows you
+many file descriptors these files are using. You should check that `fd` is a
+small number (usually 0 on 64-bit hosts).
+
+See the notes in the `SetMaxOpenFiles()` function in `dbwrapper.cc` for more
+details.
+
+### Consensus Compatibility
+
+It is possible for LevelDB changes to inadvertently change consensus
+compatibility between nodes. This happened in Bitcoin 0.8 (when LevelDB was
+first introduced). When upgrading LevelDB you should review the upstream changes
+to check for issues affecting consensus compatibility.
+
+For example, if LevelDB had a bug that accidentally prevented a key from being
+returned in an edge case, and that bug was fixed upstream, the bug "fix" would
+be an incompatible consensus change. In this situation the correct behavior
+would be to revert the upstream fix before applying the updates to Bitcoin's
+copy of LevelDB. In general you should be wary of any upstream changes affecting
+what data is returned from LevelDB queries.
+
+Scripted diffs
+--------------
+
+For reformatting and refactoring commits where the changes can be easily automated using a bash script, we use
+scripted-diff commits. The bash script is included in the commit message and our Travis CI job checks that
+the result of the script is identical to the commit. This aids reviewers since they can verify that the script
+does exactly what it's supposed to do. It is also helpful for rebasing (since the same script can just be re-run
+on the new master commit).
+
+To create a scripted-diff:
+
+- start the commit message with `scripted-diff:` (and then a description of the diff on the same line)
+- in the commit message include the bash script between lines containing just the following text:
+    - `-BEGIN VERIFY SCRIPT-`
+    - `-END VERIFY SCRIPT-`
+
+The scripted-diff is verified by the tool `test/lint/commit-script-check.sh`. The tool's default behavior when supplied
+with a commit is to verify all scripted-diffs from the beginning of time up to said commit. Internally, the tool passes
+the first supplied argument to `git rev-list --reverse` to determine which commits to verify script-diffs for, ignoring
+commits that don't conform to the commit message format described above.
+
+For development, it might be more convenient to verify all scripted-diffs in a range `A..B`, for example:
+
+```bash
+test/lint/commit-script-check.sh origin/master..HEAD
+```
+
+Commit [`bb81e173`](https://github.com/bitcoin/bitcoin/commit/bb81e173) is an example of a scripted-diff.
 
 Git and GitHub tips
----------------------
+-------------
 
 - For resolving merge/rebase conflicts, it can be useful to enable diff3 style using
   `git config merge.conflictstyle diff3`. Instead of
@@ -752,8 +797,109 @@ Git and GitHub tips
 
         [remote "upstream-pull"]
                 fetch = +refs/pull/*:refs/remotes/upstream-pull/*
-                url = git@github.com:bitcoin/bitcoin.git
+                url = git@github.com:PIVX-Project/PIVX.git
 
   This will add an `upstream-pull` remote to your git repository, which can be fetched using `git fetch --all`
   or `git fetch upstream-pull`. Afterwards, you can use `upstream-pull/NUMBER/head` in arguments to `git show`,
   `git checkout` and anywhere a commit id would be acceptable to see the changes from pull request NUMBER.
+
+Release notes
+-------------
+
+Release notes should be written for any PR that:
+
+- introduces a notable new feature
+- fixes a significant bug
+- changes an API or configuration model
+- makes any other visible change to the end-user experience.
+
+Release notes should be added to a PR-specific release note file at
+`/doc/release-notes-<PR number>.md` to avoid conflicts between multiple PRs.
+All `release-notes*` files are merged into a single
+[/doc/release-notes.md](/doc/release-notes.md) file prior to the release.
+
+RPC interface guidelines
+--------------------------
+
+A few guidelines for introducing and reviewing new RPC interfaces:
+
+- Method naming: use consecutive lower-case names such as `getrawtransaction` and `submitblock`
+
+  - *Rationale*: Consistency with existing interface.
+
+- Argument naming: use snake case `fee_delta` (and not, e.g. camel case `feeDelta`)
+
+  - *Rationale*: Consistency with existing interface.
+
+- Use the JSON parser for parsing, don't manually parse integers or strings from
+  arguments unless absolutely necessary.
+
+  - *Rationale*: Introduces hand-rolled string manipulation code at both the caller and callee sites,
+    which is error prone, and it is easy to get things such as escaping wrong.
+    JSON already supports nested data structures, no need to re-invent the wheel.
+
+  - *Exception*: AmountFromValue can parse amounts as string. This was introduced because many JSON
+    parsers and formatters hard-code handling decimal numbers as floating point
+    values, resulting in potential loss of precision. This is unacceptable for
+    monetary values. **Always** use `AmountFromValue` and `ValueFromAmount` when
+    inputting or outputting monetary values. The only exceptions to this are
+    `prioritisetransaction` and `getblocktemplate` because their interface
+    is specified as-is in BIP22.
+
+- Missing arguments and 'null' should be treated the same: as default values. If there is no
+  default value, both cases should fail in the same way. The easiest way to follow this
+  guideline is detect unspecified arguments with `params[x].isNull()` instead of
+  `params.size() <= x`. The former returns true if the argument is either null or missing,
+  while the latter returns true if is missing, and false if it is null.
+
+  - *Rationale*: Avoids surprises when switching to name-based arguments. Missing name-based arguments
+  are passed as 'null'.
+
+- Try not to overload methods on argument type. E.g. don't make `getblock(true)` and `getblock("hash")`
+  do different things.
+
+  - *Rationale*: This is impossible to use with `pivx-cli`, and can be surprising to users.
+
+  - *Exception*: Some RPC calls can take both an `int` and `bool`, most notably when a bool was switched
+    to a multi-value, or due to other historical reasons. **Always** have false map to 0 and
+    true to 1 in this case.
+
+- Don't forget to fill in the argument names correctly in the RPC command table.
+
+  - *Rationale*: If not, the call can not be used with name-based arguments.
+
+- Set okSafeMode in the RPC command table to a sensible value: safe mode is when the
+  blockchain is regarded to be in a confused state, and the client deems it unsafe to
+  do anything irreversible such as send. Anything that just queries should be permitted.
+
+  - *Rationale*: Troubleshooting a node in safe mode is difficult if half the
+    RPCs don't work.
+
+- Add every non-string RPC argument `(method, idx, name)` to the table `vRPCConvertParams` in `rpc/client.cpp`.
+
+  - *Rationale*: `pivx-cli` and the GUI debug console use this table to determine how to
+    convert a plaintext command line to JSON. If the types don't match, the method can be unusable
+    from there.
+
+- A RPC method must either be a wallet method or a non-wallet method. Do not
+  introduce new methods that differ in behavior based on presence of a wallet.
+
+  - *Rationale*: as well as complicating the implementation and interfering
+    with the introduction of multi-wallet, wallet and non-wallet code should be
+    separated to avoid introducing circular dependencies between code units.
+
+- Try to make the RPC response a JSON object.
+
+  - *Rationale*: If a RPC response is not a JSON object then it is harder to avoid API breakage if
+    new data in the response is needed.
+
+- Be aware of RPC method aliases and generally avoid registering the same
+  callback function pointer for different RPCs.
+
+  - *Rationale*: RPC methods registered with the same function pointer will be
+    considered aliases and only the first method name will show up in the
+    `help` rpc command list.
+
+  - *Exception*: Using RPC method aliases may be appropriate in cases where a
+    new RPC is replacing a deprecated RPC, to avoid both RPCs confusingly
+    showing up in the command list.

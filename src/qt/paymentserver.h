@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015 The Bitcoin Core developers
+// Copyright (c) 2011-2014 The Bitcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -21,10 +21,10 @@
 //
 // When startup is finished and the main window is
 // shown, a signal is sent to slot uiReady(), which
-// emits a receivedURI() signal for any payment
+// emits a receivedURL() signal for any payment
 // requests that happened during startup.
 //
-// After startup, receivedURI() happens as usual.
+// After startup, receivedURL() happens as usual.
 //
 // This class has one more feature: a static
 // method that finds URIs passed in the command line
@@ -53,7 +53,7 @@ class QUrl;
 QT_END_NAMESPACE
 
 // BIP70 max payment request size in bytes (DoS protection)
-static const qint64 BIP70_MAX_PAYMENTREQUEST_SIZE = 50000;
+extern const qint64 BIP70_MAX_PAYMENTREQUEST_SIZE;
 
 class PaymentServer : public QObject
 {
@@ -62,7 +62,7 @@ class PaymentServer : public QObject
 public:
     // Parse URIs on command line
     // Returns false on error
-    static void ipcParseCommandLine(int argc, char *argv[]);
+    static void ipcParseCommandLine(int argc, char* argv[]);
 
     // Returns true if there were URIs on the command line
     // which were successfully sent to an already-running
@@ -86,26 +86,20 @@ public:
     static X509_STORE* getCertStore();
 
     // OptionsModel is used for getting proxy settings and display unit
-    void setOptionsModel(OptionsModel *optionsModel);
+    void setOptionsModel(OptionsModel* optionsModel);
 
-    // Verify that the payment request network matches the client network
-    static bool verifyNetwork(const payments::PaymentDetails& requestDetails);
-    // Verify if the payment request is expired
-    static bool verifyExpired(const payments::PaymentDetails& requestDetails);
-    // Verify the payment request size is valid as per BIP70
-    static bool verifySize(qint64 requestSize);
-    // Verify the payment request amount is valid
-    static bool verifyAmount(const CAmount& requestAmount);
+    // This is now public, because we use it in paymentservertests.cpp
+    static bool readPaymentRequestFromFile(const QString& filename, PaymentRequestPlus& request);
 
 Q_SIGNALS:
     // Fired when a valid payment request is received
     void receivedPaymentRequest(SendCoinsRecipient);
 
     // Fired when a valid PaymentACK is received
-    void receivedPaymentACK(const QString &paymentACKMsg);
+    void receivedPaymentACK(const QString& paymentACKMsg);
 
     // Fired when a message should be reported to the user
-    void message(const QString &title, const QString &message, unsigned int style);
+    void message(const QString& title, const QString& message, unsigned int style);
 
 public Q_SLOTS:
     // Signal this when the main window's UI is ready
@@ -121,28 +115,25 @@ public Q_SLOTS:
 private Q_SLOTS:
     void handleURIConnection();
     void netRequestFinished(QNetworkReply*);
-    void reportSslErrors(QNetworkReply*, const QList<QSslError> &);
+    void reportSslErrors(QNetworkReply*, const QList<QSslError>&);
     void handlePaymentACK(const QString& paymentACKMsg);
 
 protected:
     // Constructor registers this on the parent QApplication to
     // receive QEvent::FileOpen and QEvent:Drop events
-    bool eventFilter(QObject *object, QEvent *event);
+    bool eventFilter(QObject* object, QEvent* event);
 
 private:
-    static bool readPaymentRequestFromFile(const QString& filename, PaymentRequestPlus& request);
-    bool processPaymentRequest(const PaymentRequestPlus& request, SendCoinsRecipient& recipient);
+    bool processPaymentRequest(PaymentRequestPlus& request, SendCoinsRecipient& recipient);
     void fetchRequest(const QUrl& url);
 
     // Setup networking
     void initNetManager();
 
-    bool saveURIs;                      // true during startup
+    bool saveURIs; // true during startup
     QLocalServer* uriServer;
-
     QNetworkAccessManager* netManager;  // Used to fetch payment requests
-
-    OptionsModel *optionsModel;
+    OptionsModel* optionsModel;
 };
 
 #endif // BITCOIN_QT_PAYMENTSERVER_H

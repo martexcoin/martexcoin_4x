@@ -1,11 +1,15 @@
-// Copyright (c) 2012-2015 The Bitcoin Core developers
+// Copyright (c) 2012-2013 The Bitcoin Core developers
+// Copyright (c) 2017-2019 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "random.h"
 #include "scheduler.h"
-
-#include "test/test_martex.h"
+#if defined(HAVE_CONFIG_H)
+#include "config/martex-config.h"
+#else
+#define HAVE_WORKING_BOOST_SLEEP_FOR
+#endif
 
 #include <boost/bind.hpp>
 #include <boost/random/mersenne_twister.hpp>
@@ -47,8 +51,8 @@ BOOST_AUTO_TEST_CASE(manythreads)
     //
     // So... ten shared counters, which if all the tasks execute
     // properly will sum to the number of tasks done.
-    // Each task adds or subtracts a random amount from one of the
-    // counters, and then schedules another task 0-1000
+    // Each task adds or subtracts from one of the counters a
+    // random amount, and then schedules another task 0-1000
     // microseconds in the future to subtract or add from
     // the counter -random_amount+1, so in the end the shared
     // counters should sum to the number of initial tasks performed.

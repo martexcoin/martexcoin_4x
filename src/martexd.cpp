@@ -1,25 +1,20 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The MarteX Core developers
-// Distributed under the MIT software license, see the accompanying
+// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2019 The PIVX developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#if defined(HAVE_CONFIG_H)
-#include "config/martex-config.h"
-#endif
-
-#include "chainparams.h"
 #include "clientversion.h"
-#include "compat.h"
-#include "rpc/server.h"
 #include "init.h"
-#include "noui.h"
-#include "scheduler.h"
-#include "util.h"
+#include "main.h"
 #include "masternodeconfig.h"
+#include "noui.h"
+#include "rpc/server.h"
+#include "guiinterface.h"
+#include "util.h"
 #include "httpserver.h"
 #include "httprpc.h"
-#include "utilstrencodings.h"
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/filesystem.hpp>
@@ -33,8 +28,8 @@
  *
  * \section intro_sec Introduction
  *
- * This is the developer documentation of the reference client for an experimental new digital currency called MarteX (https://www.martexcoin.org/),
- * which enables instant payments to anyone, anywhere in the world. MarteX uses peer-to-peer technology to operate
+ * This is the developer documentation of the reference client for an experimental new digital currency called MARTEX (https://www.martexcoin.org),
+ * which enables instant payments to anyone, anywhere in the world. MARTEX uses peer-to-peer technology to operate
  * with no central authority: managing transactions and issuing money are carried out collectively by the network.
  *
  * The software is a community-driven open source project, released under the MIT license.
@@ -43,20 +38,17 @@
  * Use the buttons <code>Namespaces</code>, <code>Classes</code> or <code>Files</code> at the top of the page to start navigating the code.
  */
 
-void WaitForShutdown(boost::thread_group* threadGroup)
+static bool fDaemon;
+
+void WaitForShutdown()
 {
     bool fShutdown = ShutdownRequested();
     // Tell the main threads to shutdown.
-    while (!fShutdown)
-    {
+    while (!fShutdown) {
         MilliSleep(200);
         fShutdown = ShutdownRequested();
     }
-    if (threadGroup)
-    {
-        Interrupt(*threadGroup);
-        threadGroup->join_all();
-    }
+    Interrupt();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -65,70 +57,52 @@ void WaitForShutdown(boost::thread_group* threadGroup)
 //
 bool AppInit(int argc, char* argv[])
 {
-    boost::thread_group threadGroup;
-    CScheduler scheduler;
-
     bool fRet = false;
 
     //
     // Parameters
     //
-    // If Qt is used, parameters/MarteX.conf are parsed in qt/martex.cpp's main()
+    // If Qt is used, parameters/martex.conf are parsed in qt/martex.cpp's main()
     ParseParameters(argc, argv);
 
     // Process help and version before taking care about datadir
-    if (IsArgSet("-?") || IsArgSet("-h") ||  IsArgSet("-help") || IsArgSet("-version"))
-    {
-        std::string strUsage = strprintf(_("%s Daemon"), _(PACKAGE_NAME)) + " " + _("version") + " " + FormatFullVersion() + "\n";
+    if (mapArgs.count("-?") || mapArgs.count("-help") || mapArgs.count("-version")) {
+        std::string strUsage = _("MarteX Core Daemon") + " " + _("version") + " " + FormatFullVersionWithCodename() + "\n";
 
-        if (IsArgSet("-version"))
-        {
-            strUsage += FormatParagraph(LicenseInfo());
-        }
-        else
-        {
+        if (mapArgs.count("-version")) {
+            strUsage += LicenseInfo();
+        } else {
             strUsage += "\n" + _("Usage:") + "\n" +
-                  "  martexd [options]                     " + strprintf(_("Start %s Daemon"), _(PACKAGE_NAME)) + "\n";
+                        "  martexd [options]                     " + _("Start MarteX Core Daemon") + "\n";
 
             strUsage += "\n" + HelpMessage(HMM_BITCOIND);
         }
 
         fprintf(stdout, "%s", strUsage.c_str());
-        return true;
+        return false;
     }
 
-    try
-    {
-        bool datadirFromCmdLine = IsArgSet("-datadir");
-        if (datadirFromCmdLine && !boost::filesystem::is_directory(GetDataDir(false)))
-        {
-            fprintf(stderr, "Error: Specified data directory \"%s\" does not exist.\n", GetArg("-datadir", "").c_str());
+    try {
+        if (!boost::filesystem::is_directory(GetDataDir(false))) {
+            fprintf(stderr, "Error: Specified data directory \"%s\" does not exist.\n", mapArgs["-datadir"].c_str());
             return false;
         }
-        try
-        {
-            ReadConfigFile(GetArg("-conf", BITCOIN_CONF_FILENAME));
+        try {
+            ReadConfigFile(mapArgs, mapMultiArgs);
         } catch (const std::exception& e) {
-            fprintf(stderr,"Error reading configuration file: %s\n", e.what());
+            fprintf(stderr, "Error reading configuration file: %s\n", e.what());
             return false;
-        }
-        if (!datadirFromCmdLine && !boost::filesystem::is_directory(GetDataDir(false)))
-        {
-            fprintf(stderr, "Error: Specified data directory \"%s\" from config file does not exist.\n", GetArg("-datadir", "").c_str());
-            return EXIT_FAILURE;
         }
         // Check for -testnet or -regtest parameter (Params() calls are only valid after this clause)
-        try {
-            SelectParams(ChainNameFromCommandLine());
-        } catch (const std::exception& e) {
-            fprintf(stderr, "Error: %s\n", e.what());
+        if (!SelectParamsFromCommandLine()) {
+            fprintf(stderr, "Error: Invalid combination of -regtest and -testnet.\n");
             return false;
         }
 
         // parse masternode.conf
         std::string strErr;
-        if(!masternodeConfig.read(strErr)) {
-            fprintf(stderr,"Error reading masternode configuration file: %s\n", strErr.c_str());
+        if (!masternodeConfig.read(strErr)) {
+            fprintf(stderr, "Error reading masternode configuration file: %s\n", strErr.c_str());
             return false;
         }
 
@@ -138,63 +112,49 @@ bool AppInit(int argc, char* argv[])
             if (!IsSwitchChar(argv[i][0]) && !boost::algorithm::istarts_with(argv[i], "martex:"))
                 fCommandLine = true;
 
-        if (fCommandLine)
-        {
+        if (fCommandLine) {
             fprintf(stderr, "Error: There is no RPC client functionality in martexd anymore. Use the martex-cli utility instead.\n");
-            exit(EXIT_FAILURE);
+            exit(1);
         }
-        // -server defaults to true for bitcoind but not for the GUI so do this here
+#ifndef WIN32
+        fDaemon = GetBoolArg("-daemon", false);
+        if (fDaemon) {
+            fprintf(stdout, "MARTEX server starting\n");
+
+            // Daemonize
+            pid_t pid = fork();
+            if (pid < 0) {
+                fprintf(stderr, "Error: fork() returned %d errno %d\n", pid, errno);
+                return false;
+            }
+            if (pid > 0) // Parent process, pid is child process id
+            {
+                return true;
+            }
+            // Child process falls through to rest of initialization
+
+            pid_t sid = setsid();
+            if (sid < 0)
+                fprintf(stderr, "Error: setsid() returned %d errno %d\n", sid, errno);
+        }
+#endif
         SoftSetBoolArg("-server", true);
+
         // Set this early so that parameter interactions go to console
         InitLogging();
         InitParameterInteraction();
-        if (!AppInitBasicSetup())
-        {
-            // InitError will have been called with detailed error, which ends up on console
-            exit(EXIT_FAILURE);
-        }
-        if (!AppInitParameterInteraction())
-        {
-            // InitError will have been called with detailed error, which ends up on console
-            exit(EXIT_FAILURE);
-        }
-        if (!AppInitSanityChecks())
-        {
-            // InitError will have been called with detailed error, which ends up on console
-            exit(EXIT_FAILURE);
-        }
-        if (GetBoolArg("-daemon", false))
-        {
-#if HAVE_DECL_DAEMON
-            fprintf(stdout, "MarteX Core server starting\n");
-
-            // Daemonize
-            if (daemon(1, 0)) { // don't chdir (1), do close FDs (0)
-                fprintf(stderr, "Error: daemon() failed: %s\n", strerror(errno));
-                return false;
-            }
-#else
-            fprintf(stderr, "Error: -daemon is not supported on this operating system\n");
-            return false;
-#endif // HAVE_DECL_DAEMON
-        }
-
-        fRet = AppInitMain(threadGroup, scheduler);
-    }
-    catch (const std::exception& e) {
+        std::vector<std::string> words;
+        fRet = AppInit2(words);
+    } catch (const std::exception& e) {
         PrintExceptionContinue(&e, "AppInit()");
     } catch (...) {
         PrintExceptionContinue(NULL, "AppInit()");
     }
 
-    if (!fRet)
-    {
-        Interrupt(threadGroup);
-        // threadGroup.join_all(); was left out intentionally here, because we didn't re-test all of
-        // the startup-failure cases to make sure they don't result in a hang due to some
-        // thread-blocking-waiting-for-another-thread-during-startup case
+    if (!fRet) {
+        Interrupt();
     } else {
-        WaitForShutdown(&threadGroup);
+        WaitForShutdown();
     }
     Shutdown();
 
@@ -208,5 +168,5 @@ int main(int argc, char* argv[])
     // Connect martexd signal handlers
     noui_connect();
 
-    return (AppInit(argc, argv) ? EXIT_SUCCESS : EXIT_FAILURE);
+    return (AppInit(argc, argv) ? 0 : 1);
 }

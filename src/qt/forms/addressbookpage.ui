@@ -23,6 +23,43 @@
    </item>
    <item>
     <widget class="QTableView" name="tableView">
+     <property name="palette">
+      <palette>
+       <active>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>51</red>
+           <green>51</green>
+           <blue>51</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>51</red>
+           <green>51</green>
+           <blue>51</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>85</red>
+           <green>85</green>
+           <blue>85</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
@@ -59,6 +96,10 @@
        <property name="text">
         <string>&amp;New</string>
        </property>
+       <property name="icon">
+        <iconset resource="../martex.qrc">
+         <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
+       </property>
        <property name="autoDefault">
         <bool>false</bool>
        </property>
@@ -72,6 +113,10 @@
        <property name="text">
         <string>&amp;Copy</string>
        </property>
+       <property name="icon">
+        <iconset resource="../martex.qrc">
+         <normaloff>:/icons/editcopy</normaloff>:/icons/editcopy</iconset>
+       </property>
        <property name="autoDefault">
         <bool>false</bool>
        </property>
@@ -84,6 +129,10 @@
        </property>
        <property name="text">
         <string>&amp;Delete</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../martex.qrc">
+         <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
@@ -110,6 +159,10 @@
        </property>
        <property name="text">
         <string>&amp;Export</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../martex.qrc">
+         <normaloff>:/icons/export</normaloff>:/icons/export</iconset>
        </property>
        <property name="autoDefault">
         <bool>false</bool>

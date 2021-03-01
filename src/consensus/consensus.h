@@ -1,25 +1,32 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2015 The Bitcoin Core developers
+// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2019 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_CONSENSUS_CONSENSUS_H
 #define BITCOIN_CONSENSUS_CONSENSUS_H
 
-/** The maximum allowed size for a serialized block, in bytes (network rule) */
-static const unsigned int MAX_LEGACY_BLOCK_SIZE = 25612864;
-static const unsigned int MAX_DIP0001_BLOCK_SIZE = 25612864;
-inline unsigned int MaxBlockSize(bool fDIP0001Active /*= false */)
-{
-    return fDIP0001Active ? MAX_DIP0001_BLOCK_SIZE : MAX_LEGACY_BLOCK_SIZE;
-}
+#include "amount.h"
+#include <stdint.h>
+
+/** The maximum allowed size for a block, in bytes (only for buffer size limits) */
+static const unsigned int MAX_BLOCK_SIZE_CURRENT = 25612864;
+static const unsigned int MAX_BLOCK_SIZE_LEGACY = 1000000;
+
 /** The maximum allowed number of signature check operations in a block (network rule) */
-inline unsigned int MaxBlockSigOps(bool fDIP0001Active /*= false */)
-{
-    return MaxBlockSize(fDIP0001Active) / 50;
-}
-/** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
-static const int COINBASE_MATURITY = 150;
+static const unsigned int MAX_BLOCK_SIGOPS_CURRENT = MAX_BLOCK_SIZE_CURRENT / 50;
+static const unsigned int MAX_BLOCK_SIGOPS_LEGACY = MAX_BLOCK_SIZE_LEGACY / 50;
+
+/** The maximum number of sigops we're willing to relay/mine in a single tx */
+static const unsigned int MAX_TX_SIGOPS_CURRENT = MAX_BLOCK_SIGOPS_CURRENT / 5;
+static const unsigned int MAX_TX_SIGOPS_LEGACY = MAX_BLOCK_SIGOPS_LEGACY / 5;
+
+/** The minimum amount for the value of a P2CS output */
+static const CAmount MIN_COLDSTAKING_AMOUNT = 1 * COIN;
+
+/** The default maximum reorganization depth **/
+static const int DEFAULT_MAX_REORG_DEPTH = 100;
 
 /** Flags for nSequence and nLockTime locks */
 enum {

@@ -1,39 +1,48 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2015 The Bitcoin Core developers
+// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2015-2018 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_KEY_H
-#define BITCOIN_KEY_H
+#ifndef PIVX_KEY_H
+#define PIVX_KEY_H
 
-#include "pubkey.h"
+#include "allocators.h"
 #include "serialize.h"
-#include "support/allocators/secure.h"
 #include "uint256.h"
+#include "pubkey.h"
 
 #include <stdexcept>
 #include <vector>
 
+class CPubKey;
 
-/**
- * secp256k1:
- * const unsigned int PRIVATE_KEY_SIZE = 279;
- * const unsigned int PUBLIC_KEY_SIZE  = 65;
- * const unsigned int SIGNATURE_SIZE   = 72;
- *
- * see www.keylength.com
- * script supports up to 75 for single byte push
- */
+struct CExtPubKey;
 
 /**
  * secure_allocator is defined in allocators.h
- * CPrivKey is a serialized private key, with all parameters included (279 bytes)
+ * CPrivKey is a serialized private key, with all parameters included
+ * (PRIVATE_KEY_SIZE bytes)
  */
 typedef std::vector<unsigned char, secure_allocator<unsigned char> > CPrivKey;
 
 /** An encapsulated private key. */
 class CKey
 {
+public:
+    /**
+     * secp256k1:
+     */
+    static const unsigned int PRIVATE_KEY_SIZE            = 279;
+    static const unsigned int COMPRESSED_PRIVATE_KEY_SIZE = 214;
+    /**
+     * see www.keylength.com
+     * script supports up to 75 for single byte push
+     */
+    static_assert(
+        PRIVATE_KEY_SIZE >= COMPRESSED_PRIVATE_KEY_SIZE,
+        "COMPRESSED_PRIVATE_KEY_SIZE is larger than PRIVATE_KEY_SIZE");
+
 private:
     //! Whether this private key is valid. We check for correctness when modifying the key
     //! data, so fValid should always correspond to the actual state.
@@ -56,11 +65,6 @@ public:
         keydata.resize(32);
     }
 
-    //! Destructor (again necessary because of memlocking).
-    ~CKey()
-    {
-    }
-
     friend bool operator==(const CKey& a, const CKey& b)
     {
         return a.fCompressed == b.fCompressed &&
@@ -81,7 +85,7 @@ public:
         } else {
             fValid = false;
         }
-    }
+}
 
     //! Simple read-only vector-like interface.
     unsigned int size() const { return (fValid ? keydata.size() : 0); }
@@ -99,6 +103,8 @@ public:
 
     //! Generate a new private key using a cryptographic PRNG.
     void MakeNewKey(bool fCompressed);
+
+    uint256 GetPrivKey_256();
 
     /**
      * Convert the private key to a CPrivKey (serialized OpenSSL private key data).
@@ -137,7 +143,10 @@ public:
     bool VerifyPubKey(const CPubKey& vchPubKey) const;
 
     //! Load private key and check that public key matches.
-    bool Load(CPrivKey& privkey, CPubKey& vchPubKey, bool fSkipCheck);
+    bool Load(const CPrivKey& privkey, const CPubKey& vchPubKey, bool fSkipCheck);
+
+    //! Check whether an element of a signature (r or s) is valid.
+    static bool CheckSignatureElement(const unsigned char* vch, int len, bool half);
 };
 
 struct CExtKey {
@@ -162,7 +171,7 @@ struct CExtKey {
     CExtPubKey Neuter() const;
     void SetMaster(const unsigned char* seed, unsigned int nSeedLen);
     template <typename Stream>
-    void Serialize(Stream& s) const
+    void Serialize(Stream& s, int nType, int nVersion) const
     {
         unsigned int len = BIP32_EXTKEY_SIZE;
         ::WriteCompactSize(s, len);
@@ -171,7 +180,7 @@ struct CExtKey {
         s.write((const char *)&code[0], len);
     }
     template <typename Stream>
-    void Unserialize(Stream& s)
+    void Unserialize(Stream& s, int nType, int nVersion)
     {
         unsigned int len = ::ReadCompactSize(s);
         unsigned char code[BIP32_EXTKEY_SIZE];
@@ -189,4 +198,4 @@ void ECC_Stop(void);
 /** Check that required EC support is available at runtime. */
 bool ECC_InitSanityCheck(void);
 
-#endif // BITCOIN_KEY_H
+#endif // PIVX_KEY_H

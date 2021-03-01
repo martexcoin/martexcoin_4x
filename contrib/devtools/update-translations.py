@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright (c) 2014 Wladimir J. van der Laan
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -11,11 +11,10 @@ It will do the following automatically:
 - post-process them into valid and committable format
   - remove invalid control characters
   - remove location tags (makes diffs less noisy)
-
-TODO:
-- auto-add new translations to the build system according to the translation process
+- update git for added translations
+- update build system
 '''
-from __future__ import division, print_function
+import argparse
 import subprocess
 import re
 import sys
@@ -26,22 +25,40 @@ import xml.etree.ElementTree as ET
 # Name of transifex tool
 TX = 'tx'
 # Name of source language file
-SOURCE_LANG = 'martex_en.ts'
+SOURCE_LANG = 'pivx_en.ts'
 # Directory with locale files
 LOCALE_DIR = 'src/qt/locale'
 # Minimum number of messages for translation to be considered at all
 MIN_NUM_MESSAGES = 10
+# Minimum completion percentage required to download from transifex
+MINIMUM_PERC = 80
+# Path to git
+GIT = os.getenv("GIT", "git")
 
 def check_at_repository_root():
     if not os.path.exists('.git'):
         print('No .git directory found')
         print('Execute this script at the root of the repository', file=sys.stderr)
-        exit(1)
+        sys.exit(1)
 
-def fetch_all_translations():
-    if subprocess.call([TX, 'pull', '-f', '-a']):
+def remove_current_translations():
+    '''
+    Remove current translations, as well as temporary files that might be left behind
+    We only want the active translations that are currently on transifex.
+    This leaves pivx_en.ts untouched.
+    '''
+    for (_,name) in all_ts_files():
+        os.remove(name)
+    for (_,name) in all_ts_files('.orig'):
+        os.remove(name + '.orig')
+
+def fetch_all_translations(fAll = False):
+    call_list = [TX, 'pull', '-f', '-a']
+    if not fAll:
+        call_list.append('--minimum-perc=%s' % MINIMUM_PERC)
+    if subprocess.call(call_list):
         print('Error while fetching translations', file=sys.stderr)
-        exit(1)
+        sys.exit(1)
 
 def find_format_specifiers(s):
     '''Find all format specifiers in a string.'''
@@ -87,7 +104,7 @@ def check_format_specifiers(source, translation, errors, numerus):
     source_f = split_format_specifiers(find_format_specifiers(source))
     # assert that no source messages contain both Qt and strprintf format specifiers
     # if this fails, go change the source as this is hacky and confusing!
-    #assert(not(source_f[0] and source_f[1]))
+    assert(not(source_f[0] and source_f[1]))
     try:
         translation_f = split_format_specifiers(find_format_specifiers(translation))
     except IndexError:
@@ -102,10 +119,10 @@ def check_format_specifiers(source, translation, errors, numerus):
             return False
     return True
 
-def all_ts_files(suffix=''):
+def all_ts_files(suffix='', include_source=False):
     for filename in os.listdir(LOCALE_DIR):
         # process only language files, and do not process source language
-        if not filename.endswith('.ts'+suffix) or filename == SOURCE_LANG+suffix:
+        if not filename.endswith('.ts'+suffix) or (not include_source and filename == SOURCE_LANG+suffix):
             continue
         if suffix: # remove provided suffix
             filename = filename[0:-len(suffix)]
@@ -204,8 +221,51 @@ def postprocess_translations(reduce_diff_hacks=False):
             tree.write(filepath, encoding='utf-8')
     return have_errors
 
+def update_git():
+    '''
+    Add new files to git repository.
+    (Removing files isn't necessary here, as `git commit -a` will take care of removing files that are gone)
+    '''
+    file_paths = [filepath for (filename, filepath) in all_ts_files()]
+    subprocess.check_call([GIT, 'add'] + file_paths)
+
+
+def update_build_systems():
+    '''
+    Update build system and Qt resource descriptors.
+    '''
+    filename_lang = [re.match(r'((pivx_(.*)).ts)$', filename).groups() for (filename, filepath) in all_ts_files(include_source=True)]
+    filename_lang.sort(key=lambda x: x[0])
+
+    # update qrc locales
+    with open('src/qt/martex_locale.qrc', 'w') as f:
+        f.write('<!DOCTYPE RCC><RCC version="1.0">\n')
+        f.write('    <qresource prefix="/translations">\n')
+        for (filename, basename, lang) in filename_lang:
+            f.write(f'        <file alias="{lang}">locale/{basename}.qm</file>\n')
+        f.write('    </qresource>\n')
+        f.write('</RCC>\n')
+
+    # update Makefile include
+    with open('src/Makefile.qt_locale.include', 'w') as f:
+        f.write('QT_TS = \\\n')
+        f.write(' \\\n'.join(f'  qt/locale/{filename}' for (filename, basename, lang) in filename_lang))
+        f.write('\n') # make sure last line doesn't end with a backslash
+
+
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(add_help=False,
+                                     usage='%(prog)s [update-translations.py options] [flags]',
+                                     description=__doc__,
+                                     epilog='',
+                                     formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('--ignore_completion', '-i', action='store_true', help='fetch all translations, even those not reaching the completion threshold')
+    args, unknown_args = parser.parse_known_args()
+
     check_at_repository_root()
-    # fetch_all_translations()
+    remove_current_translations()
+    fetch_all_translations(args.ignore_completion)
     postprocess_translations()
+    update_git()
+    update_build_systems()
 

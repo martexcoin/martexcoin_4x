@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2015 The Bitcoin Core developers
+// Copyright (c) 2009-2018 The Bitcoin developers
+// Copyright (c) 2018-2019 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -80,19 +81,8 @@ enum
     // Verify CHECKLOCKTIMEVERIFY
     //
     // See BIP65 for details.
-    SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY = (1U << 9),
-
-    // support CHECKSEQUENCEVERIFY opcode
-    //
-    // See BIP112 for details
-    SCRIPT_VERIFY_CHECKSEQUENCEVERIFY = (1U << 10),
-
-    // Signature(s) must be empty vector if an CHECK(MULTI)SIG operation failed
-    //
-    SCRIPT_VERIFY_NULLFAIL = (1U << 14),
+    SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY = (1U << 9)
 };
-
-bool CheckSignatureEncoding(const std::vector<unsigned char> &vchSig, unsigned int flags, ScriptError* serror);
 
 uint256 SignatureHash(const CScript &scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType);
 
@@ -109,7 +99,7 @@ public:
          return false;
     }
 
-    virtual bool CheckSequence(const CScriptNum& nSequence) const
+    virtual bool CheckColdStake(const CScript& script) const
     {
          return false;
     }
@@ -130,7 +120,9 @@ public:
     TransactionSignatureChecker(const CTransaction* txToIn, unsigned int nInIn) : txTo(txToIn), nIn(nInIn) {}
     bool CheckSig(const std::vector<unsigned char>& scriptSig, const std::vector<unsigned char>& vchPubKey, const CScript& scriptCode) const override;
     bool CheckLockTime(const CScriptNum& nLockTime) const override;
-    bool CheckSequence(const CScriptNum& nSequence) const override;
+    bool CheckColdStake(const CScript& script) const override {
+        return txTo->CheckColdStake(script);
+    }
 };
 
 class MutableTransactionSignatureChecker : public TransactionSignatureChecker

@@ -1,16 +1,13 @@
-// Copyright (c) 2011-2015 The Bitcoin Core developers
-// Distributed under the MIT software license, see the accompanying
+// Copyright (c) 2011-2013 The Bitcoin developers
+// Copyright (c) 2017-2019 The PIVX developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_QT_TRAFFICGRAPHWIDGET_H
 #define BITCOIN_QT_TRAFFICGRAPHWIDGET_H
 
-#include "trafficgraphdata.h"
-
-#include <boost/function.hpp>
-
-#include <QWidget>
 #include <QQueue>
+#include <QWidget>
 
 class ClientModel;
 
@@ -24,27 +21,29 @@ class TrafficGraphWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit TrafficGraphWidget(QWidget *parent = 0);
-    void setClientModel(ClientModel *model);
+    explicit TrafficGraphWidget(QWidget* parent = 0);
+    void setClientModel(ClientModel* model);
     int getGraphRangeMins() const;
 
 protected:
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent*);
 
 public Q_SLOTS:
     void updateRates();
-    void setGraphRangeMins(int value);
+    void setGraphRangeMins(int mins);
     void clear();
 
 private:
-    typedef boost::function<float(const TrafficSample&)> SampleChooser;
-    void paintPath(QPainterPath &path, const TrafficGraphData::SampleQueue &queue, SampleChooser chooser);
+    void paintPath(QPainterPath& path, QQueue<float>& samples);
 
-    QTimer *timer;
+    QTimer* timer;
     float fMax;
     int nMins;
-    ClientModel *clientModel;
-    TrafficGraphData trafficGraphData;
+    QQueue<float> vSamplesIn;
+    QQueue<float> vSamplesOut;
+    quint64 nLastBytesIn;
+    quint64 nLastBytesOut;
+    ClientModel* clientModel;
 };
 
 #endif // BITCOIN_QT_TRAFFICGRAPHWIDGET_H

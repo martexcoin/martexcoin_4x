@@ -10,13 +10,11 @@
        and/or designing a new system that will use merkle trees, keep in mind
        that the following merkle tree algorithm has a serious flaw related to
        duplicate txids, resulting in a vulnerability (CVE-2012-2459).
-
        The reason is that if the number of hashes in the list at a given time
        is odd, the last one is duplicated before computing the next level (which
        is unusual in Merkle trees). This results in certain sequences of
        transactions leading to the same merkle root. For example, these two
        trees:
-
                     A               A
                   /  \            /   \
                 B     C         B       C
@@ -24,11 +22,9 @@
               D   E   F       D   E   F   F
              / \ / \ / \     / \ / \ / \ / \
              1 2 3 4 5 6     1 2 3 4 5 6 5 6
-
        for transaction lists [1,2,3,4,5,6] and [1,2,3,4,5,6,5,6] (where 5 and
        6 are repeated) result in the same root hash A (because the hash of both
        of (F) and (F,F) is C).
-
        The vulnerability results from being able to send a block with such a
        transaction list, with the same merkle root, and the same block hash as
        the original without duplication, resulting in failed validation. If the
@@ -160,7 +156,7 @@ uint256 BlockMerkleRoot(const CBlock& block, bool* mutated)
     std::vector<uint256> leaves;
     leaves.resize(block.vtx.size());
     for (size_t s = 0; s < block.vtx.size(); s++) {
-        leaves[s] = block.vtx[s]->GetHash();
+        leaves[s] = block.vtx[s].GetHash();
     }
     return ComputeMerkleRoot(leaves, mutated);
 }
@@ -170,7 +166,7 @@ std::vector<uint256> BlockMerkleBranch(const CBlock& block, uint32_t position)
     std::vector<uint256> leaves;
     leaves.resize(block.vtx.size());
     for (size_t s = 0; s < block.vtx.size(); s++) {
-        leaves[s] = block.vtx[s]->GetHash();
+        leaves[s] = block.vtx[s].GetHash();
     }
     return ComputeMerkleBranch(leaves, position);
 }

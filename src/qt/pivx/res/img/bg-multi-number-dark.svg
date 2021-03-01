@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#191919;}
+	.st1{fill:#191919;stroke:url(#Path_18926_1_);stroke-width:1.5;}
+</style>
+<title>Top BarTheme Copy</title>
+<desc>Created with Sketch.</desc>
+<g id="Top-BarTheme-Copy">
+	<circle id="Oval" class="st0" cx="12" cy="12" r="12"/>
+	<linearGradient id="Path_18926_1_" gradientUnits="userSpaceOnUse" x1="12" y1="21.75" x2="12" y2="2.25">
+		<stop  offset="0" style="stop-color:#00D3D5"/>
+		<stop  offset="1" style="stop-color:#59c9c9"/>
+	</linearGradient>
+	<path id="Path_18926" class="st1" d="M12,3c-5,0-9,4-9,9s4,9,9,9s9-4,9-9c0-2.4-0.9-4.7-2.6-6.4C16.7,3.9,14.4,3,12,3z"/>
+</g>
+</svg>

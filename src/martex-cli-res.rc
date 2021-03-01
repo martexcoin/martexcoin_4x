@@ -16,12 +16,12 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "MarteX"
-            VALUE "FileDescription",    "martex-cli (JSON-RPC client for " PACKAGE_NAME ")"
+            VALUE "CompanyName",        "MARTEX Ecosystem"
+            VALUE "FileDescription",    "martex-cli (OSS RPC client for MARTEX)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "martex-cli"
             VALUE "LegalCopyright",     COPYRIGHT_STR
-            VALUE "LegalTrademarks1",   "Distributed under the MIT software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
+            VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "martex-cli.exe"
             VALUE "ProductName",        "martex-cli"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR

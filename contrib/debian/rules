@@ -2,8 +2,11 @@
 # -*- mode: makefile; coding: utf-8 -*-
 
 #DEB_MAKE_CHECK_TARGET = test_martex
-#build/martexd::
+#build/bitcoind::
 #	$(if $(filter nocheck,$(DEB_BUILD_OPTIONS)),,src/test_martex)
+
+DEB_INSTALL_EXAMPLES_bitcoind += debian/examples/*
+DEB_INSTALL_MANPAGES_bitcoind += debian/manpages/*
 
 %:
 	dh --with bash-completion $@
@@ -12,12 +15,24 @@ override_dh_auto_clean:
 	if [ -f Makefile ]; then $(MAKE) distclean; fi
 	rm -rf Makefile.in aclocal.m4 configure src/Makefile.in src/martex-config.h.in src/build-aux src/qt/Makefile.in src/qt/test/Makefile.in src/test/Makefile.in
 
-QT=$(shell dpkg-vendor --derives-from Ubuntu && echo qt4 || echo qt5)
-
 # Yea, autogen should be run on the source archive, but I like doing git archive
 override_dh_auto_configure:
 	./autogen.sh
-	./configure --with-gui=$(QT)
+	./configure --with-gui=qt5
 
 override_dh_auto_test:
 	make check
+
+# No SysV or Upstart init scripts included
+override_dh_installinit:
+	dh_installinit \
+		--noscripts
+
+# Don’t enable service by default
+override_dh_systemd_enable:
+	dh_systemd_enable \
+		--no-enable
+
+# Restart after upgrade
+override_dh_systemd_start:
+	dh_systemd_start \

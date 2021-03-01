@@ -1,35 +1,25 @@
-// Copyright (c) 2011-2015 The Bitcoin Core developers
-// Distributed under the MIT software license, see the accompanying
+// Copyright (c) 2011-2013 The Bitcoin developers
+// Copyright (c) 2017-2019 The PIVX developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_QT_OPTIONSDIALOG_H
 #define BITCOIN_QT_OPTIONSDIALOG_H
 
 #include <QDialog>
-#include <QValidator>
 
 class OptionsModel;
 class QValidatedLineEdit;
+class QLineEdit;
 
 QT_BEGIN_NAMESPACE
 class QDataWidgetMapper;
 QT_END_NAMESPACE
 
-namespace Ui {
+namespace Ui
+{
 class OptionsDialog;
 }
-
-/** Proxy address widget validator, checks for a valid proxy address.
- */
-class ProxyAddressValidator : public QValidator
-{
-    Q_OBJECT
-
-public:
-    explicit ProxyAddressValidator(QObject *parent);
-
-    State validate(QString &input, int &pos) const;
-};
 
 /** Preferences dialog. */
 class OptionsDialog : public QDialog
@@ -37,34 +27,41 @@ class OptionsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit OptionsDialog(QWidget *parent, bool enableWallet);
+    explicit OptionsDialog(QWidget* parent, bool enableWallet);
     ~OptionsDialog();
 
-    void setModel(OptionsModel *model);
+    void setModel(OptionsModel* model);
     void setMapper();
+    void setCurrentIndex(int index);
+
+protected:
+    bool eventFilter(QObject* object, QEvent* event);
 
 private Q_SLOTS:
+    /* enable OK button */
+    void enableOkButton();
+    /* disable OK button */
+    void disableOkButton();
     /* set OK button state (enabled / disabled) */
     void setOkButtonState(bool fState);
     void on_resetButton_clicked();
     void on_okButton_clicked();
     void on_cancelButton_clicked();
-    
-    void on_hideTrayIcon_stateChanged(int fState);
+
+    void updateHideOrphans(bool fHide);
 
     void showRestartWarning(bool fPersistent = false);
     void clearStatusLabel();
-    void updateProxyValidationState();
-    /* query the networks, for which the default proxy is used */
-    void updateDefaultProxyNets();
+    void doProxyIpChecks(QValidatedLineEdit* pUiProxyIp, QLineEdit* pUiProxyPort);
 
 Q_SIGNALS:
-    void proxyIpChecks(QValidatedLineEdit *pUiProxyIp, int nProxyPort);
+    void proxyIpChecks(QValidatedLineEdit* pUiProxyIp, QLineEdit* pUiProxyPort);
 
 private:
-    Ui::OptionsDialog *ui;
-    OptionsModel *model;
-    QDataWidgetMapper *mapper;
+    Ui::OptionsDialog* ui;
+    OptionsModel* model;
+    QDataWidgetMapper* mapper;
+    bool fProxyIpValid;
 };
 
 #endif // BITCOIN_QT_OPTIONSDIALOG_H

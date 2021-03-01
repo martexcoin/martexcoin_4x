@@ -1,15 +1,15 @@
-// Copyright (c) 2012-2015 The Bitcoin Core developers
-// Distributed under the MIT software license, see the accompanying
+// Copyright (c) 2012-2016 The Bitcoin Core developers
+// Copyright (c) 2017-2019 The PIVX developers
+// Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "util.h"
-#include "test/test_martex.h"
+#include "test/test_pivx.h"
 
 #include <string>
 #include <vector>
 
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
 
 BOOST_FIXTURE_TEST_SUITE(getarg_tests, BasicTestingSetup)
@@ -21,11 +21,11 @@ static void ResetArgs(const std::string& strArg)
       boost::split(vecArg, strArg, boost::is_space(), boost::token_compress_on);
 
     // Insert dummy executable name:
-    vecArg.insert(vecArg.begin(), "testmartex");
+    vecArg.insert(vecArg.begin(), "testbitcoin");
 
     // Convert to char*:
     std::vector<const char*> vecChar;
-    BOOST_FOREACH(std::string& s, vecArg)
+    for (std::string& s : vecArg)
         vecChar.push_back(s.c_str());
 
     ParseParameters(vecChar.size(), &vecChar[0]);
@@ -126,7 +126,7 @@ BOOST_AUTO_TEST_CASE(intarg)
     BOOST_CHECK_EQUAL(GetArg("-bar", 11), 0);
 }
 
-BOOST_AUTO_TEST_CASE(doublemartex)
+BOOST_AUTO_TEST_CASE(doubledash)
 {
     ResetArgs("--foo");
     BOOST_CHECK_EQUAL(GetBoolArg("-foo", false), true);

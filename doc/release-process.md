@@ -1,76 +1,83 @@
 Release Process
 ====================
 
-* Update translations, see [translation_process.md](https://github.com/martexcoin/martexcoin/blob/master/doc/translation_process.md#synchronising-translations).
+## Branch updates
 
-* Update manpages, see [gen-manpages.sh](https://github.com/martexcoin/martexcoin/blob/master/contrib/devtools/README.md#gen-manpagessh).
+### Before every release candidate
 
-Before every minor and major release:
+* Update translations (ping Fuzzbawls on Discord) see [translation_process.md](https://github.com/PIVX-Project/PIVX/blob/master/doc/translation_process.md#synchronising-translations).
+* Update manpages, see [gen-manpages.sh](https://github.com/pivx-project/pivx/blob/master/contrib/devtools/README.md#gen-manpagessh).
+* Update release candidate version in `configure.ac` (`CLIENT_VERSION_RC`)
 
-* Update [bips.md](bips.md) to account for changes since the last release.
-* Update version in sources (see below)
+### Before every major and minor release
+
+* Update version in `configure.ac` (don't forget to set `CLIENT_VERSION_IS_RELEASE` to `true`) (don't forget to set `CLIENT_VERSION_RC` to `0`)
 * Write release notes (see below)
-* Update `src/chainparams.cpp` nMinimumChainWork with information from the getblockchaininfo rpc.
-* Update `src/chainparams.cpp` defaultAssumeValid  with information from the getblockhash rpc.
-  - The selected value must not be orphaned so it may be useful to set the value two blocks back from the tip.
-  - Testnet should be set some tens of thousands back from the tip due to reorgs there.
-  - This update should be reviewed with a reindex-chainstate with assumevalid=0 to catch any defect
-     that causes rejection of blocks in the past history.
 
-Before every major release:
+### Before every major release
 
-* Update hardcoded [seeds](/contrib/seeds/README.md). TODO: Give example PR for MarteX
+* Update hardcoded [seeds](/contrib/seeds/README.md), see [this pull request](https://github.com/bitcoin/bitcoin/pull/7415) for an example.
 * Update [`BLOCK_CHAIN_SIZE`](/src/qt/intro.cpp) to the current size plus some overhead.
+* Update `src/chainparams.cpp` with statistics about the transaction count and rate.
+* On both the master branch and the new release branch:
+  - update `CLIENT_VERSION_MINOR` in [`configure.ac`](../configure.ac)
+* On the new release branch in [`configure.ac`](../configure.ac):
+  - set `CLIENT_VERSION_REVISION` to `0`
+  - set `CLIENT_VERSION_IS_RELEASE` to `true`
+
+
+#### After branch-off (on master)
+
+- Update the version of `contrib/gitian-descriptors/*.yml`.
+
+#### After branch-off (on the major release branch)
+
+- Update the versions and the link to the release notes draft in `doc/release-notes.md`.
+
+#### Before final release
+
+- Merge the release notes into the branch.
+- Ensure the "Needs release note" label is removed from all relevant pull requests and issues.
+
+
+## Building
 
 ### First time / New builders
 
-If you're using the automated script (found in [contrib/gitian-build.sh](/contrib/gitian-build.sh)), then at this point you should run it with the "--setup" command. Otherwise ignore this.
+If you're using the automated script (found in [contrib/gitian-build.py](/contrib/gitian-build.py)), then at this point you should run it with the "--setup" command. Otherwise ignore this.
 
 Check out the source code in the following directory hierarchy.
 
-	cd /path/to/your/toplevel/build
-	git clone https://github.com/martexcoin/gitian.sigs.git
-	git clone https://github.com/martexcoin/martexcoin-detached-sigs.git
-	git clone https://github.com/devrandom/gitian-builder.git
-	git clone https://github.com/martexcoin/martexcoin.git
+    cd /path/to/your/toplevel/build
+    git clone https://github.com/pivx-project/gitian.sigs.git
+    git clone https://github.com/pivx-project/pivx-detached-sigs.git
+    git clone https://github.com/devrandom/gitian-builder.git
+    git clone https://github.com/pivx-project/pivx.git
 
-### MarteX Core maintainers/release engineers, update (commit) version in sources
-
-- `configure.ac`:
-    - `_CLIENT_VERSION_MAJOR`
-    - `_CLIENT_VERSION_MINOR`
-    - `_CLIENT_VERSION_REVISION`
-    - Don't forget to set `_CLIENT_VERSION_IS_RELEASE` to `true`
-- `src/clientversion.h`: (this mirrors `configure.ac` - see issue #3539)
-    - `CLIENT_VERSION_MAJOR`
-    - `CLIENT_VERSION_MINOR`
-    - `CLIENT_VERSION_REVISION`
-    - Don't forget to set `CLIENT_VERSION_IS_RELEASE` to `true`
-- `doc/README.md` and `doc/README_windows.txt`
-- `doc/Doxyfile`: `PROJECT_NUMBER` contains the full version
-- `contrib/gitian-descriptors/*.yml`: usually one'd want to do this on master after branching off the release - but be sure to at least do it before a new major release
+### PIVX maintainers/release engineers, suggestion for writing release notes
 
 Write release notes. git shortlog helps a lot, for example:
 
-    git shortlog --no-merges v(current version, e.g. 0.12.2)..v(new version, e.g. 0.12.3)
+    git shortlog --no-merges v(current version, e.g. 0.7.2)..v(new version, e.g. 0.8.0)
+
 
 Generate list of authors:
 
-    git log --format='%aN' "$*" | sort -ui | sed -e 's/^/- /'
+    git log --format='- %aN' v(current version, e.g. 3.2.2)..v(new version, e.g. 3.2.3) | sort -fiu
 
-Tag version (or release candidate) in git
+Tag the version (or release candidate) in git:
 
-    git tag -s v(new version, e.g. 0.12.3)
+    git tag -s v(new version, e.g. 0.8.0)
 
 ### Setup and perform Gitian builds
 
-If you're using the automated script (found in [contrib/gitian-build.sh](/contrib/gitian-build.sh)), then at this point you should run it with the "--build" command. Otherwise ignore this.
+If you're using the automated script (found in [contrib/gitian-build.py](/contrib/gitian-build.py)), then at this point you should run it with the "--build" command. Otherwise ignore this.
 
 Setup Gitian descriptors:
 
-    pushd ./martexcoin
+    pushd ./pivx
     export SIGNER=(your Gitian key, ie bluematt, sipa, etc)
-    export VERSION=(new version, e.g. 0.12.3)
+    export VERSION=(new version, e.g. 0.8.0)
     git fetch
     git checkout v${VERSION}
     popd
@@ -87,7 +94,6 @@ Ensure gitian-builder is up-to-date:
     git pull
     popd
 
-
 ### Fetch and create inputs: (first time, or when dependency versions change)
 
     pushd ./gitian-builder
@@ -96,14 +102,16 @@ Ensure gitian-builder is up-to-date:
     wget -P inputs http://downloads.sourceforge.net/project/osslsigncode/osslsigncode/osslsigncode-1.7.1.tar.gz
     popd
 
-Create the OS X SDK tarball, see the [OS X readme](README_osx.md) for details, and copy it into the inputs directory.
+Create the macOS SDK tarball, see the [macOS build instructions](build-osx.md#deterministic-macos-dmg-notes) for details, and copy it into the inputs directory.
 
 ### Optional: Seed the Gitian sources cache and offline git repositories
 
-By default, Gitian will fetch source files as needed. To cache them ahead of time:
+NOTE: Gitian is sometimes unable to download files. If you have errors, try the step below.
+
+By default, Gitian will fetch source files as needed. To cache them ahead of time, make sure you have checked out the tag you want to build in pivx, then:
 
     pushd ./gitian-builder
-    make -C ../martexcoin/depends download SOURCES_PATH=`pwd`/cache/common
+    make -C ../pivx/depends download SOURCES_PATH=`pwd`/cache/common
     popd
 
 Only missing files will be fetched, so this is safe to re-run for each build.
@@ -111,50 +119,50 @@ Only missing files will be fetched, so this is safe to re-run for each build.
 NOTE: Offline builds must use the --url flag to ensure Gitian fetches only from local URLs. For example:
 
     pushd ./gitian-builder
-    ./bin/gbuild --url martexcoin=/path/to/martexcoin,signature=/path/to/sigs {rest of arguments}
+    ./bin/gbuild --url pivx=/path/to/pivx,signature=/path/to/sigs {rest of arguments}
     popd
 
 The gbuild invocations below <b>DO NOT DO THIS</b> by default.
 
-### Build and sign MarteX Core for Linux, Windows, and OS X:
+### Build and sign PIVX Core for Linux, Windows, and macOS:
 
     pushd ./gitian-builder
-    ./bin/gbuild --memory 3000 --commit martexcoin=v${VERSION} ../martexcoin/contrib/gitian-descriptors/gitian-linux.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../martexcoin/contrib/gitian-descriptors/gitian-linux.yml
-    mv build/out/martex-*.tar.gz build/out/src/martex-*.tar.gz ../
+    ./bin/gbuild --num-make 2 --memory 3000 --commit pivx=v${VERSION} ../pivx/contrib/gitian-descriptors/gitian-linux.yml
+    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-linux --destination ../gitian.sigs/ ../pivx/contrib/gitian-descriptors/gitian-linux.yml
+    mv build/out/pivx-*.tar.gz build/out/src/pivx-*.tar.gz ../
 
-    ./bin/gbuild --memory 3000 --commit martexcoin=v${VERSION} ../martexcoin/contrib/gitian-descriptors/gitian-win.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../martexcoin/contrib/gitian-descriptors/gitian-win.yml
-    mv build/out/martex-*-win-unsigned.tar.gz inputs/martex-win-unsigned.tar.gz
-    mv build/out/martex-*.zip build/out/martex-*.exe ../
+    ./bin/gbuild --num-make 2 --memory 3000 --commit pivx=v${VERSION} ../pivx/contrib/gitian-descriptors/gitian-win.yml
+    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../pivx/contrib/gitian-descriptors/gitian-win.yml
+    mv build/out/pivx-*-win-unsigned.tar.gz inputs/pivx-win-unsigned.tar.gz
+    mv build/out/pivx-*.zip build/out/pivx-*.exe ../
 
-    ./bin/gbuild --memory 3000 --commit martexcoin=v${VERSION} ../martexcoin/contrib/gitian-descriptors/gitian-osx.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../martexcoin/contrib/gitian-descriptors/gitian-osx.yml
-    mv build/out/martex-*-osx-unsigned.tar.gz inputs/martex-osx-unsigned.tar.gz
-    mv build/out/martex-*.tar.gz build/out/martex-*.dmg ../
+    ./bin/gbuild --num-make 2 --memory 3000 --commit pivx=v${VERSION} ../pivx/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../pivx/contrib/gitian-descriptors/gitian-osx.yml
+    mv build/out/pivx-*-osx-unsigned.tar.gz inputs/pivx-osx-unsigned.tar.gz
+    mv build/out/pivx-*.tar.gz build/out/pivx-*.dmg ../
     popd
 
 Build output expected:
 
-  1. source tarball (`martex-${VERSION}.tar.gz`)
-  2. linux 32-bit and 64-bit dist tarballs (`martex-${VERSION}-linux[32|64].tar.gz`)
-  3. windows 32-bit and 64-bit unsigned installers and dist zips (`martex-${VERSION}-win[32|64]-setup-unsigned.exe`, `martex-${VERSION}-win[32|64].zip`)
-  4. OS X unsigned installer and dist tarball (`martex-${VERSION}-osx-unsigned.dmg`, `martex-${VERSION}-osx64.tar.gz`)
+  1. source tarball (`pivx-${VERSION}.tar.gz`)
+  2. linux 32-bit and 64-bit dist tarballs (`pivx-${VERSION}-linux[32|64].tar.gz`)
+  3. windows 32-bit and 64-bit unsigned installers and dist zips (`pivx-${VERSION}-win[32|64]-setup-unsigned.exe`, `pivx-${VERSION}-win[32|64].zip`)
+  4. macOS unsigned installer and dist tarball (`pivx-${VERSION}-osx-unsigned.dmg`, `pivx-${VERSION}-osx64.tar.gz`)
   5. Gitian signatures (in `gitian.sigs/${VERSION}-<linux|{win,osx}-unsigned>/(your Gitian key)/`)
 
 ### Verify other gitian builders signatures to your own. (Optional)
 
 Add other gitian builders keys to your gpg keyring, and/or refresh keys.
 
-    gpg --import martexcoin/contrib/gitian-keys/*.pgp
+    gpg --import pivx/contrib/gitian-keys/*.pgp
     gpg --refresh-keys
 
 Verify the signatures
 
     pushd ./gitian-builder
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../martexcoin/contrib/gitian-descriptors/gitian-linux.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../martexcoin/contrib/gitian-descriptors/gitian-win.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../martexcoin/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../pivx/contrib/gitian-descriptors/gitian-linux.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../pivx/contrib/gitian-descriptors/gitian-win.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../pivx/contrib/gitian-descriptors/gitian-osx.yml
     popd
 
 ### Next steps:
@@ -162,43 +170,73 @@ Verify the signatures
 Commit your signature to gitian.sigs:
 
     pushd gitian.sigs
-    git add ${VERSION}-linux/${SIGNER}
-    git add ${VERSION}-win-unsigned/${SIGNER}
-    git add ${VERSION}-osx-unsigned/${SIGNER}
-    git commit -a
+    git add ${VERSION}-linux/"${SIGNER}"
+    git add ${VERSION}-win-unsigned/"${SIGNER}"
+    git add ${VERSION}-osx-unsigned/"${SIGNER}"
+    git commit -m "Add ${VERSION} unsigned sigs for ${SIGNER}"
     git push  # Assuming you can push to the gitian.sigs tree
     popd
 
-Wait for Windows/OS X detached signatures:
+Codesigner only: Create Windows/macOS detached signatures:
+- Only one person handles codesigning. Everyone else should skip to the next step.
+- Only once the Windows/macOS builds each have 3 matching signatures may they be signed with their respective release keys.
 
-- Once the Windows/OS X builds each have 3 matching signatures, they will be signed with their respective release keys.
-- Detached signatures will then be committed to the [martex-detached-sigs](https://github.com/martexcoin/martexcoin-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
+Codesigner only: Sign the macOS binary:
 
-Create (and optionally verify) the signed OS X binary:
+    transfer pivx-osx-unsigned.tar.gz to macOS for signing
+    tar xf pivx-osx-unsigned.tar.gz
+    ./detached-sig-create.sh -s "Key ID"
+    Enter the keychain password and authorize the signature
+    Move signature-osx.tar.gz back to the gitian host
+
+Codesigner only: Sign the windows binaries:
+
+    tar xf pivx-win-unsigned.tar.gz
+    ./detached-sig-create.sh -key /path/to/codesign.key
+    Enter the passphrase for the key when prompted
+    signature-win.tar.gz will be created
+
+Codesigner only: Commit the detached codesign payloads:
+
+    cd ~/pivx-detached-sigs
+    checkout the appropriate branch for this release series
+    rm -rf *
+    tar xf signature-osx.tar.gz
+    tar xf signature-win.tar.gz
+    git add -a
+    git commit -m "point to ${VERSION}"
+    git tag -s v${VERSION} HEAD
+    git push the current branch and new tag
+
+Non-codesigners: wait for Windows/macOS detached signatures:
+
+- Once the Windows/macOS builds each have 3 matching signatures, they will be signed with their respective release keys.
+- Detached signatures will then be committed to the [pivx-detached-sigs](https://github.com/pivx-Project/pivx-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
+
+Create (and optionally verify) the signed macOS binary:
 
     pushd ./gitian-builder
-    ./bin/gbuild -i --commit signature=v${VERSION} ../martexcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../martexcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../martexcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-    mv build/out/martex-osx-signed.dmg ../martex-${VERSION}-osx.dmg
+    ./bin/gbuild -i --commit signature=v${VERSION} ../pivx/contrib/gitian-descriptors/gitian-osx-signer.yml
+    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../pivx/contrib/gitian-descriptors/gitian-osx-signer.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../pivx/contrib/gitian-descriptors/gitian-osx-signer.yml
+    mv build/out/pivx-osx-signed.dmg ../pivx-${VERSION}-osx.dmg
     popd
 
 Create (and optionally verify) the signed Windows binaries:
 
     pushd ./gitian-builder
-    ./bin/gbuild -i --commit signature=v${VERSION} ../martexcoin/contrib/gitian-descriptors/gitian-win-signer.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../martexcoin/contrib/gitian-descriptors/gitian-win-signer.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-signed ../martexcoin/contrib/gitian-descriptors/gitian-win-signer.yml
-    mv build/out/martex-*win64-setup.exe ../martex-${VERSION}-win64-setup.exe
-    mv build/out/martex-*win32-setup.exe ../martex-${VERSION}-win32-setup.exe
+    ./bin/gbuild -i --commit signature=v${VERSION} ../pivx/contrib/gitian-descriptors/gitian-win-signer.yml
+    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../pivx/contrib/gitian-descriptors/gitian-win-signer.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-signed ../pivx/contrib/gitian-descriptors/gitian-win-signer.yml
+    mv build/out/pivx-*win64-setup.exe ../pivx-${VERSION}-win64-setup.exe
     popd
 
-Commit your signature for the signed OS X/Windows binaries:
+Commit your signature for the signed macOS/Windows binaries:
 
     pushd gitian.sigs
-    git add ${VERSION}-osx-signed/${SIGNER}
-    git add ${VERSION}-win-signed/${SIGNER}
-    git commit -a
+    git add ${VERSION}-osx-signed/"${SIGNER}"
+    git add ${VERSION}-win-signed/"${SIGNER}"
+    git commit -m "Add ${SIGNER} ${VERSION} signed binaries signatures"
     git push  # Assuming you can push to the gitian.sigs tree
     popd
 
@@ -212,23 +250,22 @@ sha256sum * > SHA256SUMS
 
 The list of files should be:
 ```
-martex-${VERSION}-aarch64-linux-gnu.tar.gz
-martex-${VERSION}-arm-linux-gnueabihf.tar.gz
-martex-${VERSION}-i686-pc-linux-gnu.tar.gz
-martex-${VERSION}-x86_64-linux-gnu.tar.gz
-martex-${VERSION}-osx64.tar.gz
-martex-${VERSION}-osx.dmg
-martex-${VERSION}.tar.gz
-martex-${VERSION}-win32-setup.exe
-martex-${VERSION}-win32.zip
-martex-${VERSION}-win64-setup.exe
-martex-${VERSION}-win64.zip
+pivx-${VERSION}-aarch64-linux-gnu.tar.gz
+pivx-${VERSION}-arm-linux-gnueabihf.tar.gz
+pivx-${VERSION}-i686-pc-linux-gnu.tar.gz
+pivx-${VERSION}-riscv64-linux-gnu.tar.gz
+pivx-${VERSION}-x86_64-linux-gnu.tar.gz
+pivx-${VERSION}-osx64.tar.gz
+pivx-${VERSION}-osx.dmg
+pivx-${VERSION}.tar.gz
+pivx-${VERSION}-win64-setup.exe
+pivx-${VERSION}-win64.zip
 ```
 The `*-debug*` files generated by the gitian build contain debug symbols
 for troubleshooting by developers. It is assumed that anyone that is interested
 in debugging can run gitian to generate the files for themselves. To avoid
 end-user confusion about which file to pick, as well as save storage
-space *do not upload these to the martexcoin.org server*.
+space *do not upload these to github*.
 
 - GPG-sign it, delete the unsigned file:
 ```
@@ -238,20 +275,16 @@ rm SHA256SUMS
 (the digest algorithm is forced to sha256 to avoid confusion of the `Hash:` header that GPG adds with the SHA256 used for the files)
 Note: check that SHA256SUMS itself doesn't end up in SHA256SUMS, which is a spurious/nonsensical entry.
 
-- Upload zips and installers, as well as `SHA256SUMS.asc` from last step, to the martexcoin.org server
-
-- Update martexcoin.org
+- Upload zips and installers, as well as `SHA256SUMS.asc` from last step, to the GitHub release (see below)
 
 - Announce the release:
 
-  - Release on MarteX forum: https://www.martexcoin.org/forum/topic/official-announcements.54/
+  - bitcointalk announcement thread
 
-  - Optionally Discord, twitter, reddit /r/MarteXpay, ... but this will usually sort out itself
-
-  - Notify flare so that he can start building [the PPAs](https://launchpad.net/~martexcoin.org/+archive/ubuntu/martexcoin)
+  - Optionally twitter, reddit /r/pivx, ... but this will usually sort out itself
 
   - Archive release notes for the new version to `doc/release-notes/` (branch `master` and branch of the release)
 
-  - Create a [new GitHub release](https://github.com/martexcoin/martexcoin/releases/new) with a link to the archived release notes.
+  - Create a [new GitHub release](https://github.com/PIVX-Project/PIVX/releases/new) with a link to the archived release notes.
 
   - Celebrate

@@ -1,13 +1,13 @@
 # Copyright (c) 2013-2016 The Bitcoin Core developers
-# Copyright (c) 2014-2018 The MarteX Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 DIST_SUBDIRS = secp256k1 univalue
 
-AM_LDFLAGS = $(PTHREAD_CFLAGS) $(LIBTOOL_LDFLAGS) $(HARDENED_LDFLAGS)
-AM_CXXFLAGS = $(HARDENED_CXXFLAGS) $(ERROR_CXXFLAGS)
-AM_CPPFLAGS = $(HARDENED_CPPFLAGS)
+AM_LDFLAGS = $(PTHREAD_CFLAGS) $(LIBTOOL_LDFLAGS) $(HARDENED_LDFLAGS) $(GPROF_LDFLAGS) $(SANITIZER_LDFLAGS)
+AM_CXXFLAGS = $(DEBUG_CXXFLAGS) $(HARDENED_CXXFLAGS) $(WARN_CXXFLAGS) $(NOWARN_CXXFLAGS) $(ERROR_CXXFLAGS) $(GPROF_CXXFLAGS) $(SANITIZER_CXXFLAGS)
+AM_CPPFLAGS = $(DEBUG_CPPFLAGS) $(HARDENED_CPPFLAGS)
+AM_LIBTOOLFLAGS = --preserve-dup-deps
 EXTRA_LIBRARIES =
 
 if EMBEDDED_UNIVALUE
@@ -25,26 +25,26 @@ BITCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAG
 BITCOIN_INCLUDES += -I$(srcdir)/secp256k1/include
 BITCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
 
-LIBBITCOIN_SERVER=libmartex_server.a
-LIBBITCOIN_COMMON=libmartex_common.a
-LIBBITCOIN_CONSENSUS=libmartex_consensus.a
-LIBBITCOIN_CLI=libmartex_cli.a
-LIBBITCOIN_UTIL=libmartex_util.a
-LIBBITCOIN_CRYPTO=crypto/libmartex_crypto.a
-LIBBITCOINQT=qt/libmartexqt.a
+LIBBITCOIN_SERVER=libbitcoin_server.a
+LIBBITCOIN_COMMON=libbitcoin_common.a
+LIBBITCOIN_CLI=libbitcoin_cli.a
+LIBBITCOIN_UTIL=libbitcoin_util.a
+LIBBITCOIN_CRYPTO=crypto/libbitcoin_crypto.a
+LIBBITCOIN_ZEROCOIN=libzerocoin/libbitcoin_zerocoin.a
+LIBBITCOINQT=qt/libbitcoinqt.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 
 if ENABLE_ZMQ
-LIBBITCOIN_ZMQ=libmartex_zmq.a
+LIBBITCOIN_ZMQ=libbitcoin_zmq.a
 endif
 if BUILD_BITCOIN_LIBS
-LIBBITCOINCONSENSUS=libmartexconsensus.la
+LIBBITCOINCONSENSUS=libbitcoinconsensus.la
 endif
 if ENABLE_WALLET
-LIBBITCOIN_WALLET=libmartex_wallet.a
+LIBBITCOIN_WALLET=libbitcoin_wallet.a
 endif
 
-$(LIBSECP256K1): $(wildcard secp256k1/src/*) $(wildcard secp256k1/include/*)
+$(LIBSECP256K1): $(wildcard secp256k1/src/*.h) $(wildcard secp256k1/src/*.c) $(wildcard secp256k1/include/*)
 	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
 
 # Make is not made aware of per-object dependencies to avoid limiting building parallelization
@@ -53,7 +53,7 @@ EXTRA_LIBRARIES += \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_COMMON) \
-  $(LIBBITCOIN_CONSENSUS) \
+  $(LIBBITCOIN_ZEROCOIN) \
   $(LIBBITCOIN_SERVER) \
   $(LIBBITCOIN_CLI) \
   $(LIBBITCOIN_WALLET) \
@@ -62,6 +62,7 @@ EXTRA_LIBRARIES += \
 lib_LTLIBRARIES = $(LIBBITCOINCONSENSUS)
 
 bin_PROGRAMS =
+noinst_PROGRAMS =
 TESTS =
 BENCHMARKS =
 
@@ -76,19 +77,16 @@ endif
 .PHONY: FORCE check-symbols check-security
 # martex core #
 BITCOIN_CORE_H = \
-  addrdb.h \
   activemasternode.h \
-  addressindex.h \
-  spentindex.h \
   addrman.h \
-  alert.h \
+  allocators.h \
+  amount.h \
   base58.h \
-  bip39.h \
-  bip39_english.h \
-  blockencodings.h \
+  wallet/bip39.h \
+  wallet/bip39_english.h \
+  bip38.h \
   bloom.h \
-  cachemap.h \
-  cachemultimap.h \
+  blocksignature.h \
   chain.h \
   chainparams.h \
   chainparamsbase.h \
@@ -96,6 +94,7 @@ BITCOIN_CORE_H = \
   checkpoints.h \
   checkqueue.h \
   clientversion.h \
+  coincontrol.h \
   coins.h \
   compat.h \
   compat/byteswap.h \
@@ -103,318 +102,321 @@ BITCOIN_CORE_H = \
   compat/sanity.h \
   compressor.h \
   consensus/consensus.h \
+  consensus/merkle.h \
+  consensus/validation.h \
+  consensus/tx_verify.h \
+  consensus/zerocoin_verify.h \
+  consensus/params.h \
+  primitives/block.h \
+  primitives/transaction.h \
   core_io.h \
-  core_memusage.h \
-  cuckoocache.h \
+  crypter.h \
+  pairresult.h \
+  addressbook.h \
   anonsend.h \
-  anonsend-client.h \
-  anonsend-server.h \
-  anonsend-util.h \
-  dsnotificationinterface.h \
-  governance.h \
-  governance-classes.h \
-  governance-exceptions.h \
-  governance-object.h \
-  governance-validators.h \
-  governance-vote.h \
-  governance-votedb.h \
-  flat-database.h \
-  hdchain.h \
+  anonsend-relay.h \
+  wallet/db.h \
+  hash.h \
+  wallet/hdchain.h \
   httprpc.h \
   httpserver.h \
-  indirectmap.h \
   init.h \
-  fastsend.h \
+  legacy/stakemodifier.h \
+  kernel.h \
+  fasttx.h \
   key.h \
-  keepass.h \
-	kernel.h \
   keystore.h \
-  dbwrapper.h \
+  leveldbwrapper.h \
   limitedmap.h \
+  main.h \
   masternode.h \
   masternode-payments.h \
+  masternode-budget.h \
   masternode-sync.h \
   masternodeman.h \
   masternodeconfig.h \
-  memusage.h \
+  forgeman.h \
   merkleblock.h \
   messagesigner.h \
   miner.h \
-  net.h \
-  net_processing.h \
-  netaddress.h \
+  mruset.h \
   netbase.h \
-  netfulfilledman.h \
-  netmessagemaker.h \
+  net.h \
   noui.h \
-  policy/fees.h \
-  policy/policy.h \
-  policy/rbf.h \
   pow.h \
   protocol.h \
+  pubkey.h \
   random.h \
   reverselock.h \
+  reverse_iterate.h \
   rpc/client.h \
   rpc/protocol.h \
   rpc/server.h \
-  rpc/register.h \
   scheduler.h \
+  script/interpreter.h \
+  script/keyorigin.h \
+  script/script.h \
   script/sigcache.h \
   script/sign.h \
   script/standard.h \
-  script/ismine.h \
+  script/script_error.h \
+  serialize.h \
   spork.h \
+  sporkdb.h \
+  sporkid.h \
+  stakeinput.h \
   streams.h \
-  support/allocators/secure.h \
-  support/allocators/zeroafterfree.h \
   support/cleanse.h \
-  support/events.h \
-  support/lockedpool.h \
   sync.h \
   threadsafety.h \
-  threadinterrupt.h \
   timedata.h \
+  tinyformat.h \
   torcontrol.h \
   txdb.h \
   txmempool.h \
-  ui_interface.h \
+  guiinterface.h \
+  uint256.h \
   undo.h \
+  util/memory.h \
   util.h \
+  util/macros.h \
+  util/threadnames.h \
+  utilstrencodings.h \
   utilmoneystr.h \
   utiltime.h \
-  validation.h \
   validationinterface.h \
-  versionbits.h \
-  wallet/coincontrol.h \
-  wallet/crypter.h \
-  wallet/db.h \
-  wallet/rpcwallet.h \
+  version.h \
+  wallet/hdchain.h \
   wallet/wallet.h \
+  wallet/wallet_ismine.h \
   wallet/walletdb.h \
-  warnings.h \
+  zpivchain.h \
+  zpiv/deterministicmint.h \
+  zpiv/mintpool.h \
+  zpiv/zerocoin.h \
+  zpiv/zpivmodule.h \
   zmq/zmqabstractnotifier.h \
-  zmq/zmqconfig.h\
+  zmq/zmqconfig.h \
   zmq/zmqnotificationinterface.h \
   zmq/zmqpublishnotifier.h
 
-
 obj/build.h: FORCE
 	@$(MKDIR_P) $(builddir)/obj
-	@$(top_srcdir)/share/genbuild.sh $(abs_top_builddir)/src/obj/build.h \
-	  $(abs_top_srcdir)
-libmartex_util_a-clientversion.$(OBJEXT): obj/build.h
+	@$(top_srcdir)/share/genbuild.sh "$(abs_top_builddir)/src/obj/build.h" \
+	  "$(abs_top_srcdir)"
+libbitcoin_util_a-clientversion.$(OBJEXT): obj/build.h
 
 # server: shared between martexd and martex-qt
-libmartex_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
-libmartex_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_server_a_SOURCES = \
-  activemasternode.cpp \
+libbitcoin_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
+libbitcoin_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_server_a_SOURCES = \
   addrman.cpp \
-  addrdb.cpp \
-  alert.cpp \
   bloom.cpp \
-  blockencodings.cpp \
+  blocksignature.cpp \
   chain.cpp \
   checkpoints.cpp \
-  dsnotificationinterface.cpp \
+  consensus/tx_verify.cpp \
+  consensus/zerocoin_verify.cpp \
   httprpc.cpp \
   httpserver.cpp \
   init.cpp \
-  fastsend.cpp \
-  dbwrapper.cpp \
-  governance.cpp \
-  governance-classes.cpp \
-  governance-object.cpp \
-  governance-validators.cpp \
-  governance-vote.cpp \
-  governance-votedb.cpp \
-	kernel.cpp \
-  masternode.cpp \
-  masternode-payments.cpp \
-  masternode-sync.cpp \
-  masternodeconfig.cpp \
-  masternodeman.cpp \
+  leveldbwrapper.cpp \
+  main.cpp \
   merkleblock.cpp \
-  messagesigner.cpp \
   miner.cpp \
   net.cpp \
-  netfulfilledman.cpp \
-  net_processing.cpp \
   noui.cpp \
-  policy/fees.cpp \
-  policy/policy.cpp \
   pow.cpp \
-  anonsend.cpp \
-  anonsend-server.cpp \
   rest.cpp \
   rpc/blockchain.cpp \
   rpc/masternode.cpp \
-  rpc/governance.cpp \
+  rpc/budget.cpp \
   rpc/mining.cpp \
   rpc/misc.cpp \
   rpc/net.cpp \
   rpc/rawtransaction.cpp \
   rpc/server.cpp \
   script/sigcache.cpp \
-  script/ismine.cpp \
-  sendalert.cpp \
-  spork.cpp \
+  sporkdb.cpp \
   timedata.cpp \
   torcontrol.cpp \
   txdb.cpp \
   txmempool.cpp \
-  ui_interface.cpp \
-  validation.cpp \
   validationinterface.cpp \
-  versionbits.cpp \
+  zpivchain.cpp \
   $(BITCOIN_CORE_H)
 
 if ENABLE_ZMQ
-libmartex_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
-libmartex_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_zmq_a_SOURCES = \
+libbitcoin_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
+libbitcoin_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_zmq_a_SOURCES = \
   zmq/zmqabstractnotifier.cpp \
   zmq/zmqnotificationinterface.cpp \
   zmq/zmqpublishnotifier.cpp
 endif
 
-
 # wallet: shared between martexd and martex-qt, but only linked
 # when wallet enabled
-libmartex_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libmartex_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_wallet_a_SOURCES = \
-  keepass.cpp \
-  anonsend-client.cpp \
-  anonsend-util.cpp \
-  wallet/crypter.cpp \
+libbitcoin_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_wallet_a_SOURCES = \
+  activemasternode.cpp \
+  bip38.cpp \
+  anonsend.cpp \
+  anonsend-relay.cpp \
+  addressbook.cpp \
+  crypter.cpp \
+  fasttx.cpp \
+  masternode.cpp \
+  masternode-budget.cpp \
+  masternode-payments.cpp \
+  masternode-sync.cpp \
+  masternodeconfig.cpp \
+  forgeman.cpp \
+  masternodeman.cpp \
+  messagesigner.cpp \
+  legacy/stakemodifier.cpp \
+  kernel.cpp \
   wallet/db.cpp \
   wallet/rpcdump.cpp \
   wallet/rpcwallet.cpp \
+  wallet/hdchain.cpp \
   wallet/wallet.cpp \
+  wallet/wallet_ismine.cpp \
   wallet/walletdb.cpp \
-  policy/rbf.cpp \
+  zpiv/deterministicmint.cpp \
+  zpiv/zerocoin.cpp \
+  zpiv/mintpool.cpp \
+  stakeinput.cpp \
+  zpiv/zpivmodule.cpp \
   $(BITCOIN_CORE_H)
 
 # crypto primitives library
-crypto_libmartex_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_CONFIG_INCLUDES) $(PIC_FLAGS)
-crypto_libmartex_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) $(PIC_FLAGS)
-crypto_libmartex_crypto_a_SOURCES = \
-  crypto/aes.cpp \
-  crypto/aes.h \
-  crypto/common.h \
-	crypto/hashblock.h \
+crypto_libbitcoin_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(PIC_FLAGS)
+crypto_libbitcoin_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIC_FLAGS)
+crypto_libbitcoin_crypto_a_SOURCES = \
+  crypto/sha1.cpp \
+  crypto/sha256.cpp \
+  crypto/sha512.cpp \
+  crypto/chacha20.h \
+  crypto/chacha20.cpp \
   crypto/hmac_sha256.cpp \
-  crypto/hmac_sha256.h \
+  crypto/rfc6979_hmac_sha256.cpp \
   crypto/hmac_sha512.cpp \
-  crypto/hmac_sha512.h \
+  crypto/scrypt.cpp \
   crypto/ripemd160.cpp \
   crypto/aes_helper.c \
-  crypto/ripemd160.h \
-  crypto/sha1.cpp \
-  crypto/sha1.h \
-  crypto/sha256.cpp \
-  crypto/sha256.h \
-  crypto/sha512.cpp \
-  crypto/sha512.h
-
-# x13
-crypto_libmartex_crypto_a_SOURCES += \
   crypto/blake.c \
   crypto/bmw.c \
-  crypto/cubehash.c \
-  crypto/echo.c \
-	crypto/fugue.c \
   crypto/groestl.c \
-	crypto/hamsi.c \
-	crypto/hamsi_helper.c \
   crypto/jh.c \
-  crypto/keccak.c \
   crypto/luffa.c \
+  crypto/keccak.c \
+  crypto/skein.c \
+  crypto/cubehash.c \
   crypto/shavite.c \
   crypto/simd.c \
-  crypto/skein.c \
+  crypto/echo.c \
+  crypto/hamsi.c \
+  crypto/hamsi_helper.c \
+  crypto/fugue.c \
+  crypto/sha2.c \
+  crypto/common.h \
+  crypto/sha256.h \
+  crypto/sha512.h \
+  crypto/hmac_sha256.h \
+  crypto/rfc6979_hmac_sha256.h \
+  crypto/hmac_sha512.h \
+  crypto/scrypt.h \
+  crypto/sha1.h \
+  crypto/ripemd160.h \
   crypto/sph_blake.h \
   crypto/sph_bmw.h \
-  crypto/sph_cubehash.h \
-  crypto/sph_echo.h \
-	crypto/sph_fugue.h \
   crypto/sph_groestl.h \
-	crypto/sph_hamsi.h \
   crypto/sph_jh.h \
   crypto/sph_keccak.h \
   crypto/sph_luffa.h \
   crypto/sph_shavite.h \
-  crypto/sph_simd.h \
+  crypto/sph_hamsi.h \
+  crypto/sph_cubehash.h \
   crypto/sph_skein.h \
+  crypto/sph_simd.h \
+  crypto/sph_fugue.h \
+  crypto/sph_echo.h \
+  crypto/sph_sha2.h \
   crypto/sph_types.h
 
-# consensus: shared between all executables that validate any consensus rules.
-libmartex_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libmartex_consensus_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_consensus_a_SOURCES = \
-  amount.h \
-  arith_uint256.cpp \
-  arith_uint256.h \
-  consensus/merkle.cpp \
-  consensus/merkle.h \
-  consensus/params.h \
-  consensus/validation.h \
-  hash.cpp \
-  hash.h \
-  prevector.h \
-  primitives/block.cpp \
-  primitives/block.h \
-  primitives/transaction.cpp \
-  primitives/transaction.h \
-  pubkey.cpp \
-  pubkey.h \
-  script/martexconsensus.cpp \
-  script/interpreter.cpp \
-  script/interpreter.h \
-  script/script.cpp \
-  script/script.h \
-  script/script_error.cpp \
-  script/script_error.h \
-  serialize.h \
-  tinyformat.h \
-  uint256.cpp \
-  uint256.h \
-  utilstrencodings.cpp \
-  utilstrencodings.h \
-  version.h
+# libzerocoin library
+libzerocoin_libbitcoin_zerocoin_a_CPPFLAGS = $(AM_CPPFLAGS) $(BOOST_CPPFLAGS)
+libzerocoin_libbitcoin_zerocoin_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libzerocoin_libbitcoin_zerocoin_a_SOURCES = \
+  libzerocoin/Accumulator.h \
+  libzerocoin/bignum.h \
+  libzerocoin/Coin.h \
+  libzerocoin/CoinSpend.h \
+  libzerocoin/Commitment.h \
+  libzerocoin/Denominations.h \
+  libzerocoin/ParamGeneration.h \
+  libzerocoin/Params.h \
+  libzerocoin/SpendType.h \
+  libzerocoin/ZerocoinDefines.h \
+  libzerocoin/bignum.cpp \
+  libzerocoin/Accumulator.cpp \
+  libzerocoin/Coin.cpp \
+  libzerocoin/CoinSpend.cpp \
+  libzerocoin/Denominations.cpp \
+  libzerocoin/ParamGeneration.cpp \
+  libzerocoin/Params.cpp
+if USE_NUM_GMP
+  libzerocoin_libbitcoin_zerocoin_a_SOURCES += libzerocoin/bignum_gmp.cpp
+endif
+if USE_NUM_OPENSSL
+  libzerocoin_libbitcoin_zerocoin_a_SOURCES += libzerocoin/bignum_openssl.cpp
+endif
 
 # common: shared between martexd, and martex-qt and non-server tools
-libmartex_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libmartex_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_common_a_SOURCES = \
+libbitcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_common_a_SOURCES = \
+  allocators.cpp \
   amount.cpp \
   base58.cpp \
-  bip39.cpp \
+  wallet/bip39.cpp \
+  bip38.cpp \
   chainparams.cpp \
   coins.cpp \
   compressor.cpp \
+  consensus/merkle.cpp \
+  primitives/block.cpp \
+  zpiv/deterministicmint.cpp \
+  primitives/transaction.cpp \
+  zpiv/zerocoin.cpp \
   core_read.cpp \
   core_write.cpp \
-  hdchain.cpp \
+  hash.cpp \
+  wallet/hdchain.cpp \
   key.cpp \
   keystore.cpp \
-  netaddress.cpp \
   netbase.cpp \
   protocol.cpp \
+  pubkey.cpp \
   scheduler.cpp \
+  script/interpreter.cpp \
+  script/script.cpp \
   script/sign.cpp \
   script/standard.cpp \
-  warnings.cpp \
+  script/script_error.cpp \
+  spork.cpp \
+  sporkdb.cpp \
   $(BITCOIN_CORE_H)
 
 # util: shared between all executables.
 # This library *must* be included to make sure that the glibc
 # backward-compatibility objects and their sanity checks are linked.
-libmartex_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libmartex_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_util_a_SOURCES = \
-  support/lockedpool.cpp \
+libbitcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_util_a_SOURCES = \
+  allocators.cpp \
   chainparamsbase.cpp \
   clientversion.cpp \
   compat/glibc_sanity.cpp \
@@ -424,25 +426,27 @@ libmartex_util_a_SOURCES = \
   rpc/protocol.cpp \
   support/cleanse.cpp \
   sync.cpp \
-  threadinterrupt.cpp \
+  uint256.cpp \
   util.cpp \
   utilmoneystr.cpp \
+  util/threadnames.cpp \
   utilstrencodings.cpp \
   utiltime.cpp \
   $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
-libmartex_util_a_SOURCES += compat/glibc_compat.cpp
+libbitcoin_util_a_SOURCES += compat/glibc_compat.cpp
+AM_LDFLAGS += $(COMPAT_LDFLAGS)
 endif
 
 # cli: shared between martex-cli and martex-qt
-libmartex_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libmartex_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libmartex_cli_a_SOURCES = \
+libbitcoin_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_cli_a_SOURCES = \
   rpc/client.cpp \
   $(BITCOIN_CORE_H)
 
-nodist_libmartex_util_a_SOURCES = $(srcdir)/obj/build.h
+nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # martexd binary #
@@ -454,17 +458,17 @@ martexd_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 if TARGET_WINDOWS
 martexd_SOURCES += martexd-res.rc
 endif
-
 martexd_LDADD = \
   $(LIBBITCOIN_SERVER) \
+  $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_COMMON) \
   $(LIBUNIVALUE) \
+  $(LIBBITCOIN_ZEROCOIN) \
   $(LIBBITCOIN_UTIL) \
-  $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_ZMQ) \
-  $(LIBBITCOIN_CONSENSUS) \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBLEVELDB) \
+  $(LIBLEVELDB_SSE42) \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
@@ -485,6 +489,7 @@ martex_cli_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO)
+
 martex_cli_LDADD += $(BOOST_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS)
 #
 
@@ -501,36 +506,45 @@ endif
 martex_tx_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_COMMON) \
+  $(LIBBITCOIN_ZEROCOIN) \
   $(LIBBITCOIN_UTIL) \
-  $(LIBBITCOIN_CONSENSUS) \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBSECP256K1)
 
 martex_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 #
 
-# martexconsensus library #
+# bitcoinconsensus library #
 if BUILD_BITCOIN_LIBS
-include_HEADERS = script/martexconsensus.h
-libmartexconsensus_la_SOURCES = $(crypto_libmartex_crypto_a_SOURCES) $(libmartex_consensus_a_SOURCES)
+include_HEADERS = script/bitcoinconsensus.h
+libbitcoinconsensus_la_SOURCES = \
+  allocators.cpp \
+  primitives/transaction.cpp \
+  crypto/hmac_sha512.cpp \
+  crypto/scrypt.cpp \
+  crypto/sha1.cpp \
+  crypto/sha256.cpp \
+  crypto/sha512.cpp \
+  crypto/ripemd160.cpp \
+  hash.cpp \
+  pubkey.cpp \
+  script/script.cpp \
+  script/interpreter.cpp \
+  script/bitcoinconsensus.cpp \
+  uint256.cpp \
+  utilstrencodings.cpp
 
 if GLIBC_BACK_COMPAT
-  libmartexconsensus_la_SOURCES += compat/glibc_compat.cpp
+  libbitcoinconsensus_la_SOURCES += compat/glibc_compat.cpp
 endif
 
-libmartexconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libmartexconsensus_la_LIBADD = $(LIBSECP256K1)
-libmartexconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
-libmartexconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoinconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
+libbitcoinconsensus_la_LIBADD = $(LIBSECP256K1)
+libbitcoinconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
+libbitcoinconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
 endif
 #
-
-CTAES_DIST =  crypto/ctaes/bench.c
-CTAES_DIST += crypto/ctaes/ctaes.c
-CTAES_DIST += crypto/ctaes/ctaes.h
-CTAES_DIST += crypto/ctaes/README.md
-CTAES_DIST += crypto/ctaes/test.c
 
 CLEANFILES = $(EXTRA_LIBRARIES)
 
@@ -538,18 +552,19 @@ CLEANFILES += *.gcda *.gcno
 CLEANFILES += compat/*.gcda compat/*.gcno
 CLEANFILES += consensus/*.gcda consensus/*.gcno
 CLEANFILES += crypto/*.gcda crypto/*.gcno
-CLEANFILES += policy/*.gcda policy/*.gcno
+CLEANFILES += libzerocoin/*.gcda libzerocoin/*.gcno
 CLEANFILES += primitives/*.gcda primitives/*.gcno
+CLEANFILES += rpc/*.gcda rpc/*.gcno
 CLEANFILES += script/*.gcda script/*.gcno
 CLEANFILES += support/*.gcda support/*.gcno
 CLEANFILES += univalue/*.gcda univalue/*.gcno
 CLEANFILES += wallet/*.gcda wallet/*.gcno
 CLEANFILES += wallet/test/*.gcda wallet/test/*.gcno
 CLEANFILES += zmq/*.gcda zmq/*.gcno
+CLEANFILES += zpiv/*.gcda zpiv/*.gcno
+CLEANFILES += obj/build.h
 
-DISTCLEANFILES = obj/build.h
-
-EXTRA_DIST = $(CTAES_DIST)
+EXTRA_DIST =
 
 
 config/martex-config.h: config/stamp-h1
@@ -571,20 +586,16 @@ clean-local:
 	## FIXME: How to get the appropriate modulename_CPPFLAGS in here?
 	$(AM_V_GEN) $(WINDRES) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CPPFLAGS) -DWINDRES_PREPROC -i $< -o $@
 
-.mm.o:
-	$(AM_V_CXX) $(OBJCXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	  $(CPPFLAGS) $(AM_CXXFLAGS) $(QT_INCLUDES) $(AM_CXXFLAGS) $(PIE_FLAGS) $(CXXFLAGS) -c -o $@ $<
-
 check-symbols: $(bin_PROGRAMS)
 if GLIBC_BACK_COMPAT
 	@echo "Checking glibc back compat..."
-	$(AM_V_at) READELF=$(READELF) CPPFILT=$(CPPFILT) $(top_srcdir)/contrib/devtools/symbol-check.py < $(bin_PROGRAMS)
+	$(AM_V_at) READELF=$(READELF) CPPFILT=$(CPPFILT) $(PYTHON) $(top_srcdir)/contrib/devtools/symbol-check.py < $(bin_PROGRAMS)
 endif
 
 check-security: $(bin_PROGRAMS)
 if HARDEN
 	@echo "Checking binary security..."
-	$(AM_V_at) READELF=$(READELF) OBJDUMP=$(OBJDUMP) $(top_srcdir)/contrib/devtools/security-check.py < $(bin_PROGRAMS)
+	$(AM_V_at) READELF=$(READELF) OBJDUMP=$(OBJDUMP) $(PYTHON) $(top_srcdir)/contrib/devtools/security-check.py < $(bin_PROGRAMS)
 endif
 
 %.pb.cc %.pb.h: %.proto
@@ -597,10 +608,6 @@ endif
 
 if ENABLE_TESTS
 include Makefile.test.include
-endif
-
-if ENABLE_BENCH
-include Makefile.bench.include
 endif
 
 if ENABLE_QT

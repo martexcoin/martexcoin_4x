@@ -1,58 +1,78 @@
-// Copyright (c) 2012-2013 The PPCoin developers
+// Copyright (c) 2011-2013 The PPCoin developers
+// Copyright (c) 2013-2014 The NovaCoin Developers
+// Copyright (c) 2014-2018 The BlackCoin Developers
+// Copyright (c) 2015-2020 The PIVX developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef PPCOIN_KERNEL_H
-#define PPCOIN_KERNEL_H
 
-#include "chainparams.h"
-#include "consensus/validation.h"
-#include "uint256.h"
-#include "primitives/transaction.h"
-#include "pow.h"
+#ifndef PIVX_KERNEL_H
+#define PIVX_KERNEL_H
 
-// To decrease granularity of timestamp
-// Supposed to be 2^n-1
-static const int STAKE_TIMESTAMP_MASK = 15;
+#include "main.h"
+#include "stakeinput.h"
 
-// MODIFIER_INTERVAL_RATIO:
-// ratio of group interval length between the last group and the first group
-static const int MODIFIER_INTERVAL_RATIO = 3;
+class CStakeKernel {
+public:
+    /**
+     * CStakeKernel Constructor
+     *
+     * @param[in]   pindexPrev      index of the parent of the kernel block
+     * @param[in]   stakeInput      input for the coinstake of the kernel block
+     * @param[in]   nBits           target difficulty bits of the kernel block
+     * @param[in]   nTimeTx         time of the kernel block
+     */
+    CStakeKernel(const CBlockIndex* const pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int nTimeTx);
 
-/** Coinbase transaction outputs can only be staked after this number of new blocks (network rule) */
-static const int nStakeMinConfirmations = 15;
-/** Minimum nCoinAge required to stake PoS */
-static const unsigned int nStakeMinAge = 10 * 60; // 2 horas
-/** Time to elapse before new modifier is computed */
-static const unsigned int nModifierInterval = 2 * 60;
-/** Desired block times/spacing */
-static const int64_t GetTargetSpacing = BLOCK_SPACING;
-/** Protocol toggle */
-inline bool IsProtocolV3(int64_t nTime) { return Params().NetworkIDString() == CBaseChainParams::TESTNET || nTime > 1493596800; } // Mon, 01 May 2017 00:00:00 GMT
+    // Return stake kernel hash
+    uint256 GetHash() const;
 
-class CBlockIndex;
+    // Check that the kernel hash meets the target required
+    bool CheckKernelHash(bool fSkipLog = false) const;
 
-// Compute the hash modifier for proof-of-stake
-bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeModifier, bool& fGeneratedStakeModifier);
-uint256 ComputeStakeModifierV2(const CBlockIndex* pindexPrev, const uint256& kernel);
+private:
+    // kernel message hashed
+    CDataStream stakeModifier{CDataStream(SER_GETHASH, 0)};
+    int nTimeBlockFrom{0};
+    CDataStream stakeUniqueness{CDataStream(SER_GETHASH, 0)};
+    int nTime{0};
+    // hash target
+    unsigned int nBits{0};     // difficulty for the target
+    CAmount stakeValue{0};     // target multiplier
+};
 
-// Check whether stake kernel meets hash target
-// Sets hashProofOfStake on success return
-bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, unsigned int nBits, unsigned int nTimeBlockFrom, const CTransactionRef& txPrev, const COutPoint& prevout, unsigned int nTimeTx, uint256& hashProofOfStake, uint256& targetProofOfStake, bool fPrintProofOfStake=false);
+/* PoS Validation */
 
-// Check kernel hash target and coinstake signature
-// Sets hashProofOfStake on success return
-bool CheckProofOfStake(CValidationState &state, const CBlockIndex* pindexPrev, const CTransaction& tx, unsigned int nBits, uint256& hashProofOfStake, uint256& targetProofOfStake);
+/*
+ * Stake                Check if stakeInput can stake a block on top of pindexPrev
+ *
+ * @param[in]   pindexPrev      index of the parent block of the block being staked
+ * @param[in]   stakeInput      input for the coinstake
+ * @param[in]   nBits           target difficulty bits
+ * @param[in]   nTimeTx         new blocktime
+ * @return      bool            true if stake kernel hash meets target protocol
+ */
+bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx);
 
-// Check whether the coinstake timestamp meets protocol
-bool CheckCoinStakeTimestamp(int nHeight, int64_t nTimeBlock, int64_t nTimeTx);
+/*
+ * CheckProofOfStake    Check if block has valid proof of stake
+ *
+ * @param[in]   block           block with the proof being verified
+ * @param[out]  strError        string returning error message (if any, else empty)
+ * @param[in]   pindexPrev      index of the parent block
+ *                              (if nullptr, it will be searched in mapBlockIndex)
+ * @return      bool            true if the block has a valid proof of stake
+ */
+bool CheckProofOfStake(const CBlock& block, std::string& strError, const CBlockIndex* pindexPrev = nullptr);
 
-// Get time weight using supplied timestamps
-int64_t GetWeight(int64_t nIntervalBeginning, int64_t nIntervalEnd);
+/*
+ * GetStakeKernelHash   Return stake kernel of a block
+ *
+ * @param[out]  hashRet         hash of the kernel (set by this function)
+ * @param[in]   block           block with the kernel to return
+ * @param[in]   pindexPrev      index of the parent block
+ *                              (if nullptr, it will be searched in mapBlockIndex)
+ * @return      bool            false if kernel cannot be initialized, true otherwise
+ */
+bool GetStakeKernelHash(uint256& hashRet, const CBlock& block, const CBlockIndex* pindexPrev = nullptr);
 
-// Wrapper around CheckStakeKernelHash()
-// Also checks existence of kernel input and min age
-// Convenient for searching a kernel
-bool CheckKernel(CBlockIndex* pindexPrev, unsigned int nBits, int64_t nTime, const COutPoint& prevout, int64_t* pBlockTime = NULL);
-bool IsConfirmedInNPrevBlocks(const uint256 &hashBlock, const CBlockIndex *pindexFrom, int nMaxDepth, int &nActualDepth);
-
-#endif // PPCOIN_KERNEL_H
+#endif // PIVX_KERNEL_H

@@ -1,0 +1,8 @@
+/usr/bin/martex-cli		--	gen_context(system_u:object_r:martex_exec_t,s0)
+/usr/sbin/martexd		--	gen_context(system_u:object_r:martex_exec_t,s0)
+/usr/lib(64)?/martex/martexd		--	gen_context(system_u:object_r:martex_exec_t,s0)
+
+/etc/martex(/.*)?		gen_context(system_u:object_r:martex_conf_t,s0)
+/var/lib/martex(/.*)?		gen_context(system_u:object_r:martex_var_lib_t,s0)
+
+(/var)?/run/martexd(/.*)?   gen_context(system_u:object_r:martex_var_run_t,s0)

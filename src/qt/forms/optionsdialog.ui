@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>576</width>
-    <height>402</height>
+    <height>442</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,10 +30,10 @@
        <item>
         <widget class="QCheckBox" name="bitcoinAtStartup">
          <property name="toolTip">
-          <string>Automatically start %1 after logging in to the system.</string>
+          <string>Automatically start MarteX after logging in to the system.</string>
          </property>
          <property name="text">
-          <string>&amp;Start %1 on system login</string>
+          <string>&amp;Start MarteX on system login</string>
          </property>
         </widget>
        </item>
@@ -102,33 +102,7 @@
            </property>
           </widget>
          </item>
-         <item>
-          <spacer name="horizontalSpacer_3_Main">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
         </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_Main">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -137,6 +111,27 @@
        <string>W&amp;allet</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_Wallet">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2_Wallet">
+         <item>
+          <widget class="QLabel" name="labelStakeSplitThresholdText">
+           <property name="text">
+            <string>Stake split threshold:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spinBoxStakeSplitThreshold">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>999999</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
@@ -164,36 +159,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="showAdvancedPSUI">
-            <property name="toolTip">
-             <string>Show additional information and buttons for AnonSend on overview screen.</string>
-            </property>
-            <property name="text">
-             <string>Enable advanced AnonSend interface</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="lowKeysWarning">
-            <property name="toolTip">
-             <string>Show warning dialog when AnonSend detects that wallet has very low number of keys left.</string>
-            </property>
-            <property name="text">
-             <string>Warn if AnonSend is running out of keys</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="anonSendMultiSession">
-            <property name="toolTip">
-             <string>Whether to use experimental AnonSend mode with multiple mixing sessions per block.&lt;br/&gt;Note: You must use this feature carefully.&lt;br/&gt;Make sure you always have recent wallet (auto)backup in a safe place!</string>
-            </property>
-            <property name="text">
-             <string>Enable AnonSend &amp;multi-session</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QCheckBox" name="spendZeroConfChange">
             <property name="toolTip">
              <string>If you disable the spending of unconfirmed change, the change from a transaction&lt;br/&gt;cannot be used until that transaction has at least one confirmation.&lt;br/&gt;This also affects how your balance is computed.</string>
@@ -205,75 +170,6 @@
           </item>
          </layout>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4_Wallet">
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="toolTip">
-            <string>This setting determines the amount of individual masternodes that an input will be anonymized through.&lt;br/&gt;More rounds of anonymization gives a higher degree of privacy, but also costs more in fees.</string>
-           </property>
-           <property name="text">
-            <string>AnonSend rounds to use</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="anonSendRounds">
-           <property name="minimum">
-            <number>2</number>
-           </property>
-           <property name="maximum">
-            <number>8</number>
-           </property>
-           <property name="value">
-            <number>4</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="toolTip">
-            <string>This amount acts as a threshold to turn off AnonSend once it's reached.</string>
-           </property>
-           <property name="statusTip">
-            <string notr="true"/>
-           </property>
-           <property name="whatsThis">
-            <string notr="true"/>
-           </property>
-           <property name="accessibleName">
-            <string notr="true"/>
-           </property>
-           <property name="accessibleDescription">
-            <string notr="true"/>
-           </property>
-           <property name="text">
-            <string>Amount of MarteX to keep anonymized</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="anonSendAmount">
-           <property name="minimum">
-            <number>2</number>
-           </property>
-           <property name="maximum">
-            <number>2000</number>
-           </property>
-           <property name="singleStep">
-            <number>10</number>
-           </property>
-           <property name="value">
-            <number>1000</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_Wallet">
@@ -298,7 +194,7 @@
        <item>
         <widget class="QCheckBox" name="mapPortUpnp">
          <property name="toolTip">
-          <string>Automatically open the MarteX Core client port on the router. This only works when your router supports UPnP and it is enabled.</string>
+          <string>Automatically open the MarteX client port on the router. This only works when your router supports UPnP and it is enabled.</string>
          </property>
          <property name="text">
           <string>Map port using &amp;UPnP</string>
@@ -407,193 +303,6 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2_Network">
-         <item>
-          <widget class="QLabel" name="proxyActiveNets">
-           <property name="text">
-            <string>Used for reaching peers via:</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="proxyReachIPv4">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="toolTip">
-            <string>Shows, if the supplied default SOCKS5 proxy is used to reach peers via this network type.</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="proxyReachIPv4Label">
-           <property name="text">
-            <string>IPv4</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="proxyReachIPv6">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="toolTip">
-            <string>Shows, if the supplied default SOCKS5 proxy is used to reach peers via this network type.</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="proxyReachIPv6Label">
-           <property name="text">
-            <string>IPv6</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="proxyReachTor">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="toolTip">
-            <string>Shows, if the supplied default SOCKS5 proxy is used to reach peers via this network type.</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="proxyReachTorLabel">
-           <property name="text">
-            <string>Tor</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_2_Network">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="connectSocksTor">
-         <property name="toolTip">
-          <string>Connect to the MarteX network through a separate SOCKS5 proxy for Tor hidden services.</string>
-         </property>
-         <property name="text">
-          <string>Use separate SOCKS5 proxy to reach peers via Tor hidden services:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3_Network">
-         <item>
-          <widget class="QLabel" name="proxyIpTorLabel">
-           <property name="text">
-            <string>Proxy &amp;IP:</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-           <property name="buddy">
-            <cstring>proxyIpTor</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QValidatedLineEdit" name="proxyIpTor">
-           <property name="minimumSize">
-            <size>
-             <width>140</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>140</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>IP address of the proxy (e.g. IPv4: 127.0.0.1 / IPv6: ::1)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="proxyPortTorLabel">
-           <property name="text">
-            <string>&amp;Port:</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-           <property name="buddy">
-            <cstring>proxyPortTor</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="proxyPortTor">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>55</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Port of the proxy (e.g. 9050)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_4_Network">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
         <spacer name="verticalSpacer_Network">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -614,16 +323,6 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_Window">
        <item>
-        <widget class="QCheckBox" name="hideTrayIcon">
-         <property name="toolTip">
-          <string>&amp;Hide the icon from the system tray.</string>
-         </property>
-         <property name="text">
-          <string>Hide tray icon</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QCheckBox" name="minimizeToTray">
          <property name="toolTip">
           <string>Show only a tray icon after minimizing the window.</string>
@@ -636,7 +335,7 @@
        <item>
         <widget class="QCheckBox" name="minimizeOnClose">
          <property name="toolTip">
-          <string>Minimize instead of exit the application when the window is closed. When this option is enabled, the application will be closed only after selecting Exit in the menu.</string>
+          <string>Minimize instead of exit the application when the window is closed. When this option is enabled, the application will be closed only after selecting Quit in the menu.</string>
          </property>
          <property name="text">
           <string>M&amp;inimize on close</string>
@@ -681,7 +380,7 @@
          <item>
           <widget class="QValueComboBox" name="lang">
            <property name="toolTip">
-            <string>The user interface language can be set here. This setting will take effect after restarting %1.</string>
+            <string>The user interface language can be set here. This setting will take effect after restarting MarteX.</string>
            </property>
           </widget>
          </item>
@@ -703,7 +402,7 @@
          </property>
          <property name="text">
           <string>Language missing or translation incomplete? Help contributing translations here:
-https://www.transifex.com/projects/p/martex/</string>
+https://www.transifex.com/pivx-project/pivx-project-translations</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -717,7 +416,7 @@ https://www.transifex.com/projects/p/martex/</string>
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4_Display" stretch="0,0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2_Display" stretch="0,0">
          <item>
           <widget class="QLabel" name="themeLabel">
            <property name="text">
@@ -731,73 +430,116 @@ https://www.transifex.com/projects/p/martex/</string>
         </layout>
        </item>
        <item>
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
+        <widget class="QWidget" name="verticalZpivDisplayWidget" native="true">
+         <layout class="QVBoxLayout" name="verticalZpivDisplayLayout">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3_Display">
+            <item>
+             <widget class="QLabel" name="unitLabel">
+              <property name="text">
+               <string>Unit to show amounts in:</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QValueComboBox" name="unit">
+              <property name="toolTip">
+               <string>Choose the default subdivision unit to show in the interface and when sending coins.</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4_Display">
+            <item>
+             <widget class="QLabel" name="digitsLabel">
+              <property name="text">
+               <string>Decimal digits</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QValueComboBox" name="digits"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5_Display">
+            <item>
+             <widget class="QCheckBox" name="checkBoxHideZeroBalances">
+              <property name="toolTip">
+               <string>Hide empty balances</string>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>Hide empty balances</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBoxHideOrphans">
+              <property name="toolTip">
+               <string>Hide orphan stakes in transaction lists</string>
+              </property>
+              <property name="text">
+               <string>Hide orphan stakes</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6_Display">
+            <item>
+             <widget class="QLabel" name="thirdPartyTxUrlsLabel">
+              <property name="toolTip">
+               <string>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</string>
+              </property>
+              <property name="text">
+               <string>Third party transaction URLs</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="thirdPartyTxUrls">
+              <property name="toolTip">
+               <string>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2_Display">
-         <item>
-          <widget class="QLabel" name="unitLabel">
-           <property name="text">
-            <string>&amp;Unit to show amounts in:</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-           <property name="buddy">
-            <cstring>unit</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QValueComboBox" name="unit">
-           <property name="toolTip">
-            <string>Choose the default subdivision unit to show in the interface and when sending coins.</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5_Display">
-         <item>
-          <widget class="QLabel" name="digitsLabel">
-           <property name="text">
-            <string>Decimal digits</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QValueComboBox" name="digits"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3_Display">
-         <item>
-          <widget class="QLabel" name="thirdPartyTxUrlsLabel">
-           <property name="toolTip">
-            <string>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items.&lt;br/&gt;%s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</string>
-           </property>
-           <property name="text">
-            <string>Third party transaction URLs</string>
-           </property>
-           <property name="buddy">
-            <cstring>thirdPartyTxUrls</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="thirdPartyTxUrls">
-           <property name="toolTip">
-            <string>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items.&lt;br/&gt;%s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer">

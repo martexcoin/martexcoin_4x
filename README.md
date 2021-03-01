@@ -1,72 +1,63 @@
-MarteX Core
-===========
-[![logo](https://img.shields.io/badge/Martexcoin-Cryptocurrency-blue.svg)](https://www.martexcoin.org)
-[![issues](https://img.shields.io/github/issues/martexcoin/martexcoin.svg)](https://github.com/martexcoin/martexcoin/issues)
-[![forks](https://img.shields.io/github/forks/martexcoin/martexcoin.svg)](https://github.com/martexcoin/martexcoin/network/members)
-[![stars](https://img.shields.io/github/stars/martexcoin/martexcoin.svg)](https://github.com/martexcoin/martexcoin/stargazers)
-[![license](https://img.shields.io/github/license/martexcoin/martexcoin.svg)](https://github.com/martexcoin/martexcoin/blob/master/COPYING)
-![downloads](https://img.shields.io/github/downloads/martexcoin/martexcoin/total.svg)
+# ZENZO Core Integration/Staging Repository
 
-What is MarteX?
-----------------
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE) [![Chat on Discord](https://img.shields.io/badge/chat-Discord-brightgreen.svg)](https://discord.gg/invite/nzGapAh) [![GitHub version](https://badge.fury.io/gh/Zenzo-Ecosystem%2FZENZO-Core.svg)](https://badge.fury.io/gh/Zenzo-Ecosystem%2FZENZO-Core)
 
-MarteX is an experimental digital currency that enables anonymous, instant
-payments to anyone, anywhere in the world. MarteX uses peer-to-peer technology
-to operate with no central authority: managing transactions and issuing money
-are carried out collectively by the network. MarteX Core is the name of the open
-source software which enables the use of this currency.
+ZENZO(MXT) is an open-source digital
+currency based on Bitcoin's blockchain technology, Dash’s Masternodes and 
+PIVX’s general Codebase. Each of these elements was combined
+to create a powerful and innovative technology. ZENZO is also powered
+by Blackcoin Proof-of-Stake 3.0 and Bitcoin Core 0.10x code base, using Xevan
+hashing algorithm with a block time of just 60 seconds.
+
+A peer-to-peer digital currency that provides fast, zero cost
+payments to anywhere around the world, without any third-party
+intervention. ZENZO is a fully decentralized global payment network
+allowing individuals to have full control of their finances.
+
+Masternodes require a collateral of 15,000 MXT and can be run on the
+Tor network for greater privacy. All transactions on the network are fully
+verifiable with a built-in blockchain explorer within the software itself. The
+block reward ratio of staking to masternodes is 35:65.
+
+The ZENZO(MXT) digital currency powers the monetary system behind ZENZO’s many
+use cases, such as the [ZENZO Arcade](https://arcade.zenzo.io) and the [ZENZO SDK](https://github.com/ZENZO-Ecosystem/ZENZO-SDK-NodeJS)
+
+**For more information, please visit [zenzo.io](https://www.zenzo.io).**
+
+***
+
+### Blockchain & Coin Specifications
+<table>
+<tr><td>Ticker</td><td>MXT</td></tr>
+<tr><td>Maximum Coin Supply</td><td>∞</td></tr>  
+<tr><td>Consensus Algorithm</td><td>Proof of Stake (PoS)</td></tr>
+<tr><td>Hashing Algorithm</td><td>Xevan</td></tr>
+<tr><td>Masternode Collateral</td><td>15,000 MXT</td></tr>  
+<tr><td>Premine</td><td>16,800,000 MXT</td></tr>
+<tr><td>Zerocoin Start Height</td><td>101</td></tr>
+<tr><td>Block Time</td><td>1 Minute</td></tr>
+<tr><td>Block Size</td><td>2 MB</td></tr>
+<tr><td>Block Maturity</td><td>50 Blocks</td></tr>
+<tr><td>Block Confirmation</td><td>10</td></tr>
+<tr><td>PoS Minimum Age</td><td>3 hours</td></tr>
+<tr><td>PoS Maximum Age</td><td>Ø</td></tr>  
+<tr><td>Block Rewards (Staking)</td><td>35%</td></tr>
+<tr><td>Block Rewards (Masternodes)</td><td>65%</td></tr>
+</table>
+
+### Block Rewards (MXT)
+<table>
+<tr><td>Block 1</td><td>16,800,000</td></tr>
+<tr><td>Block 2 - 400</td><td>0.01</td></tr>
+<tr><td>Block 401 - 10,000</td><td>15</td></tr>
+<tr><td>Block 10,001 - 50,000</td><td>13</td></tr>
+<tr><td>Block 50,001 - 100,000</td><td>11</td></tr>
+<tr><td>Block 100,001 - ∞</td><td>9</td></tr>  
+</table>
+
+***
 
 
-To know more read our [whitepaper](https://github.com/MarteXcoin-documentation/Documentation/tree/master/white_paper).
+*Special thanks to ZENZO Core Developers (including [@JSKitty](https://github.com/JSKitty))* and other contributors: 
 
-License
--------
-
-MarteX Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
-information or see https://opensource.org/licenses/MIT.
-
-Development Process
--------------------
-
-The `master` branch is regularly built (see `doc/build-*.md` for instructions) and tested, but it is not guaranteed to be
-completely stable.
-[Tags](https://github.com/martexcoin/martexcoin/tags) are created to indicate new official,
-stable release versions of MarteX Core.
-
-The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md).
-
-Participation in the MarteX project is subject to a [Code of Conduct](CODE_OF_CONDUCT.md).
-
-Testing
--------
-
-Testing and code review is the bottleneck for development; we get more pull
-requests than we can review and test on short notice. Please be patient and help out by testing
-other people's pull requests, and remember this is a security-critical project where any mistake might cost people
-lots of money.
-
-### Automated Testing
-
-Developers are strongly encouraged to write [unit tests](src/test/README.md) for new code, and to
-submit new unit tests for old code. Unit tests can be compiled and run
-(assuming they weren't disabled in configure) with: `make check`. Further details on running
-and extending unit tests can be found in [/src/test/README.md](/src/test/README.md).
-
-There are also [regression and integration tests](/qa) of the RPC interface, written
-in Python, that are run automatically on the build server.
-These tests can be run (if the [test dependencies](/qa) are installed) with: `qa/pull-tester/rpc-tests.py`
-
-The Travis CI system makes sure that every pull request is built for Windows, Linux, and OS X, and that unit/sanity tests are run automatically.
-
-### Manual Quality Assurance (QA) Testing
-
-Changes should be tested by somebody other than the developer who wrote the
-code. This is especially important for large or high-risk changes. It is useful
-to add a test plan to the pull request description if testing the changes is
-not straightforward.
-
-# Documentations
-
-[Development documents.](./doc)
-
-[User documents.](./mxt-docs)
+[@AkshayNexus](https://github.com/akshaynexus), [@j00v](https://github.com/j00v), [@sicXnull](https://github.com/sicXnull)
