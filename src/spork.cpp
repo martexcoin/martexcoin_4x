@@ -26,6 +26,11 @@ std::map<int, int64_t> mapSporkDefaults = {
     {SPORK_10_MASTERNODE_PAY_UPDATED_NODES,  4070908800ULL}, // OFF
     {SPORK_12_RECONSIDER_BLOCKS,                         0}, // 0N
     {SPORK_14_REQUIRE_SENTINEL_FLAG,         4070908800ULL}, // OFF
+    {SPORK_15_NEW_PROTOCOL_ENFORCEMENT,      4070908800ULL}, // OFF
+    {SPORK_16_ZEROCOIN_MAINTENANCE_MODE,     4070908800ULL}, // OFF
+    {SPORK_17_COLDSTAKING_ENFORCEMENT,       4070908800ULL}, // OFF
+    {SPORK_18_ZEROCOIN_PUBLICSPEND_V4,       4070908800ULL}, // OFF
+    {SPORK_19_ECOFUND_PAYMENT_ENFORCEMENT,   4070908800ULL}, // OFF
     {SPORK_20_FORCE_ENABLED_MASTERNODE,      4070908800ULL}, // OFF
 };
 
@@ -162,15 +167,20 @@ int64_t CSporkManager::GetSporkValue(int nSporkID)
 
 int CSporkManager::GetSporkIDByName(const std::string& strName)
 {
-    if (strName == "SPORK_2_FASTSEND_ENABLED")               return SPORK_2_FASTSEND_ENABLED;
-    if (strName == "SPORK_3_FASTSEND_BLOCK_FILTERING")       return SPORK_3_FASTSEND_BLOCK_FILTERING;
-    if (strName == "SPORK_5_FASTSEND_MAX_VALUE")             return SPORK_5_FASTSEND_MAX_VALUE;
+    if (strName == "SPORK_2_FASTSEND_ENABLED")                  return SPORK_2_FASTSEND_ENABLED;
+    if (strName == "SPORK_3_FASTSEND_BLOCK_FILTERING")          return SPORK_3_FASTSEND_BLOCK_FILTERING;
+    if (strName == "SPORK_5_FASTSEND_MAX_VALUE")                return SPORK_5_FASTSEND_MAX_VALUE;
     if (strName == "SPORK_6_NEW_SIGS")                          return SPORK_6_NEW_SIGS;
     if (strName == "SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT")    return SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT;
     if (strName == "SPORK_9_SUPERBLOCKS_ENABLED")               return SPORK_9_SUPERBLOCKS_ENABLED;
     if (strName == "SPORK_10_MASTERNODE_PAY_UPDATED_NODES")     return SPORK_10_MASTERNODE_PAY_UPDATED_NODES;
     if (strName == "SPORK_12_RECONSIDER_BLOCKS")                return SPORK_12_RECONSIDER_BLOCKS;
     if (strName == "SPORK_14_REQUIRE_SENTINEL_FLAG")            return SPORK_14_REQUIRE_SENTINEL_FLAG;
+    if (strName == "SPORK_15_NEW_PROTOCOL_ENFORCEMENT")         return SPORK_15_NEW_PROTOCOL_ENFORCEMENT;
+    if (strName == "SPORK_16_ZEROCOIN_MAINTENANCE_MODE")        return SPORK_16_ZEROCOIN_MAINTENANCE_MODE;
+    if (strName == "SPORK_17_COLDSTAKING_ENFORCEMENT")          return SPORK_17_COLDSTAKING_ENFORCEMENT;
+    if (strName == "SPORK_18_ZEROCOIN_PUBLICSPEND_V4")          return SPORK_18_ZEROCOIN_PUBLICSPEND_V4;
+    if (strName == "SPORK_19_ECOFUND_PAYMENT_ENFORCEMENT")      return SPORK_19_ECOFUND_PAYMENT_ENFORCEMENT;
     if (strName == "SPORK_20_FORCE_ENABLED_MASTERNODE")         return SPORK_20_FORCE_ENABLED_MASTERNODE;
 
     LogPrint("spork", "CSporkManager::GetSporkIDByName -- Unknown Spork name '%s'\n", strName);
@@ -180,15 +190,20 @@ int CSporkManager::GetSporkIDByName(const std::string& strName)
 std::string CSporkManager::GetSporkNameByID(int nSporkID)
 {
     switch (nSporkID) {
-        case SPORK_2_FASTSEND_ENABLED:               return "SPORK_2_FASTSEND_ENABLED";
-        case SPORK_3_FASTSEND_BLOCK_FILTERING:       return "SPORK_3_FASTSEND_BLOCK_FILTERING";
-        case SPORK_5_FASTSEND_MAX_VALUE:             return "SPORK_5_FASTSEND_MAX_VALUE";
+        case SPORK_2_FASTSEND_ENABLED:                  return "SPORK_2_FASTSEND_ENABLED";
+        case SPORK_3_FASTSEND_BLOCK_FILTERING:          return "SPORK_3_FASTSEND_BLOCK_FILTERING";
+        case SPORK_5_FASTSEND_MAX_VALUE:                return "SPORK_5_FASTSEND_MAX_VALUE";
         case SPORK_6_NEW_SIGS:                          return "SPORK_6_NEW_SIGS";
         case SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT:    return "SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT";
         case SPORK_9_SUPERBLOCKS_ENABLED:               return "SPORK_9_SUPERBLOCKS_ENABLED";
         case SPORK_10_MASTERNODE_PAY_UPDATED_NODES:     return "SPORK_10_MASTERNODE_PAY_UPDATED_NODES";
         case SPORK_12_RECONSIDER_BLOCKS:                return "SPORK_12_RECONSIDER_BLOCKS";
         case SPORK_14_REQUIRE_SENTINEL_FLAG:            return "SPORK_14_REQUIRE_SENTINEL_FLAG";
+        case SPORK_15_NEW_PROTOCOL_ENFORCEMENT:         return "SPORK_15_NEW_PROTOCOL_ENFORCEMENT";
+        case SPORK_16_ZEROCOIN_MAINTENANCE_MODE:        return "SPORK_16_ZEROCOIN_MAINTENANCE_MODE";
+        case SPORK_17_COLDSTAKING_ENFORCEMENT:          return "SPORK_17_COLDSTAKING_ENFORCEMENT";
+        case SPORK_18_ZEROCOIN_PUBLICSPEND_V4:          return "SPORK_18_ZEROCOIN_PUBLICSPEND_V4";
+        case SPORK_19_ECOFUND_PAYMENT_ENFORCEMENT:      return "SPORK_19_ECOFUND_PAYMENT_ENFORCEMENT";
         case SPORK_20_FORCE_ENABLED_MASTERNODE:         return "SPORK_20_FORCE_ENABLED_MASTERNODE";
         default:
             LogPrint("spork", "CSporkManager::GetSporkNameByID -- Unknown Spork ID %d\n", nSporkID);

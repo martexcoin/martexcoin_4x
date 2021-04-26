@@ -17,15 +17,20 @@ class CSporkManager;
     Don't ever reuse these IDs for other sporks
     - This would result in old clients getting confused about which spork is for what
 */
-static const int SPORK_2_FASTSEND_ENABLED                            = 10001;
-static const int SPORK_3_FASTSEND_BLOCK_FILTERING                    = 10002;
-static const int SPORK_5_FASTSEND_MAX_VALUE                          = 10004;
+static const int SPORK_2_FASTSEND_ENABLED                            	= 10001;
+static const int SPORK_3_FASTSEND_BLOCK_FILTERING                    	= 10002;
+static const int SPORK_5_FASTSEND_MAX_VALUE                         	= 10004;
 static const int SPORK_6_NEW_SIGS                                       = 10005;
 static const int SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT                 = 10007;
 static const int SPORK_9_SUPERBLOCKS_ENABLED                            = 10008;
 static const int SPORK_10_MASTERNODE_PAY_UPDATED_NODES                  = 10009;
 static const int SPORK_12_RECONSIDER_BLOCKS                             = 10011;
 static const int SPORK_14_REQUIRE_SENTINEL_FLAG                         = 10013;
+static const int SPORK_15_NEW_PROTOCOL_ENFORCEMENT			= 10014;
+static const int SPORK_16_ZEROCOIN_MAINTENANCE_MODE			= 10016;
+static const int SPORK_17_COLDSTAKING_ENFORCEMENT			= 10017;
+static const int SPORK_18_ZEROCOIN_PUBLICSPEND_V4			= 10018;
+static const int SPORK_19_ECOFUND_PAYMENT_ENFORCEMENT			= 10019;
 static const int SPORK_20_FORCE_ENABLED_MASTERNODE			= 10020;
 static const int SPORK_START                                            = SPORK_2_FASTSEND_ENABLED;
 static const int SPORK_END                                              = SPORK_20_FORCE_ENABLED_MASTERNODE;
