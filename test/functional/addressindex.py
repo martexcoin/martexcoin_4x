@@ -15,19 +15,18 @@ import binascii
 
 class AddressIndexTest(BitcoinTestFramework):
 
-    def __init__(self):
-        super().__init__()
+    def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 4
 
     def setup_network(self):
-        self.nodes = []
+        self.add_nodes(self.num_nodes)
         # Nodes 0/1 are "wallet" nodes
-        self.nodes.append(start_node(0, self.options.tmpdir, ["-debug", "-relaypriority=0"]))
-        self.nodes.append(start_node(1, self.options.tmpdir, ["-debug", "-addressindex"]))
+        self.start_node(0, ["-relaypriority=0"])
+        self.start_node(1, ["-addressindex"])
         # Nodes 2/3 are used for testing
-        self.nodes.append(start_node(2, self.options.tmpdir, ["-debug", "-addressindex", "-relaypriority=0"]))
-        self.nodes.append(start_node(3, self.options.tmpdir, ["-debug", "-addressindex"]))
+        self.start_node(2, ["-addressindex", "-relaypriority=0"])
+        self.start_node(3, ["-addressindex"])
         connect_nodes(self.nodes[0], 1)
         connect_nodes(self.nodes[0], 2)
         connect_nodes(self.nodes[0], 3)
@@ -36,7 +35,19 @@ class AddressIndexTest(BitcoinTestFramework):
         self.sync_all()
 
     def run_test(self):
-        print("Mining blocks...")
+        self.log.info("Test that settings can't be changed without -reindex...")
+        self.stop_node(1)
+        self.assert_start_raises_init_error(1, ["-addressindex=0"], 'You need to rebuild the database using -reindex to change -addressindex')
+        self.start_node(1, ["-addressindex=0", "-reindex"])
+        connect_nodes(self.nodes[0], 1)
+        self.sync_all()
+        self.stop_node(1)
+        self.assert_start_raises_init_error(1, ["-addressindex"], 'You need to rebuild the database using -reindex to change -addressindex')
+        self.start_node(1, ["-addressindex", "-reindex"])
+        connect_nodes(self.nodes[0], 1)
+        self.sync_all()
+
+        self.log.info("Mining blocks...")
         self.nodes[0].generate(105)
         self.sync_all()
 
@@ -50,7 +61,7 @@ class AddressIndexTest(BitcoinTestFramework):
         assert_equal(balance0["balance"], 0)
 
         # Check p2pkh and p2sh address indexes
-        print("Testing p2pkh and p2sh address index...")
+        self.log.info("Testing p2pkh and p2sh address index...")
 
         txid0 = self.nodes[0].sendtoaddress("yMNJePdcKvXtWWQnFYHNeJ5u8TF2v1dfK4", 10)
         self.nodes[0].generate(1)
@@ -85,7 +96,7 @@ class AddressIndexTest(BitcoinTestFramework):
         assert_equal(txidsb[2], txidb2)
 
         # Check that limiting by height works
-        print("Testing querying txids by range of block heights..")
+        self.log.info("Testing querying txids by range of block heights..")
         height_txids = self.nodes[1].getaddresstxids({
             "addresses": ["93bVhahvUKmQu8gu9g3QnPPa2cxFK98pMB"],
             "start": 105,
@@ -110,7 +121,7 @@ class AddressIndexTest(BitcoinTestFramework):
         assert_equal(balance0["balance"], 45 * 100000000)
 
         # Check that outputs with the same address will only return one txid
-        print("Testing for txid uniqueness...")
+        self.log.info("Testing for txid uniqueness...")
         addressHash = binascii.unhexlify("FE30B718DCF0BF8A2A686BF1820C073F8B2C3B37")
         scriptPubKey = CScript([OP_HASH160, addressHash, OP_EQUAL])
         unspent = self.nodes[0].listunspent()
@@ -120,7 +131,7 @@ class AddressIndexTest(BitcoinTestFramework):
         tx.rehash()
 
         signed_tx = self.nodes[0].signrawtransaction(binascii.hexlify(tx.serialize()).decode("utf-8"))
-        sent_txid = self.nodes[0].sendrawtransaction(signed_tx["hex"], True, False, True)
+        sent_txid = self.nodes[0].sendrawtransaction(signed_tx["hex"], True)
 
         self.nodes[0].generate(1)
         self.sync_all()
@@ -130,12 +141,12 @@ class AddressIndexTest(BitcoinTestFramework):
         assert_equal(txidsmany[3], sent_txid)
 
         # Check that balances are correct
-        print("Testing balances...")
+        self.log.info("Testing balances...")
         balance0 = self.nodes[1].getaddressbalance("93bVhahvUKmQu8gu9g3QnPPa2cxFK98pMB")
         assert_equal(balance0["balance"], 45 * 100000000 + 21)
 
         # Check that balances are correct after spending
-        print("Testing balances after spending...")
+        self.log.info("Testing balances after spending...")
         privkey2 = "cU4zhap7nPJAWeMFu4j6jLrfPmqakDAzy8zn8Fhb3oEevdm4e5Lc"
         address2 = "yeMpGzMj3rhtnz48XsfpB8itPHhHtgxLc3"
         addressHash2 = binascii.unhexlify("C5E4FB9171C22409809A3E8047A29C83886E325D")
@@ -144,12 +155,13 @@ class AddressIndexTest(BitcoinTestFramework):
 
         unspent = self.nodes[0].listunspent()
         tx = CTransaction()
+        tx_fee_sat = 1000
         tx.vin = [CTxIn(COutPoint(int(unspent[0]["txid"], 16), unspent[0]["vout"]))]
-        amount = int(unspent[0]["amount"] * 100000000)
+        amount = int(unspent[0]["amount"] * 100000000) - tx_fee_sat
         tx.vout = [CTxOut(amount, scriptPubKey2)]
         tx.rehash()
         signed_tx = self.nodes[0].signrawtransaction(binascii.hexlify(tx.serialize()).decode("utf-8"))
-        spending_txid = self.nodes[0].sendrawtransaction(signed_tx["hex"], True, False, True)
+        spending_txid = self.nodes[0].sendrawtransaction(signed_tx["hex"], True)
         self.nodes[0].generate(1)
         self.sync_all()
         balance1 = self.nodes[1].getaddressbalance(address2)
@@ -163,7 +175,7 @@ class AddressIndexTest(BitcoinTestFramework):
         tx.rehash()
 
         signed_tx = self.nodes[0].signrawtransaction(binascii.hexlify(tx.serialize()).decode("utf-8"))
-        sent_txid = self.nodes[0].sendrawtransaction(signed_tx["hex"], True, False, True)
+        sent_txid = self.nodes[0].sendrawtransaction(signed_tx["hex"], True)
         self.nodes[0].generate(1)
         self.sync_all()
 
@@ -188,13 +200,13 @@ class AddressIndexTest(BitcoinTestFramework):
         assert_equal(len(deltas), 1)
 
         # Check that unspent outputs can be queried
-        print("Testing utxos...")
+        self.log.info("Testing utxos...")
         utxos = self.nodes[1].getaddressutxos({"addresses": [address2]})
         assert_equal(len(utxos), 1)
         assert_equal(utxos[0]["satoshis"], change_amount)
 
         # Check that indexes will be updated with a reorg
-        print("Testing reorg...")
+        self.log.info("Testing reorg...")
 
         best_hash = self.nodes[0].getbestblockhash()
         self.nodes[0].invalidateblock(best_hash)
@@ -202,8 +214,7 @@ class AddressIndexTest(BitcoinTestFramework):
         self.nodes[2].invalidateblock(best_hash)
         self.nodes[3].invalidateblock(best_hash)
         # Allow some time for the reorg to start
-        set_mocktime(get_mocktime() + 2)
-        set_node_times(self.nodes, get_mocktime())
+        self.bump_mocktime(2)
         self.sync_all()
 
         balance4 = self.nodes[1].getaddressbalance(address2)
@@ -229,7 +240,7 @@ class AddressIndexTest(BitcoinTestFramework):
         assert_equal(utxos3[2]["height"], 265)
 
         # Check mempool indexing
-        print("Testing mempool indexing...")
+        self.log.info("Testing mempool indexing...")
 
         privKey3 = "cRyrMvvqi1dmpiCmjmmATqjAwo6Wu7QTjKu1ABMYW5aFG4VXW99K"
         address3 = "yWB15aAdpeKuSaQHFVJpBDPbNSLZJSnDLA"
@@ -241,17 +252,16 @@ class AddressIndexTest(BitcoinTestFramework):
 
         tx = CTransaction()
         tx.vin = [CTxIn(COutPoint(int(unspent[0]["txid"], 16), unspent[0]["vout"]))]
-        amount = int(unspent[0]["amount"] * 100000000)
+        amount = int(unspent[0]["amount"] * 100000000) - tx_fee_sat
         tx.vout = [CTxOut(amount, scriptPubKey3)]
         tx.rehash()
         signed_tx = self.nodes[2].signrawtransaction(binascii.hexlify(tx.serialize()).decode("utf-8"))
-        memtxid1 = self.nodes[2].sendrawtransaction(signed_tx["hex"], True, False, True)
-        set_mocktime(get_mocktime() + 2)
-        set_node_times(self.nodes, get_mocktime())
+        memtxid1 = self.nodes[2].sendrawtransaction(signed_tx["hex"], True)
+        self.bump_mocktime(2)
 
         tx2 = CTransaction()
         tx2.vin = [CTxIn(COutPoint(int(unspent[1]["txid"], 16), unspent[1]["vout"]))]
-        amount = int(unspent[1]["amount"] * 100000000)
+        amount = int(unspent[1]["amount"] * 100000000) - tx_fee_sat
         tx2.vout = [
             CTxOut(int(amount / 4), scriptPubKey3),
             CTxOut(int(amount / 4), scriptPubKey3),
@@ -260,9 +270,8 @@ class AddressIndexTest(BitcoinTestFramework):
         ]
         tx2.rehash()
         signed_tx2 = self.nodes[2].signrawtransaction(binascii.hexlify(tx2.serialize()).decode("utf-8"))
-        memtxid2 = self.nodes[2].sendrawtransaction(signed_tx2["hex"], True, False, True)
-        set_mocktime(get_mocktime() + 2)
-        set_node_times(self.nodes, get_mocktime())
+        memtxid2 = self.nodes[2].sendrawtransaction(signed_tx2["hex"], True)
+        self.bump_mocktime(2)
 
         mempool = self.nodes[2].getaddressmempool({"addresses": [address3]})
         assert_equal(len(mempool), 3)
@@ -288,9 +297,8 @@ class AddressIndexTest(BitcoinTestFramework):
         tx.rehash()
         self.nodes[2].importprivkey(privKey3)
         signed_tx3 = self.nodes[2].signrawtransaction(binascii.hexlify(tx.serialize()).decode("utf-8"))
-        memtxid3 = self.nodes[2].sendrawtransaction(signed_tx3["hex"], True, False, True)
-        set_mocktime(get_mocktime() + 2)
-        set_node_times(self.nodes, get_mocktime())
+        memtxid3 = self.nodes[2].sendrawtransaction(signed_tx3["hex"], True)
+        self.bump_mocktime(2)
 
         mempool3 = self.nodes[2].getaddressmempool({"addresses": [address3]})
         assert_equal(len(mempool3), 2)
@@ -321,13 +329,13 @@ class AddressIndexTest(BitcoinTestFramework):
         tx.rehash()
         self.nodes[0].importprivkey(privkey1)
         signed_tx = self.nodes[0].signrawtransaction(binascii.hexlify(tx.serialize()).decode("utf-8"))
-        mem_txid = self.nodes[0].sendrawtransaction(signed_tx["hex"], True, False, True)
+        mem_txid = self.nodes[0].sendrawtransaction(signed_tx["hex"], True)
 
         self.sync_all()
         mempool_deltas = self.nodes[2].getaddressmempool({"addresses": [address1]})
         assert_equal(len(mempool_deltas), 2)
 
-        print("Passed\n")
+        self.log.info("Passed")
 
 
 if __name__ == '__main__':
