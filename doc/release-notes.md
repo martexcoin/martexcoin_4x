@@ -1,47 +1,108 @@
-MarteX Core version 3.0.0
-==========================
+*After branching off for a major version release of MarteXcoin Core, use this
+template to create the initial release notes draft.*
 
-Release is now available from:
+*The release notes draft is a temporary file that can be added to by anyone. See
+[/doc/developer-notes.md#release-notes](/doc/developer-notes.md#release-notes)
+for the process.*
 
-  <https://www.martexcoin.org/downloads/#wallets>
+*Create the draft, named* "*version* Release Notes Draft"
+*(e.g. "4.0.4 Release Notes Draft")*
 
-This is an optional release and only contains changes for testnet. It is not required to update masternodes on mainnet.
+*Before the final release, move the notes back to this git repository.*
 
-Please report bugs using the issue tracker at github:
+*version* Release Notes Draft
+===============================
+
+MarteXcoin Core version *version* is now available from:
+
+  <https://github.com/martexcoin/martexcoin/releases>
+
+This release includes new features, various bug fixes and performance
+improvements, as well as updated translations.
+
+Please report bugs using the issue tracker at GitHub:
 
   <https://github.com/martexcoin/martexcoin/issues>
 
+To receive security and update notifications, please subscribe to:
 
-Upgrading and downgrading
-=========================
+  <>
 
 How to Upgrade
---------------
+==============
 
 If you are running an older version, shut it down. Wait until it has completely
 shut down (which might take a few minutes for older versions), then run the
 installer (on Windows) or just copy over /Applications/MarteX-Qt (on Mac) or
 martexd/martex-qt (on Linux).
 
+Upgrading directly from a version of MarteXcoin Core that has reached its EOL is
+possible, but it might take some time if the data directory needs to be migrated. Old
+wallet versions of MarteXcoin Core are generally supported.
+
+Compatibility
+==============
+
+MarteXcoin Core is supported and extensively tested on operating systems
+using the Linux kernel, macOS 10.14+, and Windows 7 and newer.  MarteXcoin
+Core should also work on most other Unix-like systems but is not as
+frequently tested on them.  It is not recommended to use MarteXcoin Core on
+unsupported systems.
+
+From MarteXcoin Core 3.0.0 onwards, macOS versions earlier than 10.14 are no
+longer supported. Additionally, MarteXcoin Core does not yet change appearance
+when macOS "dark mode" is activated.
+
 Notable changes
 ===============
 
-Fork/Reset testnet at block 4001
---------------------------------
+P2P and network changes
+-----------------------
 
-This release is NOT required on mainnet. It is intended to be deployed on testnet and will cause a fork at block 4001.
-The plan is to restart all testing for the v3.0.0 upgrade process.
+Updated RPCs
+------------
 
-When deployed on testnet, it is required to start with a fresh data directory or call MarteX Core with `-reindex-chainstate`.
+Changes to Wallet or GUI related RPCs can be found in the GUI or Wallet section below.
+
+New RPCs
+--------
+
+Build System
+------------
+
+New settings
+------------
+
+Updated settings
+----------------
+
+Changes to Wallet or GUI related settings can be found in the GUI or Wallet section below.
+
+- Steps to follow in how to document the source code.  (#45)
+
+Tools and Utilities
+-------------------
+
+Wallet
+------
+
+GUI changes
+-----------
+
+Low-level changes
+=================
+
+RPC
+---
+
+Tests
+-----
 
 Credits
 =======
 
-Thanks to everyone who directly contributed to this release,
-as well as everyone who submitted issues and reviewed pull requests.
+Thanks to everyone who directly contributed to this release:
 
 
-Older releases
-==============
-
-MarteX Core tree 3.0.0.x was a fork of Bitcoin Core tree 0.12.
+As well as to everyone that helped with translations on
+[Transifex](https://www.transifex.com/martexcoin/martexcoin/).

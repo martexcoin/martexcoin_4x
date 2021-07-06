@@ -9,7 +9,7 @@ See CONTRIBUTING.md
 
 <!--
 Please provide clear motivation for your patch and explain how it improves
-MarteXcoin Core user experience or MarteXcoin Core developer experience
+MarteX Core user experience or MarteXcoin Core developer experience
 significantly:
 
 * Any test improvements or new tests that improve coverage are always welcome.
